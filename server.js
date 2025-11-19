@@ -7,6 +7,26 @@ const socketIo = require('socket.io');
 // Load environment variables
 dotenv.config();
 
+// Auto-initialize database schema on startup
+const db = require('./config/database');
+const fs = require('fs');
+const path = require('path');
+
+(async () => {
+    try {
+        const schemaPath = path.join(__dirname, 'database', 'schema.sql');
+        const schema = fs.readFileSync(schemaPath, 'utf8');
+        await db.query(schema);
+        console.log('Database schema initialized/verified');
+    } catch (error) {
+        if (error.message.includes('already exists')) {
+            console.log('Database schema already exists');
+        } else {
+            console.log('Schema init warning:', error.message);
+        }
+    }
+})();
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
