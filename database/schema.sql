@@ -43,6 +43,47 @@ CREATE TABLE IF NOT EXISTS pvp_matches (
     CONSTRAINT valid_winner CHECK (winner_id = player1_id OR winner_id = player2_id)
 );
 
+-- Tournaments table
+CREATE TABLE IF NOT EXISTS tournaments (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    status VARCHAR(20) DEFAULT 'upcoming' NOT NULL,
+    max_players INTEGER DEFAULT 64 NOT NULL,
+    current_round INTEGER DEFAULT 0 NOT NULL,
+    total_rounds INTEGER DEFAULT 0 NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    CONSTRAINT status_check CHECK (status IN ('upcoming', 'registration', 'in_progress', 'completed', 'cancelled')),
+    CONSTRAINT max_players_power_of_2 CHECK (max_players IN (4, 8, 16, 32, 64, 128))
+);
+
+-- Tournament entries (3-Pokemon teams)
+CREATE TABLE IF NOT EXISTS tournament_entries (
+    id SERIAL PRIMARY KEY,
+    tournament_id INTEGER NOT NULL REFERENCES tournaments(id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    pokemon1_roster_id INTEGER NOT NULL REFERENCES pokemon_rosters(id) ON DELETE CASCADE,
+    pokemon2_roster_id INTEGER NOT NULL REFERENCES pokemon_rosters(id) ON DELETE CASCADE,
+    pokemon3_roster_id INTEGER NOT NULL REFERENCES pokemon_rosters(id) ON DELETE CASCADE,
+    bracket_position INTEGER,
+    submitted_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    CONSTRAINT unique_tournament_entry UNIQUE (tournament_id, user_id)
+);
+
+-- Tournament matches (bracket)
+CREATE TABLE IF NOT EXISTS tournament_matches (
+    id SERIAL PRIMARY KEY,
+    tournament_id INTEGER NOT NULL REFERENCES tournaments(id) ON DELETE CASCADE,
+    round INTEGER NOT NULL,
+    position INTEGER NOT NULL,
+    player1_entry_id INTEGER REFERENCES tournament_entries(id) ON DELETE CASCADE,
+    player2_entry_id INTEGER REFERENCES tournament_entries(id) ON DELETE CASCADE,
+    winner_entry_id INTEGER REFERENCES tournament_entries(id) ON DELETE CASCADE,
+    battle_results JSONB,
+    completed_at TIMESTAMP,
+    CONSTRAINT unique_match UNIQUE (tournament_id, round, position)
+);
+
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 CREATE INDEX IF NOT EXISTS idx_users_rating ON users(rating DESC);
@@ -54,6 +95,12 @@ CREATE INDEX IF NOT EXISTS idx_pvp_matches_player1 ON pvp_matches(player1_id);
 CREATE INDEX IF NOT EXISTS idx_pvp_matches_player2 ON pvp_matches(player2_id);
 CREATE INDEX IF NOT EXISTS idx_pvp_matches_winner ON pvp_matches(winner_id);
 CREATE INDEX IF NOT EXISTS idx_pvp_matches_created_at ON pvp_matches(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tournaments_start_time ON tournaments(start_time);
+CREATE INDEX IF NOT EXISTS idx_tournaments_status ON tournaments(status);
+CREATE INDEX IF NOT EXISTS idx_tournament_entries_tournament ON tournament_entries(tournament_id);
+CREATE INDEX IF NOT EXISTS idx_tournament_entries_user ON tournament_entries(user_id);
+CREATE INDEX IF NOT EXISTS idx_tournament_matches_tournament ON tournament_matches(tournament_id);
+CREATE INDEX IF NOT EXISTS idx_tournament_matches_round ON tournament_matches(tournament_id, round);
 
 -- Sample queries for testing
 

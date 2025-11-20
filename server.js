@@ -7,26 +7,6 @@ const socketIo = require('socket.io');
 // Load environment variables
 dotenv.config();
 
-// Auto-initialize database schema on startup
-const db = require('./config/database');
-const fs = require('fs');
-const path = require('path');
-
-(async () => {
-    try {
-        const schemaPath = path.join(__dirname, 'database', 'schema.sql');
-        const schema = fs.readFileSync(schemaPath, 'utf8');
-        await db.query(schema);
-        console.log('Database schema initialized/verified');
-    } catch (error) {
-        if (error.message.includes('already exists')) {
-            console.log('Database schema already exists');
-        } else {
-            console.log('Schema init warning:', error.message);
-        }
-    }
-})();
-
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
@@ -47,12 +27,14 @@ const userRoutes = require('./routes/users');
 const pokemonRoutes = require('./routes/pokemon');
 const pvpRoutes = require('./routes/pvp');
 const leaderboardRoutes = require('./routes/leaderboard');
+const tournamentRoutes = require('./routes/tournaments');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/pokemon', pokemonRoutes);
 app.use('/api/pvp', pvpRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/tournaments', tournamentRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -79,9 +61,13 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
+// Start tournament processor
+const { startTournamentProcessor } = require('./services/tournamentProcessor');
+startTournamentProcessor();
+
 server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Pokesume backend server running on port ${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Pokesume backend server running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
 module.exports = { app, io };
