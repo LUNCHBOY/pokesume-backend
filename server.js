@@ -65,10 +65,9 @@ const PORT = process.env.PORT || 5000;
 
 // Start tournament processor with cron
 cron.schedule('*/5 * * * *', async () => {
-    console.log('[Cron] Running tournament processor...');
-    await processTournaments();
+  console.log('[Cron] Running tournament processor...');
+  await processTournaments();
 });
-
 console.log('[Cron] Tournament processor scheduled (every 5 minutes)');
 
 server.listen(PORT, '0.0.0.0', () => {
