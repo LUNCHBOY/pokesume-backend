@@ -1,7 +1,7 @@
 // Tournament Processor - Runs every 5 minutes to advance tournaments
 // This file should be placed in your backend and called via cron/scheduler
 
-const db = require('./config/database'); // Your database connection
+const db = require('./database'); // Your database connection
 
 // Battle simulation configuration
 const BATTLE_CONFIG = {
@@ -316,10 +316,10 @@ async function startTournament(tournamentId) {
   );
   
   if (entries.rows.length < 2) {
-    console.log(`[Tournament ${tournamentId}] Not enough players, cancelling`);
+    console.log(`[Tournament ${tournamentId}] Not enough players, deleting tournament`);
     await db.query(
-      'UPDATE tournaments SET status = $1 WHERE id = $2',
-      ['cancelled', tournamentId]
+      'DELETE FROM tournaments WHERE id = $1',
+      [tournamentId]
     );
     return;
   }
