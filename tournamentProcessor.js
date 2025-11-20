@@ -1,7 +1,7 @@
 // Tournament Processor - Runs every 5 minutes to advance tournaments
 // This file should be placed in your backend and called via cron/scheduler
 
-const db = require('./db'); // Your database connection
+const db = require('./database'); // Your database connection
 
 // Battle simulation configuration
 const BATTLE_CONFIG = {
@@ -513,3 +513,10 @@ if (require.main === module) {
     process.exit(1);
   });
 }
+
+
+
+
+
+
+
