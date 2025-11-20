@@ -6,29 +6,54 @@ const router = express.Router();
 
 // Save Pokemon roster (career completion)
 router.post('/roster', authenticateToken, async (req, res) => {
-  try {
-    const { pokemonData, turnNumber } = req.body;
+    try {
+        const { pokemonData, turnNumber } = req.body;
 
-    if (!pokemonData || !turnNumber) {
-      return res.status(400).json({ error: 'Pokemon data and turn number required' });
-    }
+        // Validate required fields
+        if (!pokemonData || !pokemonData.name || !pokemonData.stats || !pokemonData.type) {
+            return res.status(400).json({ error: 'Invalid Pokemon data' });
+        }
 
-    const result = await db.query(
-      `INSERT INTO pokemon_rosters (user_id, pokemon_data, turn_number, created_at)
+        // Extract moves from knownAbilities if present
+        const moves = pokemonData.knownAbilities || ['Tackle', 'QuickAttack']; // Default moves
+
+        // Format Pokemon data for tournament battles
+        const formattedData = {
+            name: pokemonData.name,
+            type: pokemonData.type,
+            grade: pokemonData.grade,
+            stats: {
+                HP: pokemonData.stats.HP || 100,
+                Attack: pokemonData.stats.Attack || 50,
+                Defense: pokemonData.stats.Defense || 50,
+                Instinct: pokemonData.stats.Instinct || 50,
+                Speed: pokemonData.stats.Speed || 50
+            },
+            moves: moves.slice(0, 4), // Max 4 moves
+            aptitudes: pokemonData.aptitudes || {},
+            inspirations: pokemonData.inspirations || {},
+            baseName: pokemonData.baseName,
+            evolutionStage: pokemonData.evolutionStage || 0,
+            completedAt: pokemonData.completedAt || Date.now()
+        };
+
+        const result = await db.query(
+            `INSERT INTO pokemon_rosters (user_id, pokemon_data, turn_number, created_at)
        VALUES ($1, $2, $3, NOW())
        RETURNING id, created_at`,
-      [req.user.userId, JSON.stringify(pokemonData), turnNumber]
-    );
+            [req.user.userId, JSON.stringify(formattedData), turnNumber || 0]
+        );
 
-    res.status(201).json({
-      message: 'Pokemon roster saved',
-      rosterId: result.rows[0].id,
-      createdAt: result.rows[0].created_at
-    });
-  } catch (error) {
-    console.error('Save roster error:', error);
-    res.status(500).json({ error: 'Failed to save roster' });
-  }
+        res.status(201).json({
+            success: true,
+            message: 'Pokemon roster saved',
+            rosterId: result.rows[0].id,
+            createdAt: result.rows[0].created_at
+        });
+    } catch (error) {
+        console.error('Save roster error:', error);
+        res.status(500).json({ error: 'Failed to save roster' });
+    }
 });
 
 // Get user's Pokemon rosters
