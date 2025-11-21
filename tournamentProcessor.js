@@ -459,17 +459,24 @@ async function simulateMatch(match) {
   const e1 = entry1.rows[0];
   const e2 = entry2.rows[0];
   
-  // Parse Pokemon data
+  // Parse Pokemon data (handle both JSON string and object)
+  const parsePokemonData = (data) => {
+    if (typeof data === 'string') {
+      return JSON.parse(data);
+    }
+    return data; // Already an object
+  };
+  
   const team1 = [
-    JSON.parse(e1.pokemon1_data),
-    JSON.parse(e1.pokemon2_data),
-    JSON.parse(e1.pokemon3_data)
+    parsePokemonData(e1.pokemon1_data),
+    parsePokemonData(e1.pokemon2_data),
+    parsePokemonData(e1.pokemon3_data)
   ];
   
   const team2 = [
-    JSON.parse(e2.pokemon1_data),
-    JSON.parse(e2.pokemon2_data),
-    JSON.parse(e2.pokemon3_data)
+    parsePokemonData(e2.pokemon1_data),
+    parsePokemonData(e2.pokemon2_data),
+    parsePokemonData(e2.pokemon3_data)
   ];
   
   // Simulate battle
