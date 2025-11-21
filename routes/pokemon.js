@@ -73,8 +73,6 @@ router.get('/rosters', authenticateToken, async (req, res) => {
     
     console.log('[GET /rosters] Found', result.rows.length, 'rosters');
     res.json({ rosters: result.rows });
-
-    res.json({ rosters: result.rows });
   } catch (error) {
     console.error('Fetch rosters error:', error);
     res.status(500).json({ error: 'Failed to fetch rosters' });
