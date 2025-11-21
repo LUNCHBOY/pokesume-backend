@@ -59,8 +59,9 @@ router.post('/roster', authenticateToken, async (req, res) => {
 // Get user's Pokemon rosters
 router.get('/rosters', authenticateToken, async (req, res) => {
   try {
+    console.log('[GET /rosters] User ID from token:', req.user.userId);
+    
     const { limit = 10, offset = 0 } = req.query;
-
     const result = await db.query(
       `SELECT id, pokemon_data, turn_number, created_at
        FROM pokemon_rosters
@@ -69,6 +70,9 @@ router.get('/rosters', authenticateToken, async (req, res) => {
        LIMIT $2 OFFSET $3`,
       [req.user.userId, limit, offset]
     );
+    
+    console.log('[GET /rosters] Found', result.rows.length, 'rosters');
+    res.json({ rosters: result.rows });
 
     res.json({ rosters: result.rows });
   } catch (error) {
