@@ -1,7 +1,7 @@
 // Tournament Processor - Runs every 5 minutes to advance tournaments
 // This file should be placed in your backend and called via cron/scheduler
 
-const db = require('./db'); // Your database connection
+const db = require('./database'); // Your database connection
 
 // Battle simulation configuration
 const BATTLE_CONFIG = {
@@ -281,7 +281,7 @@ async function processTournaments() {
     // Get all active tournaments
     const tournaments = await db.query(`
       SELECT * FROM tournaments 
-      WHERE status IN ('pending', 'active') 
+      WHERE status IN ('registration', 'upcoming', 'in_progress') 
       ORDER BY start_time ASC
     `);
     
@@ -290,13 +290,13 @@ async function processTournaments() {
       const startTime = new Date(tournament.start_time);
       
       // Check if tournament should start
-      if (tournament.status === 'pending' && now >= startTime) {
+      if (tournament.status === 'registration' && now >= startTime) {
         console.log(`[Tournament ${tournament.id}] Starting tournament: ${tournament.name}`);
         await startTournament(tournament.id);
       }
       
       // Process active tournament rounds
-      if (tournament.status === 'active') {
+      if (tournament.status === 'in_progress') {
         console.log(`[Tournament ${tournament.id}] Processing active tournament`);
         await processRound(tournament.id);
       }
@@ -316,10 +316,10 @@ async function startTournament(tournamentId) {
   );
   
   if (entries.rows.length < 2) {
-    console.log(`[Tournament ${tournamentId}] Not enough players, cancelling`);
+    console.log(`[Tournament ${tournamentId}] Not enough players, deleting tournament`);
     await db.query(
-      'UPDATE tournaments SET status = $1 WHERE id = $2',
-      ['cancelled', tournamentId]
+      'DELETE FROM tournaments WHERE id = $1',
+      [tournamentId]
     );
     return;
   }
@@ -331,7 +331,7 @@ async function startTournament(tournamentId) {
   // Update tournament status
   await db.query(
     'UPDATE tournaments SET status = $1, current_round = $2, total_rounds = $3 WHERE id = $4',
-    ['active', 1, rounds, tournamentId]
+    ['in_progress', 1, rounds, tournamentId]
   );
   
   // Generate first round bracket
