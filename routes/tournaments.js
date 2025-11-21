@@ -81,7 +81,7 @@ router.get('/:tournamentId', async (req, res) => {
       `SELECT 
         te.id,
         te.bracket_position,
-        te.submitted_at,
+        te.joined_at,
         u.id as user_id,
         u.username,
         u.rating,
@@ -166,7 +166,7 @@ router.post('/:tournamentId/enter', authenticateToken, async (req, res) => {
     // Insert entry
     const result = await db.query(
       `INSERT INTO tournament_entries 
-        (tournament_id, user_id, pokemon1_roster_id, pokemon2_roster_id, pokemon3_roster_id, submitted_at)
+        (tournament_id, user_id, pokemon1_roster_id, pokemon2_roster_id, pokemon3_roster_id, joined_at)
        VALUES ($1, $2, $3, $4, $5, NOW())
        RETURNING id, submitted_at`,
       [req.params.tournamentId, req.user.userId, pokemon1RosterId, pokemon2RosterId, pokemon3RosterId]
@@ -175,7 +175,7 @@ router.post('/:tournamentId/enter', authenticateToken, async (req, res) => {
     res.status(201).json({
       message: 'Tournament entry submitted',
       entryId: result.rows[0].id,
-      submittedAt: result.rows[0].submitted_at
+      submittedAt: result.rows[0].joined_at
     });
   } catch (error) {
     console.error('Submit entry error:', error);
