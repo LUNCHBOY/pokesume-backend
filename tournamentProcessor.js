@@ -344,6 +344,14 @@ async function generateBracket(tournamentId, entries) {
   // Shuffle and pair players
   const shuffled = [...entries].sort(() => Math.random() - 0.5);
   
+  // Set bracket_position for each entry
+  for (let i = 0; i < shuffled.length; i++) {
+    await db.query(
+      'UPDATE tournament_entries SET bracket_position = $1 WHERE id = $2',
+      [i, shuffled[i].id]
+    );
+  }
+  
   let position = 0;
   for (let i = 0; i < shuffled.length; i += 2) {
     const player1 = shuffled[i];
@@ -352,13 +360,12 @@ async function generateBracket(tournamentId, entries) {
     await db.query(`
       INSERT INTO tournament_matches (
         tournament_id, round, position,
-        player1_roster_id, player1_user_id,
-        player2_roster_id, player2_user_id
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+        player1_entry_id, player2_entry_id
+      ) VALUES ($1, $2, $3, $4, $5)
     `, [
       tournamentId, 1, position++,
-      player1.roster_id, player1.user_id,
-      player2 ? player2.roster_id : null, player2 ? player2.user_id : null
+      player1.id,
+      player2 ? player2.id : null
     ]);
   }
 }
@@ -408,61 +415,77 @@ async function simulateMatch(match) {
   console.log(`[Match ${match.id}] Simulating battle`);
   
   // Handle bye
-  if (!match.player2_roster_id) {
+  if (!match.player2_entry_id) {
     await db.query(`
       UPDATE tournament_matches 
-      SET winner_roster_id = $1, winner_user_id = $2, 
-          battle_results = $3, completed_at = NOW()
-      WHERE id = $4
+      SET winner_entry_id = $1, 
+          battle_results = $2, completed_at = NOW()
+      WHERE id = $3
     `, [
-      match.player1_roster_id, match.player1_user_id,
+      match.player1_entry_id,
       JSON.stringify({ score: '1-0', winner: 'player1', bye: true }),
       match.id
     ]);
     return;
   }
   
-  // Get both rosters with Pokemon data
-  const roster1 = await db.query(`
-    SELECT r.*, u.username as player_username
-    FROM pokemon_rosters r
-    JOIN users u ON r.user_id = u.id
-    WHERE r.id = $1
-  `, [match.player1_roster_id]);
+  // Get entry data with rosters
+  const entry1 = await db.query(`
+    SELECT te.*, u.username,
+           pr1.pokemon_data as pokemon1_data,
+           pr2.pokemon_data as pokemon2_data,
+           pr3.pokemon_data as pokemon3_data
+    FROM tournament_entries te
+    JOIN users u ON te.user_id = u.id
+    JOIN pokemon_rosters pr1 ON te.pokemon1_roster_id = pr1.id
+    JOIN pokemon_rosters pr2 ON te.pokemon2_roster_id = pr2.id
+    JOIN pokemon_rosters pr3 ON te.pokemon3_roster_id = pr3.id
+    WHERE te.id = $1
+  `, [match.player1_entry_id]);
   
-  const roster2 = await db.query(`
-    SELECT r.*, u.username as player_username
-    FROM pokemon_rosters r
-    JOIN users u ON r.user_id = u.id
-    WHERE r.id = $1
-  `, [match.player2_roster_id]);
+  const entry2 = await db.query(`
+    SELECT te.*, u.username,
+           pr1.pokemon_data as pokemon1_data,
+           pr2.pokemon_data as pokemon2_data,
+           pr3.pokemon_data as pokemon3_data
+    FROM tournament_entries te
+    JOIN users u ON te.user_id = u.id
+    JOIN pokemon_rosters pr1 ON te.pokemon1_roster_id = pr1.id
+    JOIN pokemon_rosters pr2 ON te.pokemon2_roster_id = pr2.id
+    JOIN pokemon_rosters pr3 ON te.pokemon3_roster_id = pr3.id
+    WHERE te.id = $1
+  `, [match.player2_entry_id]);
   
-  const p1Data = roster1.rows[0];
-  const p2Data = roster2.rows[0];
+  const e1 = entry1.rows[0];
+  const e2 = entry2.rows[0];
   
-  // Parse Pokemon data (assuming it's stored in pokemon_data JSON field)
-  const pokemon1 = JSON.parse(p1Data.pokemon_data);
-  const pokemon2 = JSON.parse(p2Data.pokemon_data);
+  // Parse Pokemon data
+  const team1 = [
+    JSON.parse(e1.pokemon1_data),
+    JSON.parse(e1.pokemon2_data),
+    JSON.parse(e1.pokemon3_data)
+  ];
   
-  // Create roster arrays (best-of-3 format, but can be single Pokemon)
-  const roster1Array = Array.isArray(pokemon1) ? pokemon1 : [pokemon1];
-  const roster2Array = Array.isArray(pokemon2) ? pokemon2 : [pokemon2];
+  const team2 = [
+    JSON.parse(e2.pokemon1_data),
+    JSON.parse(e2.pokemon2_data),
+    JSON.parse(e2.pokemon3_data)
+  ];
   
   // Simulate battle
-  const result = simulateBestOf3(roster1Array, roster2Array);
+  const result = simulateBestOf3(team1, team2);
   
-  // Determine winner
-  const winnerRosterId = result.winner === 'player1' ? match.player1_roster_id : match.player2_roster_id;
-  const winnerUserId = result.winner === 'player1' ? match.player1_user_id : match.player2_user_id;
+  // Determine winner entry
+  const winnerEntryId = result.winner === 'player1' ? match.player1_entry_id : match.player2_entry_id;
   
   // Store results
   await db.query(`
     UPDATE tournament_matches 
-    SET winner_roster_id = $1, winner_user_id = $2, 
-        battle_results = $3, completed_at = NOW()
-    WHERE id = $4
+    SET winner_entry_id = $1, 
+        battle_results = $2, completed_at = NOW()
+    WHERE id = $3
   `, [
-    winnerRosterId, winnerUserId,
+    winnerEntryId,
     JSON.stringify(result),
     match.id
   ]);
@@ -472,7 +495,7 @@ async function simulateMatch(match) {
 
 async function advanceRound(tournamentId, nextRound, currentMatches) {
   // Get winners from current round
-  const winners = currentMatches.filter(m => m.winner_roster_id);
+  const winners = currentMatches.filter(m => m.winner_entry_id);
   
   // Pair winners for next round
   let position = 0;
@@ -483,13 +506,12 @@ async function advanceRound(tournamentId, nextRound, currentMatches) {
     await db.query(`
       INSERT INTO tournament_matches (
         tournament_id, round, position,
-        player1_roster_id, player1_user_id,
-        player2_roster_id, player2_user_id
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+        player1_entry_id, player2_entry_id
+      ) VALUES ($1, $2, $3, $4, $5)
     `, [
       tournamentId, nextRound, position++,
-      player1.winner_roster_id, player1.winner_user_id,
-      player2 ? player2.winner_roster_id : null, player2 ? player2.winner_user_id : null
+      player1.winner_entry_id,
+      player2 ? player2.winner_entry_id : null
     ]);
   }
   
