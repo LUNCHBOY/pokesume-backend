@@ -94,7 +94,7 @@ router.get('/:tournamentId', async (req, res) => {
       JOIN pokemon_rosters pr2 ON te.pokemon2_roster_id = pr2.id
       JOIN pokemon_rosters pr3 ON te.pokemon3_roster_id = pr3.id
       WHERE te.tournament_id = $1
-      ORDER BY te.submitted_at ASC`,
+      ORDER BY te.joined_at ASC`,
       [req.params.tournamentId]
     );
 
@@ -168,7 +168,7 @@ router.post('/:tournamentId/enter', authenticateToken, async (req, res) => {
       `INSERT INTO tournament_entries 
         (tournament_id, user_id, pokemon1_roster_id, pokemon2_roster_id, pokemon3_roster_id, joined_at)
        VALUES ($1, $2, $3, $4, $5, NOW())
-       RETURNING id, submitted_at`,
+       RETURNING id, joined_at`,
       [req.params.tournamentId, req.user.userId, pokemon1RosterId, pokemon2RosterId, pokemon3RosterId]
     );
 
