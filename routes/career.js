@@ -43,19 +43,29 @@ router.post('/start', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Pokemon and supports required' });
     }
 
+    // Initialize support friendships
+    const supportFriendships = {};
+    selectedSupports.forEach(supportName => {
+      supportFriendships[supportName] = 0;
+    });
+
     // Initialize career state
     const careerState = {
       pokemon,
       selectedSupports,
+      basePokemonName: pokemon.name,
+      evolutionStage: 0,
       currentStats: { ...pokemon.baseStats },
       energy: 100,
       turn: 1,
       skillPoints: 0,
       knownAbilities: [...pokemon.defaultAbilities],
-      moveHints: [],
+      learnableAbilities: [...(pokemon.learnableAbilities || [])],
+      moveHints: {},
       turnHistory: [],
       inspirations: [],
-      friendship: 0,
+      supportFriendships,
+      completedHangouts: [],
       pokeclockRetries: 3,
       hasUsedPokeclock: false
     };
