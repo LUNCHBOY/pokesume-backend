@@ -15,7 +15,7 @@ const authenticateToken = require('../middleware/auth');
 // Get user's Pokemon inventory
 router.get('/pokemon', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { limit = 100, offset = 0 } = req.query;
 
     const result = await pool.query(
@@ -47,7 +47,7 @@ router.get('/pokemon', authenticateToken, async (req, res) => {
 // Add Pokemon to inventory (gacha pull)
 router.post('/pokemon', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { pokemonName, pokemonData } = req.body;
 
     if (!pokemonName || !pokemonData) {
@@ -74,7 +74,7 @@ router.post('/pokemon', authenticateToken, async (req, res) => {
 // Delete Pokemon from inventory
 router.delete('/pokemon/:id', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const pokemonId = req.params.id;
 
     const result = await pool.query(
@@ -100,7 +100,7 @@ router.delete('/pokemon/:id', authenticateToken, async (req, res) => {
 // Get user's Support inventory
 router.get('/supports', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { limit = 100, offset = 0 } = req.query;
 
     const result = await pool.query(
@@ -132,7 +132,7 @@ router.get('/supports', authenticateToken, async (req, res) => {
 // Add Support to inventory (gacha pull)
 router.post('/supports', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { supportName, supportData } = req.body;
 
     if (!supportName || !supportData) {
@@ -159,7 +159,7 @@ router.post('/supports', authenticateToken, async (req, res) => {
 // Delete Support from inventory
 router.delete('/supports/:id', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const supportId = req.params.id;
 
     const result = await pool.query(
@@ -185,7 +185,7 @@ router.delete('/supports/:id', authenticateToken, async (req, res) => {
 // Get user's trained Pokemon
 router.get('/trained', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { limit = 100, offset = 0 } = req.query;
 
     const result = await pool.query(
@@ -221,7 +221,7 @@ router.get('/trained', authenticateToken, async (req, res) => {
 // Get user's Primos balance
 router.get('/primos', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     const result = await pool.query(
       'SELECT primos FROM users WHERE id = $1',
@@ -242,7 +242,7 @@ router.get('/primos', authenticateToken, async (req, res) => {
 // Update user's Primos (add or subtract)
 router.post('/primos', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { amount } = req.body;
 
     if (typeof amount !== 'number') {

@@ -12,7 +12,7 @@ const { simulateBattle } = require('../services/battleSimulator');
 // Get active career state
 router.get('/active', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     const result = await pool.query(
       'SELECT career_state FROM active_careers WHERE user_id = $1',
@@ -36,7 +36,7 @@ router.get('/active', authenticateToken, async (req, res) => {
 // Start new career
 router.post('/start', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { pokemon, selectedSupports } = req.body;
 
     if (!pokemon || !selectedSupports) {
@@ -90,7 +90,7 @@ router.post('/start', authenticateToken, async (req, res) => {
 // Update career state
 router.put('/update', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { careerState } = req.body;
 
     if (!careerState) {
@@ -112,7 +112,7 @@ router.put('/update', authenticateToken, async (req, res) => {
 // Process battle (server-authoritative)
 router.post('/battle', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { opponent, isGymLeader } = req.body;
 
     if (!opponent) {
@@ -202,7 +202,7 @@ router.post('/battle', authenticateToken, async (req, res) => {
 // Complete career (save to trained pokemon)
 router.post('/complete', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { careerState, completionType } = req.body;
 
     if (!careerState || !completionType) {
@@ -244,7 +244,7 @@ router.post('/complete', authenticateToken, async (req, res) => {
 // Abandon career
 router.delete('/abandon', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     await pool.query(
       'DELETE FROM active_careers WHERE user_id = $1',
