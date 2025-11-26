@@ -8,7 +8,7 @@ const router = express.Router();
 const { pool } = require('../config/database');
 const authenticateToken = require('../middleware/auth');
 const { simulateBattle } = require('../services/battleSimulator');
-const { LEGENDARY_POKEMON, POKEMON } = require('../shared/gameData');
+const { LEGENDARY_POKEMON, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS } = require('../shared/gameData');
 
 // Helper function to generate gym leaders
 const generateGymLeaders = () => {
@@ -177,7 +177,8 @@ router.post('/start', authenticateToken, async (req, res) => {
   }
 });
 
-// Update career state
+// DEPRECATED: Update career state (INSECURE - replaced by server-authoritative endpoints)
+// This endpoint should be removed once all actions are server-authoritative
 router.put('/update', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -196,6 +197,514 @@ router.put('/update', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Update career error:', error);
     res.status(500).json({ error: 'Failed to update career' });
+  }
+});
+
+// Process training action (server-authoritative)
+router.post('/train', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { stat } = req.body;
+
+    if (!stat || !['HP', 'Attack', 'Defense', 'Instinct', 'Speed'].includes(stat)) {
+      return res.status(400).json({ error: 'Valid stat required' });
+    }
+
+    // Get active career
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Validate training options exist and include this stat
+    if (!careerState.currentTrainingOptions || !careerState.currentTrainingOptions[stat]) {
+      return res.status(400).json({ error: 'Invalid training selection' });
+    }
+
+    const option = careerState.currentTrainingOptions[stat];
+    const energyCost = GAME_CONFIG.TRAINING.ENERGY_COSTS[stat];
+    const currentEnergy = careerState.energy;
+
+    // Calculate failure chance based on current energy (before deduction)
+    let failureChance = 0;
+    if (currentEnergy <= 75) {
+      if (currentEnergy <= 0) {
+        failureChance = 0.891;
+      } else if (currentEnergy <= 20) {
+        failureChance = 0.891 - ((currentEnergy / 20) * 0.216);
+      } else if (currentEnergy <= 30) {
+        failureChance = 0.675 - (((currentEnergy - 20) / 10) * 0.225);
+      } else if (currentEnergy <= 50) {
+        failureChance = 0.45 - (((currentEnergy - 30) / 20) * 0.225);
+      } else {
+        failureChance = 0.225 - (((currentEnergy - 50) / 25) * 0.225);
+      }
+    }
+
+    // Speed training has 50% lower fail rate
+    if (stat === 'Speed') {
+      failureChance *= 0.5;
+    }
+
+    const trainingFailed = Math.random() < failureChance;
+
+    if (trainingFailed) {
+      // Training failed
+      const statLoss = stat === 'Speed' ? 0 : GAME_CONFIG.TRAINING.STAT_LOSS_ON_FAILURE;
+
+      const updatedCareerState = {
+        ...careerState,
+        currentStats: {
+          ...careerState.currentStats,
+          [stat]: Math.max(1, careerState.currentStats[stat] - statLoss)
+        },
+        energy: Math.max(0, careerState.energy - energyCost),
+        turn: careerState.turn + 1,
+        turnLog: [{
+          turn: careerState.turn,
+          type: 'training_fail',
+          stat,
+          message: stat === 'Speed' ? `Training ${stat} failed! No stat loss.` : `Training ${stat} failed! Lost ${statLoss} ${stat}.`
+        }, ...(careerState.turnLog || [])],
+        currentTrainingOptions: null
+      };
+
+      await pool.query(
+        'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+        [JSON.stringify(updatedCareerState), userId]
+      );
+
+      return res.json({
+        success: true,
+        result: 'failure',
+        careerState: updatedCareerState
+      });
+    }
+
+    // Training succeeded - calculate gains
+    let statGain = GAME_CONFIG.TRAINING.BASE_STAT_GAINS[stat];
+    const friendshipGains = {};
+
+    option.supports.forEach(supportName => {
+      const support = SUPPORT_CARDS[supportName];
+      if (!support) return;
+
+      const friendship = careerState.supportFriendships[supportName] || 0;
+      const isMaxFriendship = friendship >= 100;
+      const supportType = support.type || support.supportType;
+
+      if (supportType === stat) {
+        statGain += isMaxFriendship ? support.friendshipBonusTraining : support.typeBonusTraining;
+      } else {
+        statGain += support.generalBonusTraining;
+      }
+
+      friendshipGains[supportName] = (friendshipGains[supportName] || 0) + GAME_CONFIG.TRAINING.FRIENDSHIP_GAIN;
+    });
+
+    const newFriendships = { ...careerState.supportFriendships };
+    Object.keys(friendshipGains).forEach(support => {
+      const currentFriendship = newFriendships[support] || 0;
+      newFriendships[support] = Math.min(100, currentFriendship + friendshipGains[support]);
+    });
+
+    // Handle move hints
+    const newMoveHints = { ...careerState.moveHints };
+    const newLearnableAbilities = [...(careerState.learnableAbilities || [])];
+    if (option.hint) {
+      const moveName = option.hint.move;
+      newMoveHints[moveName] = (newMoveHints[moveName] || 0) + 1;
+      if (!newLearnableAbilities.includes(moveName) && !careerState.knownAbilities.includes(moveName)) {
+        newLearnableAbilities.push(moveName);
+      }
+    }
+
+    const updatedCareerState = {
+      ...careerState,
+      currentStats: {
+        ...careerState.currentStats,
+        [stat]: careerState.currentStats[stat] + statGain
+      },
+      energy: Math.max(0, careerState.energy - energyCost),
+      skillPoints: careerState.skillPoints + GAME_CONFIG.TRAINING.SKILL_POINTS_GAIN,
+      supportFriendships: newFriendships,
+      moveHints: newMoveHints,
+      learnableAbilities: newLearnableAbilities,
+      turn: careerState.turn + 1,
+      turnLog: [{
+        turn: careerState.turn,
+        type: 'training_success',
+        stat,
+        statGain,
+        message: `Trained ${stat} successfully! Gained ${statGain} ${stat}.`
+      }, ...(careerState.turnLog || [])],
+      currentTrainingOptions: null
+    };
+
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    res.json({
+      success: true,
+      result: 'success',
+      careerState: updatedCareerState,
+      statGain,
+      friendshipGains
+    });
+  } catch (error) {
+    console.error('Training error:', error);
+    res.status(500).json({ error: 'Failed to process training' });
+  }
+});
+
+// Generate training options (server-authoritative)
+router.post('/generate-training', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Get active career
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Generate training options (server-side random selection)
+    const allSupports = careerState.selectedSupports;
+    const stats = ['HP', 'Attack', 'Defense', 'Instinct', 'Speed'];
+    const trainingOptions = {};
+
+    stats.forEach(stat => {
+      // Pick 2 random supports for this stat
+      const shuffled = [...allSupports].sort(() => Math.random() - 0.5);
+      const selectedSupports = shuffled.slice(0, 2);
+
+      // 20% chance for move hint
+      let hint = null;
+      if (Math.random() < 0.2) {
+        const learnableAbilities = careerState.learnableAbilities || [];
+        const unknownMoves = learnableAbilities.filter(move => !careerState.knownAbilities.includes(move));
+        if (unknownMoves.length > 0) {
+          const randomMove = unknownMoves[Math.floor(Math.random() * unknownMoves.length)];
+          hint = { move: randomMove, description: `Hint for ${randomMove}!` };
+        }
+      }
+
+      trainingOptions[stat] = {
+        supports: selectedSupports,
+        hint
+      };
+    });
+
+    const updatedCareerState = {
+      ...careerState,
+      currentTrainingOptions: trainingOptions
+    };
+
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState
+    });
+  } catch (error) {
+    console.error('Generate training error:', error);
+    res.status(500).json({ error: 'Failed to generate training options' });
+  }
+});
+
+// Trigger random event (server-authoritative)
+router.post('/trigger-event', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Get active career
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Check for available hangout events
+    const selectedSupports = careerState.selectedSupports;
+    const availableHangouts = selectedSupports.filter(supportName => {
+      const friendship = careerState.supportFriendships[supportName] || 0;
+      return friendship >= 80 && !careerState.completedHangouts.includes(supportName);
+    });
+
+    let eventToSet = null;
+
+    // If hangouts are available, 50% chance to pick a hangout event
+    if (availableHangouts.length > 0 && Math.random() < 0.5) {
+      const supportName = availableHangouts[Math.floor(Math.random() * availableHangouts.length)];
+      const hangoutEvent = HANGOUT_EVENTS[supportName];
+      if (hangoutEvent) {
+        eventToSet = {
+          type: 'hangout',
+          supportName,
+          ...hangoutEvent
+        };
+      }
+    }
+
+    if (!eventToSet) {
+      // Filter events: 70% chance to exclude negative events
+      const eventKeys = Object.keys(RANDOM_EVENTS);
+      let filteredKeys = eventKeys;
+
+      if (Math.random() < 0.7) {
+        filteredKeys = eventKeys.filter(key => RANDOM_EVENTS[key].type !== 'negative');
+      }
+
+      if (filteredKeys.length === 0) {
+        filteredKeys = eventKeys;
+      }
+
+      const randomKey = filteredKeys[Math.floor(Math.random() * filteredKeys.length)];
+      const event = RANDOM_EVENTS[randomKey];
+
+      if (event && event.type && event.name) {
+        eventToSet = { ...event, key: randomKey };
+      }
+    }
+
+    const updatedCareerState = {
+      ...careerState,
+      pendingEvent: eventToSet
+    };
+
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState
+    });
+  } catch (error) {
+    console.error('Trigger event error:', error);
+    res.status(500).json({ error: 'Failed to trigger event' });
+  }
+});
+
+// Resolve event (server-authoritative)
+router.post('/resolve-event', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { choiceIndex } = req.body; // For choice events
+
+    // Get active career
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    if (!careerState.pendingEvent) {
+      return res.status(400).json({ error: 'No pending event to resolve' });
+    }
+
+    const pendingEvent = careerState.pendingEvent;
+    let outcome;
+
+    // Determine outcome based on event type
+    if (pendingEvent.type === 'stat_increase') {
+      outcome = { effect: pendingEvent.effect };
+    } else if (pendingEvent.type === 'choice') {
+      if (choiceIndex === undefined || !pendingEvent.choices[choiceIndex]) {
+        return res.status(400).json({ error: 'Invalid choice index' });
+      }
+      const choice = pendingEvent.choices[choiceIndex];
+
+      // Roll for outcome
+      const roll = Math.random();
+      let cumulative = 0;
+      for (const possibleOutcome of choice.outcomes) {
+        cumulative += possibleOutcome.chance;
+        if (roll < cumulative) {
+          outcome = possibleOutcome;
+          break;
+        }
+      }
+    } else if (pendingEvent.type === 'hangout') {
+      outcome = pendingEvent.effect;
+    }
+
+    if (!outcome) {
+      return res.status(400).json({ error: 'Failed to determine outcome' });
+    }
+
+    const eventResult = outcome.effect || outcome;
+    const newStats = { ...careerState.currentStats };
+    let energyChange = 0;
+    let skillPointsChange = 0;
+    const friendshipChanges = {};
+    let moveHintReceived = null;
+
+    // Apply stat changes
+    if (eventResult.stats) {
+      Object.keys(eventResult.stats).forEach(stat => {
+        newStats[stat] = Math.max(1, newStats[stat] + eventResult.stats[stat]);
+      });
+    }
+
+    if (eventResult.energy !== undefined) energyChange = eventResult.energy;
+    if (eventResult.skillPoints !== undefined) skillPointsChange = eventResult.skillPoints;
+    if (eventResult.friendship && pendingEvent.supportName) {
+      friendshipChanges[pendingEvent.supportName] = eventResult.friendship;
+    }
+    if (eventResult.moveHint) {
+      moveHintReceived = eventResult.moveHint;
+    }
+
+    const newMoveHints = { ...careerState.moveHints };
+    const newLearnableAbilities = [...(careerState.learnableAbilities || [])];
+    if (moveHintReceived) {
+      newMoveHints[moveHintReceived] = (newMoveHints[moveHintReceived] || 0) + 1;
+      if (!newLearnableAbilities.includes(moveHintReceived) && !careerState.knownAbilities.includes(moveHintReceived)) {
+        newLearnableAbilities.push(moveHintReceived);
+      }
+    }
+
+    const newFriendships = { ...careerState.supportFriendships };
+    Object.keys(friendshipChanges).forEach(support => {
+      const currentFriendship = newFriendships[support] || 0;
+      newFriendships[support] = Math.min(100, currentFriendship + friendshipChanges[support]);
+    });
+
+    const completedHangouts = (pendingEvent.type === 'hangout' && pendingEvent.supportName)
+      ? [...careerState.completedHangouts, pendingEvent.supportName]
+      : careerState.completedHangouts;
+
+    const shouldShowResult = pendingEvent.type === 'choice' || pendingEvent.type === 'hangout';
+
+    const updatedCareerState = {
+      ...careerState,
+      currentStats: newStats,
+      energy: Math.max(0, Math.min(GAME_CONFIG.CAREER.MAX_ENERGY, careerState.energy + energyChange)),
+      skillPoints: careerState.skillPoints + skillPointsChange,
+      supportFriendships: newFriendships,
+      moveHints: newMoveHints,
+      learnableAbilities: newLearnableAbilities,
+      completedHangouts,
+      eventResult: shouldShowResult ? {
+        stats: eventResult.stats || {},
+        energy: energyChange,
+        skillPoints: skillPointsChange,
+        friendship: friendshipChanges,
+        moveHint: moveHintReceived,
+        flavor: outcome.flavor || null
+      } : null,
+      pendingEvent: null,
+      currentTrainingOptions: !shouldShowResult ? null : careerState.currentTrainingOptions
+    };
+
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState,
+      showResult: shouldShowResult
+    });
+  } catch (error) {
+    console.error('Resolve event error:', error);
+    res.status(500).json({ error: 'Failed to resolve event' });
+  }
+});
+
+// Learn ability (server-authoritative)
+router.post('/learn-ability', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { moveName } = req.body;
+
+    if (!moveName) {
+      return res.status(400).json({ error: 'Move name required' });
+    }
+
+    // Get active career
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Validate move exists and is learnable
+    const { MOVES } = require('../shared/gameData');
+    const move = MOVES[moveName];
+    if (!move) {
+      return res.status(400).json({ error: 'Invalid move' });
+    }
+
+    // Check if already known
+    if (careerState.knownAbilities.includes(moveName)) {
+      return res.status(400).json({ error: 'Already knows this ability' });
+    }
+
+    // Calculate cost with hints
+    const hintsReceived = careerState.moveHints[moveName] || 0;
+    const discount = Math.min(hintsReceived * GAME_CONFIG.MOVES.HINT_DISCOUNT, GAME_CONFIG.MOVES.MAX_HINT_DISCOUNT);
+    const finalCost = Math.ceil(move.cost * (1 - discount));
+
+    // Check if can afford
+    if (careerState.skillPoints < finalCost) {
+      return res.status(400).json({ error: 'Not enough skill points' });
+    }
+
+    const updatedCareerState = {
+      ...careerState,
+      knownAbilities: [...careerState.knownAbilities, moveName],
+      skillPoints: careerState.skillPoints - finalCost
+    };
+
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState,
+      cost: finalCost
+    });
+  } catch (error) {
+    console.error('Learn ability error:', error);
+    res.status(500).json({ error: 'Failed to learn ability' });
   }
 });
 
