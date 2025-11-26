@@ -8,6 +8,76 @@ const router = express.Router();
 const { pool } = require('../config/database');
 const authenticateToken = require('../middleware/auth');
 const { simulateBattle } = require('../services/battleSimulator');
+const { LEGENDARY_POKEMON, POKEMON } = require('../shared/gameData');
+
+// Helper function to generate gym leaders
+const generateGymLeaders = () => {
+  const allGymLeaders = [
+    { name: 'Blaine', type: 'Fire', pokemon: LEGENDARY_POKEMON.Moltres },
+    { name: 'Misty', type: 'Water', pokemon: LEGENDARY_POKEMON.Articuno },
+    { name: 'Erika', type: 'Grass', pokemon: LEGENDARY_POKEMON.Celebi },
+    { name: 'Lt. Surge', type: 'Electric', pokemon: LEGENDARY_POKEMON.Raikou },
+    { name: 'Agatha', type: 'Poison', pokemon: LEGENDARY_POKEMON.Gengar },
+    { name: 'Giovanni', type: 'Fire', pokemon: LEGENDARY_POKEMON.Entei },
+    { name: 'Wallace', type: 'Water', pokemon: LEGENDARY_POKEMON.Suicune },
+    { name: 'Wattson', type: 'Electric', pokemon: LEGENDARY_POKEMON.Zapdos },
+    { name: 'Will', type: 'Psychic', pokemon: LEGENDARY_POKEMON.Lugia },
+    { name: 'Flannery', type: 'Fire', pokemon: LEGENDARY_POKEMON.HoOh },
+    { name: 'Sabrina', type: 'Psychic', pokemon: LEGENDARY_POKEMON.Mewtwo },
+    { name: 'Juan', type: 'Water', pokemon: LEGENDARY_POKEMON.Kyogre },
+    { name: 'Maxie', type: 'Fire', pokemon: LEGENDARY_POKEMON.Groudon },
+    { name: 'Winona', type: 'Grass', pokemon: LEGENDARY_POKEMON.Rayquaza },
+    { name: 'Bruno', type: 'Fighting', pokemon: LEGENDARY_POKEMON.Dialga }
+  ];
+
+  // Randomly shuffle and pick 5 gym leaders
+  const shuffled = [...allGymLeaders].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 5);
+};
+
+// Helper function to generate wild battles
+const generateWildBattles = (turn) => {
+  const startMultiplier = 1.0 * 1.04;
+  const growthPerTurn = 0.03125 * 1.04 * 1.3 * 1.25;
+  const difficultyMult = startMultiplier + (turn * growthPerTurn);
+
+  // Randomly select 2 pokemons from all available pokemons
+  const allPokemons = Object.values(POKEMON);
+  const shuffled = [...allPokemons].sort(() => Math.random() - 0.5);
+  const selectedPokemons = shuffled.slice(0, 2);
+
+  return selectedPokemons.map(pokemon => {
+    // Determine move pool based on turn
+    let availableAbilities = [...pokemon.defaultAbilities];
+
+    // Add learnable abilities progressively
+    if (turn >= 8) {
+      availableAbilities.push(...pokemon.learnableAbilities.slice(0, 2));
+    }
+    if (turn >= 16) {
+      availableAbilities.push(...pokemon.learnableAbilities.slice(2, 4));
+    }
+    if (turn >= 24) {
+      availableAbilities.push(...pokemon.learnableAbilities.slice(4));
+    }
+
+    // Scale stats based on difficulty
+    const scaledStats = {};
+    Object.keys(pokemon.baseStats).forEach(stat => {
+      scaledStats[stat] = Math.floor(pokemon.baseStats[stat] * difficultyMult);
+    });
+
+    return {
+      name: pokemon.name,
+      primaryType: pokemon.primaryType,
+      stats: scaledStats,
+      abilities: availableAbilities,
+      typeAptitudes: pokemon.typeAptitudes,
+      strategy: pokemon.strategy,
+      strategyGrade: pokemon.strategyGrade
+    };
+  });
+};
 
 // Get active career state
 router.get('/active', authenticateToken, async (req, res) => {
@@ -49,6 +119,10 @@ router.post('/start', authenticateToken, async (req, res) => {
       supportFriendships[supportName] = 0;
     });
 
+    // Generate gym leaders and initial wild battles
+    const gymLeaders = generateGymLeaders();
+    const availableBattles = generateWildBattles(1);
+
     // Initialize career state
     const careerState = {
       pokemon,
@@ -63,11 +137,17 @@ router.post('/start', authenticateToken, async (req, res) => {
       learnableAbilities: [...(pokemon.learnableAbilities || [])],
       moveHints: {},
       turnHistory: [],
+      turnLog: [],
       inspirations: [],
       supportFriendships,
       completedHangouts: [],
       pokeclockRetries: 3,
-      hasUsedPokeclock: false
+      hasUsedPokeclock: false,
+      gymLeaders,
+      currentGymIndex: 0,
+      availableBattles,
+      currentTrainingOptions: null,
+      pendingEvent: null
     };
 
     // Check if user already has active career
