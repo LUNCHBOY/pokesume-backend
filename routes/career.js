@@ -132,7 +132,7 @@ router.post('/start', authenticateToken, async (req, res) => {
       currentStats: { ...pokemon.baseStats },
       energy: 100,
       turn: 1,
-      skillPoints: 0,
+      skillPoints: 30,
       knownAbilities: [...pokemon.defaultAbilities],
       learnableAbilities: [...(pokemon.learnableAbilities || [])],
       moveHints: {},
