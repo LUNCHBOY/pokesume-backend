@@ -30,6 +30,8 @@ const pokemonRoutes = require('./routes/pokemon');
 const pvpRoutes = require('./routes/pvp');
 const leaderboardRoutes = require('./routes/leaderboard');
 const tournamentRoutes = require('./routes/tournaments');
+const careerRoutes = require('./routes/career');
+const inventoryRoutes = require('./routes/inventory');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -37,6 +39,8 @@ app.use('/api/pokemon', pokemonRoutes);
 app.use('/api/pvp', pvpRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/tournaments', tournamentRoutes);
+app.use('/api/career', careerRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
