@@ -79,6 +79,55 @@ const generateWildBattles = (turn) => {
   });
 };
 
+// Helper to migrate old career states
+const migrateCareerState = (careerState) => {
+  let updated = false;
+  const migrated = { ...careerState };
+
+  // Ensure skillPoints is initialized
+  if (migrated.skillPoints === undefined || migrated.skillPoints === null || isNaN(migrated.skillPoints)) {
+    migrated.skillPoints = 30;
+    updated = true;
+  }
+
+  // Ensure supportFriendships is initialized
+  if (!migrated.supportFriendships || typeof migrated.supportFriendships !== 'object') {
+    migrated.supportFriendships = {};
+    (migrated.selectedSupports || []).forEach(supportName => {
+      migrated.supportFriendships[supportName] = 0;
+    });
+    updated = true;
+  }
+
+  // Ensure all selected supports have friendship entries
+  (migrated.selectedSupports || []).forEach(supportName => {
+    if (migrated.supportFriendships[supportName] === undefined) {
+      migrated.supportFriendships[supportName] = 0;
+      updated = true;
+    }
+  });
+
+  // Ensure completedHangouts exists
+  if (!migrated.completedHangouts) {
+    migrated.completedHangouts = [];
+    updated = true;
+  }
+
+  // Ensure moveHints is an object (not array)
+  if (!migrated.moveHints || Array.isArray(migrated.moveHints)) {
+    migrated.moveHints = {};
+    updated = true;
+  }
+
+  // Ensure turnLog exists
+  if (!migrated.turnLog) {
+    migrated.turnLog = [];
+    updated = true;
+  }
+
+  return { migrated, updated };
+};
+
 // Get active career state
 router.get('/active', authenticateToken, async (req, res) => {
   try {
@@ -93,9 +142,20 @@ router.get('/active', authenticateToken, async (req, res) => {
       return res.json({ hasActiveCareer: false });
     }
 
+    const careerState = result.rows[0].career_state;
+    const { migrated, updated } = migrateCareerState(careerState);
+
+    // Save migrated state if updated
+    if (updated) {
+      await pool.query(
+        'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+        [JSON.stringify(migrated), userId]
+      );
+    }
+
     res.json({
       hasActiveCareer: true,
-      careerState: result.rows[0].career_state
+      careerState: migrated
     });
   } catch (error) {
     console.error('Get active career error:', error);
@@ -429,7 +489,7 @@ router.post('/generate-training', authenticateToken, async (req, res) => {
   }
 });
 
-// Trigger random event (server-authoritative)
+// Trigger random event OR generate training (server-authoritative)
 router.post('/trigger-event', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -446,63 +506,109 @@ router.post('/trigger-event', authenticateToken, async (req, res) => {
 
     const careerState = careerResult.rows[0].career_state;
 
-    // Check for available hangout events
-    const selectedSupports = careerState.selectedSupports;
-    const availableHangouts = selectedSupports.filter(supportName => {
-      const friendship = careerState.supportFriendships[supportName] || 0;
-      return friendship >= 80 && !careerState.completedHangouts.includes(supportName);
-    });
+    // 50% chance for an event to occur
+    if (Math.random() < 0.5) {
+      // Check for available hangout events
+      const selectedSupports = careerState.selectedSupports;
+      const availableHangouts = selectedSupports.filter(supportName => {
+        const friendship = careerState.supportFriendships[supportName] || 0;
+        return friendship >= 80 && !careerState.completedHangouts.includes(supportName);
+      });
 
-    let eventToSet = null;
+      let eventToSet = null;
 
-    // If hangouts are available, 50% chance to pick a hangout event
-    if (availableHangouts.length > 0 && Math.random() < 0.5) {
-      const supportName = availableHangouts[Math.floor(Math.random() * availableHangouts.length)];
-      const hangoutEvent = HANGOUT_EVENTS[supportName];
-      if (hangoutEvent) {
-        eventToSet = {
-          type: 'hangout',
-          supportName,
-          ...hangoutEvent
+      // If hangouts are available, 50% chance to pick a hangout event
+      if (availableHangouts.length > 0 && Math.random() < 0.5) {
+        const supportName = availableHangouts[Math.floor(Math.random() * availableHangouts.length)];
+        const hangoutEvent = HANGOUT_EVENTS[supportName];
+        if (hangoutEvent) {
+          eventToSet = {
+            type: 'hangout',
+            supportName,
+            ...hangoutEvent
+          };
+        }
+      }
+
+      if (!eventToSet) {
+        // Filter events: 70% chance to exclude negative events
+        const eventKeys = Object.keys(RANDOM_EVENTS);
+        let filteredKeys = eventKeys;
+
+        if (Math.random() < 0.7) {
+          filteredKeys = eventKeys.filter(key => RANDOM_EVENTS[key].type !== 'negative');
+        }
+
+        if (filteredKeys.length === 0) {
+          filteredKeys = eventKeys;
+        }
+
+        const randomKey = filteredKeys[Math.floor(Math.random() * filteredKeys.length)];
+        const event = RANDOM_EVENTS[randomKey];
+
+        if (event && event.type && event.name) {
+          eventToSet = { ...event, key: randomKey };
+        }
+      }
+
+      const updatedCareerState = {
+        ...careerState,
+        pendingEvent: eventToSet
+      };
+
+      await pool.query(
+        'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+        [JSON.stringify(updatedCareerState), userId]
+      );
+
+      res.json({
+        success: true,
+        careerState: updatedCareerState
+      });
+    } else {
+      // No event - generate training options instead
+      const allSupports = careerState.selectedSupports;
+      const stats = ['HP', 'Attack', 'Defense', 'Instinct', 'Speed'];
+      const trainingOptions = {};
+
+      stats.forEach(stat => {
+        // Pick 2 random supports for this stat
+        const shuffled = [...allSupports].sort(() => Math.random() - 0.5);
+        const selectedSupports = shuffled.slice(0, 2);
+
+        // 20% chance for move hint
+        let hint = null;
+        if (Math.random() < 0.2) {
+          const learnableAbilities = careerState.learnableAbilities || [];
+          const unknownMoves = learnableAbilities.filter(move => !careerState.knownAbilities.includes(move));
+          if (unknownMoves.length > 0) {
+            const randomMove = unknownMoves[Math.floor(Math.random() * unknownMoves.length)];
+            hint = { move: randomMove, description: `Hint for ${randomMove}!` };
+          }
+        }
+
+        trainingOptions[stat] = {
+          supports: selectedSupports,
+          hint
         };
-      }
+      });
+
+      const updatedCareerState = {
+        ...careerState,
+        currentTrainingOptions: trainingOptions,
+        pendingEvent: null
+      };
+
+      await pool.query(
+        'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+        [JSON.stringify(updatedCareerState), userId]
+      );
+
+      res.json({
+        success: true,
+        careerState: updatedCareerState
+      });
     }
-
-    if (!eventToSet) {
-      // Filter events: 70% chance to exclude negative events
-      const eventKeys = Object.keys(RANDOM_EVENTS);
-      let filteredKeys = eventKeys;
-
-      if (Math.random() < 0.7) {
-        filteredKeys = eventKeys.filter(key => RANDOM_EVENTS[key].type !== 'negative');
-      }
-
-      if (filteredKeys.length === 0) {
-        filteredKeys = eventKeys;
-      }
-
-      const randomKey = filteredKeys[Math.floor(Math.random() * filteredKeys.length)];
-      const event = RANDOM_EVENTS[randomKey];
-
-      if (event && event.type && event.name) {
-        eventToSet = { ...event, key: randomKey };
-      }
-    }
-
-    const updatedCareerState = {
-      ...careerState,
-      pendingEvent: eventToSet
-    };
-
-    await pool.query(
-      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
-      [JSON.stringify(updatedCareerState), userId]
-    );
-
-    res.json({
-      success: true,
-      careerState: updatedCareerState
-    });
   } catch (error) {
     console.error('Trigger event error:', error);
     res.status(500).json({ error: 'Failed to trigger event' });
