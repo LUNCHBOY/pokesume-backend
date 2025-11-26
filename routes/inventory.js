@@ -6,14 +6,14 @@
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../config/database');
-const { verifyToken } = require('../middleware/auth');
+const authenticateToken = require('../middleware/auth');
 
 // ============================================================================
 // POKEMON INVENTORY
 // ============================================================================
 
 // Get user's Pokemon inventory
-router.get('/pokemon', verifyToken, async (req, res) => {
+router.get('/pokemon', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { limit = 100, offset = 0 } = req.query;
@@ -45,7 +45,7 @@ router.get('/pokemon', verifyToken, async (req, res) => {
 });
 
 // Add Pokemon to inventory (gacha pull)
-router.post('/pokemon', verifyToken, async (req, res) => {
+router.post('/pokemon', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { pokemonName, pokemonData } = req.body;
@@ -72,7 +72,7 @@ router.post('/pokemon', verifyToken, async (req, res) => {
 });
 
 // Delete Pokemon from inventory
-router.delete('/pokemon/:id', verifyToken, async (req, res) => {
+router.delete('/pokemon/:id', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const pokemonId = req.params.id;
@@ -98,7 +98,7 @@ router.delete('/pokemon/:id', verifyToken, async (req, res) => {
 // ============================================================================
 
 // Get user's Support inventory
-router.get('/supports', verifyToken, async (req, res) => {
+router.get('/supports', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { limit = 100, offset = 0 } = req.query;
@@ -130,7 +130,7 @@ router.get('/supports', verifyToken, async (req, res) => {
 });
 
 // Add Support to inventory (gacha pull)
-router.post('/supports', verifyToken, async (req, res) => {
+router.post('/supports', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { supportName, supportData } = req.body;
@@ -157,7 +157,7 @@ router.post('/supports', verifyToken, async (req, res) => {
 });
 
 // Delete Support from inventory
-router.delete('/supports/:id', verifyToken, async (req, res) => {
+router.delete('/supports/:id', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const supportId = req.params.id;
@@ -183,7 +183,7 @@ router.delete('/supports/:id', verifyToken, async (req, res) => {
 // ============================================================================
 
 // Get user's trained Pokemon
-router.get('/trained', verifyToken, async (req, res) => {
+router.get('/trained', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { limit = 100, offset = 0 } = req.query;
@@ -219,7 +219,7 @@ router.get('/trained', verifyToken, async (req, res) => {
 // ============================================================================
 
 // Get user's Primos balance
-router.get('/primos', verifyToken, async (req, res) => {
+router.get('/primos', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -240,7 +240,7 @@ router.get('/primos', verifyToken, async (req, res) => {
 });
 
 // Update user's Primos (add or subtract)
-router.post('/primos', verifyToken, async (req, res) => {
+router.post('/primos', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { amount } = req.body;

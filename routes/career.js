@@ -6,11 +6,11 @@
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../config/database');
-const { verifyToken } = require('../middleware/auth');
+const authenticateToken = require('../middleware/auth');
 const { simulateBattle } = require('../services/battleSimulator');
 
 // Get active career state
-router.get('/active', verifyToken, async (req, res) => {
+router.get('/active', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -34,7 +34,7 @@ router.get('/active', verifyToken, async (req, res) => {
 });
 
 // Start new career
-router.post('/start', verifyToken, async (req, res) => {
+router.post('/start', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { pokemon, selectedSupports } = req.body;
@@ -88,7 +88,7 @@ router.post('/start', verifyToken, async (req, res) => {
 });
 
 // Update career state
-router.put('/update', verifyToken, async (req, res) => {
+router.put('/update', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { careerState } = req.body;
@@ -110,7 +110,7 @@ router.put('/update', verifyToken, async (req, res) => {
 });
 
 // Process battle (server-authoritative)
-router.post('/battle', verifyToken, async (req, res) => {
+router.post('/battle', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { opponent, isGymLeader } = req.body;
@@ -200,7 +200,7 @@ router.post('/battle', verifyToken, async (req, res) => {
 });
 
 // Complete career (save to trained pokemon)
-router.post('/complete', verifyToken, async (req, res) => {
+router.post('/complete', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const { careerState, completionType } = req.body;
@@ -242,7 +242,7 @@ router.post('/complete', verifyToken, async (req, res) => {
 });
 
 // Abandon career
-router.delete('/abandon', verifyToken, async (req, res) => {
+router.delete('/abandon', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
 
