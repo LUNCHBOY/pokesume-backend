@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../config/database');
 const authenticateToken = require('../middleware/auth');
+const { simulateBattle } = require('../services/battleSimulator');
 
 const router = express.Router();
 
@@ -249,6 +250,118 @@ router.delete('/:tournamentId/withdraw', authenticateToken, async (req, res) => 
   } catch (error) {
     console.error('Withdraw error:', error);
     res.status(500).json({ error: 'Failed to withdraw from tournament' });
+  }
+});
+
+// Simulate tournament match battle (server-authoritative)
+router.post('/matches/:matchId/simulate', authenticateToken, async (req, res) => {
+  try {
+    const matchId = req.params.matchId;
+
+    // Get match details
+    const matchResult = await db.query(
+      `SELECT
+        tm.*,
+        te1.pokemon1_roster_id as p1_roster1_id,
+        te1.pokemon2_roster_id as p1_roster2_id,
+        te1.pokemon3_roster_id as p1_roster3_id,
+        te2.pokemon1_roster_id as p2_roster1_id,
+        te2.pokemon2_roster_id as p2_roster2_id,
+        te2.pokemon3_roster_id as p2_roster3_id
+      FROM tournament_matches tm
+      JOIN tournament_entries te1 ON tm.player1_entry_id = te1.id
+      JOIN tournament_entries te2 ON tm.player2_entry_id = te2.id
+      WHERE tm.id = $1`,
+      [matchId]
+    );
+
+    if (matchResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Match not found' });
+    }
+
+    const match = matchResult.rows[0];
+
+    // Check if match already completed
+    if (match.winner_entry_id) {
+      return res.status(400).json({ error: 'Match already completed' });
+    }
+
+    // Get Pokemon roster data for both players
+    const rostersResult = await db.query(
+      `SELECT id, pokemon_data FROM pokemon_rosters
+       WHERE id IN ($1, $2, $3, $4, $5, $6)`,
+      [
+        match.p1_roster1_id, match.p1_roster2_id, match.p1_roster3_id,
+        match.p2_roster1_id, match.p2_roster2_id, match.p2_roster3_id
+      ]
+    );
+
+    // Parse pokemon_data and organize by player
+    const rosters = {};
+    rostersResult.rows.forEach(row => {
+      rosters[row.id] = typeof row.pokemon_data === 'string'
+        ? JSON.parse(row.pokemon_data)
+        : row.pokemon_data;
+    });
+
+    const player1Team = [
+      rosters[match.p1_roster1_id],
+      rosters[match.p1_roster2_id],
+      rosters[match.p1_roster3_id]
+    ];
+
+    const player2Team = [
+      rosters[match.p2_roster1_id],
+      rosters[match.p2_roster2_id],
+      rosters[match.p2_roster3_id]
+    ];
+
+    // Simulate 3v3 battles (best of 3 individual battles)
+    const battleResults = [];
+    let player1Wins = 0;
+    let player2Wins = 0;
+
+    for (let i = 0; i < 3; i++) {
+      const pokemon1 = player1Team[i];
+      const pokemon2 = player2Team[i];
+
+      const battleResult = simulateBattle(pokemon1, pokemon2);
+      battleResults.push(battleResult);
+
+      if (battleResult.winner === 1) {
+        player1Wins++;
+      } else {
+        player2Wins++;
+      }
+    }
+
+    // Determine overall winner (best of 3)
+    const matchWinnerEntryId = player1Wins > player2Wins
+      ? match.player1_entry_id
+      : match.player2_entry_id;
+
+    // Update match with results
+    await db.query(
+      `UPDATE tournament_matches
+       SET winner_entry_id = $1,
+           battle_results = $2,
+           completed_at = NOW()
+       WHERE id = $3`,
+      [
+        matchWinnerEntryId,
+        JSON.stringify({ battles: battleResults, player1Wins, player2Wins }),
+        matchId
+      ]
+    );
+
+    res.json({
+      success: true,
+      winner: matchWinnerEntryId === match.player1_entry_id ? 'player1' : 'player2',
+      battleResults: { battles: battleResults, player1Wins, player2Wins }
+    });
+  } catch (error) {
+    console.error('Simulate match error:', error);
+    res.status(500).json({ error: 'Failed to simulate match' });
   }
 });
 
