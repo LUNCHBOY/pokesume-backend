@@ -918,16 +918,18 @@ router.post('/battle', authenticateToken, async (req, res) => {
       strategyGrade: careerState.pokemon.strategyGrade
     };
 
-    // Prepare opponent Pokemon - normalize stats field
-    // Gym leaders and Elite Four may have stats or baseStats depending on source
+    // Prepare opponent Pokemon - normalize to consistent structure
+    // All data sources use baseStats, normalize to stats for battle
+    // Handle: wild battles (direct stats), gym leaders (baseStats), Elite Four (pokemon.baseStats)
+    const pokemonData = opponent.pokemon || opponent; // Elite Four has nested pokemon object
     const opponentPokemon = {
-      name: opponent.pokemon || opponent.name,
-      primaryType: opponent.primaryType,
-      stats: opponent.stats || opponent.baseStats || (opponent.pokemon ? opponent.pokemon.baseStats : null),
-      abilities: opponent.abilities || opponent.defaultAbilities || [],
-      typeAptitudes: opponent.typeAptitudes,
-      strategy: opponent.strategy || 'Balanced',
-      strategyGrade: opponent.strategyGrade || 'A'
+      name: pokemonData.name || opponent.name,
+      primaryType: pokemonData.primaryType || opponent.primaryType,
+      stats: pokemonData.stats || pokemonData.baseStats,
+      abilities: pokemonData.abilities || pokemonData.defaultAbilities || [],
+      typeAptitudes: pokemonData.typeAptitudes || opponent.typeAptitudes,
+      strategy: pokemonData.strategy || opponent.strategy || 'Balanced',
+      strategyGrade: pokemonData.strategyGrade || opponent.strategyGrade || 'A'
     };
 
     // Validate opponent has required fields
