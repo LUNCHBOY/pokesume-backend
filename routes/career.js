@@ -136,6 +136,20 @@ const migrateCareerState = (careerState) => {
     updated = true;
   }
 
+  // Migrate pokeclockRetries to pokeclocks
+  if (migrated.pokeclockRetries !== undefined && migrated.pokeclocks === undefined) {
+    migrated.pokeclocks = migrated.pokeclockRetries;
+    delete migrated.pokeclockRetries;
+    delete migrated.hasUsedPokeclock;
+    updated = true;
+  }
+
+  // Ensure pokeclocks is initialized
+  if (migrated.pokeclocks === undefined) {
+    migrated.pokeclocks = 3;
+    updated = true;
+  }
+
   return { migrated, updated };
 };
 
@@ -313,8 +327,7 @@ router.post('/start', authenticateToken, async (req, res) => {
       inspirations: [],
       supportFriendships,
       completedHangouts: [],
-      pokeclockRetries: 3,
-      hasUsedPokeclock: false,
+      pokeclocks: 3,
       gymLeaders,
       currentGymIndex: 0,
       availableBattles,
@@ -571,6 +584,66 @@ router.post('/train', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Training error:', error);
     res.status(500).json({ error: 'Failed to process training' });
+  }
+});
+
+// Process rest action (server-authoritative)
+router.post('/rest', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Get active career
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Calculate energy gain using REST config
+    const roll = Math.random();
+    let energyGain = GAME_CONFIG.REST.ENERGY_GAINS[1]; // Default: middle value (50)
+    if (roll < GAME_CONFIG.REST.PROBMOVES[0]) {
+      energyGain = GAME_CONFIG.REST.ENERGY_GAINS[0]; // Low roll: 30
+    } else if (roll > 1 - GAME_CONFIG.REST.PROBMOVES[2]) {
+      energyGain = GAME_CONFIG.REST.ENERGY_GAINS[2]; // High roll: 70
+    }
+
+    const currentEnergy = careerState.energy ?? GAME_CONFIG.CAREER.STARTING_ENERGY;
+    const newEnergy = Math.min(GAME_CONFIG.CAREER.MAX_ENERGY, currentEnergy + energyGain);
+
+    const logEntry = {
+      turn: careerState.turn,
+      type: 'rest',
+      energyGain,
+      message: `Rested and recovered ${energyGain} energy.`
+    };
+
+    const updatedCareerState = {
+      ...careerState,
+      energy: newEnergy,
+      turn: careerState.turn + 1,
+      turnLog: [logEntry, ...(careerState.turnLog || [])],
+      currentTrainingOptions: null
+    };
+
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState,
+      energyGain
+    });
+  } catch (error) {
+    console.error('Rest error:', error);
+    res.status(500).json({ error: 'Failed to process rest' });
   }
 });
 
