@@ -34,11 +34,44 @@ const generateGymLeaders = () => {
   return shuffled.slice(0, 4);
 };
 
+// Helper function to calculate difficulty multiplier based on turn
+// Scaling: 1.04x at turn 0, 3.5x at turn 60
+const calculateDifficultyMultiplier = (turn) => {
+  const startMultiplier = 1.04;
+  const growthPerTurn = 0.041; // Reaches 3.5x at turn 60
+  return startMultiplier + (turn * growthPerTurn);
+};
+
+// Elite Four fixed multipliers (used instead of turn-based scaling)
+const ELITE_FOUR_MULTIPLIERS = {
+  0: 3.5,   // Lorelei (turn 60)
+  1: 3.7,   // Bruno (turn 61)
+  2: 3.9,   // Agatha (turn 62)
+  3: 4.25   // Lance (turn 63)
+};
+
+// Helper function to scale Pokemon stats based on turn difficulty
+const scaleStats = (baseStats, turn) => {
+  const difficultyMult = calculateDifficultyMultiplier(turn);
+  const scaledStats = {};
+  Object.keys(baseStats).forEach(stat => {
+    scaledStats[stat] = Math.floor(baseStats[stat] * difficultyMult);
+  });
+  return scaledStats;
+};
+
+// Helper function to scale Pokemon stats with a fixed multiplier
+const scaleStatsWithMultiplier = (baseStats, multiplier) => {
+  const scaledStats = {};
+  Object.keys(baseStats).forEach(stat => {
+    scaledStats[stat] = Math.floor(baseStats[stat] * multiplier);
+  });
+  return scaledStats;
+};
+
 // Helper function to generate wild battles
 const generateWildBattles = (turn) => {
-  const startMultiplier = 1.0 * 1.04;
-  const growthPerTurn = 0.03125 * 1.04 * 1.3 * 1.25;
-  const difficultyMult = startMultiplier + (turn * growthPerTurn);
+  const difficultyMult = calculateDifficultyMultiplier(turn);
 
   // Randomly select 2 pokemons from all available pokemons
   const allPokemons = Object.values(POKEMON);
@@ -192,9 +225,15 @@ const getSupportCardAttributes = (card) => {
 
   const defaults = rarityDefaults[card.rarity] || rarityDefaults['Common'];
 
+  // Use individual card appearanceChance if defined, otherwise use rarity default
+  const finalAppearanceChance = card.appearanceChance !== undefined
+    ? card.appearanceChance
+    : defaults.appearanceChance;
+
   return {
     ...card,
     ...defaults,
+    appearanceChance: finalAppearanceChance,
     supportType: card.type || card.supportType
   };
 };
@@ -1055,10 +1094,32 @@ router.post('/battle', authenticateToken, async (req, res) => {
     // All data sources use baseStats, normalize to stats for battle
     // Handle: wild battles (direct stats), gym leaders (baseStats), Elite Four (pokemon.baseStats)
     const pokemonData = opponent.pokemon || opponent; // Elite Four has nested pokemon object
+
+    // Get base stats from opponent data
+    let opponentStats = pokemonData.stats || pokemonData.baseStats;
+
+    // Scale gym leader / Elite Four stats based on current turn
+    if (isGymLeader && opponentStats) {
+      const currentTurn = careerState.turn;
+      const eliteFourStartTurn = GAME_CONFIG.CAREER.ELITE_FOUR_START_TURN || 60;
+
+      // Check if this is an Elite Four battle (turn 60+)
+      if (currentTurn >= eliteFourStartTurn) {
+        const eliteFourIndex = currentTurn - eliteFourStartTurn;
+        const multiplier = ELITE_FOUR_MULTIPLIERS[eliteFourIndex] || 4.25; // Default to Lance's multiplier
+        opponentStats = scaleStatsWithMultiplier(opponentStats, multiplier);
+        console.log('[Battle] Scaled Elite Four stats with multiplier', multiplier, ':', opponentStats);
+      } else {
+        // Regular gym leader - use turn-based scaling
+        opponentStats = scaleStats(opponentStats, currentTurn);
+        console.log('[Battle] Scaled gym leader stats for turn', currentTurn, ':', opponentStats);
+      }
+    }
+
     const opponentPokemon = {
       name: pokemonData.name || opponent.name,
       primaryType: pokemonData.primaryType || opponent.primaryType,
-      stats: pokemonData.stats || pokemonData.baseStats,
+      stats: opponentStats,
       abilities: pokemonData.abilities || pokemonData.defaultAbilities || [],
       typeAptitudes: pokemonData.typeAptitudes || opponent.typeAptitudes,
       strategy: pokemonData.strategy || opponent.strategy || 'Balanced',

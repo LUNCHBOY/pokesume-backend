@@ -111,7 +111,71 @@ const MOVES = {
   DarkPulse: { type: 'Psychic', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 52, effect: { type: 'confuse', chance: 0.3, duration: 3 } },
   BlueFlare: { type: 'Fire', damage: 40, warmup: 6, cooldown: 7, stamina: 88, cost: 88, effect: { type: 'burn', chance: 0.5, duration: 5, damage: 6 } },
   DiamondStorm: { type: 'Fighting', damage: 33, warmup: 4, cooldown: 5, stamina: 55, cost: 68, effect: null },
-  PayDay: { type: 'Normal', damage: 15, warmup: 0, cooldown: 2, stamina: 25, cost: 35, effect: null }
+  PayDay: { type: 'Normal', damage: 15, warmup: 0, cooldown: 2, stamina: 25, cost: 35, effect: null },
+  // Weather moves
+  Sandstorm: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_sand', duration: 5 } },
+  // Additional moves from support card hints
+  AirSlash: { type: 'Normal', damage: 25, warmup: 2, cooldown: 3, stamina: 40, cost: 50, effect: { type: 'confuse', chance: 0.3, duration: 2 } },
+  AncientPower: { type: 'Normal', damage: 20, warmup: 2, cooldown: 3, stamina: 35, cost: 45, effect: { type: 'buff_all', chance: 0.1 } },
+  AquaRing: { type: 'Water', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'regen', duration: 5, healPercent: 0.06 } },
+  Attract: { type: 'Normal', damage: 0, warmup: 1, cooldown: 5, stamina: 25, cost: 35, effect: { type: 'infatuate', chance: 0.5, duration: 3 } },
+  BlastBurn: { type: 'Fire', damage: 42, warmup: 6, cooldown: 8, stamina: 68, cost: 85, effect: { type: 'exhaust', duration: 2 } },
+  BraveBird: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 58, cost: 72, effect: { type: 'recoil', damagePercent: 0.25 } },
+  BulkUp: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack_defense', duration: 4 } },
+  BulletPunch: { type: 'Fighting', damage: 16, warmup: 0, cooldown: 2, stamina: 28, cost: 38, effect: null },
+  CalmMind: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_instinct', duration: 4 } },
+  Curse: { type: 'Psychic', damage: 0, warmup: 3, cooldown: 6, stamina: 40, cost: 50, effect: { type: 'curse', duration: 5, damage: 6 } },
+  DazzlingGleam: { type: 'Normal', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
+  DestinyBond: { type: 'Psychic', damage: 0, warmup: 3, cooldown: 8, stamina: 50, cost: 60, effect: { type: 'destiny_bond', duration: 2 } },
+  DracoMeteor: { type: 'Fire', damage: 40, warmup: 6, cooldown: 7, stamina: 65, cost: 82, effect: { type: 'debuff_instinct_self', duration: 2 } },
+  DragonDance: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack_speed', duration: 4 } },
+  DragonPulse: { type: 'Fire', damage: 29, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
+  DragonRush: { type: 'Fighting', damage: 32, warmup: 4, cooldown: 5, stamina: 52, cost: 65, effect: { type: 'stun', chance: 0.2, duration: 1 } },
+  DragonTail: { type: 'Fighting', damage: 20, warmup: 2, cooldown: 4, stamina: 35, cost: 45, effect: { type: 'push_back' } },
+  DreamEater: { type: 'Psychic', damage: 32, warmup: 4, cooldown: 5, stamina: 48, cost: 60, effect: { type: 'drain_sleep', healPercent: 0.5 } },
+  EarthPower: { type: 'Fighting', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'debuff_defense', chance: 0.1, duration: 2 } },
+  Eruption: { type: 'Fire', damage: 42, warmup: 6, cooldown: 7, stamina: 70, cost: 85, effect: { type: 'hp_based_damage' } },
+  Explosion: { type: 'Normal', damage: 45, warmup: 5, cooldown: 10, stamina: 85, cost: 90, effect: { type: 'self_ko' } },
+  FeintAttack: { type: 'Psychic', damage: 20, warmup: 1, cooldown: 2, stamina: 30, cost: 40, effect: null },
+  FirePunch: { type: 'Fire', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 48, effect: { type: 'burn', chance: 0.2, duration: 4, damage: 3 } },
+  FlashCannon: { type: 'Normal', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: { type: 'debuff_defense', chance: 0.1, duration: 2 } },
+  FocusBlast: { type: 'Fighting', damage: 36, warmup: 5, cooldown: 6, stamina: 58, cost: 72, effect: { type: 'debuff_defense', chance: 0.1, duration: 2 } },
+  FoulPlay: { type: 'Psychic', damage: 30, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: { type: 'use_opponent_attack' } },
+  FusionFlare: { type: 'Fire', damage: 38, warmup: 6, cooldown: 6, stamina: 62, cost: 78, effect: { type: 'burn', chance: 0.3, duration: 5, damage: 5 } },
+  FutureSight: { type: 'Psychic', damage: 36, warmup: 5, cooldown: 7, stamina: 55, cost: 70, effect: { type: 'delayed_damage', turns: 3 } },
+  HeatWave: { type: 'Fire', damage: 31, warmup: 4, cooldown: 5, stamina: 50, cost: 62, effect: { type: 'burn', chance: 0.2, duration: 4, damage: 3 } },
+  Hex: { type: 'Psychic', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 45, effect: { type: 'double_if_status' } },
+  Hurricane: { type: 'Normal', damage: 36, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'confuse', chance: 0.3, duration: 3 } },
+  IcePunch: { type: 'Water', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 48, effect: { type: 'freeze', chance: 0.2, duration: 3 } },
+  IronDefense: { type: 'Normal', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_defense', duration: 4 } },
+  MeteorMash: { type: 'Normal', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'buff_attack', chance: 0.2, duration: 3 } },
+  Metronome: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'random_move' } },
+  MilkDrink: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
+  Moonblast: { type: 'Normal', damage: 31, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'debuff_instinct', chance: 0.3, duration: 2 } },
+  Moonlight: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
+  NastyPlot: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_instinct', duration: 4 } },
+  Outrage: { type: 'Fighting', damage: 36, warmup: 4, cooldown: 6, stamina: 58, cost: 72, effect: { type: 'confuse_self_after', duration: 2 } },
+  PowerGem: { type: 'Normal', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
+  Present: { type: 'Normal', damage: 20, warmup: 1, cooldown: 3, stamina: 30, cost: 40, effect: { type: 'random_damage_or_heal' } },
+  RapidSpin: { type: 'Normal', damage: 15, warmup: 1, cooldown: 2, stamina: 25, cost: 35, effect: { type: 'remove_hazards' } },
+  Recover: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
+  RockPolish: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_speed', duration: 4 } },
+  Rollout: { type: 'Normal', damage: 12, warmup: 1, cooldown: 2, stamina: 25, cost: 35, effect: { type: 'consecutive_boost', maxHits: 5 } },
+  Roost: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
+  Screech: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'debuff_defense', duration: 3 } },
+  Slash: { type: 'Normal', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 48, effect: { type: 'high_crit' } },
+  SleepPowder: { type: 'Grass', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'sleep', chance: 0.75, duration: 3 } },
+  SludgeWave: { type: 'Poison', damage: 31, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'poison', chance: 0.3, duration: 4, damage: 4 } },
+  Spikes: { type: 'Normal', damage: 0, warmup: 2, cooldown: 6, stamina: 30, cost: 40, effect: { type: 'entry_hazard', layers: 3 } },
+  StealthRock: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 6, stamina: 30, cost: 40, effect: { type: 'entry_hazard_rock' } },
+  SwordsDance: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack', duration: 4 } },
+  Synthesis: { type: 'Grass', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
+  ThunderWave: { type: 'Electric', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'paralyze', chance: 0.9, duration: 5 } },
+  Toxic: { type: 'Poison', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'badly_poison', duration: 6 } },
+  Transform: { type: 'Normal', damage: 0, warmup: 3, cooldown: 10, stamina: 40, cost: 50, effect: { type: 'copy_opponent' } },
+  UTurn: { type: 'Normal', damage: 21, warmup: 1, cooldown: 3, stamina: 32, cost: 42, effect: { type: 'switch_out' } },
+  Waterfall: { type: 'Water', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 52, effect: { type: 'stun', chance: 0.2, duration: 1 } },
+  WillOWisp: { type: 'Fire', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'burn', chance: 0.85, duration: 5, damage: 4 } }
 };
 
 // Type to color mapping for aptitude lookups
@@ -158,7 +222,13 @@ function simulateBattle(player1, player2) {
       statusEffects: []
     },
     tick: 0,
-    battleLog: []
+    battleLog: [],
+    // Weather state - affects both combatants
+    weather: {
+      type: null,       // 'sand', 'rain', 'sun', 'hail', etc.
+      ticksRemaining: 0,
+      caster: null      // 1 or 2 - which player started the weather
+    }
   };
 
   // Simulate battle ticks until one Pokemon faints
@@ -186,21 +256,33 @@ function simulateBattle(player1, player2) {
         energy: battleState.player2.currentStamina,
         statusEffects: [...battleState.player2.statusEffects]
       },
+      weather: battleState.weather.type ? { ...battleState.weather } : null,
       message: null
     });
 
     // Process player 1
-    const p1Message = processCombatantTick(battleState.player1, battleState.player2, 'Player 1');
+    const p1Message = processCombatantTick(battleState.player1, battleState.player2, 'Player 1', battleState);
     if (p1Message) {
       battleState.battleLog[battleState.battleLog.length - 1].message = p1Message;
     }
 
     // Process player 2 if still alive
     if (battleState.player2.currentHP > 0) {
-      const p2Message = processCombatantTick(battleState.player2, battleState.player1, 'Player 2');
+      const p2Message = processCombatantTick(battleState.player2, battleState.player1, 'Player 2', battleState);
       if (p2Message) {
         const lastLog = battleState.battleLog[battleState.battleLog.length - 1];
         lastLog.message = lastLog.message ? `${lastLog.message} | ${p2Message}` : p2Message;
+      }
+    }
+
+    // Process weather effects at end of tick
+    if (battleState.weather.type && battleState.weather.ticksRemaining > 0) {
+      const weatherMessages = processWeatherEffects(battleState);
+      if (weatherMessages.length > 0) {
+        const lastLog = battleState.battleLog[battleState.battleLog.length - 1];
+        lastLog.message = lastLog.message
+          ? `${lastLog.message} | ${weatherMessages.join(' | ')}`
+          : weatherMessages.join(' | ');
       }
     }
   }
@@ -246,7 +328,7 @@ function simulateBattle(player1, player2) {
  * Modifies combatant and opponent states in place
  * Returns message string for battle log
  */
-function processCombatantTick(combatant, opponent, name) {
+function processCombatantTick(combatant, opponent, name, battleState) {
   const messages = [];
 
   // Initialize move states on first tick
@@ -298,7 +380,7 @@ function processCombatantTick(combatant, opponent, name) {
 
   // Execute move or rest
   if (willCast && selectedMove) {
-    const moveMessage = executeMove(combatant, opponent, selectedMove, name);
+    const moveMessage = executeMove(combatant, opponent, selectedMove, name, battleState);
     messages.push(moveMessage);
   } else {
     // Rest and recover stamina
@@ -421,7 +503,7 @@ function selectMove(combatant, opponent, available) {
 /**
  * Execute a move and return battle message
  */
-function executeMove(combatant, opponent, moveName, attackerName) {
+function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   const move = MOVES[moveName];
   const strategyMult = GAME_CONFIG.STRATEGY[combatant.strategy] || GAME_CONFIG.STRATEGY.Balanced;
   const aptGradeMult = GAME_CONFIG.APTITUDE.MULTIPLIERS[combatant.strategyGrade] || 1.0;
@@ -475,50 +557,444 @@ function executeMove(combatant, opponent, moveName, attackerName) {
     }
   }
 
-  // Base damage calculation
-  const attackStat = combatant.stats.Attack;
-  const defenseStat = opponent.stats.Defense;
+  // Base damage calculation with buff/debuff modifiers
+  let attackStat = combatant.stats.Attack;
+  let defenseStat = opponent.stats.Defense;
+
+  // Apply attack buffs/debuffs
+  combatant.statusEffects.forEach(e => {
+    if (e.type === 'buff_attack' && e.multiplier) attackStat *= e.multiplier;
+  });
+  opponent.statusEffects.forEach(e => {
+    if (e.type === 'debuff_defense' && e.multiplier) defenseStat *= e.multiplier;
+  });
+
   const baseDamage = move.damage * (attackStat / defenseStat);
   let damage = Math.floor(baseDamage * aptitudeMult * typeBonus);
 
-  // Critical hit
-  const critChance = GAME_CONFIG.BATTLE.BASE_CRIT_CHANCE +
-                     (combatant.stats.Instinct / GAME_CONFIG.BATTLE.INSTINCT_CRIT_DENOMINATOR);
+  // Apply HP-based damage modifier (Eruption)
+  if (move.effect && move.effect.type === 'hp_based_damage') {
+    const hpPercent = combatant.currentHP / combatant.stats.HP;
+    damage = Math.floor(damage * hpPercent);
+  }
+
+  // Critical hit calculation with high_crit modifier
+  let critChance = GAME_CONFIG.BATTLE.BASE_CRIT_CHANCE +
+                   (combatant.stats.Instinct / GAME_CONFIG.BATTLE.INSTINCT_CRIT_DENOMINATOR);
+
+  // High crit moves (Slash) have 3x crit chance
+  if (move.effect && move.effect.type === 'high_crit') {
+    critChance *= 3;
+  }
+
+  // Apply instinct buffs to crit chance
+  combatant.statusEffects.forEach(e => {
+    if (e.type === 'buff_instinct' && e.multiplier) critChance *= e.multiplier;
+  });
+
   const isCrit = Math.random() < critChance;
   if (isCrit) {
     damage = Math.floor(damage * 2);
   }
 
-  damage = Math.max(1, damage);
-  opponent.currentHP = Math.max(0, opponent.currentHP - damage);
+  // Handle zero-damage (status/weather) moves differently
+  if (move.damage === 0) {
+    damage = 0;
+  } else {
+    damage = Math.max(1, damage);
+    opponent.currentHP = Math.max(0, opponent.currentHP - damage);
+  }
 
   // Build message
-  let message = `${attackerName} used ${moveName}! Dealt ${damage} damage!`;
-  if (isCrit) message += ' *** CRITICAL HIT! ***';
-  if (typeBonus > 1.0) message += ' Super effective!';
+  let message = damage > 0
+    ? `${attackerName} used ${moveName}! Dealt ${damage} damage!`
+    : `${attackerName} used ${moveName}!`;
+  if (isCrit && damage > 0) message += ' *** CRITICAL HIT! ***';
+  if (typeBonus > 1.0 && damage > 0) message += ' Super effective!';
 
   // Apply status effects
   if (move.effect) {
     const effect = move.effect;
+    const effectApplied = Math.random() < (effect.chance || 1.0);
 
+    // === SELF-TARGETING EFFECTS ===
     if (effect.type === 'exhaust') {
-      // Self-exhaust
+      // Self-exhaust (HyperBeam, BlastBurn, RoarOfTime)
       combatant.statusEffects.push({
         type: 'exhaust',
         duration: effect.duration,
         ticksRemaining: effect.duration
       });
       message += ` ${attackerName} is exhausted!`;
-    } else if (Math.random() < (effect.chance || 1.0)) {
-      // Apply effect to opponent
-      opponent.statusEffects.push({
-        type: effect.type,
+    } else if (effect.type === 'recoil') {
+      // Recoil damage (Submission, FlareBlitz, BraveBird, DoubleEdge)
+      const recoilDamage = Math.floor(damage * effect.damagePercent);
+      combatant.currentHP = Math.max(0, combatant.currentHP - recoilDamage);
+      message += ` ${attackerName} took ${recoilDamage} recoil damage!`;
+    } else if (effect.type === 'self_ko') {
+      // Self KO (Explosion)
+      combatant.currentHP = 0;
+      message += ` ${attackerName} fainted from the explosion!`;
+    } else if (effect.type === 'heal_self') {
+      // Self healing (Recover, MilkDrink, Moonlight, Roost, Synthesis)
+      const healAmount = Math.floor(combatant.stats.HP * effect.healPercent);
+      combatant.currentHP = Math.min(combatant.stats.HP, combatant.currentHP + healAmount);
+      message += ` ${attackerName} recovered ${healAmount} HP!`;
+    } else if (effect.type === 'buff_attack') {
+      // Attack buff (SwordsDance, MeteorMash)
+      if (effectApplied) {
+        combatant.statusEffects.push({
+          type: 'buff_attack',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          multiplier: 1.5
+        });
+        message += ` ${attackerName}'s Attack rose!`;
+      }
+    } else if (effect.type === 'buff_defense') {
+      // Defense buff (IronDefense)
+      combatant.statusEffects.push({
+        type: 'buff_defense',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        damage: effect.damage,
-        staminaBoost: effect.staminaBoost
+        multiplier: 1.5
       });
-      message += ` Opponent is ${effect.type}!`;
+      message += ` ${attackerName}'s Defense rose!`;
+    } else if (effect.type === 'buff_speed') {
+      // Speed buff (RockPolish)
+      combatant.statusEffects.push({
+        type: 'buff_speed',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        multiplier: 1.5
+      });
+      message += ` ${attackerName}'s Speed rose!`;
+    } else if (effect.type === 'buff_instinct') {
+      // Instinct buff (CalmMind, NastyPlot)
+      combatant.statusEffects.push({
+        type: 'buff_instinct',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        multiplier: 1.5
+      });
+      message += ` ${attackerName}'s Instinct rose!`;
+    } else if (effect.type === 'buff_attack_defense') {
+      // Attack + Defense buff (BulkUp)
+      combatant.statusEffects.push({
+        type: 'buff_attack',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        multiplier: 1.3
+      });
+      combatant.statusEffects.push({
+        type: 'buff_defense',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        multiplier: 1.3
+      });
+      message += ` ${attackerName}'s Attack and Defense rose!`;
+    } else if (effect.type === 'buff_attack_speed') {
+      // Attack + Speed buff (DragonDance)
+      combatant.statusEffects.push({
+        type: 'buff_attack',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        multiplier: 1.3
+      });
+      combatant.statusEffects.push({
+        type: 'buff_speed',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        multiplier: 1.3
+      });
+      message += ` ${attackerName}'s Attack and Speed rose!`;
+    } else if (effect.type === 'buff_all') {
+      // All stats buff (AncientPower - 10% chance)
+      if (effectApplied) {
+        ['buff_attack', 'buff_defense', 'buff_speed', 'buff_instinct'].forEach(buffType => {
+          combatant.statusEffects.push({
+            type: buffType,
+            duration: 4,
+            ticksRemaining: 4,
+            multiplier: 1.2
+          });
+        });
+        message += ` ${attackerName}'s stats rose!`;
+      }
+    } else if (effect.type === 'debuff_instinct_self') {
+      // Self instinct debuff (DracoMeteor)
+      combatant.statusEffects.push({
+        type: 'debuff_instinct',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        multiplier: 0.6
+      });
+      message += ` ${attackerName}'s Instinct fell!`;
+    } else if (effect.type === 'confuse_self_after') {
+      // Confuse self after attack (Outrage)
+      combatant.statusEffects.push({
+        type: 'confuse',
+        duration: effect.duration,
+        ticksRemaining: effect.duration
+      });
+      message += ` ${attackerName} became confused!`;
+    } else if (effect.type === 'regen') {
+      // Regeneration over time (AquaRing)
+      combatant.statusEffects.push({
+        type: 'regen',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        healPercent: effect.healPercent
+      });
+      message += ` ${attackerName} surrounded itself with water!`;
+    } else if (effect.type === 'evasion') {
+      // Evasion boost (ShadowForce)
+      combatant.statusEffects.push({
+        type: 'evasion',
+        duration: effect.duration,
+        ticksRemaining: effect.duration
+      });
+      message += ` ${attackerName} vanished!`;
+
+    // === WEATHER EFFECTS ===
+    } else if (effect.type.startsWith('weather_')) {
+      const weatherType = effect.type.replace('weather_', '');
+      const casterNum = attackerName === 'Player 1' ? 1 : 2;
+      battleState.weather = {
+        type: weatherType,
+        ticksRemaining: effect.duration,
+        caster: casterNum
+      };
+      const weatherNames = {
+        sand: 'Sandstorm',
+        rain: 'Rain',
+        sun: 'Harsh Sunlight',
+        hail: 'Hail'
+      };
+      message += ` ${weatherNames[weatherType] || weatherType} started!`;
+
+    // === DRAIN EFFECTS ===
+    } else if (effect.type === 'drain' && effectApplied) {
+      // HP drain (DrainPunch, GigaDrain)
+      const healAmount = Math.floor(damage * effect.healPercent);
+      combatant.currentHP = Math.min(combatant.stats.HP, combatant.currentHP + healAmount);
+      message += ` ${attackerName} drained ${healAmount} HP!`;
+    } else if (effect.type === 'drain_sleep') {
+      // Drain only works if opponent is asleep (DreamEater)
+      const isAsleep = opponent.statusEffects.some(e => e.type === 'sleep');
+      if (isAsleep) {
+        const healAmount = Math.floor(damage * effect.healPercent);
+        combatant.currentHP = Math.min(combatant.stats.HP, combatant.currentHP + healAmount);
+        message += ` ${attackerName} ate the dream and recovered ${healAmount} HP!`;
+      }
+
+    // === SPECIAL DAMAGE MODIFIERS ===
+    } else if (effect.type === 'high_crit') {
+      // High crit handled above in crit calculation - just a marker
+      // Already implemented via higher base crit, no additional action needed
+    } else if (effect.type === 'hp_based_damage') {
+      // Damage based on user HP (Eruption) - already calculated in base damage
+      // Effect is that lower HP = less damage, handled by damage calculation
+    } else if (effect.type === 'double_if_status') {
+      // Double damage if opponent has status (Hex)
+      if (opponent.statusEffects.length > 0) {
+        const bonusDamage = damage; // Already dealt damage, deal it again
+        opponent.currentHP = Math.max(0, opponent.currentHP - bonusDamage);
+        message += ` Hex dealt double damage!`;
+      }
+    } else if (effect.type === 'use_opponent_attack') {
+      // Use opponent's Attack stat (FoulPlay) - already calculated with modified formula
+      // The damage calculation should use opponent.stats.Attack instead of combatant.stats.Attack
+      // For simplicity, we'll add bonus damage based on opponent's Attack
+      const attackDiff = opponent.stats.Attack - combatant.stats.Attack;
+      if (attackDiff > 0) {
+        const bonusDamage = Math.floor(move.damage * (attackDiff / 100));
+        opponent.currentHP = Math.max(0, opponent.currentHP - bonusDamage);
+        message += ` Foul Play used opponent's strength!`;
+      }
+
+    // === OPPONENT STATUS EFFECTS ===
+    } else if (effectApplied) {
+      // All other effects that apply to opponent
+      if (effect.type === 'burn') {
+        opponent.statusEffects.push({
+          type: 'burn',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          damage: effect.damage || 4
+        });
+        message += ` Opponent was burned!`;
+      } else if (effect.type === 'poison') {
+        opponent.statusEffects.push({
+          type: 'poison',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          damage: effect.damage || 4
+        });
+        message += ` Opponent was poisoned!`;
+      } else if (effect.type === 'badly_poison') {
+        // Toxic - damage increases each turn
+        opponent.statusEffects.push({
+          type: 'badly_poison',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          damage: 2,
+          turnsActive: 0
+        });
+        message += ` Opponent was badly poisoned!`;
+      } else if (effect.type === 'paralyze') {
+        opponent.statusEffects.push({
+          type: 'paralyze',
+          duration: effect.duration,
+          ticksRemaining: effect.duration
+        });
+        message += ` Opponent was paralyzed!`;
+      } else if (effect.type === 'freeze') {
+        opponent.statusEffects.push({
+          type: 'freeze',
+          duration: effect.duration,
+          ticksRemaining: effect.duration
+        });
+        message += ` Opponent was frozen!`;
+      } else if (effect.type === 'sleep') {
+        opponent.statusEffects.push({
+          type: 'sleep',
+          duration: effect.duration,
+          ticksRemaining: effect.duration
+        });
+        message += ` Opponent fell asleep!`;
+      } else if (effect.type === 'confuse') {
+        opponent.statusEffects.push({
+          type: 'confuse',
+          duration: effect.duration,
+          ticksRemaining: effect.duration
+        });
+        message += ` Opponent became confused!`;
+      } else if (effect.type === 'stun') {
+        opponent.statusEffects.push({
+          type: 'stun',
+          duration: effect.duration,
+          ticksRemaining: effect.duration
+        });
+        message += ` Opponent flinched!`;
+      } else if (effect.type === 'infatuate') {
+        opponent.statusEffects.push({
+          type: 'infatuate',
+          duration: effect.duration,
+          ticksRemaining: effect.duration
+        });
+        message += ` Opponent fell in love!`;
+      } else if (effect.type === 'curse') {
+        opponent.statusEffects.push({
+          type: 'curse',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          damage: effect.damage || 6
+        });
+        message += ` Opponent was cursed!`;
+      } else if (effect.type === 'soak') {
+        opponent.statusEffects.push({
+          type: 'soak',
+          duration: effect.duration,
+          ticksRemaining: effect.duration
+        });
+        message += ` Opponent got soaked!`;
+      } else if (effect.type === 'debuff_defense') {
+        opponent.statusEffects.push({
+          type: 'debuff_defense',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          multiplier: 0.7
+        });
+        message += ` Opponent's Defense fell!`;
+      } else if (effect.type === 'debuff_instinct') {
+        opponent.statusEffects.push({
+          type: 'debuff_instinct',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          multiplier: 0.7
+        });
+        message += ` Opponent's Instinct fell!`;
+      } else if (effect.type === 'energize') {
+        combatant.statusEffects.push({
+          type: 'energize',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          staminaBoost: effect.staminaBoost || 5
+        });
+        message += ` ${attackerName} is energized!`;
+      } else if (effect.type === 'destiny_bond') {
+        combatant.statusEffects.push({
+          type: 'destiny_bond',
+          duration: effect.duration,
+          ticksRemaining: effect.duration
+        });
+        message += ` ${attackerName} is ready to take the opponent down with it!`;
+      } else if (effect.type === 'delayed_damage') {
+        // FutureSight - damage will hit later
+        opponent.statusEffects.push({
+          type: 'delayed_damage',
+          duration: effect.turns,
+          ticksRemaining: effect.turns,
+          damage: damage // Store the calculated damage
+        });
+        message += ` ${attackerName} foresaw an attack!`;
+      } else if (effect.type === 'entry_hazard' || effect.type === 'entry_hazard_rock') {
+        // Entry hazards (Spikes, StealthRock) - simplified: just deal damage now
+        const hazardDamage = effect.type === 'entry_hazard_rock' ? 8 : 5;
+        opponent.currentHP = Math.max(0, opponent.currentHP - hazardDamage);
+        message += ` Hazards dealt ${hazardDamage} damage!`;
+      } else if (effect.type === 'remove_hazards') {
+        // RapidSpin - clears hazards (simplified: restore some HP)
+        const healAmount = 5;
+        combatant.currentHP = Math.min(combatant.stats.HP, combatant.currentHP + healAmount);
+        message += ` Hazards were cleared!`;
+      } else if (effect.type === 'push_back') {
+        // DragonTail - resets opponent's move warmups
+        Object.values(opponent.moveStates).forEach(state => {
+          if (state.warmupRemaining > 0) {
+            state.warmupRemaining += 1;
+          }
+        });
+        message += ` Opponent was pushed back!`;
+      } else if (effect.type === 'consecutive_boost') {
+        // Rollout - tracking consecutive hits (simplified: just normal damage)
+        // Would need state tracking across turns for full implementation
+      } else if (effect.type === 'random_move') {
+        // Metronome - use a random move (simplified: deal random damage)
+        const randomDamage = Math.floor(Math.random() * 30) + 10;
+        opponent.currentHP = Math.max(0, opponent.currentHP - randomDamage);
+        message += ` Metronome used a random move for ${randomDamage} damage!`;
+      } else if (effect.type === 'random_damage_or_heal') {
+        // Present - random damage or heal
+        const roll = Math.random();
+        if (roll < 0.4) {
+          const presentDamage = Math.floor(Math.random() * 40) + 40;
+          opponent.currentHP = Math.max(0, opponent.currentHP - presentDamage);
+          message += ` Present dealt ${presentDamage} damage!`;
+        } else if (roll < 0.7) {
+          const presentDamage = Math.floor(Math.random() * 30) + 10;
+          opponent.currentHP = Math.max(0, opponent.currentHP - presentDamage);
+          message += ` Present dealt ${presentDamage} damage!`;
+        } else {
+          const healAmount = Math.floor(opponent.stats.HP * 0.25);
+          opponent.currentHP = Math.min(opponent.stats.HP, opponent.currentHP + healAmount);
+          message += ` Present healed opponent for ${healAmount}!`;
+        }
+      } else if (effect.type === 'copy_opponent') {
+        // Transform - copy opponent's stats (simplified: boost own stats temporarily)
+        combatant.statusEffects.push({
+          type: 'transformed',
+          duration: 5,
+          ticksRemaining: 5
+        });
+        message += ` ${attackerName} transformed!`;
+      } else if (effect.type === 'switch_out') {
+        // UTurn - deal damage and gain stamina (simplified since no switching)
+        const staminaGain = 10;
+        combatant.currentStamina = Math.min(GAME_CONFIG.BATTLE.MAX_STAMINA, combatant.currentStamina + staminaGain);
+        message += ` ${attackerName} gained momentum!`;
+      }
     }
   }
 
@@ -539,18 +1015,140 @@ function processStatusEffects(combatant, name) {
   combatant.statusEffects = combatant.statusEffects.filter(effect => {
     effect.ticksRemaining--;
 
+    // === DAMAGE OVER TIME ===
     if (effect.type === 'burn' || effect.type === 'poison') {
       combatant.currentHP = Math.max(0, combatant.currentHP - effect.damage);
       messages.push(`${name} takes ${effect.damage} damage from ${effect.type}!`);
-    } else if (effect.type === 'energize') {
+    } else if (effect.type === 'badly_poison') {
+      // Toxic damage increases each turn
+      effect.turnsActive = (effect.turnsActive || 0) + 1;
+      const toxicDamage = effect.damage * effect.turnsActive;
+      combatant.currentHP = Math.max(0, combatant.currentHP - toxicDamage);
+      messages.push(`${name} takes ${toxicDamage} damage from toxic poison!`);
+    } else if (effect.type === 'curse') {
+      combatant.currentHP = Math.max(0, combatant.currentHP - effect.damage);
+      messages.push(`${name} is hurt by the curse!`);
+    } else if (effect.type === 'delayed_damage' && effect.ticksRemaining === 0) {
+      // FutureSight damage hits when timer expires
+      combatant.currentHP = Math.max(0, combatant.currentHP - effect.damage);
+      messages.push(`${name} was hit by the foreseen attack for ${effect.damage} damage!`);
+    }
+
+    // === HEALING OVER TIME ===
+    else if (effect.type === 'regen') {
+      const healAmount = Math.floor(combatant.stats.HP * effect.healPercent);
+      combatant.currentHP = Math.min(combatant.stats.HP, combatant.currentHP + healAmount);
+      messages.push(`${name} restored ${healAmount} HP!`);
+    }
+
+    // === STAMINA EFFECTS ===
+    else if (effect.type === 'energize') {
       combatant.currentStamina = Math.min(GAME_CONFIG.BATTLE.MAX_STAMINA,
                                           combatant.currentStamina + effect.staminaBoost);
-    } else if (effect.type === 'stun' && effect.ticksRemaining > 0) {
+    }
+
+    // === MOVEMENT IMPAIRMENT ===
+    else if (effect.type === 'stun' && effect.ticksRemaining > 0) {
       messages.push(`${name} is stunned!`);
+    } else if (effect.type === 'freeze' && effect.ticksRemaining > 0) {
+      // 20% chance to thaw each turn
+      if (Math.random() < 0.2) {
+        effect.ticksRemaining = 0;
+        messages.push(`${name} thawed out!`);
+      } else {
+        messages.push(`${name} is frozen solid!`);
+      }
+    } else if (effect.type === 'sleep' && effect.ticksRemaining > 0) {
+      messages.push(`${name} is fast asleep!`);
+    } else if (effect.type === 'confuse' && effect.ticksRemaining > 0) {
+      // 33% chance to hurt self when confused
+      if (Math.random() < 0.33) {
+        const confuseDamage = Math.floor(combatant.stats.Attack * 0.1);
+        combatant.currentHP = Math.max(0, combatant.currentHP - confuseDamage);
+        messages.push(`${name} hurt itself in confusion for ${confuseDamage} damage!`);
+      }
+    } else if (effect.type === 'infatuate' && effect.ticksRemaining > 0) {
+      // 50% chance to be immobilized by love
+      if (Math.random() < 0.5) {
+        messages.push(`${name} is immobilized by love!`);
+      }
+    }
+
+    // === BUFF/DEBUFF EFFECTS (these are passive, checked during damage calc) ===
+    // buff_attack, buff_defense, buff_speed, buff_instinct, debuff_defense, debuff_instinct
+    // These don't need per-tick processing, they're checked when calculating damage
+
+    // === SPECIAL STATES ===
+    else if (effect.type === 'evasion' && effect.ticksRemaining > 0) {
+      // Evasion is checked during hit calculation
+    } else if (effect.type === 'destiny_bond' && effect.ticksRemaining > 0) {
+      // Destiny bond is checked when combatant faints
+    } else if (effect.type === 'soak' && effect.ticksRemaining > 0) {
+      // Soak changes type effectiveness (simplified: reduces fire damage taken)
     }
 
     return effect.ticksRemaining > 0;
   });
+
+  return messages;
+}
+
+/**
+ * Process weather effects at end of each tick
+ * Returns array of messages
+ */
+function processWeatherEffects(battleState) {
+  const messages = [];
+  const weather = battleState.weather;
+
+  if (!weather.type || weather.ticksRemaining <= 0) {
+    return messages;
+  }
+
+  // Weather damage configuration
+  const WEATHER_DAMAGE = {
+    sand: 4,  // Sandstorm deals chip damage
+    hail: 4   // Hail also deals chip damage (if added later)
+  };
+
+  // Types immune to weather damage
+  const WEATHER_IMMUNITY = {
+    sand: ['Fighting', 'Ground', 'Rock', 'Steel'],  // In Pokemon, Ground/Rock/Steel are immune to sand
+    hail: ['Ice']  // Ice types immune to hail
+  };
+
+  // Apply weather damage if applicable
+  if (WEATHER_DAMAGE[weather.type]) {
+    const damage = WEATHER_DAMAGE[weather.type];
+    const immuneTypes = WEATHER_IMMUNITY[weather.type] || [];
+
+    // Check player 1 immunity
+    if (!immuneTypes.includes(battleState.player1.primaryType)) {
+      battleState.player1.currentHP = Math.max(0, battleState.player1.currentHP - damage);
+      messages.push(`${battleState.player1.name} takes ${damage} damage from the ${weather.type === 'sand' ? 'sandstorm' : weather.type}!`);
+    }
+
+    // Check player 2 immunity
+    if (!immuneTypes.includes(battleState.player2.primaryType)) {
+      battleState.player2.currentHP = Math.max(0, battleState.player2.currentHP - damage);
+      messages.push(`${battleState.player2.name} takes ${damage} damage from the ${weather.type === 'sand' ? 'sandstorm' : weather.type}!`);
+    }
+  }
+
+  // Decrement weather duration
+  weather.ticksRemaining--;
+
+  // Weather ended message
+  if (weather.ticksRemaining <= 0) {
+    const weatherNames = {
+      sand: 'The sandstorm subsided.',
+      rain: 'The rain stopped.',
+      sun: 'The harsh sunlight faded.',
+      hail: 'The hail stopped.'
+    };
+    messages.push(weatherNames[weather.type] || `The ${weather.type} ended.`);
+    battleState.weather = { type: null, ticksRemaining: 0, caster: null };
+  }
 
   return messages;
 }

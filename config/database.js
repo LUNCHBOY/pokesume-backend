@@ -1,10 +1,11 @@
 const { Pool } = require('pg');
 
+// Only use SSL for production (Railway) - local PostgreSQL typically doesn't support SSL
+const isProduction = process.env.NODE_ENV === 'production';
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  },
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000  // Increased to 10 seconds
