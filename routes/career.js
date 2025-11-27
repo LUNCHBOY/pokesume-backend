@@ -802,6 +802,8 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
     const { choiceIndex } = req.body; // For choice events
 
+    console.log('[Resolve Event] Request received for user:', userId, 'choiceIndex:', choiceIndex);
+
     // Get active career
     const careerResult = await pool.query(
       'SELECT career_state FROM active_careers WHERE user_id = $1',
@@ -809,23 +811,33 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
     );
 
     if (careerResult.rows.length === 0) {
+      console.log('[Resolve Event] No active career found');
       return res.status(400).json({ error: 'No active career found' });
     }
 
     const careerState = careerResult.rows[0].career_state;
 
     if (!careerState.pendingEvent) {
+      console.log('[Resolve Event] No pending event');
       return res.status(400).json({ error: 'No pending event to resolve' });
     }
 
     const pendingEvent = careerState.pendingEvent;
+    console.log('[Resolve Event] Pending event type:', pendingEvent.type, 'name:', pendingEvent.name);
     let outcome;
 
     // Determine outcome based on event type
     if (pendingEvent.type === 'stat_increase') {
+      console.log('[Resolve Event] Handling stat_increase event');
+      outcome = { effect: pendingEvent.effect };
+    } else if (pendingEvent.type === 'negative') {
+      // Negative events have a direct effect property
+      console.log('[Resolve Event] Handling negative event');
       outcome = { effect: pendingEvent.effect };
     } else if (pendingEvent.type === 'choice') {
+      console.log('[Resolve Event] Handling choice event');
       if (choiceIndex === undefined || !pendingEvent.choices[choiceIndex]) {
+        console.log('[Resolve Event] Invalid choice index');
         return res.status(400).json({ error: 'Invalid choice index' });
       }
       const choice = pendingEvent.choices[choiceIndex];
@@ -841,12 +853,18 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
         }
       }
     } else if (pendingEvent.type === 'hangout') {
+      console.log('[Resolve Event] Handling hangout event');
       outcome = pendingEvent.effect;
+    } else {
+      console.log('[Resolve Event] Unknown event type:', pendingEvent.type);
     }
 
     if (!outcome) {
+      console.log('[Resolve Event] Failed to determine outcome');
       return res.status(400).json({ error: 'Failed to determine outcome' });
     }
+
+    console.log('[Resolve Event] Outcome determined:', outcome);
 
     const eventResult = outcome.effect || outcome;
     const newStats = { ...careerState.currentStats };
@@ -1210,6 +1228,54 @@ router.delete('/abandon', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Abandon career error:', error);
     res.status(500).json({ error: 'Failed to abandon career' });
+  }
+});
+
+// Use pokeclock to retry gym battle
+router.post('/use-pokeclock', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Get active career
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Check if player has pokeclocks
+    if (!careerState.pokeclocks || careerState.pokeclocks <= 0) {
+      return res.status(400).json({ error: 'No pokeclocks remaining' });
+    }
+
+    // Decrement pokeclocks and revert turn to retry gym battle
+    const updatedCareerState = {
+      ...careerState,
+      pokeclocks: careerState.pokeclocks - 1,
+      turn: careerState.turn - 1  // Revert turn so gym battle triggers again
+    };
+
+    // Save updated career state
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    console.log('[UsePokeclock] Turn reverted from', careerState.turn, 'to', updatedCareerState.turn, 'Pokeclocks remaining:', updatedCareerState.pokeclocks);
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState,
+      pokeclocksRemaining: updatedCareerState.pokeclocks
+    });
+  } catch (error) {
+    console.error('Use pokeclock error:', error);
+    res.status(500).json({ error: 'Failed to use pokeclock' });
   }
 });
 
