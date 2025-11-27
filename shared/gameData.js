@@ -141,8 +141,9 @@ const EVOLUTION_CHAINS = {
 
 const GAME_CONFIG = {
   CAREER: {
-    TOTAL_TURNS: 60,
+    TOTAL_TURNS: 63,
     GYM_LEADER_INTERVAL: 12,
+    ELITE_FOUR_START_TURN: 60,
     STARTING_ENERGY: 100,
     MAX_ENERGY: 100
   },
@@ -1870,6 +1871,230 @@ const LEGENDARY_POKEMON = {
 };
 
 // ============================================================================
+// GYM LEADER SIGNATURE POKEMON (Non-Legendary)
+// ============================================================================
+
+const GYM_LEADER_POKEMON = {
+  // Fire type gym leaders' signature Pokemon
+  BlaineArcanine: {
+    name: 'Arcanine',
+    primaryType: 'Fire',
+    baseStats: { HP: 110, Attack: 95, Defense: 70, Instinct: 85, Speed: 75 },
+    typeAptitudes: { Red: 'S', Blue: 'D', Green: 'B', Purple: 'A', Yellow: 'A', Orange: 'C' },
+    strategy: 'Nuker',
+    strategyGrade: 'S',
+    defaultAbilities: ['Ember', 'Tackle'],
+    learnableAbilities: ['Flamethrower', 'FireBlast', 'FlareBlitz', 'HyperBeam']
+  },
+  FlanneryMagmar: {
+    name: 'Magmar',
+    primaryType: 'Fire',
+    baseStats: { HP: 108, Attack: 98, Defense: 73, Instinct: 83, Speed: 73 },
+    typeAptitudes: { Red: 'S', Blue: 'D', Green: 'B', Purple: 'A', Yellow: 'A', Orange: 'C' },
+    strategy: 'Balanced',
+    strategyGrade: 'S',
+    defaultAbilities: ['Ember', 'Tackle'],
+    learnableAbilities: ['Flamethrower', 'FireBlast', 'LavaPlume', 'HyperBeam']
+  },
+  GiovanniRapidash: {
+    name: 'Rapidash',
+    primaryType: 'Fire',
+    baseStats: { HP: 118, Attack: 110, Defense: 95, Instinct: 78, Speed: 64 },
+    typeAptitudes: { Red: 'S', Blue: 'E', Green: 'A', Purple: 'B', Yellow: 'A', Orange: 'S' },
+    strategy: 'Balanced',
+    strategyGrade: 'S',
+    defaultAbilities: ['Ember', 'Tackle'],
+    learnableAbilities: ['Flamethrower', 'FireBlast', 'FlareBlitz', 'HyperBeam']
+  },
+  // Water type gym leaders' signature Pokemon
+  MistyStarmie: {
+    name: 'Starmie',
+    primaryType: 'Water',
+    baseStats: { HP: 115, Attack: 75, Defense: 90, Instinct: 90, Speed: 65 },
+    typeAptitudes: { Red: 'B', Blue: 'S', Green: 'D', Purple: 'A', Yellow: 'A', Orange: 'C' },
+    strategy: 'Balanced',
+    strategyGrade: 'S',
+    defaultAbilities: ['WaterGun', 'Tackle'],
+    learnableAbilities: ['Surf', 'HydroPump', 'Psychic', 'HyperBeam']
+  },
+  WallaceLapras: {
+    name: 'Lapras',
+    primaryType: 'Water',
+    baseStats: { HP: 118, Attack: 73, Defense: 93, Instinct: 88, Speed: 63 },
+    typeAptitudes: { Red: 'B', Blue: 'S', Green: 'D', Purple: 'A', Yellow: 'A', Orange: 'C' },
+    strategy: 'Scaler',
+    strategyGrade: 'S',
+    defaultAbilities: ['WaterGun', 'Tackle'],
+    learnableAbilities: ['Surf', 'HydroPump', 'IceBeam', 'HyperBeam']
+  },
+  JuanVaporeon: {
+    name: 'Vaporeon',
+    primaryType: 'Water',
+    baseStats: { HP: 122, Attack: 98, Defense: 85, Instinct: 95, Speed: 65 },
+    typeAptitudes: { Red: 'C', Blue: 'S', Green: 'D', Purple: 'A', Yellow: 'A', Orange: 'B' },
+    strategy: 'Nuker',
+    strategyGrade: 'S',
+    defaultAbilities: ['WaterGun', 'Tackle'],
+    learnableAbilities: ['Surf', 'HydroPump', 'IceBeam', 'HyperBeam']
+  },
+  // Grass type gym leaders' signature Pokemon
+  ErikaVileplume: {
+    name: 'Vileplume',
+    primaryType: 'Grass',
+    baseStats: { HP: 120, Attack: 85, Defense: 85, Instinct: 80, Speed: 65 },
+    typeAptitudes: { Red: 'D', Blue: 'B', Green: 'S', Purple: 'A', Yellow: 'A', Orange: 'C' },
+    strategy: 'Scaler',
+    strategyGrade: 'S',
+    defaultAbilities: ['VineWhip', 'Tackle'],
+    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'SludgeBomb', 'HyperBeam']
+  },
+  WinonaExeggutor: {
+    name: 'Exeggutor',
+    primaryType: 'Grass',
+    baseStats: { HP: 115, Attack: 105, Defense: 75, Instinct: 105, Speed: 85 },
+    typeAptitudes: { Red: 'A', Blue: 'A', Green: 'S', Purple: 'A', Yellow: 'S', Orange: 'A' },
+    strategy: 'Nuker',
+    strategyGrade: 'S',
+    defaultAbilities: ['VineWhip', 'Tackle'],
+    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'Psychic', 'HyperBeam']
+  },
+  // Electric type gym leaders' signature Pokemon
+  SurgeRaichu: {
+    name: 'Raichu',
+    primaryType: 'Electric',
+    baseStats: { HP: 95, Attack: 80, Defense: 65, Instinct: 100, Speed: 95 },
+    typeAptitudes: { Red: 'A', Blue: 'A', Green: 'A', Purple: 'B', Yellow: 'S', Orange: 'C' },
+    strategy: 'Nuker',
+    strategyGrade: 'S',
+    defaultAbilities: ['ThunderShock', 'Tackle'],
+    learnableAbilities: ['Thunderbolt', 'Thunder', 'VoltSwitch', 'HyperBeam']
+  },
+  WattsonElectabuzz: {
+    name: 'Electabuzz',
+    primaryType: 'Electric',
+    baseStats: { HP: 100, Attack: 88, Defense: 68, Instinct: 98, Speed: 91 },
+    typeAptitudes: { Red: 'A', Blue: 'A', Green: 'A', Purple: 'B', Yellow: 'S', Orange: 'D' },
+    strategy: 'Nuker',
+    strategyGrade: 'S',
+    defaultAbilities: ['ThunderShock', 'Tackle'],
+    learnableAbilities: ['Thunderbolt', 'Thunder', 'WildCharge', 'HyperBeam']
+  },
+  // Psychic/Poison type gym leaders' signature Pokemon
+  AgathaNidoking: {
+    name: 'Nidoking',
+    primaryType: 'Psychic',
+    baseStats: { HP: 105, Attack: 90, Defense: 75, Instinct: 85, Speed: 80 },
+    typeAptitudes: { Red: 'A', Blue: 'A', Green: 'B', Purple: 'S', Yellow: 'D', Orange: 'C' },
+    strategy: 'Balanced',
+    strategyGrade: 'S',
+    defaultAbilities: ['PsyBeam', 'Tackle'],
+    learnableAbilities: ['Psychic', 'PsychicBlast', 'SludgeBomb', 'HyperBeam']
+  },
+  WillWeezing: {
+    name: 'Weezing',
+    primaryType: 'Psychic',
+    baseStats: { HP: 125, Attack: 80, Defense: 100, Instinct: 95, Speed: 65 },
+    typeAptitudes: { Red: 'A', Blue: 'S', Green: 'B', Purple: 'S', Yellow: 'A', Orange: 'B' },
+    strategy: 'Scaler',
+    strategyGrade: 'S',
+    defaultAbilities: ['PsyBeam', 'Tackle'],
+    learnableAbilities: ['Psychic', 'PsychicBlast', 'SludgeBomb', 'HyperBeam']
+  },
+  SabrinaArbok: {
+    name: 'Arbok',
+    primaryType: 'Psychic',
+    baseStats: { HP: 110, Attack: 105, Defense: 70, Instinct: 105, Speed: 85 },
+    typeAptitudes: { Red: 'B', Blue: 'A', Green: 'A', Purple: 'S', Yellow: 'A', Orange: 'A' },
+    strategy: 'Nuker',
+    strategyGrade: 'S',
+    defaultAbilities: ['PsyBeam', 'Tackle'],
+    learnableAbilities: ['Psychic', 'PsychicBlast', 'SludgeBomb', 'HyperBeam']
+  },
+  // Fighting type gym leaders' signature Pokemon
+  BrunoMachamp: {
+    name: 'Machamp',
+    primaryType: 'Fighting',
+    baseStats: { HP: 112, Attack: 103, Defense: 88, Instinct: 88, Speed: 74 },
+    typeAptitudes: { Red: 'A', Blue: 'A', Green: 'A', Purple: 'B', Yellow: 'A', Orange: 'S' },
+    strategy: 'Balanced',
+    strategyGrade: 'S',
+    defaultAbilities: ['LowKick', 'Tackle'],
+    learnableAbilities: ['KarateChop', 'CloseCombat', 'DynamicPunch', 'HyperBeam']
+  }
+};
+
+// ============================================================================
+// ELITE FOUR
+// ============================================================================
+
+const ELITE_FOUR = [
+  {
+    name: 'Lorelei',
+    title: 'Ice Master',
+    type: 'Water',
+    pokemon: {
+      name: 'Lapras',
+      primaryType: 'Water',
+      baseStats: { HP: 130, Attack: 85, Defense: 100, Instinct: 95, Speed: 70 },
+      typeAptitudes: { Red: 'B', Blue: 'S', Green: 'D', Purple: 'A', Yellow: 'A', Orange: 'C' },
+      strategy: 'Scaler',
+      strategyGrade: 'S',
+      defaultAbilities: ['WaterGun', 'IceBeam'],
+      learnableAbilities: ['Surf', 'HydroPump', 'Blizzard', 'HyperBeam']
+    },
+    statMultiplier: 3.2
+  },
+  {
+    name: 'Bruno',
+    title: 'Fighting Master',
+    type: 'Fighting',
+    pokemon: {
+      name: 'Machamp',
+      primaryType: 'Fighting',
+      baseStats: { HP: 125, Attack: 115, Defense: 95, Instinct: 90, Speed: 75 },
+      typeAptitudes: { Red: 'A', Blue: 'A', Green: 'A', Purple: 'B', Yellow: 'A', Orange: 'S' },
+      strategy: 'Balanced',
+      strategyGrade: 'S',
+      defaultAbilities: ['LowKick', 'KarateChop'],
+      learnableAbilities: ['CloseCombat', 'DynamicPunch', 'DrainPunch', 'HyperBeam']
+    },
+    statMultiplier: 3.5
+  },
+  {
+    name: 'Agatha',
+    title: 'Ghost Master',
+    type: 'Psychic',
+    pokemon: {
+      name: 'Gengar',
+      primaryType: 'Psychic',
+      baseStats: { HP: 120, Attack: 100, Defense: 85, Instinct: 110, Speed: 95 },
+      typeAptitudes: { Red: 'A', Blue: 'A', Green: 'B', Purple: 'S', Yellow: 'D', Orange: 'C' },
+      strategy: 'Nuker',
+      strategyGrade: 'S',
+      defaultAbilities: ['PsyBeam', 'ShadowBall'],
+      learnableAbilities: ['Psychic', 'PsychicBlast', 'Hypnosis', 'HyperBeam']
+    },
+    statMultiplier: 3.8
+  },
+  {
+    name: 'Lance',
+    title: 'Dragon Master',
+    type: 'Fire',
+    pokemon: {
+      name: 'Dragonite',
+      primaryType: 'Fire',
+      baseStats: { HP: 135, Attack: 120, Defense: 95, Instinct: 105, Speed: 90 },
+      typeAptitudes: { Red: 'S', Blue: 'A', Green: 'A', Purple: 'A', Yellow: 'A', Orange: 'A' },
+      strategy: 'Nuker',
+      strategyGrade: 'S',
+      defaultAbilities: ['Ember', 'DragonClaw'],
+      learnableAbilities: ['Flamethrower', 'FireBlast', 'HyperBeam', 'ExtremeSpeed']
+    },
+    statMultiplier: 4.2
+  }
+];
+
+// ============================================================================
 // SUPPORT CARDS
 // ============================================================================
 
@@ -3165,6 +3390,8 @@ module.exports = {
   calculateBaseStats,
   POKEMON,
   LEGENDARY_POKEMON,
+  GYM_LEADER_POKEMON,
+  ELITE_FOUR,
   SUPPORT_CARDS,
   SUPPORT_GACHA_RARITY,
   GACHA_RARITY,

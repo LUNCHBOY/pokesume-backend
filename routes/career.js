@@ -8,31 +8,30 @@ const router = express.Router();
 const { pool } = require('../config/database');
 const authenticateToken = require('../middleware/auth');
 const { simulateBattle } = require('../services/battleSimulator');
-const { LEGENDARY_POKEMON, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS } = require('../shared/gameData');
+const { LEGENDARY_POKEMON, GYM_LEADER_POKEMON, ELITE_FOUR, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS } = require('../shared/gameData');
 
-// Helper function to generate gym leaders
+// Helper function to generate gym leaders (now uses non-legendary signature Pokemon)
 const generateGymLeaders = () => {
   const allGymLeaders = [
-    { name: 'Blaine', type: 'Fire', pokemon: LEGENDARY_POKEMON.Moltres },
-    { name: 'Misty', type: 'Water', pokemon: LEGENDARY_POKEMON.Articuno },
-    { name: 'Erika', type: 'Grass', pokemon: LEGENDARY_POKEMON.Celebi },
-    { name: 'Lt. Surge', type: 'Electric', pokemon: LEGENDARY_POKEMON.Raikou },
-    { name: 'Agatha', type: 'Poison', pokemon: LEGENDARY_POKEMON.Gengar },
-    { name: 'Giovanni', type: 'Fire', pokemon: LEGENDARY_POKEMON.Entei },
-    { name: 'Wallace', type: 'Water', pokemon: LEGENDARY_POKEMON.Suicune },
-    { name: 'Wattson', type: 'Electric', pokemon: LEGENDARY_POKEMON.Zapdos },
-    { name: 'Will', type: 'Psychic', pokemon: LEGENDARY_POKEMON.Lugia },
-    { name: 'Flannery', type: 'Fire', pokemon: LEGENDARY_POKEMON.HoOh },
-    { name: 'Sabrina', type: 'Psychic', pokemon: LEGENDARY_POKEMON.Mewtwo },
-    { name: 'Juan', type: 'Water', pokemon: LEGENDARY_POKEMON.Kyogre },
-    { name: 'Maxie', type: 'Fire', pokemon: LEGENDARY_POKEMON.Groudon },
-    { name: 'Winona', type: 'Grass', pokemon: LEGENDARY_POKEMON.Rayquaza },
-    { name: 'Bruno', type: 'Fighting', pokemon: LEGENDARY_POKEMON.Dialga }
+    { name: 'Blaine', type: 'Fire', pokemon: GYM_LEADER_POKEMON.BlaineArcanine },
+    { name: 'Misty', type: 'Water', pokemon: GYM_LEADER_POKEMON.MistyStarmie },
+    { name: 'Erika', type: 'Grass', pokemon: GYM_LEADER_POKEMON.ErikaVileplume },
+    { name: 'Lt. Surge', type: 'Electric', pokemon: GYM_LEADER_POKEMON.SurgeRaichu },
+    { name: 'Agatha', type: 'Poison', pokemon: GYM_LEADER_POKEMON.AgathaNidoking },
+    { name: 'Giovanni', type: 'Fire', pokemon: GYM_LEADER_POKEMON.GiovanniRapidash },
+    { name: 'Wallace', type: 'Water', pokemon: GYM_LEADER_POKEMON.WallaceLapras },
+    { name: 'Wattson', type: 'Electric', pokemon: GYM_LEADER_POKEMON.WattsonElectabuzz },
+    { name: 'Will', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.WillWeezing },
+    { name: 'Flannery', type: 'Fire', pokemon: GYM_LEADER_POKEMON.FlanneryMagmar },
+    { name: 'Sabrina', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.SabrinaArbok },
+    { name: 'Juan', type: 'Water', pokemon: GYM_LEADER_POKEMON.JuanVaporeon },
+    { name: 'Winona', type: 'Grass', pokemon: GYM_LEADER_POKEMON.WinonaExeggutor },
+    { name: 'Bruno', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.BrunoMachamp }
   ];
 
-  // Randomly shuffle and pick 5 gym leaders
+  // Randomly shuffle and pick 4 gym leaders (Elite 4 on turns 60-63)
   const shuffled = [...allGymLeaders].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, 5);
+  return shuffled.slice(0, 4);
 };
 
 // Helper function to generate wild battles
@@ -919,8 +918,26 @@ router.post('/battle', authenticateToken, async (req, res) => {
       strategyGrade: careerState.pokemon.strategyGrade
     };
 
+    // Prepare opponent Pokemon - normalize stats field
+    // Gym leaders and Elite Four may have stats or baseStats depending on source
+    const opponentPokemon = {
+      name: opponent.pokemon || opponent.name,
+      primaryType: opponent.primaryType,
+      stats: opponent.stats || opponent.baseStats || (opponent.pokemon ? opponent.pokemon.baseStats : null),
+      abilities: opponent.abilities || opponent.defaultAbilities || [],
+      typeAptitudes: opponent.typeAptitudes,
+      strategy: opponent.strategy || 'Balanced',
+      strategyGrade: opponent.strategyGrade || 'A'
+    };
+
+    // Validate opponent has required fields
+    if (!opponentPokemon.stats) {
+      console.error('Battle error: Opponent missing stats', { opponent, opponentPokemon });
+      return res.status(400).json({ error: 'Invalid opponent data - missing stats' });
+    }
+
     // Simulate battle
-    const battleResult = simulateBattle(playerPokemon, opponent);
+    const battleResult = simulateBattle(playerPokemon, opponentPokemon);
 
     // Determine if player won
     const playerWon = battleResult.winner === 1;
