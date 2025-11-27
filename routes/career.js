@@ -236,18 +236,7 @@ const generateTrainingOptionsWithAppearanceChance = (selectedSupports, careerSta
     }
   });
 
-  // Fallback: If no move hints generated through supports, check for general hints (20% chance)
-  stats.forEach(stat => {
-    if (!trainingOptions[stat].hint && Math.random() < 0.2) {
-      const learnableAbilities = careerState.learnableAbilities || [];
-      const unknownMoves = learnableAbilities.filter(move => !careerState.knownAbilities.includes(move));
-      if (unknownMoves.length > 0) {
-        const randomMove = unknownMoves[Math.floor(Math.random() * unknownMoves.length)];
-        trainingOptions[stat].hint = { move: randomMove, description: `Hint for ${randomMove}!` };
-      }
-    }
-  });
-
+  // Hints only come from support cards - no random fallback hints
   return trainingOptions;
 };
 
@@ -440,7 +429,7 @@ router.post('/train', authenticateToken, async (req, res) => {
     const trainingFailed = Math.random() < failureChance;
 
     if (trainingFailed) {
-      // Training failed
+      // Training failed - failures do NOT progress training levels
       const statLoss = stat === 'Speed' ? 0 : GAME_CONFIG.TRAINING.STAT_LOSS_ON_FAILURE;
 
       const updatedCareerState = {
@@ -457,7 +446,10 @@ router.post('/train', authenticateToken, async (req, res) => {
           stat,
           message: stat === 'Speed' ? `Training ${stat} failed! No stat loss.` : `Training ${stat} failed! Lost ${statLoss} ${stat}.`
         }, ...(careerState.turnLog || [])],
-        currentTrainingOptions: null
+        currentTrainingOptions: null,
+        // Preserve training levels and progress (failures don't affect them)
+        trainingLevels: careerState.trainingLevels || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
+        trainingProgress: careerState.trainingProgress || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 }
       };
 
       await pool.query(

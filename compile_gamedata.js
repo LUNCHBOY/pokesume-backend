@@ -1,15 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 
-// Read original App.jsx sections
-const appJsxPath = path.join(__dirname, '..', '..', 'pokesume frontend', 'pokesume-frontend', 'src', 'App.jsx');
+// Read original App_OLD.jsx sections
+const appJsxPath = path.join(__dirname, '..', '..', 'pokesume frontend', 'pokesume-frontend', 'src', 'App_OLD.jsx');
 const appJsxContent = fs.readFileSync(appJsxPath, 'utf8');
 const lines = appJsxContent.split('\n');
 
 // Extract specific line ranges
 const pokemonData = lines.slice(1529, 2916).join('\n'); // POKEMON database
 const legendaryData = lines.slice(2920, 3092).join('\n'); // LEGENDARY_POKEMON
-const supportData = lines.slice(3096, 3462).join('\n'); // SUPPORT_CARDS
+const supportData = lines.slice(3096, 3492).join('\n'); // SUPPORT_CARDS (updated with moveHints)
 const gachaData = lines.slice(3528, 3596).join('\n'); // GACHA pools
 const eventsData = lines.slice(3599, 4246).join('\n'); // RANDOM_EVENTS
 const hangoutData = lines.slice(4248, 4430).join('\n'); // HANGOUT_EVENTS

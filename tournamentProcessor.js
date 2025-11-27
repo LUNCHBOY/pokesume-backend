@@ -274,34 +274,163 @@ function simulateBestOf3(roster1, roster2) {
   };
 }
 
+// Tournament names for auto-generation
+const TOURNAMENT_NAMES = [
+  'Quick Battle Cup',
+  'Lightning League',
+  'Rapid Rumble',
+  'Flash Tournament',
+  'Speed Showdown',
+  'Blitz Battle',
+  'Swift Clash',
+  'Express Championship',
+  'Instant Arena',
+  'Sprint Series'
+];
+
+// Auto-generate a new tournament
+async function autoGenerateTournament() {
+  try {
+    // Check if there's already a tournament in registration with open slots
+    const existingRegistration = await db.query(`
+      SELECT t.id, t.max_players,
+        (SELECT COUNT(*) FROM tournament_entries WHERE tournament_id = t.id) as entries_count
+      FROM tournaments t
+      WHERE t.status = 'registration'
+      ORDER BY t.start_time ASC
+      LIMIT 1
+    `);
+
+    // If there's already a tournament accepting entries, don't create another
+    if (existingRegistration.rows.length > 0) {
+      const existing = existingRegistration.rows[0];
+      if (existing.entries_count < existing.max_players) {
+        console.log('[Auto-Tournament] Registration tournament already exists, skipping generation');
+        return null;
+      }
+    }
+
+    // Generate tournament name with timestamp
+    const nameIndex = Math.floor(Math.random() * TOURNAMENT_NAMES.length);
+    const timestamp = new Date().toISOString().slice(11, 16).replace(':', ''); // HHMM format
+    const tournamentName = `${TOURNAMENT_NAMES[nameIndex]} #${timestamp}`;
+
+    // Start time is 10 minutes from now (gives players time to register)
+    const startTime = new Date(Date.now() + 10 * 60 * 1000);
+
+    // Create tournament with 8 max players (quick format)
+    const maxPlayers = 8;
+    const totalRounds = Math.log2(maxPlayers);
+
+    const result = await db.query(
+      `INSERT INTO tournaments (name, start_time, status, max_players, total_rounds, created_at)
+       VALUES ($1, $2, 'registration', $3, $4, NOW())
+       RETURNING id, name, start_time`,
+      [tournamentName, startTime, maxPlayers, totalRounds]
+    );
+
+    console.log(`[Auto-Tournament] Created: ${result.rows[0].name} (ID: ${result.rows[0].id}), starts at ${startTime.toISOString()}`);
+    return result.rows[0];
+  } catch (error) {
+    console.error('[Auto-Tournament] Generation error:', error);
+    return null;
+  }
+}
+
+// Cleanup tournaments that failed to start (not enough players) or are old completed tournaments
+async function cleanupTournaments() {
+  try {
+    // 1. Delete registration tournaments that have passed their start time with < 2 players
+    const failedTournaments = await db.query(`
+      SELECT t.id, t.name,
+        (SELECT COUNT(*) FROM tournament_entries WHERE tournament_id = t.id) as entries_count
+      FROM tournaments t
+      WHERE t.status = 'registration'
+        AND t.start_time < NOW()
+    `);
+
+    for (const tournament of failedTournaments.rows) {
+      if (tournament.entries_count < 2) {
+        // Delete entries first (cascade should handle this, but being explicit)
+        await db.query('DELETE FROM tournament_entries WHERE tournament_id = $1', [tournament.id]);
+        await db.query('DELETE FROM tournament_matches WHERE tournament_id = $1', [tournament.id]);
+        await db.query('DELETE FROM tournaments WHERE id = $1', [tournament.id]);
+        console.log(`[Cleanup] Deleted failed tournament: ${tournament.name} (ID: ${tournament.id}) - only ${tournament.entries_count} players`);
+      }
+    }
+
+    // 2. Delete completed tournaments older than 20 minutes
+    const oldCompletedResult = await db.query(`
+      SELECT id, name FROM tournaments
+      WHERE status = 'completed'
+        AND (
+          completed_at < NOW() - INTERVAL '20 minutes'
+          OR (completed_at IS NULL AND created_at < NOW() - INTERVAL '1 hour')
+        )
+    `);
+
+    for (const tournament of oldCompletedResult.rows) {
+      // Delete associated data first
+      await db.query('DELETE FROM tournament_matches WHERE tournament_id = $1', [tournament.id]);
+      await db.query('DELETE FROM tournament_entries WHERE tournament_id = $1', [tournament.id]);
+      await db.query('DELETE FROM tournaments WHERE id = $1', [tournament.id]);
+      console.log(`[Cleanup] Deleted old completed tournament: ${tournament.name} (ID: ${tournament.id})`);
+    }
+
+    // 3. Delete stale in_progress tournaments (stuck for more than 2 hours)
+    const staleTournaments = await db.query(`
+      SELECT id, name FROM tournaments
+      WHERE status = 'in_progress'
+        AND start_time < NOW() - INTERVAL '2 hours'
+    `);
+
+    for (const tournament of staleTournaments.rows) {
+      await db.query('DELETE FROM tournament_matches WHERE tournament_id = $1', [tournament.id]);
+      await db.query('DELETE FROM tournament_entries WHERE tournament_id = $1', [tournament.id]);
+      await db.query('DELETE FROM tournaments WHERE id = $1', [tournament.id]);
+      console.log(`[Cleanup] Deleted stale tournament: ${tournament.name} (ID: ${tournament.id})`);
+    }
+
+  } catch (error) {
+    console.error('[Cleanup] Error:', error);
+  }
+}
+
 async function processTournaments() {
   console.log('[Tournament Processor] Starting...');
-  
+
   try {
+    // Step 1: Cleanup old/failed tournaments
+    await cleanupTournaments();
+
+    // Step 2: Auto-generate a new tournament if needed
+    await autoGenerateTournament();
+
+    // Step 3: Process existing tournaments
     // Get all active tournaments
     const tournaments = await db.query(`
-      SELECT * FROM tournaments 
-      WHERE status IN ('registration', 'upcoming', 'in_progress') 
+      SELECT * FROM tournaments
+      WHERE status IN ('registration', 'upcoming', 'in_progress')
       ORDER BY start_time ASC
     `);
-    
+
     for (const tournament of tournaments.rows) {
       const now = new Date();
       const startTime = new Date(tournament.start_time);
-      
+
       // Check if tournament should start
       if (tournament.status === 'registration' && now >= startTime) {
         console.log(`[Tournament ${tournament.id}] Starting tournament: ${tournament.name}`);
         await startTournament(tournament.id);
       }
-      
+
       // Process active tournament rounds
       if (tournament.status === 'in_progress') {
         console.log(`[Tournament ${tournament.id}] Processing active tournament`);
         await processRound(tournament.id);
       }
     }
-    
+
     console.log('[Tournament Processor] Complete');
   } catch (error) {
     console.error('[Tournament Processor] Error:', error);
@@ -402,10 +531,10 @@ async function processRound(tournamentId) {
     console.log(`[Tournament ${tournamentId}] Advancing to round ${currentRound + 1}`);
     await advanceRound(tournamentId, currentRound + 1, matches.rows);
   } else {
-    // Tournament complete
+    // Tournament complete - set completed_at timestamp for cleanup tracking
     console.log(`[Tournament ${tournamentId}] Tournament complete!`);
     await db.query(
-      'UPDATE tournaments SET status = $1 WHERE id = $2',
+      'UPDATE tournaments SET status = $1, completed_at = NOW() WHERE id = $2',
       ['completed', tournamentId]
     );
   }
