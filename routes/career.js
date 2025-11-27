@@ -76,7 +76,9 @@ const scaleStatsWithMultiplier = (baseStats, multiplier) => {
 
 // Helper function to generate wild battles
 const generateWildBattles = (turn) => {
-  const difficultyMult = calculateDifficultyMultiplier(turn);
+  const gymLeaderMult = calculateDifficultyMultiplier(turn);
+  // Wild pokemon are 25% weaker than gym leaders at the same turn
+  const wildMult = gymLeaderMult * 0.75;
 
   // Randomly select 2 pokemons from all available pokemons
   const allPokemons = Object.values(POKEMON);
@@ -98,10 +100,10 @@ const generateWildBattles = (turn) => {
       availableAbilities.push(...pokemon.learnableAbilities.slice(4));
     }
 
-    // Scale stats based on difficulty
+    // Scale stats based on wild difficulty (25% weaker than gym leaders)
     const scaledStats = {};
     Object.keys(pokemon.baseStats).forEach(stat => {
-      scaledStats[stat] = Math.floor(pokemon.baseStats[stat] * difficultyMult);
+      scaledStats[stat] = Math.floor(pokemon.baseStats[stat] * wildMult);
     });
 
     return {
