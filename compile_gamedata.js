@@ -6,13 +6,13 @@ const appJsxPath = path.join(__dirname, '..', '..', 'pokesume frontend', 'pokesu
 const appJsxContent = fs.readFileSync(appJsxPath, 'utf8');
 const lines = appJsxContent.split('\n');
 
-// Extract specific line ranges
-const pokemonData = lines.slice(1529, 2916).join('\n'); // POKEMON database
-const legendaryData = lines.slice(2920, 3092).join('\n'); // LEGENDARY_POKEMON
-const supportData = lines.slice(3096, 3492).join('\n'); // SUPPORT_CARDS (updated with moveHints)
-const gachaData = lines.slice(3528, 3596).join('\n'); // GACHA pools
-const eventsData = lines.slice(3599, 4246).join('\n'); // RANDOM_EVENTS
-const hangoutData = lines.slice(4248, 4430).join('\n'); // HANGOUT_EVENTS
+// Extract specific line ranges (using 0-indexed line numbers, so subtract 1 from editor line numbers)
+const pokemonData = lines.slice(1529, 2916).join('\n'); // POKEMON database (lines 1530-2916)
+const legendaryData = lines.slice(2920, 3092).join('\n'); // LEGENDARY_POKEMON (lines 2921-3092)
+const supportData = lines.slice(3096, 3493).join('\n'); // SUPPORT_CARDS (lines 3097-3493)
+const gachaData = lines.slice(3557, 3627).join('\n'); // GACHA pools (lines 3558-3627, includes both SUPPORT_GACHA_RARITY and GACHA_RARITY)
+const eventsData = lines.slice(3629, 4277).join('\n'); // RANDOM_EVENTS (lines 3630-4277)
+const hangoutData = lines.slice(4278, 4461).join('\n'); // HANGOUT_EVENTS (lines 4279-4461)
 
 // Create the complete shared module
 const gameDataModule = `/**

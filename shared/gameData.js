@@ -2272,38 +2272,10 @@ const SUPPORT_CARDS = {
   }
 };
 
+
 // ============================================================================
 // GACHA POOLS
 // ============================================================================
-
-      friendshipBonusTraining: 15,
-      appearanceChance: 0.45,
-      typeAppearancePriority: 1.5
-    }
-  };
-  
-  const defaults = rarityDefaults[card.rarity] || rarityDefaults['Common'];
-  
-  // Extract baseStatIncrease from effect.stats if available
-  let baseStatIncrease = { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 };
-  if (card.effect && card.effect.type === 'stat_boost' && card.effect.stats) {
-    baseStatIncrease = card.effect.stats;
-  }
-  
-  // Return complete attributes
-  return {
-    ...card,
-    baseStatIncrease: card.baseStatIncrease || baseStatIncrease,
-    initialFriendship: card.initialFriendship || defaults.initialFriendship,
-    typeBonusTraining: card.typeBonusTraining || defaults.typeBonusTraining,
-    generalBonusTraining: card.generalBonusTraining || defaults.generalBonusTraining,
-    friendshipBonusTraining: card.friendshipBonusTraining || defaults.friendshipBonusTraining,
-    moveHints: card.moveHints || ['BodySlam', 'HyperBeam'],
-    appearanceChance: card.appearanceChance || defaults.appearanceChance,
-    typeAppearancePriority: card.typeAppearancePriority || defaults.typeAppearancePriority,
-    type: card.supportType || 'HP' // For compatibility
-  };
-};
 
 // Support Card Gacha Rarity
 const SUPPORT_GACHA_RARITY = {
@@ -2344,11 +2316,9 @@ const GACHA_RARITY = {
     },
     Uncommon: {
         rate: 0.30, // 30%
-
-// ============================================================================
-// RANDOM EVENTS
-// ============================================================================
-
+        pokemon: [
+            'Growlithe', 'Vulpix', 'Ponyta', 'Houndour', 'Torchic', 
+            'Chinchou', 'Mareep', 'Elekid', 'Skorupi', 'Eevee', 
             'Togepi', 'Snubbull', 'Teddiursa', 'Slugma', 'Skitty',
             'Pikachu', 'Gastly', 'Fletchling', 'Cyndaquil', 'Totodile',
             'Chikorita', 'Mudkip', 'Treecko', 'Piplup', 'Turtwig',
@@ -2378,7 +2348,10 @@ const GACHA_RARITY = {
 };
 
 
-// ===== RANDOM EVENTS =====
+// ============================================================================
+// RANDOM EVENTS
+// ============================================================================
+
 const RANDOM_EVENTS = {
   // Stat increase events (10)
   wildEncounter: {
@@ -2996,11 +2969,8 @@ const RANDOM_EVENTS = {
     effect: { stats: { HP: -11, Attack: -6 }, energy: -15 }
   },
   weatherDelay: {
-
-// ============================================================================
-// HANGOUT EVENTS
-// ============================================================================
-
+    type: 'negative',
+    name: 'Sandstorm',
     description: 'A terrible sandstorm prevents proper training.',
     effect: { energy: -22 }
   },
@@ -3030,7 +3000,11 @@ const RANDOM_EVENTS = {
   }
 };
 
-// Hangout events - one per support pokemon, can only happen once
+
+// ============================================================================
+// HANGOUT EVENTS
+// ============================================================================
+
 const HANGOUT_EVENTS = {
   CynthiaGarchomp: {
     name: 'Champion\'s Masterclass',
@@ -3183,6 +3157,37 @@ const HANGOUT_EVENTS = {
     effect: { stats: { Attack: 11, Speed: 12 }, moveHint: 'AerialAce', skillPoints: 13 }
   },
   GiovanniPersian: {
+    name: 'Ruthless Tactics',
+    description: 'Giovanni demonstrates calculated dominance.',
+    flavor: 'Persian prowls with predatory grace. Giovanni states coldly, "Power respects only power. Show no mercy."',
+    effect: { stats: { Attack: 13, Instinct: 10 }, moveHint: 'PayDay', skillPoints: 14 }
+  },
+  ProfessorOakMew: {
+    name: 'Legendary Research',
+    description: 'Professor Oak shares knowledge with Mew\'s assistance.',
+    flavor: 'Mew playfully teleports around as Oak beams. "The bond between Pokemon and trainer transcends science!" he declares.',
+    effect: { stats: { Instinct: 14, Speed: 10 }, skillPoints: 18, energy: 20 }
+  },
+  DianthaDiancie: {
+    name: 'Dazzling Showcase',
+    description: 'Diantha performs with Diancie\'s brilliance.',
+    flavor: 'Diancie\'s diamonds sparkle radiantly. Diantha smiles, "A champion shines brightest under pressure\u2014be dazzling!"',
+    effect: { stats: { HP: 12, Defense: 15 }, moveHint: 'DiamondStorm', energy: 18 }
+  },
+  MaxieGroudon: {
+    name: 'Land Expansion',
+    description: 'Maxie demonstrates earth-shaking power.',
+    flavor: 'Groudon\'s presence makes the ground tremble. Maxie declares, "The land itself will bow to our strength!"',
+    effect: { stats: { HP: 11, Attack: 13 }, moveHint: 'Earthquake', energy: 16 }
+  },
+  ArchieKyogre: {
+    name: 'Ocean\'s Depth',
+    description: 'Archie channels the power of the seas.',
+    flavor: 'Kyogre summons massive waves. Archie roars, "The ocean\'s fury is unstoppable\u2014embrace its power!"',
+    effect: { stats: { HP: 13, Defense: 11 }, moveHint: 'HydroPump', energy: 17 }
+  }
+};
+
 
 // ============================================================================
 // EXPORTS

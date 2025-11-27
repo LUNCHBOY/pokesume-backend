@@ -1055,7 +1055,7 @@ router.post('/battle', authenticateToken, async (req, res) => {
       [JSON.stringify(updatedCareerState), userId]
     );
 
-    res.json({
+    const responsePayload = {
       success: true,
       battleResult: {
         winner: playerWon ? 'player' : 'opponent',
@@ -1068,7 +1068,13 @@ router.post('/battle', authenticateToken, async (req, res) => {
         }
       },
       careerState: updatedCareerState
-    });
+    };
+
+    console.log('[Battle] Sending response - Turn:', updatedCareerState.turn, 'GymIndex:', updatedCareerState.currentGymIndex);
+    console.log('[Battle] Response size:', JSON.stringify(responsePayload).length, 'bytes');
+    console.log('[Battle] careerState exists in response:', !!responsePayload.careerState);
+
+    res.json(responsePayload);
   } catch (error) {
     console.error('Battle error:', error);
     res.status(500).json({ error: 'Failed to process battle' });

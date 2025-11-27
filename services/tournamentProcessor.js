@@ -1,31 +1,19 @@
 const db = require('../config/database');
-
-// Battle simulation logic (matches game's battle system)
-function simulateBattle(pokemon1Data, pokemon2Data) {
-  // This is a simplified version - you'll need to port the actual battle logic from React
-  // For now, returns random winner
-  const winner = Math.random() < 0.5 ? 1 : 2;
-  return {
-    winner,
-    pokemon1Health: Math.random() * 100,
-    pokemon2Health: Math.random() * 100,
-    battleLog: ['Battle simulated']
-  };
-}
+const { simulateBattle } = require('./battleSimulator');
 
 // Simulate best-of-3 match between two entries
 function simulateBestOf3(entry1, entry2) {
-  const results = [];
+  const battles = [];
   let entry1Wins = 0;
   let entry2Wins = 0;
 
   // Battle 1: Pokemon1 vs Pokemon1
   const battle1 = simulateBattle(entry1.pokemon1_data, entry2.pokemon1_data);
-  results.push({
+  battles.push({
     battle: 1,
-    pokemon1: entry1.pokemon1_data.name,
-    pokemon2: entry2.pokemon1_data.name,
-    winner: battle1.winner === 1 ? entry1.user_id : entry2.user_id,
+    pokemon1Name: entry1.pokemon1_data.name,
+    pokemon2Name: entry2.pokemon1_data.name,
+    winner: battle1.winner,
     battleLog: battle1.battleLog
   });
   if (battle1.winner === 1) entry1Wins++;
@@ -33,11 +21,11 @@ function simulateBestOf3(entry1, entry2) {
 
   // Battle 2: Pokemon2 vs Pokemon2 (always play all 3)
   const battle2 = simulateBattle(entry1.pokemon2_data, entry2.pokemon2_data);
-  results.push({
+  battles.push({
     battle: 2,
-    pokemon1: entry1.pokemon2_data.name,
-    pokemon2: entry2.pokemon2_data.name,
-    winner: battle2.winner === 1 ? entry1.user_id : entry2.user_id,
+    pokemon1Name: entry1.pokemon2_data.name,
+    pokemon2Name: entry2.pokemon2_data.name,
+    winner: battle2.winner,
     battleLog: battle2.battleLog
   });
   if (battle2.winner === 1) entry1Wins++;
@@ -45,18 +33,20 @@ function simulateBestOf3(entry1, entry2) {
 
   // Battle 3: Pokemon3 vs Pokemon3
   const battle3 = simulateBattle(entry1.pokemon3_data, entry2.pokemon3_data);
-  results.push({
+  battles.push({
     battle: 3,
-    pokemon1: entry1.pokemon3_data.name,
-    pokemon2: entry2.pokemon3_data.name,
-    winner: battle3.winner === 1 ? entry1.user_id : entry2.user_id,
+    pokemon1Name: entry1.pokemon3_data.name,
+    pokemon2Name: entry2.pokemon3_data.name,
+    winner: battle3.winner,
     battleLog: battle3.battleLog
   });
   if (battle3.winner === 1) entry1Wins++;
   else entry2Wins++;
 
   return {
-    results,
+    battles,
+    player1Wins: entry1Wins,
+    player2Wins: entry2Wins,
     winner: entry1Wins > entry2Wins ? entry1.id : entry2.id,
     score: `${entry1Wins}-${entry2Wins}`
   };
