@@ -124,39 +124,55 @@ const migrateCareerState = (careerState) => {
     updated = true;
   }
 
+  // Ensure trainingLevels exists
+  if (!migrated.trainingLevels) {
+    migrated.trainingLevels = { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 };
+    updated = true;
+  }
+
+  // Ensure trainingProgress exists
+  if (!migrated.trainingProgress) {
+    migrated.trainingProgress = { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 };
+    updated = true;
+  }
+
   return { migrated, updated };
 };
 
 // Helper function to get support card attributes with rarity defaults
+// Support card training bonuses - rarer cards are STRONGER and appear MORE often
 const getSupportCardAttributes = (card) => {
   const rarityDefaults = {
     'Legendary': {
-      typeBonusTraining: 20,
-      generalBonusTraining: 5,
-      friendshipBonusTraining: 30,
-      appearanceChance: 0.25,
-      typeAppearancePriority: 3.0
+      // Best training bonuses - legendary trainers provide exceptional guidance
+      typeBonusTraining: 25,         // +25 when training matching stat type
+      generalBonusTraining: 8,       // +8 for non-matching stats
+      friendshipBonusTraining: 40,   // +40 at max friendship for matching type
+      // Higher appearance = more likely to show up in training options
+      appearanceChance: 0.55,        // 55% chance to appear each turn
+      typeAppearancePriority: 4.0    // 4x weight for their specialty stat
     },
     'Rare': {
-      typeBonusTraining: 15,
-      generalBonusTraining: 4,
-      friendshipBonusTraining: 25,
-      appearanceChance: 0.35,
-      typeAppearancePriority: 2.5
+      typeBonusTraining: 20,
+      generalBonusTraining: 6,
+      friendshipBonusTraining: 32,
+      appearanceChance: 0.50,
+      typeAppearancePriority: 3.5
     },
     'Uncommon': {
-      typeBonusTraining: 12,
-      generalBonusTraining: 3,
-      friendshipBonusTraining: 20,
-      appearanceChance: 0.40,
-      typeAppearancePriority: 2.0
+      typeBonusTraining: 15,
+      generalBonusTraining: 4,
+      friendshipBonusTraining: 24,
+      appearanceChance: 0.45,
+      typeAppearancePriority: 3.0
     },
     'Common': {
+      // Lowest bonuses - but still helpful
       typeBonusTraining: 10,
       generalBonusTraining: 2,
-      friendshipBonusTraining: 15,
-      appearanceChance: 0.45,
-      typeAppearancePriority: 1.5
+      friendshipBonusTraining: 16,
+      appearanceChance: 0.40,
+      typeAppearancePriority: 2.5
     }
   };
 
@@ -314,7 +330,9 @@ router.post('/start', authenticateToken, async (req, res) => {
       currentGymIndex: 0,
       availableBattles,
       currentTrainingOptions: null,
-      pendingEvent: null
+      pendingEvent: null,
+      trainingLevels: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
+      trainingProgress: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 }
     };
 
     // Check if user already has active career
@@ -476,6 +494,32 @@ router.post('/train', authenticateToken, async (req, res) => {
       friendshipGains[supportName] = (friendshipGains[supportName] || 0) + GAME_CONFIG.TRAINING.FRIENDSHIP_GAIN_PER_TRAINING;
     });
 
+    // Apply training level bonus
+    const currentLevel = careerState.trainingLevels?.[stat] || 0;
+    const levelBonus = currentLevel * GAME_CONFIG.TRAINING.LEVEL_BONUS_MULTIPLIER;
+    statGain = Math.floor(statGain * (1 + levelBonus));
+
+    // Update training progress and level
+    const currentProgress = careerState.trainingProgress?.[stat] || 0;
+    const newProgress = currentProgress + 1;
+    let newLevel = currentLevel;
+    let leveledUp = false;
+
+    if (newProgress >= GAME_CONFIG.TRAINING.LEVEL_UP_REQUIREMENT) {
+      newLevel = currentLevel + 1;
+      leveledUp = true;
+    }
+
+    const newTrainingProgress = {
+      ...(careerState.trainingProgress || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 }),
+      [stat]: leveledUp ? 0 : newProgress
+    };
+
+    const newTrainingLevels = {
+      ...(careerState.trainingLevels || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 }),
+      [stat]: newLevel
+    };
+
     const newFriendships = { ...careerState.supportFriendships };
     Object.keys(friendshipGains).forEach(support => {
       const currentFriendship = newFriendships[support] || 0;
@@ -504,13 +548,18 @@ router.post('/train', authenticateToken, async (req, res) => {
       supportFriendships: newFriendships,
       moveHints: newMoveHints,
       learnableAbilities: newLearnableAbilities,
+      trainingProgress: newTrainingProgress,
+      trainingLevels: newTrainingLevels,
       turn: careerState.turn + 1,
       turnLog: [{
         turn: careerState.turn,
-        type: 'training_success',
+        type: leveledUp ? 'training_levelup' : 'training_success',
         stat,
         statGain,
-        message: `Trained ${stat} successfully! Gained ${statGain} ${stat}.`
+        level: newLevel,
+        message: leveledUp
+          ? `Trained ${stat} successfully! Gained ${statGain} ${stat}. ${stat} training leveled up to ${newLevel}!`
+          : `Trained ${stat} successfully! Gained ${statGain} ${stat}.`
       }, ...(careerState.turnLog || [])],
       currentTrainingOptions: null
     };
@@ -595,11 +644,12 @@ router.post('/trigger-event', authenticateToken, async (req, res) => {
 
     // 50% chance for an event to occur
     if (Math.random() < 0.5) {
-      // Check for available hangout events
+      // Check for available hangout events - requires MAX friendship (100)
       const selectedSupports = careerState.selectedSupports;
       const availableHangouts = selectedSupports.filter(supportName => {
         const friendship = careerState.supportFriendships[supportName] || 0;
-        return friendship >= 80 && !careerState.completedHangouts.includes(supportName);
+        // Hangout events only unlock after reaching max friendship (100)
+        return friendship >= 100 && !careerState.completedHangouts.includes(supportName);
       });
 
       let eventToSet = null;
@@ -948,12 +998,18 @@ router.post('/battle', authenticateToken, async (req, res) => {
     let statGain = 0;
     let skillPoints = 0;
     let energyChange = 0;
+    let badge = null;
 
     if (playerWon) {
       if (isGymLeader) {
         // Gym leader victory
         statGain = 5;
         skillPoints = 10;
+        // Award badge for gym leader defeat
+        badge = {
+          gymLeaderName: opponent.name,
+          defeatedAt: new Date().toISOString()
+        };
       } else {
         // Wild battle victory
         statGain = 15; // 50% increased from base
@@ -972,6 +1028,41 @@ router.post('/battle', authenticateToken, async (req, res) => {
       }
     }
 
+    // Apply battle results to career state
+    const updatedCareerState = {
+      ...careerState,
+      currentStats: {
+        ...careerState.currentStats,
+        HP: careerState.currentStats.HP + statGain,
+        Attack: careerState.currentStats.Attack + statGain,
+        Defense: careerState.currentStats.Defense + statGain,
+        Instinct: careerState.currentStats.Instinct + statGain,
+        Speed: careerState.currentStats.Speed + statGain
+      },
+      skillPoints: careerState.skillPoints + skillPoints,
+      energy: Math.max(0, Math.min(GAME_CONFIG.CAREER.MAX_ENERGY, careerState.energy + energyChange)),
+      turn: careerState.turn + 1,
+      turnLog: [{
+        turn: careerState.turn,
+        type: isGymLeader ? (playerWon ? 'gym_victory' : 'gym_loss') : (playerWon ? 'battle_victory' : 'battle_loss'),
+        opponent: opponent.name,
+        message: playerWon
+          ? `Defeated ${opponent.name}! Gained ${statGain} to all stats${skillPoints > 0 ? ` and ${skillPoints} skill points` : ''}.`
+          : `Lost to ${opponent.name}.${energyChange < 0 ? ` Lost ${Math.abs(energyChange)} energy.` : ''}`
+      }, ...(careerState.turnLog || [])],
+      // Move to next gym leader if defeated current one
+      currentGymIndex: (isGymLeader && playerWon) ? careerState.currentGymIndex + 1 : careerState.currentGymIndex,
+      // Generate new wild battles for next turn
+      availableBattles: generateWildBattles(careerState.turn + 1),
+      currentTrainingOptions: null
+    };
+
+    // Save updated career state
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
     res.json({
       success: true,
       battleResult: {
@@ -980,9 +1071,11 @@ router.post('/battle', authenticateToken, async (req, res) => {
         rewards: {
           statGain,
           skillPoints,
-          energyChange
+          energyChange,
+          badge
         }
-      }
+      },
+      careerState: updatedCareerState
     });
   } catch (error) {
     console.error('Battle error:', error);

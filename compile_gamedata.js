@@ -166,10 +166,12 @@ const GAME_CONFIG = {
   TRAINING: {
     ENERGY_COSTS: { HP: 25, Attack: 30, Defense: 20, Instinct: 25, Speed: -5 },
     FAILURE_CHANCE_AT_ZERO_ENERGY: 0.99,
-    BASE_STAT_GAINS: { HP: 15, Attack: 10, Defense: 10, Instinct: 7, Speed: 5 },
+    BASE_STAT_GAINS: { HP: 11, Attack: 7, Defense: 7, Instinct: 5, Speed: 4 },
     SKILL_POINTS_ON_SUCCESS: 3,
     STAT_LOSS_ON_FAILURE: 2,
-    FRIENDSHIP_GAIN_PER_TRAINING: 7
+    FRIENDSHIP_GAIN_PER_TRAINING: 7,
+    LEVEL_UP_REQUIREMENT: 4, // Successful trainings needed to level up
+    LEVEL_BONUS_MULTIPLIER: 0.10 // 10% bonus per level
   },
   REST: {
     ENERGY_GAINS: [30, 50, 70],
