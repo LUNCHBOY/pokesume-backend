@@ -35,11 +35,16 @@ const generateGymLeaders = () => {
 };
 
 // Helper function to calculate difficulty multiplier based on turn
-// Scaling: 1.04x at turn 0, 3.5x at turn 60
+// Scaling: 1.0x until turn 12, then scales to 3.5x at turn 60
 const calculateDifficultyMultiplier = (turn) => {
-  const startMultiplier = 1.04;
-  const growthPerTurn = 0.041; // Reaches 3.5x at turn 60
-  return startMultiplier + (turn * growthPerTurn);
+  // No scaling before turn 12
+  if (turn < 12) {
+    return 1.0;
+  }
+  // After turn 12, scale from 1.0 to 3.5x at turn 60
+  // 48 turns (12 to 60) to go from 1.0 to 3.5 = 2.5 increase over 48 turns
+  const growthPerTurn = 2.5 / 48; // ~0.052 per turn
+  return 1.0 + ((turn - 12) * growthPerTurn);
 };
 
 // Elite Four fixed multipliers (used instead of turn-based scaling)
