@@ -128,6 +128,114 @@ const migrateCareerState = (careerState) => {
   return { migrated, updated };
 };
 
+// Helper function to get support card attributes with rarity defaults
+const getSupportCardAttributes = (card) => {
+  const rarityDefaults = {
+    'Legendary': {
+      typeBonusTraining: 20,
+      generalBonusTraining: 5,
+      friendshipBonusTraining: 30,
+      appearanceChance: 0.25,
+      typeAppearancePriority: 3.0
+    },
+    'Rare': {
+      typeBonusTraining: 15,
+      generalBonusTraining: 4,
+      friendshipBonusTraining: 25,
+      appearanceChance: 0.35,
+      typeAppearancePriority: 2.5
+    },
+    'Uncommon': {
+      typeBonusTraining: 12,
+      generalBonusTraining: 3,
+      friendshipBonusTraining: 20,
+      appearanceChance: 0.40,
+      typeAppearancePriority: 2.0
+    },
+    'Common': {
+      typeBonusTraining: 10,
+      generalBonusTraining: 2,
+      friendshipBonusTraining: 15,
+      appearanceChance: 0.45,
+      typeAppearancePriority: 1.5
+    }
+  };
+
+  const defaults = rarityDefaults[card.rarity] || rarityDefaults['Common'];
+
+  return {
+    ...card,
+    ...defaults,
+    supportType: card.type || card.supportType
+  };
+};
+
+// Helper function to generate training options with appearance chance logic
+const generateTrainingOptionsWithAppearanceChance = (selectedSupports, careerState) => {
+  const stats = ['HP', 'Attack', 'Defense', 'Instinct', 'Speed'];
+  const trainingOptions = {};
+
+  // Initialize empty options for each stat
+  stats.forEach(stat => {
+    trainingOptions[stat] = {
+      supports: [],
+      hint: null
+    };
+  });
+
+  // Process each support with appearance chance
+  selectedSupports.forEach(supportName => {
+    const supportCard = SUPPORT_CARDS[supportName];
+    if (!supportCard) return;
+
+    const support = getSupportCardAttributes(supportCard);
+
+    // Check if support appears this turn
+    if (Math.random() < support.appearanceChance) {
+      const supportType = support.supportType;
+
+      // Calculate weighted random stat selection
+      const weights = stats.map(stat => stat === supportType ? support.typeAppearancePriority : 1);
+      const totalWeight = weights.reduce((a, b) => a + b, 0);
+      const roll = Math.random() * totalWeight;
+
+      let cumulative = 0;
+      let selectedStat = stats[0];
+      for (let i = 0; i < stats.length; i++) {
+        cumulative += weights[i];
+        if (roll < cumulative) {
+          selectedStat = stats[i];
+          break;
+        }
+      }
+
+      // Add support to selected stat
+      trainingOptions[selectedStat].supports.push(supportName);
+
+      // 15% chance for move hint (if support has move hints)
+      const hasHint = Math.random() < 0.15;
+      if (hasHint && support.moveHints && support.moveHints.length > 0) {
+        const hint = support.moveHints[Math.floor(Math.random() * support.moveHints.length)];
+        trainingOptions[selectedStat].hint = { support: supportName, move: hint };
+      }
+    }
+  });
+
+  // Fallback: If no move hints generated through supports, check for general hints (20% chance)
+  stats.forEach(stat => {
+    if (!trainingOptions[stat].hint && Math.random() < 0.2) {
+      const learnableAbilities = careerState.learnableAbilities || [];
+      const unknownMoves = learnableAbilities.filter(move => !careerState.knownAbilities.includes(move));
+      if (unknownMoves.length > 0) {
+        const randomMove = unknownMoves[Math.floor(Math.random() * unknownMoves.length)];
+        trainingOptions[stat].hint = { move: randomMove, description: `Hint for ${randomMove}!` };
+      }
+    }
+  });
+
+  return trainingOptions;
+};
+
 // Get active career state
 router.get('/active', authenticateToken, async (req, res) => {
   try {
@@ -352,12 +460,13 @@ router.post('/train', authenticateToken, async (req, res) => {
     const friendshipGains = {};
 
     option.supports.forEach(supportName => {
-      const support = SUPPORT_CARDS[supportName];
-      if (!support) return;
+      const supportCard = SUPPORT_CARDS[supportName];
+      if (!supportCard) return;
 
+      const support = getSupportCardAttributes(supportCard);
       const friendship = careerState.supportFriendships[supportName] || 0;
       const isMaxFriendship = friendship >= 100;
-      const supportType = support.type || support.supportType;
+      const supportType = support.supportType;
 
       if (supportType === stat) {
         statGain += isMaxFriendship ? support.friendshipBonusTraining : support.typeBonusTraining;
@@ -365,7 +474,7 @@ router.post('/train', authenticateToken, async (req, res) => {
         statGain += support.generalBonusTraining;
       }
 
-      friendshipGains[supportName] = (friendshipGains[supportName] || 0) + GAME_CONFIG.TRAINING.FRIENDSHIP_GAIN;
+      friendshipGains[supportName] = (friendshipGains[supportName] || 0) + GAME_CONFIG.TRAINING.FRIENDSHIP_GAIN_PER_TRAINING;
     });
 
     const newFriendships = { ...careerState.supportFriendships };
@@ -392,7 +501,7 @@ router.post('/train', authenticateToken, async (req, res) => {
         [stat]: careerState.currentStats[stat] + statGain
       },
       energy: Math.max(0, careerState.energy - energyCost),
-      skillPoints: careerState.skillPoints + GAME_CONFIG.TRAINING.SKILL_POINTS_GAIN,
+      skillPoints: careerState.skillPoints + GAME_CONFIG.TRAINING.SKILL_POINTS_ON_SUCCESS,
       supportFriendships: newFriendships,
       moveHints: newMoveHints,
       learnableAbilities: newLearnableAbilities,
@@ -442,32 +551,11 @@ router.post('/generate-training', authenticateToken, async (req, res) => {
 
     const careerState = careerResult.rows[0].career_state;
 
-    // Generate training options (server-side random selection)
-    const allSupports = careerState.selectedSupports;
-    const stats = ['HP', 'Attack', 'Defense', 'Instinct', 'Speed'];
-    const trainingOptions = {};
-
-    stats.forEach(stat => {
-      // Pick 2 random supports for this stat
-      const shuffled = [...allSupports].sort(() => Math.random() - 0.5);
-      const selectedSupports = shuffled.slice(0, 2);
-
-      // 20% chance for move hint
-      let hint = null;
-      if (Math.random() < 0.2) {
-        const learnableAbilities = careerState.learnableAbilities || [];
-        const unknownMoves = learnableAbilities.filter(move => !careerState.knownAbilities.includes(move));
-        if (unknownMoves.length > 0) {
-          const randomMove = unknownMoves[Math.floor(Math.random() * unknownMoves.length)];
-          hint = { move: randomMove, description: `Hint for ${randomMove}!` };
-        }
-      }
-
-      trainingOptions[stat] = {
-        supports: selectedSupports,
-        hint
-      };
-    });
+    // Generate training options with appearance chance logic
+    const trainingOptions = generateTrainingOptionsWithAppearanceChance(
+      careerState.selectedSupports,
+      careerState
+    );
 
     const updatedCareerState = {
       ...careerState,
@@ -566,32 +654,11 @@ router.post('/trigger-event', authenticateToken, async (req, res) => {
         careerState: updatedCareerState
       });
     } else {
-      // No event - generate training options instead
-      const allSupports = careerState.selectedSupports;
-      const stats = ['HP', 'Attack', 'Defense', 'Instinct', 'Speed'];
-      const trainingOptions = {};
-
-      stats.forEach(stat => {
-        // Pick 2 random supports for this stat
-        const shuffled = [...allSupports].sort(() => Math.random() - 0.5);
-        const selectedSupports = shuffled.slice(0, 2);
-
-        // 20% chance for move hint
-        let hint = null;
-        if (Math.random() < 0.2) {
-          const learnableAbilities = careerState.learnableAbilities || [];
-          const unknownMoves = learnableAbilities.filter(move => !careerState.knownAbilities.includes(move));
-          if (unknownMoves.length > 0) {
-            const randomMove = unknownMoves[Math.floor(Math.random() * unknownMoves.length)];
-            hint = { move: randomMove, description: `Hint for ${randomMove}!` };
-          }
-        }
-
-        trainingOptions[stat] = {
-          supports: selectedSupports,
-          hint
-        };
-      });
+      // No event - generate training options with appearance chance logic
+      const trainingOptions = generateTrainingOptionsWithAppearanceChance(
+        careerState.selectedSupports,
+        careerState
+      );
 
       const updatedCareerState = {
         ...careerState,
