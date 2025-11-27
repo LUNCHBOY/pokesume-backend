@@ -1872,6 +1872,198 @@ const LEGENDARY_POKEMON = {
 };
 
 // ============================================================================
+// GYM LEADER POKEMON (for career battles)
+// ============================================================================
+
+const GYM_LEADER_POKEMON = {
+  BlaineArcanine: {
+    name: 'Arcanine',
+    primaryType: 'Fire',
+    baseStats: { HP: 130, Attack: 110, Defense: 85, Instinct: 80, Speed: 95 },
+    typeAptitudes: { Red: 'S', Blue: 'D', Green: 'B', Purple: 'C', Yellow: 'C', Orange: 'C' },
+    strategy: 'Nuker',
+    strategyGrade: 'A',
+    defaultAbilities: ['Flamethrower', 'FireFang', 'FlareBlitz']
+  },
+  MistyStarmie: {
+    name: 'Starmie',
+    primaryType: 'Water',
+    baseStats: { HP: 115, Attack: 85, Defense: 90, Instinct: 115, Speed: 95 },
+    typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'A', Yellow: 'B', Orange: 'C' },
+    strategy: 'Balanced',
+    strategyGrade: 'A',
+    defaultAbilities: ['Surf', 'Psychic', 'IceBeam']
+  },
+  ErikaVileplume: {
+    name: 'Vileplume',
+    primaryType: 'Grass',
+    baseStats: { HP: 125, Attack: 90, Defense: 95, Instinct: 100, Speed: 65 },
+    typeAptitudes: { Red: 'D', Blue: 'B', Green: 'A', Purple: 'B', Yellow: 'C', Orange: 'C' },
+    strategy: 'Scaler',
+    strategyGrade: 'A',
+    defaultAbilities: ['GigaDrain', 'SludgeBomb', 'SolarBeam']
+  },
+  SurgeRaichu: {
+    name: 'Raichu',
+    primaryType: 'Electric',
+    baseStats: { HP: 110, Attack: 95, Defense: 70, Instinct: 95, Speed: 120 },
+    typeAptitudes: { Red: 'B', Blue: 'C', Green: 'B', Purple: 'C', Yellow: 'S', Orange: 'C' },
+    strategy: 'Nuker',
+    strategyGrade: 'A',
+    defaultAbilities: ['Thunderbolt', 'Thunder', 'VoltSwitch']
+  },
+  AgathaNidoking: {
+    name: 'Nidoking',
+    primaryType: 'Fighting',
+    baseStats: { HP: 125, Attack: 110, Defense: 85, Instinct: 85, Speed: 90 },
+    typeAptitudes: { Red: 'B', Blue: 'C', Green: 'B', Purple: 'A', Yellow: 'C', Orange: 'A' },
+    strategy: 'Balanced',
+    strategyGrade: 'A',
+    defaultAbilities: ['Earthquake', 'SludgeBomb', 'IceBeam']
+  },
+  GiovanniRapidash: {
+    name: 'Rapidash',
+    primaryType: 'Fire',
+    baseStats: { HP: 115, Attack: 105, Defense: 75, Instinct: 85, Speed: 115 },
+    typeAptitudes: { Red: 'A', Blue: 'D', Green: 'B', Purple: 'B', Yellow: 'C', Orange: 'C' },
+    strategy: 'Nuker',
+    strategyGrade: 'A',
+    defaultAbilities: ['FlareBlitz', 'Flamethrower', 'IronTail']
+  },
+  WallaceLapras: {
+    name: 'Lapras',
+    primaryType: 'Water',
+    baseStats: { HP: 150, Attack: 90, Defense: 95, Instinct: 100, Speed: 65 },
+    typeAptitudes: { Red: 'C', Blue: 'S', Green: 'D', Purple: 'B', Yellow: 'C', Orange: 'C' },
+    strategy: 'Scaler',
+    strategyGrade: 'A',
+    defaultAbilities: ['HydroPump', 'IceBeam', 'Blizzard']
+  },
+  WattsonElectabuzz: {
+    name: 'Electabuzz',
+    primaryType: 'Electric',
+    baseStats: { HP: 115, Attack: 93, Defense: 67, Instinct: 95, Speed: 115 },
+    typeAptitudes: { Red: 'B', Blue: 'C', Green: 'B', Purple: 'C', Yellow: 'A', Orange: 'C' },
+    strategy: 'Nuker',
+    strategyGrade: 'A',
+    defaultAbilities: ['Thunderbolt', 'ThunderShock', 'WildCharge']
+  },
+  WillWeezing: {
+    name: 'Weezing',
+    primaryType: 'Psychic',
+    baseStats: { HP: 115, Attack: 95, Defense: 135, Instinct: 85, Speed: 65 },
+    typeAptitudes: { Red: 'B', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'C', Orange: 'C' },
+    strategy: 'Scaler',
+    strategyGrade: 'A',
+    defaultAbilities: ['SludgeBomb', 'ShadowBall', 'DarkPulse']
+  },
+  FlanneryMagmar: {
+    name: 'Magmar',
+    primaryType: 'Fire',
+    baseStats: { HP: 115, Attack: 105, Defense: 67, Instinct: 105, Speed: 103 },
+    typeAptitudes: { Red: 'A', Blue: 'D', Green: 'B', Purple: 'C', Yellow: 'C', Orange: 'C' },
+    strategy: 'Nuker',
+    strategyGrade: 'A',
+    defaultAbilities: ['Flamethrower', 'LavaPlume', 'FireBlast']
+  },
+  SabrinaArbok: {
+    name: 'Arbok',
+    primaryType: 'Psychic',
+    baseStats: { HP: 110, Attack: 100, Defense: 79, Instinct: 79, Speed: 85 },
+    typeAptitudes: { Red: 'B', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'C', Orange: 'B' },
+    strategy: 'Balanced',
+    strategyGrade: 'A',
+    defaultAbilities: ['SludgeBomb', 'DarkPulse', 'Psychic']
+  },
+  JuanVaporeon: {
+    name: 'Vaporeon',
+    primaryType: 'Water',
+    baseStats: { HP: 150, Attack: 75, Defense: 70, Instinct: 115, Speed: 75 },
+    typeAptitudes: { Red: 'C', Blue: 'S', Green: 'D', Purple: 'B', Yellow: 'C', Orange: 'C' },
+    strategy: 'Scaler',
+    strategyGrade: 'A',
+    defaultAbilities: ['HydroPump', 'Surf', 'IceBeam']
+  },
+  WinonaExeggutor: {
+    name: 'Exeggutor',
+    primaryType: 'Grass',
+    baseStats: { HP: 135, Attack: 100, Defense: 90, Instinct: 135, Speed: 55 },
+    typeAptitudes: { Red: 'D', Blue: 'B', Green: 'A', Purple: 'A', Yellow: 'C', Orange: 'C' },
+    strategy: 'Scaler',
+    strategyGrade: 'A',
+    defaultAbilities: ['SolarBeam', 'Psychic', 'GigaDrain']
+  },
+  BrunoMachamp: {
+    name: 'Machamp',
+    primaryType: 'Fighting',
+    baseStats: { HP: 130, Attack: 130, Defense: 85, Instinct: 70, Speed: 60 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'D', Yellow: 'C', Orange: 'S' },
+    strategy: 'Nuker',
+    strategyGrade: 'A',
+    defaultAbilities: ['CloseCombat', 'DynamicPunch', 'Earthquake']
+  }
+};
+
+// ============================================================================
+// ELITE FOUR (for end-game career battles)
+// ============================================================================
+
+const ELITE_FOUR = [
+  {
+    name: 'Lorelei',
+    type: 'Water',
+    pokemon: {
+      name: 'Cloyster',
+      primaryType: 'Water',
+      baseStats: { HP: 120, Attack: 100, Defense: 180, Instinct: 90, Speed: 70 },
+      typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'B', Yellow: 'C', Orange: 'C' },
+      strategy: 'Scaler',
+      strategyGrade: 'S',
+      defaultAbilities: ['HydroPump', 'Blizzard', 'IceBeam']
+    }
+  },
+  {
+    name: 'Bruno',
+    type: 'Fighting',
+    pokemon: {
+      name: 'Machamp',
+      primaryType: 'Fighting',
+      baseStats: { HP: 140, Attack: 145, Defense: 95, Instinct: 75, Speed: 65 },
+      typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'D', Yellow: 'C', Orange: 'S' },
+      strategy: 'Nuker',
+      strategyGrade: 'S',
+      defaultAbilities: ['CloseCombat', 'Earthquake', 'StoneEdge']
+    }
+  },
+  {
+    name: 'Agatha',
+    type: 'Psychic',
+    pokemon: {
+      name: 'Gengar',
+      primaryType: 'Psychic',
+      baseStats: { HP: 110, Attack: 140, Defense: 70, Instinct: 145, Speed: 130 },
+      typeAptitudes: { Red: 'B', Blue: 'B', Green: 'C', Purple: 'S', Yellow: 'D', Orange: 'B' },
+      strategy: 'Nuker',
+      strategyGrade: 'S',
+      defaultAbilities: ['ShadowBall', 'PsychicBlast', 'DarkPulse']
+    }
+  },
+  {
+    name: 'Lance',
+    type: 'Fighting',
+    pokemon: {
+      name: 'Dragonite',
+      primaryType: 'Fighting',
+      baseStats: { HP: 145, Attack: 145, Defense: 100, Instinct: 110, Speed: 90 },
+      typeAptitudes: { Red: 'A', Blue: 'A', Green: 'A', Purple: 'B', Yellow: 'A', Orange: 'S' },
+      strategy: 'Balanced',
+      strategyGrade: 'S',
+      defaultAbilities: ['DragonClaw', 'HyperBeam', 'Earthquake']
+    }
+  }
+];
+
+// ============================================================================
 // SUPPORT CARDS
 // ============================================================================
 
@@ -3202,6 +3394,8 @@ module.exports = {
   calculateBaseStats,
   POKEMON,
   LEGENDARY_POKEMON,
+  GYM_LEADER_POKEMON,
+  ELITE_FOUR,
   SUPPORT_CARDS,
   SUPPORT_GACHA_RARITY,
   GACHA_RARITY,
