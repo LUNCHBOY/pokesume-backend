@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const { processTournaments } = require('./tournamentProcessor');
+const { processTournaments } = require('./services/tournamentProcessor');
 const matchmaker = require('./services/matchmaker');
 const express = require('express');
 const cors = require('cors');
