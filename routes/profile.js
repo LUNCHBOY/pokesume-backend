@@ -18,11 +18,24 @@ const PROFILE_ICONS = [
 // Get user profile with badges and stats
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    // Get user info
-    const userResult = await db.query(
-      'SELECT id, username, rating, primos, profile_icon, created_at FROM users WHERE id = $1',
-      [req.user.userId]
-    );
+    // Get user info - try with profile_icon, fallback without it if column doesn't exist
+    let userResult;
+    try {
+      userResult = await db.query(
+        'SELECT id, username, rating, primos, profile_icon, created_at FROM users WHERE id = $1',
+        [req.user.userId]
+      );
+    } catch (dbError) {
+      // If profile_icon column doesn't exist, query without it
+      if (dbError.message.includes('profile_icon')) {
+        userResult = await db.query(
+          'SELECT id, username, rating, primos, created_at FROM users WHERE id = $1',
+          [req.user.userId]
+        );
+      } else {
+        throw dbError;
+      }
+    }
 
     if (userResult.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
@@ -105,10 +118,19 @@ router.put('/icon', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Invalid profile icon' });
     }
 
-    await db.query(
-      'UPDATE users SET profile_icon = $1 WHERE id = $2',
-      [icon, req.user.userId]
-    );
+    try {
+      await db.query(
+        'UPDATE users SET profile_icon = $1 WHERE id = $2',
+        [icon, req.user.userId]
+      );
+    } catch (dbError) {
+      // If profile_icon column doesn't exist, return success anyway (icon stored client-side only)
+      if (dbError.message.includes('profile_icon')) {
+        console.warn('profile_icon column does not exist, skipping database update');
+        return res.json({ message: 'Profile icon updated (local only)', profileIcon: icon });
+      }
+      throw dbError;
+    }
 
     res.json({ message: 'Profile icon updated', profileIcon: icon });
   } catch (error) {
