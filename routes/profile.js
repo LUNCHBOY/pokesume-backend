@@ -64,7 +64,7 @@ router.get('/', authenticateToken, async (req, res) => {
          (pokemon_data->>'Instinct')::int +
          (pokemon_data->>'Speed')::int
        ) DESC
-       LIMIT 3`,
+       LIMIT 1`,
       [req.user.userId]
     );
 
