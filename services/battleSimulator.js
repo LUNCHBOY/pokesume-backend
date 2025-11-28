@@ -15,11 +15,12 @@ const GAME_CONFIG = {
     SPEED_STAMINA_DENOMINATOR: 15,
     MAX_STAMINA: 100,
     BASE_DODGE_CHANCE: 0.01,
-    INSTINCT_DODGE_DENOMINATOR: 2786,
+    INSTINCT_DODGE_DENOMINATOR: 2400,
     BASE_CRIT_CHANCE: 0.05,
     INSTINCT_CRIT_DENOMINATOR: 800
   },
   APTITUDE: {
+    // Damage multipliers (higher grade = more damage)
     MULTIPLIERS: {
       'F': 0.6, 'F+': 0.65,
       'E': 0.7, 'E+': 0.75,
@@ -29,12 +30,32 @@ const GAME_CONFIG = {
       'A': 1.1, 'A+': 1.15,
       'S': 1.2, 'S+': 1.225,
       'UU': 1.25, 'UU+': 1.3
+    },
+    // Stamina cost multipliers (higher grade = LOWER stamina cost)
+    STAMINA_COST: {
+      'F': 1.3, 'F+': 1.25,
+      'E': 1.2, 'E+': 1.15,
+      'D': 1.1, 'D+': 1.05,
+      'C': 1.0, 'C+': 0.97,
+      'B': 0.95, 'B+': 0.92,
+      'A': 0.88, 'A+': 0.85,
+      'S': 0.8, 'S+': 0.77,
+      'UU': 0.75, 'UU+': 0.7
     }
   },
   STRATEGY: {
-    Nuker: { warmup_mult: 0.6, cooldown_mult: 1.4 },
-    Balanced: { warmup_mult: 0.9, cooldown_mult: 0.9 },
-    Scaler: { warmup_mult: 1.4, cooldown_mult: 0.6 }
+    // Scaler: buffs first, then powerful moves
+    Scaler: { warmup_mult: 1.2, cooldown_mult: 0.8 },
+    // Nuker: saves stamina for most powerful moves
+    Nuker: { warmup_mult: 0.7, cooldown_mult: 1.3 },
+    // Debuffer: debuffs/weather first, then powerful moves
+    Debuffer: { warmup_mult: 1.0, cooldown_mult: 1.0 },
+    // Chipper: low stamina, low cooldown moves
+    Chipper: { warmup_mult: 0.5, cooldown_mult: 0.7 },
+    // Mad Lad: completely random moves
+    MadLad: { warmup_mult: 1.0, cooldown_mult: 1.0 },
+    // Balanced fallback
+    Balanced: { warmup_mult: 0.9, cooldown_mult: 0.9 }
   },
   TYPE_MATCHUPS: {
     Red: { strong: 'Grass', weak: 'Water' },
@@ -104,7 +125,7 @@ const MOVES = {
   IronHead: { type: 'Normal', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 52, effect: { type: 'stun', chance: 0.3, duration: 2 } },
   RockSlide: { type: 'Fighting', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: { type: 'stun', chance: 0.2, duration: 1 } },
   ShadowBall: { type: 'Psychic', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 52, effect: { type: 'confuse', chance: 0.25, duration: 3 } },
-  SludgeBomb: { type: 'Poison', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'poison', chance: 0.4, duration: 4, damage: 4 } },
+  SludgeBomb: { type: 'Grass', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'poison', chance: 0.4, duration: 4, damage: 4 } },
   IronTail: { type: 'Normal', damage: 32, warmup: 3, cooldown: 4, stamina: 50, cost: 62, effect: { type: 'stun', chance: 0.25, duration: 2 } },
   SteelWing: { type: 'Normal', damage: 24, warmup: 1, cooldown: 3, stamina: 35, cost: 45, effect: null },
   AerialAce: { type: 'Normal', damage: 20, warmup: 0, cooldown: 2, stamina: 28, cost: 38, effect: null },
@@ -165,17 +186,60 @@ const MOVES = {
   Screech: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'debuff_defense', duration: 3 } },
   Slash: { type: 'Normal', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 48, effect: { type: 'high_crit' } },
   SleepPowder: { type: 'Grass', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'sleep', chance: 0.75, duration: 3 } },
-  SludgeWave: { type: 'Poison', damage: 31, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'poison', chance: 0.3, duration: 4, damage: 4 } },
+  SludgeWave: { type: 'Grass', damage: 31, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'poison', chance: 0.3, duration: 4, damage: 4 } },
   Spikes: { type: 'Normal', damage: 0, warmup: 2, cooldown: 6, stamina: 30, cost: 40, effect: { type: 'entry_hazard', layers: 3 } },
   StealthRock: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 6, stamina: 30, cost: 40, effect: { type: 'entry_hazard_rock' } },
   SwordsDance: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack', duration: 4 } },
   Synthesis: { type: 'Grass', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   ThunderWave: { type: 'Electric', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'paralyze', chance: 0.9, duration: 5 } },
-  Toxic: { type: 'Poison', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'badly_poison', duration: 6 } },
+  Toxic: { type: 'Grass', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'badly_poison', duration: 6 } },
   Transform: { type: 'Normal', damage: 0, warmup: 3, cooldown: 10, stamina: 40, cost: 50, effect: { type: 'copy_opponent' } },
   UTurn: { type: 'Normal', damage: 21, warmup: 1, cooldown: 3, stamina: 32, cost: 42, effect: { type: 'switch_out' } },
   Waterfall: { type: 'Water', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 52, effect: { type: 'stun', chance: 0.2, duration: 1 } },
-  WillOWisp: { type: 'Fire', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'burn', chance: 0.85, duration: 5, damage: 4 } }
+  WillOWisp: { type: 'Fire', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'burn', chance: 0.85, duration: 5, damage: 4 } },
+
+  // === CHIPPER MOVES (Low stamina, low cooldown for each type) ===
+  // Fire Chippers
+  FlameCharge: { type: 'Fire', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'buff_speed', chance: 1.0, duration: 3 } },
+  Incinerate: { type: 'Fire', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: null },
+  // Water Chippers
+  AquaJet: { type: 'Water', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
+  BubbleBeam: { type: 'Water', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'debuff_speed', chance: 0.1, duration: 2 } },
+  // Grass Chippers
+  BulletSeed: { type: 'Grass', damage: 15, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
+  MegaDrain: { type: 'Grass', damage: 14, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'drain', chance: 0.3, healPercent: 0.25 } },
+  // Electric Chippers
+  Spark: { type: 'Electric', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'paralyze', chance: 0.15, duration: 2 } },
+  ChargeBeam: { type: 'Electric', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'buff_instinct', chance: 0.7, duration: 2 } },
+  // Psychic Chippers
+  Confusion: { type: 'Psychic', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'confuse', chance: 0.1, duration: 2 } },
+  HeartStamp: { type: 'Psychic', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'stun', chance: 0.15, duration: 1 } },
+  // Fighting Chippers
+  MachPunch: { type: 'Fighting', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
+  ForceP: { type: 'Fighting', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: null },
+
+  // === ADDITIONAL BUFF MOVES (For Scaler strategy) ===
+  Agility: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'buff_speed', duration: 4 } },
+  Harden: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'buff_defense', duration: 4 } },
+  Meditate: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'buff_attack', duration: 4 } },
+  Sharpen: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'buff_attack', duration: 3 } },
+  WorkUp: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 22, cost: 32, effect: { type: 'buff_attack', duration: 3 } },
+  CosmicPower: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 28, cost: 38, effect: { type: 'buff_defense', duration: 4 } },
+
+  // === ADDITIONAL DEBUFF MOVES (For Debuffer strategy) ===
+  Growl: { type: 'Normal', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_attack', duration: 3 } },
+  Leer: { type: 'Normal', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_defense', duration: 3 } },
+  TailWhip: { type: 'Normal', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_defense', duration: 3 } },
+  SandAttack: { type: 'Fighting', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_accuracy', duration: 3 } },
+  Confide: { type: 'Normal', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_instinct', duration: 3 } },
+  CharmMove: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'debuff_attack', duration: 4 } },
+  FakeTearsMove: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'debuff_defense', duration: 4 } },
+  ScaryFace: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'debuff_speed', duration: 4 } },
+
+  // === WEATHER MOVES (For Debuffer strategy) ===
+  RainDance: { type: 'Water', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_rain', duration: 5 } },
+  SunnyDay: { type: 'Fire', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_sun', duration: 5 } },
+  Hail: { type: 'Water', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_hail', duration: 5 } }
 };
 
 // Type to color mapping for aptitude lookups
@@ -186,7 +250,6 @@ const TYPE_TO_COLOR = {
   Electric: 'Yellow',
   Psychic: 'Purple',
   Fighting: 'Orange',
-  Poison: 'Purple',
   Normal: 'Colorless'
 };
 
@@ -348,15 +411,70 @@ function processCombatantTick(combatant, opponent, name, battleState) {
     }
   });
 
-  // Calculate available moves
+  // Check for incapacitating status effects
   const isExhausted = combatant.statusEffects.some(e => e.type === 'exhaust');
+  const isStunned = combatant.statusEffects.some(e => e.type === 'stun' && e.ticksRemaining > 0);
+  const isFrozen = combatant.statusEffects.some(e => e.type === 'freeze' && e.ticksRemaining > 0);
+  const isAsleep = combatant.statusEffects.some(e => e.type === 'sleep' && e.ticksRemaining > 0);
+  const isInfatuated = combatant.statusEffects.some(e => e.type === 'infatuate' && e.ticksRemaining > 0);
+
+  // Check if incapacitated this turn
+  let incapacitated = false;
+  let incapacitatedReason = null;
+
+  if (isStunned) {
+    incapacitated = true;
+    incapacitatedReason = 'stunned';
+  } else if (isFrozen) {
+    // 20% chance to thaw out each turn (handled in processStatusEffects, but check here too)
+    if (Math.random() >= 0.2) {
+      incapacitated = true;
+      incapacitatedReason = 'frozen';
+    }
+  } else if (isAsleep) {
+    incapacitated = true;
+    incapacitatedReason = 'asleep';
+  } else if (isInfatuated) {
+    // 50% chance to be immobilized by love
+    if (Math.random() < 0.5) {
+      incapacitated = true;
+      incapacitatedReason = 'infatuated';
+    }
+  }
+
+  // If incapacitated, skip move selection entirely
+  if (incapacitated) {
+    const incapMessages = {
+      stunned: `${name} flinched and couldn't move!`,
+      frozen: `${name} is frozen solid!`,
+      asleep: `${name} is fast asleep!`,
+      infatuated: `${name} is immobilized by love!`
+    };
+    messages.push(incapMessages[incapacitatedReason] || `${name} can't move!`);
+
+    // Still decrement move timers
+    Object.keys(combatant.moveStates).forEach(moveName => {
+      const state = combatant.moveStates[moveName];
+      if (state.warmupRemaining > 0) state.warmupRemaining--;
+      if (state.cooldownRemaining > 0) state.cooldownRemaining--;
+    });
+
+    // Process status effects (damage over time, etc.)
+    const effectMessages = processStatusEffects(combatant, name);
+    messages.push(...effectMessages);
+
+    return messages.join(' | ');
+  }
+
+  // Calculate available moves
   const available = combatant.abilities.filter(moveName => {
     const move = MOVES[moveName];
     if (!move) return false;
 
     const state = combatant.moveStates[moveName];
     const strategyMult = GAME_CONFIG.STRATEGY[combatant.strategy] || GAME_CONFIG.STRATEGY.Balanced;
-    const aptitudeMult = GAME_CONFIG.APTITUDE.MULTIPLIERS[combatant.strategyGrade] || 1.0;
+    // Use STAMINA_COST multipliers (higher aptitude = lower stamina cost)
+    const aptitudeMult = GAME_CONFIG.APTITUDE.STAMINA_COST[combatant.strategyGrade] || 1.0;
     const staminaCost = Math.ceil(move.stamina * aptitudeMult);
 
     return state.warmupRemaining === 0 &&
@@ -407,11 +525,51 @@ function processCombatantTick(combatant, opponent, name, battleState) {
 }
 
 /**
+ * Helper to categorize moves by their purpose
+ */
+function categorizeMove(move) {
+  if (!move) return 'unknown';
+
+  // Buff moves (target self with positive effects)
+  const buffEffects = ['buff_attack', 'buff_defense', 'buff_speed', 'buff_instinct',
+                       'buff_attack_defense', 'buff_attack_speed', 'buff_all', 'heal_self', 'regen'];
+  if (move.effect && buffEffects.includes(move.effect.type)) {
+    return 'buff';
+  }
+
+  // Debuff moves (target opponent with negative effects, no damage)
+  const debuffEffects = ['debuff_attack', 'debuff_defense', 'debuff_speed', 'debuff_instinct',
+                         'debuff_accuracy', 'burn', 'poison', 'badly_poison', 'paralyze',
+                         'freeze', 'sleep', 'confuse', 'curse'];
+  if (move.damage === 0 && move.effect && debuffEffects.includes(move.effect.type)) {
+    return 'debuff';
+  }
+
+  // Weather moves
+  if (move.effect && move.effect.type && move.effect.type.startsWith('weather_')) {
+    return 'weather';
+  }
+
+  // Chipper moves (low stamina, low cooldown damage moves)
+  if (move.damage > 0 && move.stamina <= 22 && move.cooldown <= 2) {
+    return 'chipper';
+  }
+
+  // Nuker moves (high damage moves)
+  if (move.damage >= 30) {
+    return 'nuker';
+  }
+
+  // Default to damage move
+  return 'damage';
+}
+
+/**
  * Select which move to use based on strategy
  */
 function selectMove(combatant, opponent, available) {
-  // Calculate predicted damage for each move
-  const movesWithPredictedDamage = available.map(moveName => {
+  // Calculate predicted damage and categorize each move
+  const movesWithData = available.map(moveName => {
     const move = MOVES[moveName];
     const moveType = move.type;
     const moveColor = TYPE_TO_COLOR[moveType];
@@ -444,60 +602,159 @@ function selectMove(combatant, opponent, available) {
     const predictedDamage = move.damage * attackDefenseRatio * aptitudeMult * typeMatchupMult * avgCritMult;
 
     const strategyMult = GAME_CONFIG.STRATEGY[combatant.strategy] || GAME_CONFIG.STRATEGY.Balanced;
-    const aptGradeMult = GAME_CONFIG.APTITUDE.MULTIPLIERS[combatant.strategyGrade] || 1.0;
+    // Use STAMINA_COST multipliers (higher aptitude = lower stamina cost)
+    const aptGradeMult = GAME_CONFIG.APTITUDE.STAMINA_COST[combatant.strategyGrade] || 1.0;
     const staminaCost = Math.ceil(move.stamina * aptGradeMult);
     const adjustedCooldown = Math.ceil(move.cooldown * strategyMult.cooldown_mult);
 
     return {
       moveName,
       move,
+      category: categorizeMove(move),
       predictedDamage,
-      damagePerStamina: predictedDamage / staminaCost,
+      damagePerStamina: move.damage > 0 ? predictedDamage / staminaCost : 0,
       staminaCost,
       cooldown: adjustedCooldown,
       aptitude
     };
   });
 
-  // Strategy-specific move selection
-  if (combatant.strategy === 'Nuker') {
-    if (Math.random() < 0.35) {
-      return movesWithPredictedDamage[Math.floor(Math.random() * movesWithPredictedDamage.length)].moveName;
-    } else {
-      return movesWithPredictedDamage.sort((a, b) => b.predictedDamage - a.predictedDamage)[0].moveName;
-    }
-  } else if (combatant.strategy === 'Scaler') {
-    if (Math.random() < 0.35) {
-      return movesWithPredictedDamage[Math.floor(Math.random() * movesWithPredictedDamage.length)].moveName;
-    } else {
-      const opponentHealthPercent = (opponent.currentHP / opponent.stats.HP) * 100;
+  // Check if combatant has active buffs (for Scaler) or opponent has debuffs (for Debuffer)
+  const hasActiveBuff = combatant.statusEffects.some(e =>
+    e.type.startsWith('buff_') && e.ticksRemaining > 1
+  );
+  const opponentHasDebuff = opponent.statusEffects.some(e =>
+    e.type.startsWith('debuff_') || ['burn', 'poison', 'badly_poison', 'paralyze', 'freeze', 'sleep', 'confuse', 'curse'].includes(e.type)
+  );
 
-      if (opponentHealthPercent > 50) {
-        const scored = movesWithPredictedDamage.map(m => ({
+  // Strategy-specific move selection
+  switch (combatant.strategy) {
+    case 'Scaler': {
+      // Scaler: buffs first, then powerful moves
+      // Priority: Use buff moves if no active buff, otherwise use highest damage
+      const buffMoves = movesWithData.filter(m => m.category === 'buff');
+      const damageMoves = movesWithData.filter(m => m.predictedDamage > 0);
+
+      // If we don't have an active buff and have buff moves available, use a buff
+      if (!hasActiveBuff && buffMoves.length > 0 && Math.random() < 0.85) {
+        return buffMoves[Math.floor(Math.random() * buffMoves.length)].moveName;
+      }
+
+      // Otherwise, use highest damage move
+      if (damageMoves.length > 0) {
+        damageMoves.sort((a, b) => b.predictedDamage - a.predictedDamage);
+        // Small chance of variation
+        if (Math.random() < 0.2 && damageMoves.length > 1) {
+          return damageMoves[Math.floor(Math.random() * Math.min(3, damageMoves.length))].moveName;
+        }
+        return damageMoves[0].moveName;
+      }
+      break;
+    }
+
+    case 'Nuker': {
+      // Nuker: saves stamina for most powerful moves
+      // Wait until we have enough stamina for high-damage moves
+      const nukerMoves = movesWithData.filter(m => m.category === 'nuker' || m.predictedDamage >= 25);
+      const allDamageMoves = movesWithData.filter(m => m.predictedDamage > 0);
+
+      // If we have a high-damage move available, use it
+      if (nukerMoves.length > 0) {
+        nukerMoves.sort((a, b) => b.predictedDamage - a.predictedDamage);
+        // High chance to use the most powerful move
+        if (Math.random() < 0.85) {
+          return nukerMoves[0].moveName;
+        }
+        return nukerMoves[Math.floor(Math.random() * nukerMoves.length)].moveName;
+      }
+
+      // If stamina is high but no nuker moves ready, consider resting (return null)
+      if (combatant.currentStamina > 40 && Math.random() < 0.4) {
+        return null; // Rest to save for big moves
+      }
+
+      // Fallback to any damage move
+      if (allDamageMoves.length > 0) {
+        return allDamageMoves.sort((a, b) => b.predictedDamage - a.predictedDamage)[0].moveName;
+      }
+      break;
+    }
+
+    case 'Debuffer': {
+      // Debuffer: debuffs/weather first, then powerful moves
+      const debuffMoves = movesWithData.filter(m => m.category === 'debuff' || m.category === 'weather');
+      const damageMoves = movesWithData.filter(m => m.predictedDamage > 0);
+
+      // If opponent doesn't have a debuff and we have debuff moves, apply one
+      if (!opponentHasDebuff && debuffMoves.length > 0 && Math.random() < 0.85) {
+        return debuffMoves[Math.floor(Math.random() * debuffMoves.length)].moveName;
+      }
+
+      // Otherwise use highest damage move
+      if (damageMoves.length > 0) {
+        damageMoves.sort((a, b) => b.predictedDamage - a.predictedDamage);
+        if (Math.random() < 0.2 && damageMoves.length > 1) {
+          return damageMoves[Math.floor(Math.random() * Math.min(3, damageMoves.length))].moveName;
+        }
+        return damageMoves[0].moveName;
+      }
+      break;
+    }
+
+    case 'Chipper': {
+      // Chipper: low stamina, low cooldown moves - chip away constantly
+      const chipperMoves = movesWithData.filter(m => m.category === 'chipper' || (m.staminaCost <= 25 && m.cooldown <= 3));
+      const allMoves = movesWithData.filter(m => m.predictedDamage > 0);
+
+      // Strongly prefer chipper moves
+      if (chipperMoves.length > 0 && Math.random() < 0.9) {
+        // Pick based on efficiency (damage per stamina)
+        chipperMoves.sort((a, b) => b.damagePerStamina - a.damagePerStamina);
+        if (Math.random() < 0.3 && chipperMoves.length > 1) {
+          return chipperMoves[Math.floor(Math.random() * chipperMoves.length)].moveName;
+        }
+        return chipperMoves[0].moveName;
+      }
+
+      // Fallback to any move, preferring efficiency
+      if (allMoves.length > 0) {
+        allMoves.sort((a, b) => b.damagePerStamina - a.damagePerStamina);
+        return allMoves[0].moveName;
+      }
+      break;
+    }
+
+    case 'MadLad': {
+      // Mad Lad: completely random moves
+      if (movesWithData.length > 0) {
+        return movesWithData[Math.floor(Math.random() * movesWithData.length)].moveName;
+      }
+      break;
+    }
+
+    default: {
+      // Balanced (fallback)
+      if (combatant.currentStamina < 30 && Math.random() < 0.5) {
+        return null; // Don't cast
+      }
+
+      if (Math.random() < 0.35) {
+        return movesWithData[Math.floor(Math.random() * movesWithData.length)].moveName;
+      } else {
+        const scored = movesWithData.map(m => ({
           ...m,
-          score: m.damagePerStamina * 10 - m.cooldown * 2
+          score: (m.damagePerStamina * 0.6) + (m.predictedDamage / 100 * 0.4)
         }));
         return scored.sort((a, b) => b.score - a.score)[0].moveName;
-      } else {
-        return movesWithPredictedDamage.sort((a, b) => b.predictedDamage - a.predictedDamage)[0].moveName;
       }
     }
-  } else {
-    // Balanced
-    if (combatant.currentStamina < 30 && Math.random() < 0.5) {
-      return null; // Don't cast
-    }
-
-    if (Math.random() < 0.35) {
-      return movesWithPredictedDamage[Math.floor(Math.random() * movesWithPredictedDamage.length)].moveName;
-    } else {
-      const scored = movesWithPredictedDamage.map(m => ({
-        ...m,
-        score: (m.damagePerStamina * 0.6) + (m.predictedDamage / 100 * 0.4)
-      }));
-      return scored.sort((a, b) => b.score - a.score)[0].moveName;
-    }
   }
+
+  // Final fallback - pick any available move
+  if (movesWithData.length > 0) {
+    return movesWithData[0].moveName;
+  }
+  return null;
 }
 
 /**
@@ -506,7 +763,8 @@ function selectMove(combatant, opponent, available) {
 function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   const move = MOVES[moveName];
   const strategyMult = GAME_CONFIG.STRATEGY[combatant.strategy] || GAME_CONFIG.STRATEGY.Balanced;
-  const aptGradeMult = GAME_CONFIG.APTITUDE.MULTIPLIERS[combatant.strategyGrade] || 1.0;
+  // Use STAMINA_COST multipliers (higher aptitude = lower stamina cost)
+  const aptGradeMult = GAME_CONFIG.APTITUDE.STAMINA_COST[combatant.strategyGrade] || 1.0;
   const staminaCost = Math.ceil(move.stamina * aptGradeMult);
 
   // Deduct stamina
@@ -517,16 +775,26 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   const isParalyzed = combatant.statusEffects.some(e => e.type === 'paralyze');
   const paralyzePenalty = isParalyzed ? 0.25 : 0;
 
+  // Check for accuracy debuff
+  const hasAccuracyDebuff = combatant.statusEffects.some(e => e.type === 'debuff_accuracy');
+  const accuracyDebuffPenalty = hasAccuracyDebuff ? 0.15 : 0;
+
   // Miss chance calculation
   const missChance = Math.max(0,
     (GAME_CONFIG.BATTLE.MAX_STAMINA - combatant.currentStamina) /
-    GAME_CONFIG.BATTLE.MAX_STAMINA * 0.075) + paralyzePenalty;
+    GAME_CONFIG.BATTLE.MAX_STAMINA * 0.075) + paralyzePenalty + accuracyDebuffPenalty;
 
   // Dodge chance when opponent is resting
-  const dodgeChance = opponent.isResting
+  let dodgeChance = opponent.isResting
     ? GAME_CONFIG.BATTLE.BASE_DODGE_CHANCE +
       (opponent.stats.Instinct / GAME_CONFIG.BATTLE.INSTINCT_DODGE_DENOMINATOR)
     : 0;
+
+  // Check for evasion effect (ShadowForce) - greatly increases dodge chance
+  const hasEvasion = opponent.statusEffects.some(e => e.type === 'evasion' && e.ticksRemaining > 0);
+  if (hasEvasion) {
+    dodgeChance += 0.8; // 80% additional dodge chance while in evasion state
+  }
 
   const hitRoll = Math.random();
   const hitChance = 1.0 - dodgeChance - missChance;
@@ -557,6 +825,23 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
     }
   }
 
+  // Check for soak effect - opponent becomes Water type temporarily
+  const isSoaked = opponent.statusEffects.some(e => e.type === 'soak' && e.ticksRemaining > 0);
+  if (isSoaked) {
+    // Grass moves are super effective against soaked targets
+    if (moveType === 'Grass') {
+      typeBonus = 1.4; // Extra effective since they're now Water type
+    }
+    // Fire moves are reduced against soaked targets
+    else if (moveType === 'Fire') {
+      typeBonus = 0.6; // Fire is weak against Water
+    }
+    // Electric moves are super effective against soaked targets
+    else if (moveType === 'Electric') {
+      typeBonus = 1.3; // Electric strong against Water
+    }
+  }
+
   // Base damage calculation with buff/debuff modifiers
   let attackStat = combatant.stats.Attack;
   let defenseStat = opponent.stats.Defense;
@@ -564,6 +849,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   // Apply attack buffs/debuffs
   combatant.statusEffects.forEach(e => {
     if (e.type === 'buff_attack' && e.multiplier) attackStat *= e.multiplier;
+    if (e.type === 'debuff_attack' && e.multiplier) attackStat *= e.multiplier;
   });
   opponent.statusEffects.forEach(e => {
     if (e.type === 'debuff_defense' && e.multiplier) defenseStat *= e.multiplier;
@@ -603,6 +889,14 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   } else {
     damage = Math.max(1, damage);
     opponent.currentHP = Math.max(0, opponent.currentHP - damage);
+
+    // Check for destiny_bond - if opponent faints, attacker faints too
+    if (opponent.currentHP <= 0) {
+      const hasDestinyBond = opponent.statusEffects.some(e => e.type === 'destiny_bond' && e.ticksRemaining > 0);
+      if (hasDestinyBond) {
+        combatant.currentHP = 0;
+      }
+    }
   }
 
   // Build message
@@ -611,6 +905,14 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
     : `${attackerName} used ${moveName}!`;
   if (isCrit && damage > 0) message += ' *** CRITICAL HIT! ***';
   if (typeBonus > 1.0 && damage > 0) message += ' Super effective!';
+
+  // Check if destiny bond triggered
+  if (opponent.currentHP <= 0 && combatant.currentHP <= 0) {
+    const hadDestinyBond = opponent.statusEffects.some(e => e.type === 'destiny_bond');
+    if (hadDestinyBond) {
+      message += ` Destiny Bond took ${attackerName} down too!`;
+    }
+  }
 
   // Apply status effects
   if (move.effect) {
@@ -915,6 +1217,30 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           multiplier: 0.7
         });
         message += ` Opponent's Instinct fell!`;
+      } else if (effect.type === 'debuff_attack') {
+        opponent.statusEffects.push({
+          type: 'debuff_attack',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          multiplier: 0.7
+        });
+        message += ` Opponent's Attack fell!`;
+      } else if (effect.type === 'debuff_speed') {
+        opponent.statusEffects.push({
+          type: 'debuff_speed',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          multiplier: 0.7
+        });
+        message += ` Opponent's Speed fell!`;
+      } else if (effect.type === 'debuff_accuracy') {
+        opponent.statusEffects.push({
+          type: 'debuff_accuracy',
+          duration: effect.duration,
+          ticksRemaining: effect.duration,
+          multiplier: 0.7
+        });
+        message += ` Opponent's Accuracy fell!`;
       } else if (effect.type === 'energize') {
         combatant.statusEffects.push({
           type: 'energize',
@@ -1048,29 +1374,20 @@ function processStatusEffects(combatant, name) {
     }
 
     // === MOVEMENT IMPAIRMENT ===
-    else if (effect.type === 'stun' && effect.ticksRemaining > 0) {
-      messages.push(`${name} is stunned!`);
-    } else if (effect.type === 'freeze' && effect.ticksRemaining > 0) {
-      // 20% chance to thaw each turn
+    // Note: stun, freeze, sleep, and infatuate are now handled in processCombatantTick
+    // before move selection. Here we just handle thawing and confusion self-damage.
+    else if (effect.type === 'freeze' && effect.ticksRemaining > 0) {
+      // 20% chance to thaw each turn (if they weren't already thawed in processCombatantTick)
       if (Math.random() < 0.2) {
         effect.ticksRemaining = 0;
         messages.push(`${name} thawed out!`);
-      } else {
-        messages.push(`${name} is frozen solid!`);
       }
-    } else if (effect.type === 'sleep' && effect.ticksRemaining > 0) {
-      messages.push(`${name} is fast asleep!`);
     } else if (effect.type === 'confuse' && effect.ticksRemaining > 0) {
-      // 33% chance to hurt self when confused
+      // 33% chance to hurt self when confused (even if they can act)
       if (Math.random() < 0.33) {
         const confuseDamage = Math.floor(combatant.stats.Attack * 0.1);
         combatant.currentHP = Math.max(0, combatant.currentHP - confuseDamage);
         messages.push(`${name} hurt itself in confusion for ${confuseDamage} damage!`);
-      }
-    } else if (effect.type === 'infatuate' && effect.ticksRemaining > 0) {
-      // 50% chance to be immobilized by love
-      if (Math.random() < 0.5) {
-        messages.push(`${name} is immobilized by love!`);
       }
     }
 

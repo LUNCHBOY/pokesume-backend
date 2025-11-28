@@ -28,8 +28,8 @@ const TYPE_TO_COLOR = {
   Fighting: 'Orange'
 };
 
-// Strategies
-const STRATEGIES = ['Nuker', 'Balanced', 'Scaler'];
+// Strategies (new paradigm)
+const STRATEGIES = ['Scaler', 'Nuker', 'Debuffer', 'Chipper', 'MadLad'];
 const STRATEGY_GRADES = ['C', 'B', 'B+', 'A', 'A+', 'S'];
 
 // Pokemon names by type for AI generation
@@ -69,15 +69,68 @@ function generateFakeUsername() {
   return formats[Math.floor(Math.random() * formats.length)];
 }
 
-// Available moves by type
-const MOVES_BY_TYPE = {
-  Fire: ['Ember', 'Flamethrower', 'FireBlast', 'FireFang', 'LavaPlume', 'FlareBlitz'],
-  Water: ['WaterGun', 'Surf', 'HydroPump', 'IceBeam', 'Waterfall'],
-  Grass: ['VineWhip', 'RazorLeaf', 'SolarBeam', 'LeafBlade', 'GigaDrain', 'PowerWhip'],
-  Electric: ['ThunderShock', 'Thunderbolt', 'Thunder', 'VoltSwitch', 'WildCharge'],
-  Psychic: ['PsyBeam', 'Psychic', 'PsychicBlast', 'Psyshock', 'ShadowBall'],
-  Fighting: ['LowKick', 'KarateChop', 'BrickBreak', 'CloseCombat', 'DrainPunch', 'AuraSphere'],
-  Normal: ['Tackle', 'QuickAttack', 'BodySlam', 'ExtremeSpeed']
+// Moves organized by strategy type
+const STRATEGY_MOVES = {
+  // Buff moves for Scaler strategy
+  Scaler: {
+    Fire: ['SwordsDance', 'DragonDance', 'WorkUp'],
+    Water: ['AquaRing', 'IronDefense', 'Harden'],
+    Grass: ['Synthesis', 'SwordsDance', 'WorkUp'],
+    Electric: ['ChargeBeam', 'Agility', 'WorkUp'],
+    Psychic: ['CalmMind', 'NastyPlot', 'Meditate', 'Agility', 'CosmicPower'],
+    Fighting: ['BulkUp', 'SwordsDance', 'DragonDance', 'RockPolish'],
+    Generic: ['Harden', 'Sharpen', 'WorkUp', 'IronDefense']
+  },
+  // High damage moves for Nuker strategy
+  Nuker: {
+    Fire: ['FireBlast', 'FlareBlitz', 'BlastBurn', 'BlueFlare', 'Eruption', 'SacredFire'],
+    Water: ['HydroPump', 'Blizzard', 'OriginPulse', 'SpacialRend'],
+    Grass: ['SolarBeam', 'PowerWhip', 'DragonAscent', 'LeafBlade'],
+    Electric: ['Thunder', 'WildCharge', 'Thunderbolt'],
+    Psychic: ['PsychicBlast', 'Psystrike', 'FutureSight', 'DreamEater'],
+    Fighting: ['CloseCombat', 'FocusBlast', 'RoarOfTime', 'DynamicPunch', 'DiamondStorm'],
+    Generic: ['HyperBeam', 'Explosion', 'DoubleEdge', 'BraveBird']
+  },
+  // Debuff and weather moves for Debuffer strategy
+  Debuffer: {
+    Fire: ['WillOWisp', 'SunnyDay', 'Screech'],
+    Water: ['RainDance', 'Hail', 'ThunderWave'],
+    Grass: ['SleepPowder', 'Toxic', 'Screech', 'Leer'],
+    Electric: ['ThunderWave', 'Screech', 'Confide'],
+    Psychic: ['Hypnosis', 'Curse', 'FakeTearsMove', 'Confide'],
+    Fighting: ['Sandstorm', 'SandAttack', 'Screech', 'Leer'],
+    Generic: ['Growl', 'Leer', 'TailWhip', 'Screech', 'CharmMove', 'ScaryFace']
+  },
+  // Low stamina/cooldown moves for Chipper strategy
+  Chipper: {
+    Fire: ['Ember', 'FlameCharge', 'Incinerate', 'FireFang'],
+    Water: ['WaterGun', 'AquaJet', 'BubbleBeam'],
+    Grass: ['VineWhip', 'BulletSeed', 'MegaDrain', 'RazorLeaf'],
+    Electric: ['ThunderShock', 'Spark', 'ChargeBeam', 'VoltSwitch'],
+    Psychic: ['PsyBeam', 'Confusion', 'HeartStamp', 'FeintAttack'],
+    Fighting: ['LowKick', 'MachPunch', 'ForceP', 'BulletPunch', 'KarateChop'],
+    Generic: ['Tackle', 'QuickAttack', 'AerialAce', 'Slash', 'RapidSpin']
+  },
+  // Random/varied moves for MadLad strategy
+  MadLad: {
+    Fire: ['Ember', 'Flamethrower', 'FireBlast', 'WillOWisp', 'FlareBlitz'],
+    Water: ['WaterGun', 'Surf', 'HydroPump', 'AquaRing', 'IceBeam'],
+    Grass: ['VineWhip', 'RazorLeaf', 'SolarBeam', 'SleepPowder', 'GigaDrain'],
+    Electric: ['ThunderShock', 'Thunderbolt', 'Thunder', 'ThunderWave'],
+    Psychic: ['PsyBeam', 'Psychic', 'Hypnosis', 'CalmMind', 'ShadowBall'],
+    Fighting: ['LowKick', 'BrickBreak', 'CloseCombat', 'BulkUp', 'DrainPunch'],
+    Generic: ['Tackle', 'BodySlam', 'HyperBeam', 'Recover', 'Metronome']
+  }
+};
+
+// High damage moves by type (for non-Chipper strategies to have a powerful attack)
+const POWER_MOVES_BY_TYPE = {
+  Fire: ['Flamethrower', 'FireBlast', 'FlareBlitz', 'LavaPlume', 'HeatWave'],
+  Water: ['Surf', 'HydroPump', 'IceBeam', 'Waterfall', 'Blizzard'],
+  Grass: ['RazorLeaf', 'SolarBeam', 'LeafBlade', 'PowerWhip', 'GigaDrain'],
+  Electric: ['Thunderbolt', 'Thunder', 'WildCharge', 'VoltSwitch'],
+  Psychic: ['Psychic', 'PsychicBlast', 'Psyshock', 'ShadowBall', 'DarkPulse'],
+  Fighting: ['BrickBreak', 'CloseCombat', 'AuraSphere', 'DrainPunch', 'Earthquake']
 };
 
 let isRunning = false;
@@ -102,7 +155,17 @@ function getRatingRange(secondsInQueue) {
 }
 
 /**
+ * Pick a random move from an array, avoiding duplicates
+ */
+function pickRandomMove(moveArray, usedMoves) {
+  const available = moveArray.filter(m => !usedMoves.has(m));
+  if (available.length === 0) return null;
+  return available[Math.floor(Math.random() * available.length)];
+}
+
+/**
  * Generate an AI Pokemon with stats similar to reference
+ * Uses new 3-move system: Tackle + 2 strategy-specific moves
  */
 function generateAIPokemon(referenceStats, variance = 0.15) {
   const type = TYPES[Math.floor(Math.random() * TYPES.length)];
@@ -139,18 +202,105 @@ function generateAIPokemon(referenceStats, variance = 0.15) {
   // Boost primary type aptitude
   typeAptitudes[color] = 'A';
 
-  // Select abilities (4 moves)
-  const typeMoves = MOVES_BY_TYPE[type] || MOVES_BY_TYPE.Normal;
-  const normalMoves = MOVES_BY_TYPE.Normal;
-  const allMoves = [...typeMoves, ...normalMoves];
-  const abilities = [];
-  const usedMoves = new Set();
+  // NEW: Build moves based on strategy (Tackle + 2 strategy-specific moves)
+  const abilities = ['Tackle']; // Everyone starts with Tackle
+  const usedMoves = new Set(['Tackle']);
 
-  while (abilities.length < 4 && abilities.length < allMoves.length) {
-    const move = allMoves[Math.floor(Math.random() * allMoves.length)];
-    if (!usedMoves.has(move)) {
-      abilities.push(move);
-      usedMoves.add(move);
+  // Get strategy-specific moves for this type
+  const strategyMovesForType = STRATEGY_MOVES[strategy];
+  const typeSpecificMoves = strategyMovesForType[type] || [];
+  const genericMoves = strategyMovesForType.Generic || [];
+  const powerMoves = POWER_MOVES_BY_TYPE[type] || [];
+
+  // For Chipper strategy: pick 2 chipper moves (they need low-cost moves)
+  if (strategy === 'Chipper') {
+    // Pick 2 chipper moves
+    const allChipperMoves = [...typeSpecificMoves, ...genericMoves];
+    const move1 = pickRandomMove(allChipperMoves, usedMoves);
+    if (move1) {
+      abilities.push(move1);
+      usedMoves.add(move1);
+    }
+    const move2 = pickRandomMove(allChipperMoves, usedMoves);
+    if (move2) {
+      abilities.push(move2);
+      usedMoves.add(move2);
+    }
+  }
+  // For Nuker strategy: pick 2 high-damage moves
+  else if (strategy === 'Nuker') {
+    const allNukerMoves = [...typeSpecificMoves, ...genericMoves];
+    const move1 = pickRandomMove(allNukerMoves, usedMoves);
+    if (move1) {
+      abilities.push(move1);
+      usedMoves.add(move1);
+    }
+    const move2 = pickRandomMove(allNukerMoves, usedMoves);
+    if (move2) {
+      abilities.push(move2);
+      usedMoves.add(move2);
+    }
+  }
+  // For Scaler strategy: 1 buff move + 1 power move
+  else if (strategy === 'Scaler') {
+    const allBuffMoves = [...typeSpecificMoves, ...genericMoves];
+    const buffMove = pickRandomMove(allBuffMoves, usedMoves);
+    if (buffMove) {
+      abilities.push(buffMove);
+      usedMoves.add(buffMove);
+    }
+    // Add a power move for when buffs are up
+    const powerMove = pickRandomMove(powerMoves, usedMoves);
+    if (powerMove) {
+      abilities.push(powerMove);
+      usedMoves.add(powerMove);
+    }
+  }
+  // For Debuffer strategy: 1 debuff/weather move + 1 power move
+  else if (strategy === 'Debuffer') {
+    const allDebuffMoves = [...typeSpecificMoves, ...genericMoves];
+    const debuffMove = pickRandomMove(allDebuffMoves, usedMoves);
+    if (debuffMove) {
+      abilities.push(debuffMove);
+      usedMoves.add(debuffMove);
+    }
+    // Add a power move for after debuffs applied
+    const powerMove = pickRandomMove(powerMoves, usedMoves);
+    if (powerMove) {
+      abilities.push(powerMove);
+      usedMoves.add(powerMove);
+    }
+  }
+  // For MadLad strategy: 2 completely random moves
+  else if (strategy === 'MadLad') {
+    const allMadLadMoves = [...typeSpecificMoves, ...genericMoves, ...powerMoves];
+    const move1 = pickRandomMove(allMadLadMoves, usedMoves);
+    if (move1) {
+      abilities.push(move1);
+      usedMoves.add(move1);
+    }
+    const move2 = pickRandomMove(allMadLadMoves, usedMoves);
+    if (move2) {
+      abilities.push(move2);
+      usedMoves.add(move2);
+    }
+  }
+
+  // Ensure we have exactly 3 moves - fill with power moves if needed
+  while (abilities.length < 3) {
+    const fallbackMove = pickRandomMove(powerMoves, usedMoves);
+    if (fallbackMove) {
+      abilities.push(fallbackMove);
+      usedMoves.add(fallbackMove);
+    } else {
+      // Ultimate fallback - use generic chipper
+      const chipperFallback = pickRandomMove(STRATEGY_MOVES.Chipper.Generic, usedMoves);
+      if (chipperFallback) {
+        abilities.push(chipperFallback);
+        usedMoves.add(chipperFallback);
+      } else {
+        break; // No more moves available
+      }
     }
   }
 

@@ -152,7 +152,7 @@ const GAME_CONFIG = {
     BASE_STAT_GAINS: { HP: 11, Attack: 7, Defense: 7, Instinct: 5, Speed: 4 },
     SKILL_POINTS_ON_SUCCESS: 3,
     STAT_LOSS_ON_FAILURE: 2,
-    FRIENDSHIP_GAIN_PER_TRAINING: 7,
+    FRIENDSHIP_GAIN_PER_TRAINING: 10,
     LEVEL_UP_REQUIREMENT: 4, // Successful trainings needed to level up
     LEVEL_BONUS_MULTIPLIER: 0.10 // 10% bonus per level
   },
