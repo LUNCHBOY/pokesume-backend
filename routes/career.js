@@ -508,7 +508,9 @@ router.post('/train', authenticateToken, async (req, res) => {
         currentTrainingOptions: null,
         // Preserve training levels and progress (failures don't affect them)
         trainingLevels: careerState.trainingLevels || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
-        trainingProgress: careerState.trainingProgress || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 }
+        trainingProgress: careerState.trainingProgress || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
+        // Regenerate wild battles with new turn's scaling
+        availableBattles: generateWildBattles(careerState.turn + 1)
       };
 
       await pool.query(
@@ -612,7 +614,9 @@ router.post('/train', authenticateToken, async (req, res) => {
           ? `Trained ${stat} successfully! Gained ${statGain} ${stat}. ${stat} training leveled up to ${newLevel}!`
           : `Trained ${stat} successfully! Gained ${statGain} ${stat}.`
       }, ...(careerState.turnLog || [])],
-      currentTrainingOptions: null
+      currentTrainingOptions: null,
+      // Regenerate wild battles with new turn's scaling
+      availableBattles: generateWildBattles(careerState.turn + 1)
     };
 
     await pool.query(
@@ -674,7 +678,9 @@ router.post('/rest', authenticateToken, async (req, res) => {
       energy: newEnergy,
       turn: careerState.turn + 1,
       turnLog: [logEntry, ...(careerState.turnLog || [])],
-      currentTrainingOptions: null
+      currentTrainingOptions: null,
+      // Regenerate wild battles with new turn's scaling
+      availableBattles: generateWildBattles(careerState.turn + 1)
     };
 
     await pool.query(
