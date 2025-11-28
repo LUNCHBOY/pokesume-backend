@@ -61,7 +61,7 @@ const GAME_CONFIG = {
     Red: { strong: 'Grass', weak: 'Water' },
     Blue: { strong: 'Fire', weak: 'Grass' },
     Green: { strong: 'Water', weak: 'Fire' },
-    Yellow: { strong: 'Psychic', weak: 'Psychic' },
+    Yellow: { strong: 'Water', weak: 'Grass' }, // Electric is strong vs Water, weak vs Grass (Ground not in game)
     Purple: { strong: 'Fighting', weak: 'Psychic' },
     Orange: { strong: 'Electric', weak: 'Psychic' }
   }
