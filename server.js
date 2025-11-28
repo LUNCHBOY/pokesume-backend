@@ -33,6 +33,7 @@ const leaderboardRoutes = require('./routes/leaderboard');
 const tournamentRoutes = require('./routes/tournaments');
 const careerRoutes = require('./routes/career');
 const inventoryRoutes = require('./routes/inventory');
+const profileRoutes = require('./routes/profile');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -42,6 +43,7 @@ app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/tournaments', tournamentRoutes);
 app.use('/api/career', careerRoutes);
 app.use('/api/inventory', inventoryRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

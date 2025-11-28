@@ -137,6 +137,51 @@ let isRunning = false;
 let intervalId = null;
 
 /**
+ * Get rating tier and corresponding stat ranges for AI generation
+ * Rating tiers match frontend: Bronze (<1000), Silver (1000-1199), Gold (1200-1399),
+ * Platinum (1400-1599), Diamond (1600-1799), Master (1800+)
+ *
+ * Grade stat totals (approximate):
+ * F: 400-500, E: 500-600, D: 600-750, C: 750-900, B: 900-1050,
+ * B+: 1050-1150, A: 1150-1300, A+: 1300-1450, S: 1450-1600, S+: 1600+
+ */
+function getAIStatsForRating(rating) {
+  // Define stat ranges per tier (min total stats, max total stats)
+  // Each Pokemon has 5 stats, so divide by 5 for per-stat average
+  const tierConfigs = {
+    bronze:   { minTotal: 550, maxTotal: 800, strategyGrades: ['C', 'B'] },      // D-C grade
+    silver:   { minTotal: 700, maxTotal: 950, strategyGrades: ['B', 'B+'] },     // C-B grade
+    gold:     { minTotal: 850, maxTotal: 1100, strategyGrades: ['B', 'B+', 'A'] }, // B-B+ grade
+    platinum: { minTotal: 1000, maxTotal: 1250, strategyGrades: ['B+', 'A', 'A+'] }, // B+-A grade
+    diamond:  { minTotal: 1150, maxTotal: 1400, strategyGrades: ['A', 'A+', 'S'] }, // A-A+ grade
+    master:   { minTotal: 1300, maxTotal: 1550, strategyGrades: ['A+', 'S'] }    // A+-S grade
+  };
+
+  let tier;
+  if (rating >= 1800) tier = 'master';
+  else if (rating >= 1600) tier = 'diamond';
+  else if (rating >= 1400) tier = 'platinum';
+  else if (rating >= 1200) tier = 'gold';
+  else if (rating >= 1000) tier = 'silver';
+  else tier = 'bronze';
+
+  const config = tierConfigs[tier];
+
+  // Generate a random total stat within the range
+  const totalStats = Math.floor(Math.random() * (config.maxTotal - config.minTotal + 1)) + config.minTotal;
+
+  // Distribute stats with some variance (not perfectly even)
+  const basePerStat = totalStats / 5;
+
+  return {
+    tier,
+    basePerStat,
+    totalStats,
+    strategyGrades: config.strategyGrades
+  };
+}
+
+/**
  * Calculate Elo rating change
  */
 function calculateEloChange(playerRating, opponentRating, won) {
@@ -164,32 +209,38 @@ function pickRandomMove(moveArray, usedMoves) {
 }
 
 /**
- * Generate an AI Pokemon with stats similar to reference
+ * Generate an AI Pokemon with stats based on player's rating tier
  * Uses new 3-move system: Tackle + 2 strategy-specific moves
+ * @param {object} tierConfig - Config from getAIStatsForRating with basePerStat and strategyGrades
  */
-function generateAIPokemon(referenceStats, variance = 0.15) {
+function generateAIPokemon(tierConfig) {
   const type = TYPES[Math.floor(Math.random() * TYPES.length)];
   const color = TYPE_TO_COLOR[type];
   const strategy = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)];
-  const strategyGrade = STRATEGY_GRADES[Math.floor(Math.random() * STRATEGY_GRADES.length)];
+  // Pick strategy grade from tier-appropriate options
+  const strategyGrade = tierConfig.strategyGrades[Math.floor(Math.random() * tierConfig.strategyGrades.length)];
 
   // Pick a real Pokemon name for this type
   const typeNames = POKEMON_NAMES_BY_TYPE[type] || POKEMON_NAMES_BY_TYPE.Fire;
   const name = typeNames[Math.floor(Math.random() * typeNames.length)];
 
-  // Generate stats with variance
-  const generateStat = (baseStat) => {
-    const min = Math.floor(baseStat * (1 - variance));
-    const max = Math.floor(baseStat * (1 + variance));
+  // Generate stats based on tier with variance
+  // Each stat gets ~20% of total with some randomness
+  const basePerStat = tierConfig.basePerStat;
+  const variance = 0.25; // 25% variance per stat
+
+  const generateStat = () => {
+    const min = Math.floor(basePerStat * (1 - variance));
+    const max = Math.floor(basePerStat * (1 + variance));
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
   const stats = {
-    HP: generateStat(referenceStats.HP || 200),
-    Attack: generateStat(referenceStats.Attack || 150),
-    Defense: generateStat(referenceStats.Defense || 150),
-    Instinct: generateStat(referenceStats.Instinct || 150),
-    Speed: generateStat(referenceStats.Speed || 150)
+    HP: generateStat(),
+    Attack: generateStat(),
+    Defense: generateStat(),
+    Instinct: generateStat(),
+    Speed: generateStat()
   };
 
   // Generate type aptitudes
@@ -316,38 +367,16 @@ function generateAIPokemon(referenceStats, variance = 0.15) {
 }
 
 /**
- * Generate AI team based on player's team stats
+ * Generate AI team based on player's rating tier
+ * @param {number} playerRating - The player's current rating
  */
-function generateAITeam(playerTeam) {
-  // Calculate average stats from player's team
-  const avgStats = {
-    HP: 0,
-    Attack: 0,
-    Defense: 0,
-    Instinct: 0,
-    Speed: 0
-  };
-
-  playerTeam.forEach(pokemon => {
-    if (pokemon && pokemon.stats) {
-      avgStats.HP += pokemon.stats.HP || 0;
-      avgStats.Attack += pokemon.stats.Attack || 0;
-      avgStats.Defense += pokemon.stats.Defense || 0;
-      avgStats.Instinct += pokemon.stats.Instinct || 0;
-      avgStats.Speed += pokemon.stats.Speed || 0;
-    }
-  });
-
-  const teamSize = playerTeam.length || 1;
-  Object.keys(avgStats).forEach(stat => {
-    avgStats[stat] = Math.floor(avgStats[stat] / teamSize);
-  });
-
-  // Generate 3 AI Pokemon with similar stats
+function generateAITeam(playerRating) {
+  // Generate 3 AI Pokemon with stats appropriate for the player's tier
+  // Each Pokemon gets its own tier config so there's variety in the team
   return [
-    generateAIPokemon(avgStats),
-    generateAIPokemon(avgStats),
-    generateAIPokemon(avgStats)
+    generateAIPokemon(getAIStatsForRating(playerRating)),
+    generateAIPokemon(getAIStatsForRating(playerRating)),
+    generateAIPokemon(getAIStatsForRating(playerRating))
   ];
 }
 
@@ -376,8 +405,8 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
     let player2Id;
 
     if (isAIMatch) {
-      // Generate AI team
-      player2Team = generateAITeam(player1Team);
+      // Generate AI team based on player's rating tier
+      player2Team = generateAITeam(entry1.rating_at_queue);
       player2Rating = entry1.rating_at_queue; // AI matches player's rating
       player2Id = entry1.user_id; // Use same user ID for AI (will be marked as AI)
     } else {

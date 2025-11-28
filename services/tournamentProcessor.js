@@ -1,6 +1,75 @@
 const db = require('../config/database');
 const { simulateBattle } = require('./battleSimulator');
 
+// Gym-themed tournament configuration
+const GYM_BADGES = [
+  { key: 'boulder', name: 'Boulder Badge', gym: 'Pewter Gym', leader: 'Brock', type: 'Rock' },
+  { key: 'cascade', name: 'Cascade Badge', gym: 'Cerulean Gym', leader: 'Misty', type: 'Water' },
+  { key: 'thunder', name: 'Thunder Badge', gym: 'Vermilion Gym', leader: 'Lt. Surge', type: 'Electric' },
+  { key: 'rainbow', name: 'Rainbow Badge', gym: 'Celadon Gym', leader: 'Erika', type: 'Grass' },
+  { key: 'soul', name: 'Soul Badge', gym: 'Fuchsia Gym', leader: 'Koga', type: 'Poison' },
+  { key: 'marsh', name: 'Marsh Badge', gym: 'Saffron Gym', leader: 'Sabrina', type: 'Psychic' },
+  { key: 'volcano', name: 'Volcano Badge', gym: 'Cinnabar Gym', leader: 'Blaine', type: 'Fire' },
+  { key: 'earth', name: 'Earth Badge', gym: 'Viridian Gym', leader: 'Giovanni', type: 'Ground' },
+  { key: 'zephyr', name: 'Zephyr Badge', gym: 'Violet Gym', leader: 'Falkner', type: 'Flying' },
+  { key: 'hive', name: 'Hive Badge', gym: 'Azalea Gym', leader: 'Bugsy', type: 'Bug' },
+  { key: 'plain', name: 'Plain Badge', gym: 'Goldenrod Gym', leader: 'Whitney', type: 'Normal' },
+  { key: 'fog', name: 'Fog Badge', gym: 'Ecruteak Gym', leader: 'Morty', type: 'Ghost' },
+  { key: 'storm', name: 'Storm Badge', gym: 'Cianwood Gym', leader: 'Chuck', type: 'Fighting' },
+  { key: 'mineral', name: 'Mineral Badge', gym: 'Olivine Gym', leader: 'Jasmine', type: 'Steel' },
+  { key: 'glacier', name: 'Glacier Badge', gym: 'Mahogany Gym', leader: 'Pryce', type: 'Ice' },
+  { key: 'rising', name: 'Rising Badge', gym: 'Blackthorn Gym', leader: 'Clair', type: 'Dragon' }
+];
+
+const TOURNAMENT_CONFIG = {
+  CREATE_INTERVAL_MINUTES: 30, // Create a new tournament every 30 minutes
+  REGISTRATION_DURATION_MINUTES: 25, // Registration open for 25 minutes before start
+  DEFAULT_MAX_PLAYERS: 8 // Default bracket size
+};
+
+// Create a new tournament automatically with gym theme
+async function createScheduledTournament() {
+  try {
+    // Check if there's already an upcoming or registration tournament
+    const existingResult = await db.query(
+      `SELECT id FROM tournaments
+       WHERE status IN ('upcoming', 'registration')
+       LIMIT 1`
+    );
+
+    if (existingResult.rows.length > 0) {
+      console.log('[Tournament Creator] Tournament already scheduled, skipping creation');
+      return null;
+    }
+
+    // Pick a random gym for the tournament theme
+    const gymBadge = GYM_BADGES[Math.floor(Math.random() * GYM_BADGES.length)];
+    const tournamentName = `${gymBadge.leader}'s ${gymBadge.type} Challenge`;
+
+    // Set start time to REGISTRATION_DURATION_MINUTES from now
+    const startTime = new Date();
+    startTime.setMinutes(startTime.getMinutes() + TOURNAMENT_CONFIG.REGISTRATION_DURATION_MINUTES);
+
+    const maxPlayers = TOURNAMENT_CONFIG.DEFAULT_MAX_PLAYERS;
+    const totalRounds = Math.log2(maxPlayers);
+
+    const result = await db.query(
+      `INSERT INTO tournaments (name, start_time, status, max_players, total_rounds, gym_theme, created_at)
+       VALUES ($1, $2, 'registration', $3, $4, $5, NOW())
+       RETURNING id, name, start_time, gym_theme`,
+      [tournamentName, startTime, maxPlayers, totalRounds, gymBadge.key]
+    );
+
+    const tournament = result.rows[0];
+    console.log(`[Tournament Creator] Created tournament: ${tournament.name} (ID: ${tournament.id}), gym: ${gymBadge.name}, starts at ${tournament.start_time}`);
+
+    return tournament;
+  } catch (error) {
+    console.error('[Tournament Creator] Error creating tournament:', error);
+    return null;
+  }
+}
+
 // Simulate best-of-3 match between two entries
 function simulateBestOf3(entry1, entry2) {
   const battles = [];
@@ -209,6 +278,54 @@ async function processRound(tournamentId, round) {
   }
 }
 
+// Award badge to tournament winner
+async function awardBadge(tournamentId, winnerEntryId) {
+  try {
+    // Get tournament gym theme and winner user_id
+    const tournamentResult = await db.query(
+      `SELECT t.gym_theme, te.user_id
+       FROM tournaments t
+       JOIN tournament_entries te ON te.id = $2
+       WHERE t.id = $1`,
+      [tournamentId, winnerEntryId]
+    );
+
+    if (tournamentResult.rows.length === 0 || !tournamentResult.rows[0].gym_theme) {
+      console.log('[Badge Award] No gym theme found for tournament');
+      return false;
+    }
+
+    const { gym_theme, user_id } = tournamentResult.rows[0];
+
+    // Check if user already has this badge
+    const existingBadge = await db.query(
+      'SELECT id, level FROM user_badges WHERE user_id = $1 AND badge_key = $2',
+      [user_id, gym_theme]
+    );
+
+    if (existingBadge.rows.length > 0) {
+      // Level up existing badge
+      await db.query(
+        'UPDATE user_badges SET level = level + 1, last_upgraded_at = NOW() WHERE id = $1',
+        [existingBadge.rows[0].id]
+      );
+      console.log(`[Badge Award] User ${user_id} leveled up ${gym_theme} badge to level ${existingBadge.rows[0].level + 1}`);
+    } else {
+      // Award new badge
+      await db.query(
+        'INSERT INTO user_badges (user_id, badge_key, level) VALUES ($1, $2, 1)',
+        [user_id, gym_theme]
+      );
+      console.log(`[Badge Award] User ${user_id} earned ${gym_theme} badge!`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('[Badge Award] Error:', error);
+    return false;
+  }
+}
+
 // Advance to next round
 async function advanceToNextRound(tournamentId, currentRound, winners) {
   try {
@@ -216,6 +333,11 @@ async function advanceToNextRound(tournamentId, currentRound, winners) {
 
     if (winners.length < 2) {
       // Tournament complete - only 1 winner
+      // Award badge to the winner
+      if (winners.length === 1) {
+        await awardBadge(tournamentId, winners[0].entryId);
+      }
+
       await db.query(
         'UPDATE tournaments SET status = $1 WHERE id = $2',
         ['completed', tournamentId]
@@ -257,10 +379,13 @@ async function processTournaments() {
   try {
     console.log('[Tournament Processor] Checking for tournaments...');
 
+    // First, ensure there's always an upcoming tournament
+    await createScheduledTournament();
+
     // Check for tournaments that should start
     const tournamentsToStartResult = await db.query(
-      `SELECT id FROM tournaments 
-       WHERE status IN ('registration', 'upcoming') 
+      `SELECT id FROM tournaments
+       WHERE status IN ('registration', 'upcoming')
        AND start_time <= NOW()`
     );
 
@@ -326,4 +451,4 @@ function startTournamentProcessor() {
   setInterval(processTournaments, 5 * 60 * 1000);
 }
 
-module.exports = { startTournamentProcessor, processTournaments };
+module.exports = { startTournamentProcessor, processTournaments, createScheduledTournament, GYM_BADGES };

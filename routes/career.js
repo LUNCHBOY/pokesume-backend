@@ -906,7 +906,20 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
       }
     } else if (pendingEvent.type === 'hangout') {
       console.log('[Resolve Event] Handling hangout event');
-      outcome = pendingEvent.effect;
+      // Triple hangout bonuses for max friendship rewards
+      const baseEffect = pendingEvent.effect;
+      const tripledStats = {};
+      if (baseEffect.stats) {
+        Object.keys(baseEffect.stats).forEach(stat => {
+          tripledStats[stat] = baseEffect.stats[stat] * 3;
+        });
+      }
+      outcome = {
+        ...baseEffect,
+        stats: Object.keys(tripledStats).length > 0 ? tripledStats : baseEffect.stats,
+        energy: baseEffect.energy !== undefined ? baseEffect.energy * 3 : undefined,
+        skillPoints: baseEffect.skillPoints !== undefined ? baseEffect.skillPoints * 3 : undefined
+      };
     } else {
       console.log('[Resolve Event] Unknown event type:', pendingEvent.type);
     }

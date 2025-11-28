@@ -1,0 +1,114 @@
+const express = require('express');
+const db = require('../config/database');
+const authenticateToken = require('../middleware/auth');
+const { GYM_BADGES } = require('../services/tournamentProcessor');
+
+const router = express.Router();
+
+// Get user profile with badges and stats
+router.get('/', authenticateToken, async (req, res) => {
+  try {
+    // Get user info
+    const userResult = await db.query(
+      'SELECT id, username, rating, primos, created_at FROM users WHERE id = $1',
+      [req.user.userId]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = userResult.rows[0];
+
+    // Get user badges
+    const badgesResult = await db.query(
+      `SELECT badge_key, level, first_earned_at, last_upgraded_at
+       FROM user_badges
+       WHERE user_id = $1
+       ORDER BY first_earned_at ASC`,
+      [req.user.userId]
+    );
+
+    // Get most powerful pokemon from roster
+    const topPokemonResult = await db.query(
+      `SELECT pokemon_data
+       FROM pokemon_rosters
+       WHERE user_id = $1
+       ORDER BY (
+         (pokemon_data->>'HP')::int +
+         (pokemon_data->>'Attack')::int +
+         (pokemon_data->>'Defense')::int +
+         (pokemon_data->>'Instinct')::int +
+         (pokemon_data->>'Speed')::int
+       ) DESC
+       LIMIT 3`,
+      [req.user.userId]
+    );
+
+    // Get tournament stats
+    const tournamentStatsResult = await db.query(
+      `SELECT
+         COUNT(DISTINCT te.tournament_id) as tournaments_entered,
+         COUNT(DISTINCT CASE WHEN tm.winner_entry_id = te.id THEN tm.id END) as matches_won
+       FROM tournament_entries te
+       LEFT JOIN tournament_matches tm ON tm.player1_entry_id = te.id OR tm.player2_entry_id = te.id
+       WHERE te.user_id = $1`,
+      [req.user.userId]
+    );
+
+    const stats = tournamentStatsResult.rows[0] || { tournaments_entered: 0, matches_won: 0 };
+
+    res.json({
+      user: {
+        id: user.id,
+        username: user.username,
+        rating: user.rating,
+        primos: user.primos,
+        memberSince: user.created_at
+      },
+      badges: badgesResult.rows,
+      topPokemon: topPokemonResult.rows.map(r => r.pokemon_data),
+      stats: {
+        tournamentsEntered: parseInt(stats.tournaments_entered) || 0,
+        matchesWon: parseInt(stats.matches_won) || 0,
+        badgesCollected: badgesResult.rows.length
+      }
+    });
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({ error: 'Failed to fetch profile' });
+  }
+});
+
+// Get all badge definitions
+router.get('/badges/all', async (req, res) => {
+  try {
+    res.json({ badges: GYM_BADGES });
+  } catch (error) {
+    console.error('Get badges error:', error);
+    res.status(500).json({ error: 'Failed to fetch badges' });
+  }
+});
+
+// Get user's badge collection
+router.get('/badges', authenticateToken, async (req, res) => {
+  try {
+    const badgesResult = await db.query(
+      `SELECT badge_key, level, first_earned_at, last_upgraded_at
+       FROM user_badges
+       WHERE user_id = $1
+       ORDER BY first_earned_at ASC`,
+      [req.user.userId]
+    );
+
+    res.json({
+      badges: badgesResult.rows,
+      allBadges: GYM_BADGES
+    });
+  } catch (error) {
+    console.error('Get user badges error:', error);
+    res.status(500).json({ error: 'Failed to fetch badges' });
+  }
+});
+
+module.exports = router;
