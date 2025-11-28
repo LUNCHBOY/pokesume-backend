@@ -14,8 +14,7 @@ const CONFIG = {
   RATING_EXPANSION_RATE: 2,      // Expand range by 2 per second
   MAX_RATING_RANGE: 500,         // Maximum rating range
   AI_TIMEOUT_SECONDS: 60,        // Generate AI opponent after 60 seconds
-  K_FACTOR_HUMAN: 32,            // Elo K-factor for human matches
-  K_FACTOR_AI: 16                // Elo K-factor for AI matches (smaller impact)
+  K_FACTOR: 32                   // Elo K-factor (same for all matches)
 };
 
 // Pokemon types and their colors
@@ -32,6 +31,43 @@ const TYPE_TO_COLOR = {
 // Strategies
 const STRATEGIES = ['Nuker', 'Balanced', 'Scaler'];
 const STRATEGY_GRADES = ['C', 'B', 'B+', 'A', 'A+', 'S'];
+
+// Pokemon names by type for AI generation
+const POKEMON_NAMES_BY_TYPE = {
+  Fire: ['Blaziken', 'Charizard', 'Infernape', 'Arcanine', 'Typhlosion', 'Magmortar', 'Houndoom', 'Ninetales', 'Rapidash', 'Flareon', 'Entei', 'Moltres', 'Delphox', 'Talonflame', 'Volcarona'],
+  Water: ['Blastoise', 'Feraligatr', 'Swampert', 'Empoleon', 'Gyarados', 'Lapras', 'Vaporeon', 'Milotic', 'Kingdra', 'Starmie', 'Greninja', 'Primarina', 'Samurott', 'Suicune', 'Kyogre'],
+  Grass: ['Venusaur', 'Meganium', 'Sceptile', 'Torterra', 'Leafeon', 'Roserade', 'Breloom', 'Serperior', 'Chesnaught', 'Decidueye', 'Vileplume', 'Victreebel', 'Exeggutor', 'Tangrowth', 'Celebi'],
+  Electric: ['Pikachu', 'Raichu', 'Jolteon', 'Ampharos', 'Luxray', 'Electivire', 'Magnezone', 'Manectric', 'Zebstrika', 'Eelektross', 'Xurkitree', 'Zeraora', 'Raikou', 'Zapdos', 'Thundurus'],
+  Psychic: ['Alakazam', 'Espeon', 'Gardevoir', 'Metagross', 'Reuniclus', 'Gothitelle', 'Delphox', 'Slowking', 'Hypno', 'Exeggutor', 'Starmie', 'Sigilyph', 'Beheeyem', 'Mew', 'Mewtwo'],
+  Fighting: ['Machamp', 'Hitmonlee', 'Hitmonchan', 'Lucario', 'Conkeldurr', 'Mienshao', 'Heracross', 'Blaziken', 'Infernape', 'Gallade', 'Hawlucha', 'Kommo-o', 'Pangoro', 'Primeape', 'Poliwrath']
+};
+
+// Fake usernames for AI opponents
+const AI_USERNAME_PREFIXES = ['Shadow', 'Storm', 'Fire', 'Ice', 'Thunder', 'Dragon', 'Mystic', 'Dark', 'Light', 'Cosmic', 'Cyber', 'Neo', 'Ultra', 'Mega', 'Alpha', 'Omega', 'Prime', 'Elite', 'Master', 'Pro'];
+const AI_USERNAME_SUFFIXES = ['Trainer', 'Hunter', 'Master', 'Champion', 'Legend', 'Slayer', 'Knight', 'Warrior', 'Fighter', 'Ace', 'King', 'Queen', 'Lord', 'Boss', 'Hero', 'Star', 'Flash', 'Bolt', 'Blaze', 'Frost'];
+
+/**
+ * Generate a fake username for AI opponent
+ */
+function generateFakeUsername() {
+  const prefix = AI_USERNAME_PREFIXES[Math.floor(Math.random() * AI_USERNAME_PREFIXES.length)];
+  const suffix = AI_USERNAME_SUFFIXES[Math.floor(Math.random() * AI_USERNAME_SUFFIXES.length)];
+  const number = Math.floor(Math.random() * 999) + 1;
+
+  // Various formats to make it look natural
+  const formats = [
+    `${prefix}${suffix}`,
+    `${prefix}${suffix}${number}`,
+    `${prefix}_${suffix}`,
+    `${prefix.toLowerCase()}${suffix}${number}`,
+    `x${prefix}${suffix}x`,
+    `The${prefix}${suffix}`,
+    `${prefix}${number}`,
+    `${suffix}${number}`,
+  ];
+
+  return formats[Math.floor(Math.random() * formats.length)];
+}
 
 // Available moves by type
 const MOVES_BY_TYPE = {
@@ -50,8 +86,8 @@ let intervalId = null;
 /**
  * Calculate Elo rating change
  */
-function calculateEloChange(playerRating, opponentRating, won, isAI) {
-  const K = isAI ? CONFIG.K_FACTOR_AI : CONFIG.K_FACTOR_HUMAN;
+function calculateEloChange(playerRating, opponentRating, won) {
+  const K = CONFIG.K_FACTOR;
   const expected = 1 / (1 + Math.pow(10, (opponentRating - playerRating) / 400));
   const score = won ? 1 : 0;
   return Math.round(K * (score - expected));
@@ -73,6 +109,10 @@ function generateAIPokemon(referenceStats, variance = 0.15) {
   const color = TYPE_TO_COLOR[type];
   const strategy = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)];
   const strategyGrade = STRATEGY_GRADES[Math.floor(Math.random() * STRATEGY_GRADES.length)];
+
+  // Pick a real Pokemon name for this type
+  const typeNames = POKEMON_NAMES_BY_TYPE[type] || POKEMON_NAMES_BY_TYPE.Fire;
+  const name = typeNames[Math.floor(Math.random() * typeNames.length)];
 
   // Generate stats with variance
   const generateStat = (baseStat) => {
@@ -115,7 +155,7 @@ function generateAIPokemon(referenceStats, variance = 0.15) {
   }
 
   return {
-    name: `AI ${type} Pokemon`,
+    name,
     primaryType: type,
     stats,
     abilities,
@@ -223,7 +263,12 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
       }
 
       const result = simulateBattle(pokemon1, pokemon2);
-      battleResults.push(result);
+      // Include Pokemon data in the battle result for replay display
+      battleResults.push({
+        ...result,
+        pokemon1: pokemon1,
+        pokemon2: pokemon2
+      });
 
       if (result.winner === 1) {
         player1Wins++;
@@ -236,22 +281,31 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
     const player1Won = player1Wins > player2Wins;
     const winnerId = player1Won ? entry1.user_id : (isAIMatch ? entry1.user_id : entry2.user_id);
 
-    // Calculate rating changes
+    // Calculate rating changes (same K-factor for all matches)
     const player1RatingChange = calculateEloChange(
       entry1.rating_at_queue,
       player2Rating,
-      player1Won,
-      isAIMatch
+      player1Won
     );
 
     const player2RatingChange = isAIMatch ? 0 : calculateEloChange(
       entry2.rating_at_queue,
       entry1.rating_at_queue,
-      !player1Won,
-      false
+      !player1Won
     );
 
-    // Insert match record
+    // Generate fake username for AI opponent
+    const aiUsername = isAIMatch ? generateFakeUsername() : null;
+
+    // Build replay data including AI username if applicable
+    const replayData = {
+      battles: battleResults,
+      player1Wins,
+      player2Wins,
+      aiOpponentUsername: aiUsername
+    };
+
+    // Insert match record (keep is_ai_opponent false to not reveal AI status)
     const matchResult = await db.query(
       `INSERT INTO pvp_matches
         (player1_id, player2_id, winner_id, replay_data, match_type, is_ai_opponent,
@@ -263,8 +317,8 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
         entry1.user_id,
         isAIMatch ? entry1.user_id : entry2.user_id,
         player1Won ? entry1.user_id : (isAIMatch ? entry1.user_id : entry2.user_id),
-        JSON.stringify({ battles: battleResults, player1Wins, player2Wins }),
-        isAIMatch,
+        JSON.stringify(replayData),
+        false, // Always false to hide AI status from frontend
         player1RatingChange,
         player2RatingChange,
         player1Wins,

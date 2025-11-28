@@ -140,7 +140,6 @@ router.get('/matches', authenticateToken, async (req, res) => {
         u2.username as player2_username,
         pm.replay_data,
         pm.match_type,
-        pm.is_ai_opponent,
         pm.player1_rating_change,
         pm.player2_rating_change,
         pm.battles_won_p1,
@@ -154,7 +153,32 @@ router.get('/matches', authenticateToken, async (req, res) => {
       [req.user.userId, limit, offset]
     );
 
-    res.json({ matches: result.rows });
+    // Process results to use fake AI usernames
+    const processedMatches = result.rows.map(match => {
+      const isAIMatch = match.player1_id === match.player2_id;
+      let player2Username = match.player2_username;
+
+      if (isAIMatch) {
+        // Parse replay_data to get AI username
+        let replayData = match.replay_data;
+        if (typeof replayData === 'string') {
+          try {
+            replayData = JSON.parse(replayData);
+          } catch (e) {
+            replayData = {};
+          }
+        }
+        player2Username = replayData?.aiOpponentUsername || 'Trainer';
+      }
+
+      return {
+        ...match,
+        player2_username: player2Username,
+        replay_data: undefined // Don't send full replay data in list
+      };
+    });
+
+    res.json({ matches: processedMatches });
   } catch (error) {
     console.error('Fetch matches error:', error);
     res.status(500).json({ error: 'Failed to fetch match history' });
@@ -289,7 +313,7 @@ router.get('/queue/status', authenticateToken, async (req, res) => {
             pm.player1_id,
             pm.player2_id,
             pm.winner_id,
-            pm.is_ai_opponent,
+            pm.replay_data,
             pm.player1_rating_change,
             pm.player2_rating_change,
             pm.battles_won_p1,
@@ -309,13 +333,28 @@ router.get('/queue/status', authenticateToken, async (req, res) => {
           const match = matchResult.rows[0];
           const isPlayer1 = match.player1_id === req.user.userId;
 
+          // Check if AI match and get fake username
+          const isAIMatch = match.player1_id === match.player2_id;
+          let opponentUsername = isPlayer1 ? match.player2_username : match.player1_username;
+
+          if (isAIMatch) {
+            let replayData = match.replay_data;
+            if (typeof replayData === 'string') {
+              try {
+                replayData = JSON.parse(replayData);
+              } catch (e) {
+                replayData = {};
+              }
+            }
+            opponentUsername = replayData?.aiOpponentUsername || 'Trainer';
+          }
+
           return res.json({
             status: 'matched',
             matchId: match.id,
             opponent: {
-              username: isPlayer1 ? (match.player2_username || 'AI Trainer') : match.player1_username,
-              rating: isPlayer1 ? match.player2_rating : match.player1_rating,
-              isAI: match.is_ai_opponent
+              username: opponentUsername,
+              rating: isPlayer1 ? match.player2_rating : match.player1_rating
             },
             result: {
               winner: match.winner_id === req.user.userId ? 'you' : 'opponent',
@@ -404,6 +443,12 @@ router.get('/match/:matchId', authenticateToken, async (req, res) => {
       replayData = JSON.parse(replayData);
     }
 
+    // Use fake AI username if this was an AI match (player2_id equals player1_id means AI)
+    const isAIMatch = match.player1_id === match.player2_id;
+    const player2Username = isAIMatch
+      ? (replayData.aiOpponentUsername || 'Trainer')
+      : match.player2_username;
+
     res.json({
       matchId: match.id,
       createdAt: match.created_at,
@@ -415,12 +460,11 @@ router.get('/match/:matchId', authenticateToken, async (req, res) => {
         team: match.player1_team
       },
       player2: {
-        username: match.player2_username || 'AI Trainer',
+        username: player2Username,
         rating: match.player2_rating,
         ratingChange: match.player2_rating_change,
         battlesWon: match.battles_won_p2,
-        team: match.player2_team,
-        isAI: match.is_ai_opponent
+        team: match.player2_team
       },
       winner: match.winner_id === match.player1_id ? 'player1' : 'player2',
       youAre: isPlayer1 ? 'player1' : 'player2',
