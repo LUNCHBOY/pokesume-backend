@@ -137,7 +137,9 @@ router.get('/matches', authenticateToken, async (req, res) => {
         pm.player1_id,
         pm.player2_id,
         u1.username as player1_username,
+        u1.profile_icon as player1_profile_icon,
         u2.username as player2_username,
+        u2.profile_icon as player2_profile_icon,
         pm.replay_data,
         pm.match_type,
         pm.player1_rating_change,
@@ -157,6 +159,7 @@ router.get('/matches', authenticateToken, async (req, res) => {
     const processedMatches = result.rows.map(match => {
       const isAIMatch = match.player1_id === match.player2_id;
       let player2Username = match.player2_username;
+      let player2ProfileIcon = match.player2_profile_icon || 'pikachu';
 
       if (isAIMatch) {
         // Parse replay_data to get AI username
@@ -169,11 +172,14 @@ router.get('/matches', authenticateToken, async (req, res) => {
           }
         }
         player2Username = replayData?.aiOpponentUsername || 'Trainer';
+        player2ProfileIcon = 'pikachu'; // Default icon for AI opponents
       }
 
       return {
         ...match,
+        player1_profile_icon: match.player1_profile_icon || 'pikachu',
         player2_username: player2Username,
+        player2_profile_icon: player2ProfileIcon,
         replay_data: undefined // Don't send full replay data in list
       };
     });
@@ -320,8 +326,10 @@ router.get('/queue/status', authenticateToken, async (req, res) => {
             pm.battles_won_p2,
             u1.username as player1_username,
             u1.rating as player1_rating,
+            u1.profile_icon as player1_profile_icon,
             u2.username as player2_username,
-            u2.rating as player2_rating
+            u2.rating as player2_rating,
+            u2.profile_icon as player2_profile_icon
           FROM pvp_matches pm
           JOIN users u1 ON pm.player1_id = u1.id
           LEFT JOIN users u2 ON pm.player2_id = u2.id
@@ -349,12 +357,15 @@ router.get('/queue/status', authenticateToken, async (req, res) => {
             opponentUsername = replayData?.aiOpponentUsername || 'Trainer';
           }
 
+          const opponentProfileIcon = isAIMatch ? 'pikachu' : (isPlayer1 ? match.player2_profile_icon : match.player1_profile_icon) || 'pikachu';
+
           return res.json({
             status: 'matched',
             matchId: match.id,
             opponent: {
               username: opponentUsername,
-              rating: isPlayer1 ? match.player2_rating : match.player1_rating
+              rating: isPlayer1 ? match.player2_rating : match.player1_rating,
+              profileIcon: opponentProfileIcon
             },
             result: {
               winner: match.winner_id === req.user.userId ? 'you' : 'opponent',

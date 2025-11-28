@@ -5,12 +5,22 @@ const { GYM_BADGES } = require('../services/tournamentProcessor');
 
 const router = express.Router();
 
+// Available profile icons
+const PROFILE_ICONS = [
+  'pikachu',
+  'squirtle',
+  'charmander',
+  'bulbasaur',
+  'mewtwo',
+  'officer-jenny'
+];
+
 // Get user profile with badges and stats
 router.get('/', authenticateToken, async (req, res) => {
   try {
     // Get user info
     const userResult = await db.query(
-      'SELECT id, username, rating, primos, created_at FROM users WHERE id = $1',
+      'SELECT id, username, rating, primos, profile_icon, created_at FROM users WHERE id = $1',
       [req.user.userId]
     );
 
@@ -64,6 +74,7 @@ router.get('/', authenticateToken, async (req, res) => {
         username: user.username,
         rating: user.rating,
         primos: user.primos,
+        profileIcon: user.profile_icon || 'pikachu',
         memberSince: user.created_at
       },
       badges: badgesResult.rows,
@@ -77,6 +88,32 @@ router.get('/', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Get profile error:', error);
     res.status(500).json({ error: 'Failed to fetch profile' });
+  }
+});
+
+// Get available profile icons
+router.get('/icons', (req, res) => {
+  res.json({ icons: PROFILE_ICONS });
+});
+
+// Update profile icon
+router.put('/icon', authenticateToken, async (req, res) => {
+  try {
+    const { icon } = req.body;
+
+    if (!icon || !PROFILE_ICONS.includes(icon)) {
+      return res.status(400).json({ error: 'Invalid profile icon' });
+    }
+
+    await db.query(
+      'UPDATE users SET profile_icon = $1 WHERE id = $2',
+      [icon, req.user.userId]
+    );
+
+    res.json({ message: 'Profile icon updated', profileIcon: icon });
+  } catch (error) {
+    console.error('Update profile icon error:', error);
+    res.status(500).json({ error: 'Failed to update profile icon' });
   }
 });
 

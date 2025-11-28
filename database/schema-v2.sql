@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     rating INTEGER DEFAULT 1000 NOT NULL,
     primos INTEGER DEFAULT 1000 NOT NULL,
+    profile_icon VARCHAR(50) DEFAULT 'pikachu' NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     last_login TIMESTAMP,
     CONSTRAINT username_length CHECK (char_length(username) >= 3 AND char_length(username) <= 20)

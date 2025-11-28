@@ -3,11 +3,34 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
 const db = require('../config/database');
+const { SUPPORT_CARDS } = require('../shared/gameData');
 
 const router = express.Router();
 
 // Initialize Google OAuth client
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// Common supports granted to new accounts
+const STARTER_SUPPORTS = ['WhitneyMiltank', 'ChuckPoliwrath', 'PryceDelibird', 'WattsonMagneton', 'FlanneryCamerupt'];
+
+// Grant starter supports to a new user
+async function grantStarterSupports(userId) {
+  try {
+    for (const supportName of STARTER_SUPPORTS) {
+      const supportData = SUPPORT_CARDS[supportName];
+      if (supportData) {
+        await db.query(
+          `INSERT INTO support_inventory (user_id, support_name, support_data)
+           VALUES ($1, $2, $3)`,
+          [userId, supportName, JSON.stringify(supportData)]
+        );
+      }
+    }
+    console.log(`[Auth] Granted ${STARTER_SUPPORTS.length} starter supports to user ${userId}`);
+  } catch (error) {
+    console.error('[Auth] Error granting starter supports:', error);
+  }
+}
 
 // Register new user
 router.post('/register', async (req, res) => {
@@ -49,6 +72,9 @@ router.post('/register', async (req, res) => {
     );
 
     const user = result.rows[0];
+
+    // Grant starter supports to new user
+    await grantStarterSupports(user.id);
 
     // Generate JWT
     const token = jwt.sign(
@@ -174,7 +200,7 @@ router.post('/google', async (req, res) => {
 
     // Check if user exists with this Google ID
     let result = await db.query(
-      'SELECT id, username, email, rating FROM users WHERE google_id = $1',
+      'SELECT id, username, email, rating, needs_username FROM users WHERE google_id = $1',
       [googleId]
     );
 
@@ -200,39 +226,22 @@ router.post('/google', async (req, res) => {
         );
       } else {
         // Create new user with Google account
-        // Generate username from Google name (sanitize and make unique)
-        let baseUsername = name.replace(/[^a-zA-Z0-9]/g, '').substring(0, 15);
-        if (baseUsername.length < 3) {
-          baseUsername = 'Trainer' + Math.floor(Math.random() * 10000);
-        }
+        // Use a temporary username - user will choose their own
+        const tempUsername = `Trainer${Date.now()}`;
 
-        // Check if username exists, add number if needed
-        let username = baseUsername;
-        let counter = 1;
-        while (true) {
-          const existing = await db.query(
-            'SELECT id FROM users WHERE username = $1',
-            [username]
-          );
-          if (existing.rows.length === 0) break;
-          username = `${baseUsername}${counter}`;
-          counter++;
-          if (counter > 100) {
-            username = `Trainer${Date.now()}`;
-            break;
-          }
-        }
-
-        // Create the new user
+        // Create the new user with temporary username
         result = await db.query(
-          `INSERT INTO users (username, email, google_id, rating, primos, created_at)
-           VALUES ($1, $2, $3, 1000, 1000, NOW())
-           RETURNING id, username, email, rating, primos, created_at`,
-          [username, email, googleId]
+          `INSERT INTO users (username, email, google_id, rating, primos, needs_username, created_at)
+           VALUES ($1, $2, $3, 1000, 1000, true, NOW())
+           RETURNING id, username, email, rating, primos, needs_username, created_at`,
+          [tempUsername, email, googleId]
         );
 
         user = result.rows[0];
         isNewUser = true;
+
+        // Grant starter supports to new user
+        await grantStarterSupports(user.id);
       }
     }
 
@@ -250,13 +259,84 @@ router.post('/google', async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        rating: user.rating
+        rating: user.rating,
+        needsUsername: user.needs_username || false
       },
       isNewUser
     });
   } catch (error) {
     console.error('Google auth error:', error);
     res.status(500).json({ error: 'Google authentication failed' });
+  }
+});
+
+// Set username for new Google users
+router.post('/set-username', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { username } = req.body;
+
+    // Validate username
+    if (!username || username.length < 3 || username.length > 20) {
+      return res.status(400).json({ error: 'Username must be 3-20 characters' });
+    }
+
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      return res.status(400).json({ error: 'Username can only contain letters, numbers, and underscores' });
+    }
+
+    // Check if username is taken
+    const existing = await db.query(
+      'SELECT id FROM users WHERE username = $1 AND id != $2',
+      [username, decoded.userId]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.status(409).json({ error: 'Username already taken' });
+    }
+
+    // Update username and clear needs_username flag
+    const result = await db.query(
+      `UPDATE users SET username = $1, needs_username = false
+       WHERE id = $2
+       RETURNING id, username, email, rating`,
+      [username, decoded.userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = result.rows[0];
+
+    // Generate new JWT with updated username
+    const newToken = jwt.sign(
+      { userId: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+
+    res.json({
+      message: 'Username set successfully',
+      token: newToken,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        rating: user.rating,
+        needsUsername: false
+      }
+    });
+  } catch (error) {
+    console.error('Set username error:', error);
+    res.status(500).json({ error: 'Failed to set username' });
   }
 });
 

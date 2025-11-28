@@ -188,7 +188,7 @@ router.post('/:tournamentId/enter', authenticateToken, async (req, res) => {
 router.get('/:tournamentId/bracket', async (req, res) => {
   try {
     const matchesResult = await db.query(
-      `SELECT 
+      `SELECT
         tm.id,
         tm.round,
         tm.position,
@@ -196,8 +196,10 @@ router.get('/:tournamentId/bracket', async (req, res) => {
         tm.completed_at,
         te1.user_id as player1_user_id,
         u1.username as player1_username,
+        u1.profile_icon as player1_profile_icon,
         te2.user_id as player2_user_id,
         u2.username as player2_username,
+        u2.profile_icon as player2_profile_icon,
         te_winner.user_id as winner_user_id,
         u_winner.username as winner_username
       FROM tournament_matches tm
@@ -212,7 +214,14 @@ router.get('/:tournamentId/bracket', async (req, res) => {
       [req.params.tournamentId]
     );
 
-    res.json({ bracket: matchesResult.rows });
+    // Add default icons where missing
+    const bracket = matchesResult.rows.map(match => ({
+      ...match,
+      player1_profile_icon: match.player1_profile_icon || 'pikachu',
+      player2_profile_icon: match.player2_profile_icon || 'pikachu'
+    }));
+
+    res.json({ bracket });
   } catch (error) {
     console.error('Fetch bracket error:', error);
     res.status(500).json({ error: 'Failed to fetch bracket' });
