@@ -488,7 +488,7 @@ router.post('/train', authenticateToken, async (req, res) => {
     const trainingFailed = Math.random() < failureChance;
 
     if (trainingFailed) {
-      // Training failed - failures do NOT progress training levels
+      // Training failed - failures do NOT progress training levels and do NOT cost energy
       const statLoss = stat === 'Speed' ? 0 : GAME_CONFIG.TRAINING.STAT_LOSS_ON_FAILURE;
 
       const updatedCareerState = {
@@ -497,13 +497,13 @@ router.post('/train', authenticateToken, async (req, res) => {
           ...careerState.currentStats,
           [stat]: Math.max(1, careerState.currentStats[stat] - statLoss)
         },
-        energy: Math.max(0, careerState.energy - energyCost),
+        energy: careerState.energy, // No energy lost on failed training
         turn: careerState.turn + 1,
         turnLog: [{
           turn: careerState.turn,
           type: 'training_fail',
           stat,
-          message: stat === 'Speed' ? `Training ${stat} failed! No stat loss.` : `Training ${stat} failed! Lost ${statLoss} ${stat}.`
+          message: stat === 'Speed' ? `Training ${stat} failed! No stat loss.` : `Training ${stat} failed! Lost ${statLoss} ${stat}. No energy lost.`
         }, ...(careerState.turnLog || [])],
         currentTrainingOptions: null,
         // Preserve training levels and progress (failures don't affect them)
@@ -1069,7 +1069,7 @@ router.post('/learn-ability', authenticateToken, async (req, res) => {
 router.post('/battle', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { opponent, isGymLeader } = req.body;
+    const { opponent, isGymLeader, isEventBattle } = req.body;
 
     if (!opponent) {
       return res.status(400).json({ error: 'Opponent required' });
@@ -1087,8 +1087,8 @@ router.post('/battle', authenticateToken, async (req, res) => {
 
     const careerState = careerResult.rows[0].career_state;
 
-    // Check energy for wild battles
-    if (!isGymLeader && careerState.energy <= 0) {
+    // Check energy for wild battles (not gym leaders or event battles)
+    if (!isGymLeader && !isEventBattle && careerState.energy <= 0) {
       return res.status(400).json({ error: 'Not enough energy for wild battle' });
     }
 
@@ -1159,14 +1159,20 @@ router.post('/battle', authenticateToken, async (req, res) => {
 
     if (playerWon) {
       if (isGymLeader) {
-        // Gym leader victory
+        // Gym leader victory - no energy cost
         statGain = 5;
         skillPoints = 10;
+        energyChange = 0;
         // Award badge for gym leader defeat
         badge = {
           gymLeaderName: opponent.name,
           defeatedAt: new Date().toISOString()
         };
+      } else if (isEventBattle) {
+        // Event battle victory - costs 20 energy
+        statGain = 15;
+        skillPoints = 0;
+        energyChange = -20;
       } else {
         // Wild battle victory
         statGain = 15; // 50% increased from base
@@ -1176,9 +1182,15 @@ router.post('/battle', authenticateToken, async (req, res) => {
     } else {
       // Defeat
       if (isGymLeader) {
-        // Gym leader defeat ends career
+        // Gym leader defeat ends career - no energy cost
         statGain = 0;
         skillPoints = 0;
+        energyChange = 0;
+      } else if (isEventBattle) {
+        // Event battle defeat - still costs 20 energy
+        statGain = 0;
+        skillPoints = 0;
+        energyChange = -20;
       } else {
         // Wild battle defeat
         energyChange = -5;
@@ -1201,10 +1213,12 @@ router.post('/battle', authenticateToken, async (req, res) => {
       turn: careerState.turn + 1,
       turnLog: [{
         turn: careerState.turn,
-        type: isGymLeader ? (playerWon ? 'gym_victory' : 'gym_loss') : (playerWon ? 'battle_victory' : 'battle_loss'),
+        type: isGymLeader ? (playerWon ? 'gym_victory' : 'gym_loss') :
+              isEventBattle ? (playerWon ? 'event_battle_victory' : 'event_battle_loss') :
+              (playerWon ? 'battle_victory' : 'battle_loss'),
         opponent: opponent.name,
         message: playerWon
-          ? `Defeated ${opponent.name}! Gained ${statGain} to all stats${skillPoints > 0 ? ` and ${skillPoints} skill points` : ''}.`
+          ? `Defeated ${opponent.name}! Gained ${statGain} to all stats${skillPoints > 0 ? ` and ${skillPoints} skill points` : ''}${energyChange < 0 ? `. Cost ${Math.abs(energyChange)} energy.` : ''}`
           : `Lost to ${opponent.name}.${energyChange < 0 ? ` Lost ${Math.abs(energyChange)} energy.` : ''}`
       }, ...(careerState.turnLog || [])],
       // Move to next gym leader if defeated current one
