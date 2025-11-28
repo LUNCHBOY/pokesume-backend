@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     rating INTEGER DEFAULT 1000 NOT NULL,
-    primos INTEGER DEFAULT 0 NOT NULL,
+    primos INTEGER DEFAULT 1000 NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     last_login TIMESTAMP,
     CONSTRAINT username_length CHECK (char_length(username) >= 3 AND char_length(username) <= 20)
@@ -70,14 +70,41 @@ CREATE TABLE IF NOT EXISTS battle_replays (
 CREATE TABLE IF NOT EXISTS pvp_matches (
     id SERIAL PRIMARY KEY,
     player1_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    player2_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    player2_id INTEGER REFERENCES users(id) ON DELETE CASCADE, -- NULL for AI opponents
     winner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     replay_data JSONB NOT NULL,
+    match_type VARCHAR(20) DEFAULT 'quick' NOT NULL,
+    is_ai_opponent BOOLEAN DEFAULT false NOT NULL,
+    player1_rating_change INTEGER,
+    player2_rating_change INTEGER,
+    battles_won_p1 INTEGER DEFAULT 0,
+    battles_won_p2 INTEGER DEFAULT 0,
+    player1_team JSONB,
+    player2_team JSONB,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
-    CONSTRAINT valid_winner CHECK (winner_id = player1_id OR winner_id = player2_id),
     CONSTRAINT pvp_matches_player1_id_fkey FOREIGN KEY (player1_id) REFERENCES users(id),
     CONSTRAINT pvp_matches_player2_id_fkey FOREIGN KEY (player2_id) REFERENCES users(id),
     CONSTRAINT pvp_matches_winner_id_fkey FOREIGN KEY (winner_id) REFERENCES users(id)
+);
+
+-- PVP matchmaking queue table
+CREATE TABLE IF NOT EXISTS pvp_queue (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    pokemon1_roster_id INTEGER NOT NULL REFERENCES pokemon_rosters(id) ON DELETE CASCADE,
+    pokemon2_roster_id INTEGER NOT NULL REFERENCES pokemon_rosters(id) ON DELETE CASCADE,
+    pokemon3_roster_id INTEGER NOT NULL REFERENCES pokemon_rosters(id) ON DELETE CASCADE,
+    rating_at_queue INTEGER NOT NULL,
+    queued_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    status VARCHAR(20) DEFAULT 'waiting' NOT NULL,
+    match_id INTEGER REFERENCES pvp_matches(id) ON DELETE SET NULL,
+    matched_with_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    CONSTRAINT unique_user_in_queue UNIQUE (user_id),
+    CONSTRAINT status_check CHECK (status IN ('waiting', 'matched', 'completed')),
+    CONSTRAINT pvp_queue_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT pvp_queue_pokemon1_roster_id_fkey FOREIGN KEY (pokemon1_roster_id) REFERENCES pokemon_rosters(id),
+    CONSTRAINT pvp_queue_pokemon2_roster_id_fkey FOREIGN KEY (pokemon2_roster_id) REFERENCES pokemon_rosters(id),
+    CONSTRAINT pvp_queue_pokemon3_roster_id_fkey FOREIGN KEY (pokemon3_roster_id) REFERENCES pokemon_rosters(id)
 );
 
 -- Tournaments table
@@ -146,6 +173,10 @@ CREATE INDEX IF NOT EXISTS idx_pvp_matches_player1 ON pvp_matches(player1_id);
 CREATE INDEX IF NOT EXISTS idx_pvp_matches_player2 ON pvp_matches(player2_id);
 CREATE INDEX IF NOT EXISTS idx_pvp_matches_winner ON pvp_matches(winner_id);
 CREATE INDEX IF NOT EXISTS idx_pvp_matches_created_at ON pvp_matches(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_pvp_matches_match_type ON pvp_matches(match_type);
+CREATE INDEX IF NOT EXISTS idx_pvp_queue_user_id ON pvp_queue(user_id);
+CREATE INDEX IF NOT EXISTS idx_pvp_queue_status ON pvp_queue(status);
+CREATE INDEX IF NOT EXISTS idx_pvp_queue_queued_at ON pvp_queue(queued_at);
 CREATE INDEX IF NOT EXISTS idx_tournaments_start_time ON tournaments(start_time);
 CREATE INDEX IF NOT EXISTS idx_tournaments_status ON tournaments(status);
 CREATE INDEX IF NOT EXISTS idx_tournament_entries_tournament ON tournament_entries(tournament_id);

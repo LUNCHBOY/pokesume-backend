@@ -36,11 +36,11 @@ router.post('/register', async (req, res) => {
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Create user
+    // Create user with starting primos
     const result = await db.query(
-      `INSERT INTO users (username, email, password_hash, rating, created_at)
-       VALUES ($1, $2, $3, 1000, NOW())
-       RETURNING id, username, email, rating, created_at`,
+      `INSERT INTO users (username, email, password_hash, rating, primos, created_at)
+       VALUES ($1, $2, $3, 1000, 1000, NOW())
+       RETURNING id, username, email, rating, primos, created_at`,
       [username, email, passwordHash]
     );
 

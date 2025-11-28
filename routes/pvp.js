@@ -130,16 +130,24 @@ router.get('/matches', authenticateToken, async (req, res) => {
     const { limit = 20, offset = 0 } = req.query;
 
     const result = await db.query(
-      `SELECT 
+      `SELECT
         pm.id,
         pm.created_at,
         pm.winner_id,
+        pm.player1_id,
+        pm.player2_id,
         u1.username as player1_username,
         u2.username as player2_username,
-        pm.replay_data
+        pm.replay_data,
+        pm.match_type,
+        pm.is_ai_opponent,
+        pm.player1_rating_change,
+        pm.player2_rating_change,
+        pm.battles_won_p1,
+        pm.battles_won_p2
       FROM pvp_matches pm
       JOIN users u1 ON pm.player1_id = u1.id
-      JOIN users u2 ON pm.player2_id = u2.id
+      LEFT JOIN users u2 ON pm.player2_id = u2.id
       WHERE pm.player1_id = $1 OR pm.player2_id = $1
       ORDER BY pm.created_at DESC
       LIMIT $2 OFFSET $3`,
@@ -150,6 +158,314 @@ router.get('/matches', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Fetch matches error:', error);
     res.status(500).json({ error: 'Failed to fetch match history' });
+  }
+});
+
+// ============================================================================
+// MATCHMAKING QUEUE ENDPOINTS
+// ============================================================================
+
+// Join matchmaking queue
+router.post('/queue', authenticateToken, async (req, res) => {
+  try {
+    const { pokemon1RosterId, pokemon2RosterId, pokemon3RosterId } = req.body;
+
+    if (!pokemon1RosterId || !pokemon2RosterId || !pokemon3RosterId) {
+      return res.status(400).json({ error: 'Three Pokemon rosters required' });
+    }
+
+    // Check if user already in queue
+    const existingQueue = await db.query(
+      'SELECT id FROM pvp_queue WHERE user_id = $1 AND status = $2',
+      [req.user.userId, 'waiting']
+    );
+
+    if (existingQueue.rows.length > 0) {
+      return res.status(400).json({ error: 'Already in matchmaking queue' });
+    }
+
+    // Verify user owns all three rosters
+    const rostersResult = await db.query(
+      'SELECT id FROM pokemon_rosters WHERE user_id = $1 AND id IN ($2, $3, $4)',
+      [req.user.userId, pokemon1RosterId, pokemon2RosterId, pokemon3RosterId]
+    );
+
+    if (rostersResult.rows.length !== 3) {
+      return res.status(400).json({ error: 'Invalid roster IDs or rosters not owned by user' });
+    }
+
+    // Get user's current rating
+    const userResult = await db.query(
+      'SELECT rating FROM users WHERE id = $1',
+      [req.user.userId]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const userRating = userResult.rows[0].rating;
+
+    // Clear any old completed/matched entries for this user
+    await db.query(
+      'DELETE FROM pvp_queue WHERE user_id = $1',
+      [req.user.userId]
+    );
+
+    // Insert into queue
+    const result = await db.query(
+      `INSERT INTO pvp_queue
+        (user_id, pokemon1_roster_id, pokemon2_roster_id, pokemon3_roster_id, rating_at_queue, queued_at, status)
+       VALUES ($1, $2, $3, $4, $5, NOW(), 'waiting')
+       RETURNING id, queued_at`,
+      [req.user.userId, pokemon1RosterId, pokemon2RosterId, pokemon3RosterId, userRating]
+    );
+
+    // Get queue position
+    const positionResult = await db.query(
+      `SELECT COUNT(*) as position FROM pvp_queue WHERE status = 'waiting' AND queued_at <= $1`,
+      [result.rows[0].queued_at]
+    );
+
+    res.status(201).json({
+      message: 'Joined matchmaking queue',
+      queueId: result.rows[0].id,
+      position: parseInt(positionResult.rows[0].position),
+      queuedAt: result.rows[0].queued_at
+    });
+  } catch (error) {
+    console.error('Join queue error:', error);
+    res.status(500).json({ error: 'Failed to join matchmaking queue' });
+  }
+});
+
+// Check queue status
+router.get('/queue/status', authenticateToken, async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT
+        pq.id,
+        pq.status,
+        pq.queued_at,
+        pq.match_id,
+        pq.matched_with_id
+      FROM pvp_queue pq
+      WHERE pq.user_id = $1
+      ORDER BY pq.queued_at DESC
+      LIMIT 1`,
+      [req.user.userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.json({ status: 'not_in_queue' });
+    }
+
+    const queueEntry = result.rows[0];
+
+    if (queueEntry.status === 'waiting') {
+      // Calculate time in queue
+      const queueTime = Math.floor((Date.now() - new Date(queueEntry.queued_at).getTime()) / 1000);
+
+      // Get queue position
+      const positionResult = await db.query(
+        `SELECT COUNT(*) as position FROM pvp_queue WHERE status = 'waiting' AND queued_at <= $1`,
+        [queueEntry.queued_at]
+      );
+
+      return res.json({
+        status: 'waiting',
+        queueId: queueEntry.id,
+        position: parseInt(positionResult.rows[0].position),
+        queueTime
+      });
+    }
+
+    if (queueEntry.status === 'matched' || queueEntry.status === 'completed') {
+      // Get match details
+      if (queueEntry.match_id) {
+        const matchResult = await db.query(
+          `SELECT
+            pm.id,
+            pm.player1_id,
+            pm.player2_id,
+            pm.winner_id,
+            pm.is_ai_opponent,
+            pm.player1_rating_change,
+            pm.player2_rating_change,
+            pm.battles_won_p1,
+            pm.battles_won_p2,
+            u1.username as player1_username,
+            u1.rating as player1_rating,
+            u2.username as player2_username,
+            u2.rating as player2_rating
+          FROM pvp_matches pm
+          JOIN users u1 ON pm.player1_id = u1.id
+          LEFT JOIN users u2 ON pm.player2_id = u2.id
+          WHERE pm.id = $1`,
+          [queueEntry.match_id]
+        );
+
+        if (matchResult.rows.length > 0) {
+          const match = matchResult.rows[0];
+          const isPlayer1 = match.player1_id === req.user.userId;
+
+          return res.json({
+            status: 'matched',
+            matchId: match.id,
+            opponent: {
+              username: isPlayer1 ? (match.player2_username || 'AI Trainer') : match.player1_username,
+              rating: isPlayer1 ? match.player2_rating : match.player1_rating,
+              isAI: match.is_ai_opponent
+            },
+            result: {
+              winner: match.winner_id === req.user.userId ? 'you' : 'opponent',
+              yourBattlesWon: isPlayer1 ? match.battles_won_p1 : match.battles_won_p2,
+              opponentBattlesWon: isPlayer1 ? match.battles_won_p2 : match.battles_won_p1,
+              ratingChange: isPlayer1 ? match.player1_rating_change : match.player2_rating_change
+            }
+          });
+        }
+      }
+
+      return res.json({
+        status: queueEntry.status,
+        matchId: queueEntry.match_id
+      });
+    }
+
+    res.json({ status: queueEntry.status });
+  } catch (error) {
+    console.error('Queue status error:', error);
+    res.status(500).json({ error: 'Failed to get queue status' });
+  }
+});
+
+// Leave matchmaking queue
+router.delete('/queue', authenticateToken, async (req, res) => {
+  try {
+    const result = await db.query(
+      'DELETE FROM pvp_queue WHERE user_id = $1 AND status = $2 RETURNING id',
+      [req.user.userId, 'waiting']
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Not in matchmaking queue' });
+    }
+
+    res.json({ message: 'Left matchmaking queue' });
+  } catch (error) {
+    console.error('Leave queue error:', error);
+    res.status(500).json({ error: 'Failed to leave matchmaking queue' });
+  }
+});
+
+// Get specific match details with full replay
+router.get('/match/:matchId', authenticateToken, async (req, res) => {
+  try {
+    const { matchId } = req.params;
+
+    const result = await db.query(
+      `SELECT
+        pm.id,
+        pm.player1_id,
+        pm.player2_id,
+        pm.winner_id,
+        pm.replay_data,
+        pm.is_ai_opponent,
+        pm.player1_rating_change,
+        pm.player2_rating_change,
+        pm.battles_won_p1,
+        pm.battles_won_p2,
+        pm.player1_team,
+        pm.player2_team,
+        pm.created_at,
+        u1.username as player1_username,
+        u1.rating as player1_rating,
+        u2.username as player2_username,
+        u2.rating as player2_rating
+      FROM pvp_matches pm
+      JOIN users u1 ON pm.player1_id = u1.id
+      LEFT JOIN users u2 ON pm.player2_id = u2.id
+      WHERE pm.id = $1
+        AND (pm.player1_id = $2 OR pm.player2_id = $2)`,
+      [matchId, req.user.userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Match not found' });
+    }
+
+    const match = result.rows[0];
+    const isPlayer1 = match.player1_id === req.user.userId;
+
+    // Parse replay data
+    let replayData = match.replay_data;
+    if (typeof replayData === 'string') {
+      replayData = JSON.parse(replayData);
+    }
+
+    res.json({
+      matchId: match.id,
+      createdAt: match.created_at,
+      player1: {
+        username: match.player1_username,
+        rating: match.player1_rating,
+        ratingChange: match.player1_rating_change,
+        battlesWon: match.battles_won_p1,
+        team: match.player1_team
+      },
+      player2: {
+        username: match.player2_username || 'AI Trainer',
+        rating: match.player2_rating,
+        ratingChange: match.player2_rating_change,
+        battlesWon: match.battles_won_p2,
+        team: match.player2_team,
+        isAI: match.is_ai_opponent
+      },
+      winner: match.winner_id === match.player1_id ? 'player1' : 'player2',
+      youAre: isPlayer1 ? 'player1' : 'player2',
+      battles: replayData.battles || replayData
+    });
+  } catch (error) {
+    console.error('Get match error:', error);
+    res.status(500).json({ error: 'Failed to get match details' });
+  }
+});
+
+// Get user's PvP stats
+router.get('/stats', authenticateToken, async (req, res) => {
+  try {
+    const userResult = await db.query(
+      'SELECT rating FROM users WHERE id = $1',
+      [req.user.userId]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const winsResult = await db.query(
+      `SELECT COUNT(*) as wins FROM pvp_matches
+       WHERE winner_id = $1 AND match_type = 'matchmaking'`,
+      [req.user.userId]
+    );
+
+    const lossesResult = await db.query(
+      `SELECT COUNT(*) as losses FROM pvp_matches
+       WHERE (player1_id = $1 OR player2_id = $1)
+       AND winner_id != $1
+       AND match_type = 'matchmaking'`,
+      [req.user.userId]
+    );
+
+    res.json({
+      rating: userResult.rows[0].rating,
+      wins: parseInt(winsResult.rows[0].wins),
+      losses: parseInt(lossesResult.rows[0].losses)
+    });
+  } catch (error) {
+    console.error('Get stats error:', error);
+    res.status(500).json({ error: 'Failed to get PvP stats' });
   }
 });
 

@@ -4,7 +4,7 @@
 
 -- Add primos column to users table if it doesn't exist
 ALTER TABLE users
-ADD COLUMN IF NOT EXISTS primos INTEGER DEFAULT 0 NOT NULL;
+ADD COLUMN IF NOT EXISTS primos INTEGER DEFAULT 1000 NOT NULL;
 
 -- Pokemon inventory (gacha pulls)
 CREATE TABLE IF NOT EXISTS pokemon_inventory (

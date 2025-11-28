@@ -1,5 +1,6 @@
 const cron = require('node-cron');
 const { processTournaments } = require('./tournamentProcessor');
+const matchmaker = require('./services/matchmaker');
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -73,6 +74,9 @@ cron.schedule('*/5 * * * *', async () => {
   await processTournaments();
 });
 console.log('[Cron] Tournament processor scheduled (every 5 minutes)');
+
+// Start matchmaker service
+matchmaker.start();
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Pokesume backend server running on port ${PORT}`);
