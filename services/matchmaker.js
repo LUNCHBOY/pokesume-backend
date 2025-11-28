@@ -13,7 +13,7 @@ const CONFIG = {
   BASE_RATING_RANGE: 100,        // Initial rating range for matching
   RATING_EXPANSION_RATE: 2,      // Expand range by 2 per second
   MAX_RATING_RANGE: 500,         // Maximum rating range
-  AI_TIMEOUT_SECONDS: 60,        // Generate AI opponent after 60 seconds
+  AI_TIMEOUT_SECONDS: 15,        // Generate AI opponent after 15 seconds
   K_FACTOR: 32                   // Elo K-factor (same for all matches)
 };
 

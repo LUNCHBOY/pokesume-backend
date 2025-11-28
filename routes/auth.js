@@ -265,8 +265,12 @@ router.post('/google', async (req, res) => {
       isNewUser
     });
   } catch (error) {
-    console.error('Google auth error:', error);
-    res.status(500).json({ error: 'Google authentication failed' });
+    console.error('Google auth error:', error.message, error.stack);
+    // Return more detailed error for debugging
+    const errorMessage = error.message.includes('column')
+      ? 'Database schema error - migrations may need to be run'
+      : 'Google authentication failed';
+    res.status(500).json({ error: errorMessage, details: error.message });
   }
 });
 

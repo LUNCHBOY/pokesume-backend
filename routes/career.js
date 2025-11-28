@@ -1173,8 +1173,12 @@ router.post('/battle', authenticateToken, async (req, res) => {
 
     if (playerWon) {
       if (isGymLeader) {
-        // Gym leader victory - no energy cost
-        statGain = 5;
+        // Check if this is an Elite Four battle (turn 60+)
+        const eliteFourStartTurn = GAME_CONFIG.CAREER.ELITE_FOUR_START_TURN || 60;
+        const isEliteFour = careerState.turn >= eliteFourStartTurn;
+
+        // Elite Four gives +20 to all stats, regular gym leaders give +10
+        statGain = isEliteFour ? 20 : 10;
         skillPoints = 10;
         energyChange = 0;
         // Award badge for gym leader defeat
