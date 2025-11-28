@@ -466,7 +466,7 @@ router.get('/match/:matchId', authenticateToken, async (req, res) => {
         battlesWon: match.battles_won_p2,
         team: match.player2_team
       },
-      winner: match.winner_id === match.player1_id ? 'player1' : 'player2',
+      winner: match.battles_won_p1 > match.battles_won_p2 ? 'player1' : 'player2',
       youAre: isPlayer1 ? 'player1' : 'player2',
       battles: replayData.battles || replayData
     });

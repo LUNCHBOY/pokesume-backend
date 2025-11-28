@@ -1198,6 +1198,7 @@ router.post('/battle', authenticateToken, async (req, res) => {
     }
 
     // Apply battle results to career state
+    // Event battles do NOT progress the turn - they happen during the current turn
     const updatedCareerState = {
       ...careerState,
       currentStats: {
@@ -1210,7 +1211,8 @@ router.post('/battle', authenticateToken, async (req, res) => {
       },
       skillPoints: careerState.skillPoints + skillPoints,
       energy: Math.max(0, Math.min(GAME_CONFIG.CAREER.MAX_ENERGY, careerState.energy + energyChange)),
-      turn: careerState.turn + 1,
+      // Event battles don't progress the turn
+      turn: isEventBattle ? careerState.turn : careerState.turn + 1,
       turnLog: [{
         turn: careerState.turn,
         type: isGymLeader ? (playerWon ? 'gym_victory' : 'gym_loss') :
@@ -1223,9 +1225,10 @@ router.post('/battle', authenticateToken, async (req, res) => {
       }, ...(careerState.turnLog || [])],
       // Move to next gym leader if defeated current one
       currentGymIndex: (isGymLeader && playerWon) ? careerState.currentGymIndex + 1 : careerState.currentGymIndex,
-      // Generate new wild battles for next turn
-      availableBattles: generateWildBattles(careerState.turn + 1),
-      currentTrainingOptions: null
+      // Generate new wild battles for next turn (but keep current ones for event battles)
+      availableBattles: isEventBattle ? careerState.availableBattles : generateWildBattles(careerState.turn + 1),
+      // Keep current training options for event battles
+      currentTrainingOptions: isEventBattle ? careerState.currentTrainingOptions : null
     };
 
     // Save updated career state
@@ -1281,7 +1284,8 @@ router.post('/complete', authenticateToken, async (req, res) => {
       strategyGrade: careerState.pokemon.strategyGrade,
       inspirations: careerState.inspirations || null,
       completionType,
-      turnNumber: careerState.turn
+      turnNumber: careerState.turn,
+      gymsDefeated: careerState.currentGymIndex || 0
     };
 
     await pool.query(
