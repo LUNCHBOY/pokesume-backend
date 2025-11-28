@@ -214,6 +214,28 @@ router.get('/trained', authenticateToken, async (req, res) => {
   }
 });
 
+// Delete trained Pokemon from roster
+router.delete('/trained/:id', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const trainedId = req.params.id;
+
+    const result = await pool.query(
+      'DELETE FROM pokemon_rosters WHERE id = $1 AND user_id = $2 RETURNING id',
+      [trainedId, userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Trained Pokemon not found' });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Delete trained Pokemon error:', error);
+    res.status(500).json({ error: 'Failed to delete trained Pokemon' });
+  }
+});
+
 // ============================================================================
 // USER PRIMOS
 // ============================================================================
