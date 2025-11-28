@@ -345,10 +345,11 @@ router.post('/start', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Pokemon and supports required' });
     }
 
-    // Initialize support friendships
+    // Initialize support friendships with their initial friendship values
     const supportFriendships = {};
     selectedSupports.forEach(supportName => {
-      supportFriendships[supportName] = 0;
+      const supportCard = SUPPORT_CARDS[supportName];
+      supportFriendships[supportName] = supportCard?.initialFriendship || 0;
     });
 
     // Generate gym leaders and initial wild battles
@@ -906,19 +907,19 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
       }
     } else if (pendingEvent.type === 'hangout') {
       console.log('[Resolve Event] Handling hangout event');
-      // Triple hangout bonuses for max friendship rewards
+      // Double hangout bonuses for max friendship rewards
       const baseEffect = pendingEvent.effect;
-      const tripledStats = {};
+      const doubledStats = {};
       if (baseEffect.stats) {
         Object.keys(baseEffect.stats).forEach(stat => {
-          tripledStats[stat] = baseEffect.stats[stat] * 3;
+          doubledStats[stat] = baseEffect.stats[stat] * 2;
         });
       }
       outcome = {
         ...baseEffect,
-        stats: Object.keys(tripledStats).length > 0 ? tripledStats : baseEffect.stats,
-        energy: baseEffect.energy !== undefined ? baseEffect.energy * 3 : undefined,
-        skillPoints: baseEffect.skillPoints !== undefined ? baseEffect.skillPoints * 3 : undefined
+        stats: Object.keys(doubledStats).length > 0 ? doubledStats : baseEffect.stats,
+        energy: baseEffect.energy !== undefined ? baseEffect.energy * 2 : undefined,
+        skillPoints: baseEffect.skillPoints !== undefined ? baseEffect.skillPoints * 2 : undefined
       };
     } else {
       console.log('[Resolve Event] Unknown event type:', pendingEvent.type);
