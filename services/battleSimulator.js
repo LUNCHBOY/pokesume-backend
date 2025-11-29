@@ -1051,7 +1051,8 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
       });
       message += ` ${attackerName} became confused!`;
     } else if (effect.type === 'regen') {
-      // Regeneration over time (AquaRing)
+      // Regeneration over time (AquaRing) - remove existing regen first (no stacking)
+      combatant.statusEffects = combatant.statusEffects.filter(e => e.type !== 'regen');
       combatant.statusEffects.push({
         type: 'regen',
         duration: effect.duration,
