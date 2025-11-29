@@ -14,7 +14,9 @@ const CONFIG = {
   RATING_EXPANSION_RATE: 2,      // Expand range by 2 per second
   MAX_RATING_RANGE: 500,         // Maximum rating range
   AI_TIMEOUT_SECONDS: 15,        // Generate AI opponent after 15 seconds
-  K_FACTOR: 32                   // Elo K-factor (same for all matches)
+  K_FACTOR: 96,                  // Base Elo K-factor (tripled from 32)
+  PLATINUM_RATING: 1400,         // Rating where inflation converges to 0
+  MAX_INFLATION_BONUS: 0.5       // Max 50% bonus for wins / 50% reduction for losses at low rating
 };
 
 // Pokemon types and their colors
@@ -182,13 +184,36 @@ function getAIStatsForRating(rating) {
 }
 
 /**
- * Calculate Elo rating change
+ * Calculate Elo rating change with soft inflation toward Platinum
+ * Players below Platinum gain more for wins and lose less for losses
+ * This effect diminishes as they approach Platinum and becomes neutral at/above Platinum
  */
 function calculateEloChange(playerRating, opponentRating, won) {
   const K = CONFIG.K_FACTOR;
   const expected = 1 / (1 + Math.pow(10, (opponentRating - playerRating) / 400));
   const score = won ? 1 : 0;
-  return Math.round(K * (score - expected));
+  const baseChange = K * (score - expected);
+
+  // Calculate inflation factor based on how far below Platinum the player is
+  // At 0 rating: full inflation bonus (MAX_INFLATION_BONUS)
+  // At PLATINUM_RATING: no inflation (0)
+  // Above PLATINUM_RATING: no inflation (0)
+  let inflationFactor = 0;
+  if (playerRating < CONFIG.PLATINUM_RATING) {
+    // Linear interpolation from MAX_INFLATION_BONUS at rating 0 to 0 at PLATINUM_RATING
+    inflationFactor = CONFIG.MAX_INFLATION_BONUS * (1 - playerRating / CONFIG.PLATINUM_RATING);
+  }
+
+  let finalChange;
+  if (won) {
+    // Wins get a bonus (more points gained)
+    finalChange = baseChange * (1 + inflationFactor);
+  } else {
+    // Losses get a reduction (fewer points lost)
+    finalChange = baseChange * (1 - inflationFactor);
+  }
+
+  return Math.round(finalChange);
 }
 
 /**
@@ -458,7 +483,9 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
 
     // Determine match winner
     const player1Won = player1Wins > player2Wins;
-    const winnerId = player1Won ? entry1.user_id : (isAIMatch ? entry1.user_id : entry2.user_id);
+    // For AI matches: if player loses, winner_id should be null to indicate AI won
+    // The frontend uses battles_won_p1/p2 to determine the actual winner
+    const winnerId = player1Won ? entry1.user_id : (isAIMatch ? null : entry2.user_id);
 
     // Calculate rating changes (same K-factor for all matches)
     const player1RatingChange = calculateEloChange(
@@ -495,7 +522,7 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
       [
         entry1.user_id,
         isAIMatch ? entry1.user_id : entry2.user_id,
-        player1Won ? entry1.user_id : (isAIMatch ? entry1.user_id : entry2.user_id),
+        winnerId,
         JSON.stringify(replayData),
         false, // Always false to hide AI status from frontend
         player1RatingChange,
@@ -519,6 +546,20 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
       await db.query(
         'UPDATE users SET rating = rating + $1 WHERE id = $2',
         [player2RatingChange, entry2.user_id]
+      );
+    }
+
+    // Award 10 primos to the winner
+    if (player1Won) {
+      await db.query(
+        'UPDATE users SET primos = primos + 10 WHERE id = $1',
+        [entry1.user_id]
+      );
+    } else if (!isAIMatch) {
+      // Player 2 won (only award if not AI match)
+      await db.query(
+        'UPDATE users SET primos = primos + 10 WHERE id = $1',
+        [entry2.user_id]
       );
     }
 

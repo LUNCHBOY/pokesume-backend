@@ -74,11 +74,39 @@ const scaleStatsWithMultiplier = (baseStats, multiplier) => {
   return scaledStats;
 };
 
+// Grade ranking for strategy comparison
+const GRADE_RANK = { 'S': 5, 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'F': 0 };
+
+// Helper function to derive strategy and grade from strategyAptitudes
+// Returns the strategy with the best aptitude grade
+const deriveStrategyFromAptitudes = (strategyAptitudes) => {
+  if (!strategyAptitudes || typeof strategyAptitudes !== 'object') {
+    return { strategy: 'Chipper', strategyGrade: 'C' };
+  }
+
+  let bestStrategy = 'Chipper';
+  let bestGrade = 'C';
+  let bestRank = GRADE_RANK[bestGrade] || 0;
+
+  for (const [strategy, grade] of Object.entries(strategyAptitudes)) {
+    const rank = GRADE_RANK[grade] || 0;
+    if (rank > bestRank) {
+      bestStrategy = strategy;
+      bestGrade = grade;
+      bestRank = rank;
+    }
+  }
+
+  return { strategy: bestStrategy, strategyGrade: bestGrade };
+};
+
 // Helper function to generate wild battles
 const generateWildBattles = (turn) => {
   const gymLeaderMult = calculateDifficultyMultiplier(turn);
-  // Wild pokemon are 25% weaker than gym leaders at the same turn
-  const wildMult = gymLeaderMult * 0.75;
+  // Wild pokemon are 25% stronger than gym leaders at the same turn
+  const wildMult = gymLeaderMult * 1.25;
+
+  console.log(`[Wild Battle] Turn ${turn}: gymLeaderMult=${gymLeaderMult.toFixed(2)}, wildMult=${wildMult.toFixed(2)}`);
 
   // Randomly select 2 pokemons from all available pokemons
   const allPokemons = Object.values(POKEMON);
@@ -100,11 +128,16 @@ const generateWildBattles = (turn) => {
       availableAbilities.push(...pokemon.learnableAbilities.slice(4));
     }
 
-    // Scale stats based on wild difficulty (25% weaker than gym leaders)
+    // Scale stats based on wild difficulty (25% stronger than gym leaders)
     const scaledStats = {};
     Object.keys(pokemon.baseStats).forEach(stat => {
       scaledStats[stat] = Math.floor(pokemon.baseStats[stat] * wildMult);
     });
+
+    console.log(`[Wild Battle] ${pokemon.name} base HP: ${pokemon.baseStats.HP}, scaled HP: ${scaledStats.HP}`);
+
+    // Derive strategy from strategyAptitudes
+    const derivedStrategy = deriveStrategyFromAptitudes(pokemon.strategyAptitudes);
 
     return {
       name: pokemon.name,
@@ -112,8 +145,8 @@ const generateWildBattles = (turn) => {
       stats: scaledStats,
       abilities: availableAbilities,
       typeAptitudes: pokemon.typeAptitudes,
-      strategy: pokemon.strategy,
-      strategyGrade: pokemon.strategyGrade
+      strategy: derivedStrategy.strategy,
+      strategyGrade: derivedStrategy.strategyGrade
     };
   });
 };
@@ -193,54 +226,21 @@ const migrateCareerState = (careerState) => {
   return { migrated, updated };
 };
 
-// Helper function to get support card attributes with rarity defaults
-// Support card training bonuses - rarer cards are STRONGER and appear MORE often
+// Helper function to get support card attributes
+// Uses actual card values from trainingBonus, appearanceRate, and typeMatchPreference
 const getSupportCardAttributes = (card) => {
-  const rarityDefaults = {
-    'Legendary': {
-      // Best training bonuses - legendary trainers provide exceptional guidance
-      typeBonusTraining: 25,         // +25 when training matching stat type
-      generalBonusTraining: 8,       // +8 for non-matching stats
-      friendshipBonusTraining: 40,   // +40 at max friendship for matching type
-      // Higher appearance = more likely to show up in training options
-      appearanceChance: 0.55,        // 55% chance to appear each turn
-      typeAppearancePriority: 4.0    // 4x weight for their specialty stat
-    },
-    'Rare': {
-      typeBonusTraining: 20,
-      generalBonusTraining: 6,
-      friendshipBonusTraining: 32,
-      appearanceChance: 0.50,
-      typeAppearancePriority: 3.5
-    },
-    'Uncommon': {
-      typeBonusTraining: 15,
-      generalBonusTraining: 4,
-      friendshipBonusTraining: 24,
-      appearanceChance: 0.45,
-      typeAppearancePriority: 3.0
-    },
-    'Common': {
-      // Lowest bonuses - but still helpful
-      typeBonusTraining: 10,
-      generalBonusTraining: 2,
-      friendshipBonusTraining: 16,
-      appearanceChance: 0.40,
-      typeAppearancePriority: 2.5
-    }
-  };
-
-  const defaults = rarityDefaults[card.rarity] || rarityDefaults['Common'];
-
-  // Use individual card appearanceChance if defined, otherwise use rarity default
-  const finalAppearanceChance = card.appearanceChance !== undefined
-    ? card.appearanceChance
-    : defaults.appearanceChance;
+  // Extract training bonuses from card's trainingBonus object
+  const trainingBonus = card.trainingBonus || {};
 
   return {
     ...card,
-    ...defaults,
-    appearanceChance: finalAppearanceChance,
+    // Map card's trainingBonus to the expected property names
+    typeBonusTraining: trainingBonus.typeMatch || 5,
+    generalBonusTraining: trainingBonus.otherStats || 1,
+    friendshipBonusTraining: trainingBonus.maxFriendshipTypeMatch || 10,
+    // Use card's actual appearance settings
+    appearanceChance: card.appearanceRate || 0.40,
+    typeAppearancePriority: 1 + (card.typeMatchPreference || 0.10) * 10, // Convert preference to priority multiplier
     supportType: card.type || card.supportType
   };
 };
@@ -381,7 +381,8 @@ router.post('/start', authenticateToken, async (req, res) => {
       currentTrainingOptions: null,
       pendingEvent: null,
       trainingLevels: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
-      trainingProgress: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 }
+      trainingProgress: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
+      stateVersion: 1 // Version tracking for idempotency - increments on every action
     };
 
     // Check if user already has active career
@@ -438,7 +439,7 @@ router.put('/update', authenticateToken, async (req, res) => {
 router.post('/train', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { stat } = req.body;
+    const { stat, expectedVersion } = req.body;
 
     if (!stat || !['HP', 'Attack', 'Defense', 'Instinct', 'Speed'].includes(stat)) {
       return res.status(400).json({ error: 'Valid stat required' });
@@ -456,9 +457,24 @@ router.post('/train', authenticateToken, async (req, res) => {
 
     const careerState = careerResult.rows[0].career_state;
 
+    // Version check for idempotency - if client sends expectedVersion and it doesn't match,
+    // the client's state is stale (likely from a network interruption)
+    if (expectedVersion !== undefined && careerState.stateVersion !== expectedVersion) {
+      return res.status(409).json({
+        error: 'State version mismatch - please refresh',
+        code: 'VERSION_MISMATCH',
+        currentState: careerState
+      });
+    }
+
     // Validate training options exist and include this stat
     if (!careerState.currentTrainingOptions || !careerState.currentTrainingOptions[stat]) {
-      return res.status(400).json({ error: 'Invalid training selection' });
+      // Return current state so client can recover
+      return res.status(400).json({
+        error: 'Invalid training selection',
+        code: 'INVALID_SELECTION',
+        currentState: careerState
+      });
     }
 
     const option = careerState.currentTrainingOptions[stat];
@@ -466,24 +482,22 @@ router.post('/train', authenticateToken, async (req, res) => {
     const currentEnergy = careerState.energy;
 
     // Calculate failure chance based on current energy (before deduction)
+    // Speed training has a shifted curve starting at 30 energy instead of 50
     let failureChance = 0;
-    if (currentEnergy <= 75) {
-      if (currentEnergy <= 0) {
-        failureChance = 0.891;
-      } else if (currentEnergy <= 20) {
-        failureChance = 0.891 - ((currentEnergy / 20) * 0.216);
-      } else if (currentEnergy <= 30) {
-        failureChance = 0.675 - (((currentEnergy - 20) / 10) * 0.225);
-      } else if (currentEnergy <= 50) {
-        failureChance = 0.45 - (((currentEnergy - 30) / 20) * 0.225);
-      } else {
-        failureChance = 0.225 - (((currentEnergy - 50) / 25) * 0.225);
-      }
-    }
+    const failureThreshold = stat === 'Speed' ? 30 : 50;
 
-    // Speed training has 50% lower fail rate
-    if (stat === 'Speed') {
-      failureChance *= 0.5;
+    if (currentEnergy <= failureThreshold) {
+      if (currentEnergy <= 0) {
+        failureChance = 0.99;
+      } else {
+        // Exponential curve: starts gentle at threshold, accelerates dramatically toward 0
+        // Formula: 0.10 + 0.89 * (1 - (energy/threshold))^3
+        // At threshold energy: 0.10 (10%)
+        // At half threshold: ~0.21 (21%)
+        // Near 0 energy: ~0.99 (99%)
+        const energyRatio = currentEnergy / failureThreshold;
+        failureChance = 0.10 + 0.89 * Math.pow(1 - energyRatio, 3);
+      }
     }
 
     const trainingFailed = Math.random() < failureChance;
@@ -511,7 +525,8 @@ router.post('/train', authenticateToken, async (req, res) => {
         trainingLevels: careerState.trainingLevels || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
         trainingProgress: careerState.trainingProgress || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
         // Regenerate wild battles with new turn's scaling
-        availableBattles: generateWildBattles(careerState.turn + 1)
+        availableBattles: generateWildBattles(careerState.turn + 1),
+        stateVersion: (careerState.stateVersion || 0) + 1
       };
 
       await pool.query(
@@ -529,6 +544,7 @@ router.post('/train', authenticateToken, async (req, res) => {
     // Training succeeded - calculate gains
     let statGain = GAME_CONFIG.TRAINING.BASE_STAT_GAINS[stat];
     const friendshipGains = {};
+    let energyRegenBonus = 0; // Bonus energy regen for Speed training from support cards
 
     option.supports.forEach(supportName => {
       const supportCard = SUPPORT_CARDS[supportName];
@@ -543,6 +559,11 @@ router.post('/train', authenticateToken, async (req, res) => {
         statGain += isMaxFriendship ? support.friendshipBonusTraining : support.typeBonusTraining;
       } else {
         statGain += support.generalBonusTraining;
+      }
+
+      // Collect energy regen bonus for Speed training (only from supports appearing in this training)
+      if (stat === 'Speed' && supportCard.specialEffect?.energyRegenBonus) {
+        energyRegenBonus += supportCard.specialEffect.energyRegenBonus;
       }
 
       friendshipGains[supportName] = (friendshipGains[supportName] || 0) + GAME_CONFIG.TRAINING.FRIENDSHIP_GAIN_PER_TRAINING;
@@ -591,13 +612,29 @@ router.post('/train', authenticateToken, async (req, res) => {
       }
     }
 
+    // Calculate max energy (base 100 + any maxEnergyBonus from selected support cards)
+    let maxEnergy = GAME_CONFIG.CAREER.MAX_ENERGY;
+    careerState.selectedSupports.forEach(supportName => {
+      const supportCard = SUPPORT_CARDS[supportName];
+      if (supportCard?.specialEffect?.maxEnergyBonus) {
+        maxEnergy += supportCard.specialEffect.maxEnergyBonus;
+      }
+    });
+
+    // Calculate new energy: subtract cost, add bonus for Speed training, cap at maxEnergy
+    let newEnergy = careerState.energy - energyCost;
+    if (stat === 'Speed') {
+      newEnergy += energyRegenBonus; // Add bonus from support cards
+    }
+    newEnergy = Math.max(0, Math.min(maxEnergy, newEnergy));
+
     const updatedCareerState = {
       ...careerState,
       currentStats: {
         ...careerState.currentStats,
         [stat]: careerState.currentStats[stat] + statGain
       },
-      energy: Math.max(0, careerState.energy - energyCost),
+      energy: newEnergy,
       skillPoints: careerState.skillPoints + GAME_CONFIG.TRAINING.SKILL_POINTS_ON_SUCCESS,
       supportFriendships: newFriendships,
       moveHints: newMoveHints,
@@ -617,7 +654,8 @@ router.post('/train', authenticateToken, async (req, res) => {
       }, ...(careerState.turnLog || [])],
       currentTrainingOptions: null,
       // Regenerate wild battles with new turn's scaling
-      availableBattles: generateWildBattles(careerState.turn + 1)
+      availableBattles: generateWildBattles(careerState.turn + 1),
+      stateVersion: (careerState.stateVersion || 0) + 1
     };
 
     await pool.query(
@@ -642,6 +680,7 @@ router.post('/train', authenticateToken, async (req, res) => {
 router.post('/rest', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
+    const { expectedVersion } = req.body;
 
     // Get active career
     const careerResult = await pool.query(
@@ -655,6 +694,15 @@ router.post('/rest', authenticateToken, async (req, res) => {
 
     const careerState = careerResult.rows[0].career_state;
 
+    // Version check for idempotency
+    if (expectedVersion !== undefined && careerState.stateVersion !== expectedVersion) {
+      return res.status(409).json({
+        error: 'State version mismatch - please refresh',
+        code: 'VERSION_MISMATCH',
+        currentState: careerState
+      });
+    }
+
     // Calculate energy gain using REST config
     const roll = Math.random();
     let energyGain = GAME_CONFIG.REST.ENERGY_GAINS[1]; // Default: middle value (50)
@@ -664,8 +712,17 @@ router.post('/rest', authenticateToken, async (req, res) => {
       energyGain = GAME_CONFIG.REST.ENERGY_GAINS[2]; // High roll: 70
     }
 
+    // Calculate max energy (base 100 + any maxEnergyBonus from selected support cards)
+    let maxEnergy = GAME_CONFIG.CAREER.MAX_ENERGY;
+    careerState.selectedSupports.forEach(supportName => {
+      const supportCard = SUPPORT_CARDS[supportName];
+      if (supportCard?.specialEffect?.maxEnergyBonus) {
+        maxEnergy += supportCard.specialEffect.maxEnergyBonus;
+      }
+    });
+
     const currentEnergy = careerState.energy ?? GAME_CONFIG.CAREER.STARTING_ENERGY;
-    const newEnergy = Math.min(GAME_CONFIG.CAREER.MAX_ENERGY, currentEnergy + energyGain);
+    const newEnergy = Math.min(maxEnergy, currentEnergy + energyGain);
 
     const logEntry = {
       turn: careerState.turn,
@@ -681,7 +738,8 @@ router.post('/rest', authenticateToken, async (req, res) => {
       turnLog: [logEntry, ...(careerState.turnLog || [])],
       currentTrainingOptions: null,
       // Regenerate wild battles with new turn's scaling
-      availableBattles: generateWildBattles(careerState.turn + 1)
+      availableBattles: generateWildBattles(careerState.turn + 1),
+      stateVersion: (careerState.stateVersion || 0) + 1
     };
 
     await pool.query(
@@ -725,7 +783,8 @@ router.post('/generate-training', authenticateToken, async (req, res) => {
 
     const updatedCareerState = {
       ...careerState,
-      currentTrainingOptions: trainingOptions
+      currentTrainingOptions: trainingOptions,
+      pendingEvent: null  // Clear any pending event when generating training (e.g., after declining a battle)
     };
 
     await pool.query(
@@ -994,7 +1053,8 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
         flavor: outcome.flavor || null
       } : null,
       pendingEvent: null,
-      currentTrainingOptions: !shouldShowResult ? null : careerState.currentTrainingOptions
+      currentTrainingOptions: !shouldShowResult ? null : careerState.currentTrainingOptions,
+      stateVersion: (careerState.stateVersion || 0) + 1
     };
 
     await pool.query(
@@ -1060,7 +1120,8 @@ router.post('/learn-ability', authenticateToken, async (req, res) => {
     const updatedCareerState = {
       ...careerState,
       knownAbilities: [...careerState.knownAbilities, moveName],
-      skillPoints: careerState.skillPoints - finalCost
+      skillPoints: careerState.skillPoints - finalCost,
+      stateVersion: (careerState.stateVersion || 0) + 1
     };
 
     await pool.query(
@@ -1083,7 +1144,7 @@ router.post('/learn-ability', authenticateToken, async (req, res) => {
 router.post('/battle', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { opponent, isGymLeader, isEventBattle } = req.body;
+    const { opponent, isGymLeader, isEventBattle, expectedVersion } = req.body;
 
     if (!opponent) {
       return res.status(400).json({ error: 'Opponent required' });
@@ -1100,6 +1161,15 @@ router.post('/battle', authenticateToken, async (req, res) => {
     }
 
     const careerState = careerResult.rows[0].career_state;
+
+    // Version check for idempotency
+    if (expectedVersion !== undefined && careerState.stateVersion !== expectedVersion) {
+      return res.status(409).json({
+        error: 'State version mismatch - please refresh',
+        code: 'VERSION_MISMATCH',
+        currentState: careerState
+      });
+    }
 
     // Check energy for wild battles (not gym leaders or event battles)
     if (!isGymLeader && !isEventBattle && careerState.energy <= 0) {
@@ -1125,6 +1195,16 @@ router.post('/battle', authenticateToken, async (req, res) => {
     // Get base stats from opponent data
     let opponentStats = pokemonData.stats || pokemonData.baseStats;
 
+    console.log('[Battle] Opponent data:', {
+      name: pokemonData.name || opponent.name,
+      isGymLeader,
+      isEventBattle,
+      hasStats: !!pokemonData.stats,
+      hasBaseStats: !!pokemonData.baseStats,
+      stats: opponentStats,
+      currentTurn: careerState.turn
+    });
+
     // Scale gym leader / Elite Four stats based on current turn
     if (isGymLeader && opponentStats) {
       const currentTurn = careerState.turn;
@@ -1143,14 +1223,20 @@ router.post('/battle', authenticateToken, async (req, res) => {
       }
     }
 
+    // Derive opponent strategy from strategyAptitudes if available
+    const opponentAptitudes = pokemonData.strategyAptitudes || opponent.strategyAptitudes;
+    const derivedStrategy = opponentAptitudes
+      ? deriveStrategyFromAptitudes(opponentAptitudes)
+      : { strategy: pokemonData.strategy || opponent.strategy || 'Chipper', strategyGrade: pokemonData.strategyGrade || opponent.strategyGrade || 'C' };
+
     const opponentPokemon = {
       name: pokemonData.name || opponent.name,
       primaryType: pokemonData.primaryType || opponent.primaryType,
       stats: opponentStats,
       abilities: pokemonData.abilities || pokemonData.defaultAbilities || [],
       typeAptitudes: pokemonData.typeAptitudes || opponent.typeAptitudes,
-      strategy: pokemonData.strategy || opponent.strategy || 'Balanced',
-      strategyGrade: pokemonData.strategyGrade || opponent.strategyGrade || 'A'
+      strategy: derivedStrategy.strategy,
+      strategyGrade: derivedStrategy.strategyGrade
     };
 
     // Validate opponent has required fields
@@ -1170,6 +1256,8 @@ router.post('/battle', authenticateToken, async (req, res) => {
     let skillPoints = 0;
     let energyChange = 0;
     let badge = null;
+    let randomStatBoost = null; // For wild battles - only boost one random stat
+    let primosReward = 0; // Primos reward for gym leader victories
 
     if (playerWon) {
       if (isGymLeader) {
@@ -1186,16 +1274,21 @@ router.post('/battle', authenticateToken, async (req, res) => {
           gymLeaderName: opponent.name,
           defeatedAt: new Date().toISOString()
         };
+        // Award primos for gym leader/Elite Four victory
+        primosReward = isEliteFour ? 20 : 10; // 20 for Elite Four, 10 for regular gym leaders
       } else if (isEventBattle) {
-        // Event battle victory - costs 20 energy
+        // Event battle victory - +15 to all stats, no energy cost
         statGain = 15;
         skillPoints = 0;
-        energyChange = -20;
+        energyChange = 0;
       } else {
-        // Wild battle victory
-        statGain = 15; // 50% increased from base
-        skillPoints = 0;
-        energyChange = 0; // No energy cost on victory
+        // Wild battle victory - +15 to random stat, +20 skill points, costs 25 energy
+        statGain = 15;
+        skillPoints = 20;
+        energyChange = -25;
+        // Pick a random stat to boost
+        const stats = ['HP', 'Attack', 'Defense', 'Instinct', 'Speed'];
+        randomStatBoost = stats[Math.floor(Math.random() * stats.length)];
       }
     } else {
       // Defeat
@@ -1210,23 +1303,30 @@ router.post('/battle', authenticateToken, async (req, res) => {
         skillPoints = 0;
         energyChange = -20;
       } else {
-        // Wild battle defeat
-        energyChange = -5;
+        // Wild battle defeat - no penalty (energy was already spent to attempt)
+        energyChange = 0;
       }
     }
 
     // Apply battle results to career state
     // Event battles do NOT progress the turn - they happen during the current turn
+    // Wild battles only boost a random stat, others boost all stats
+    const newStats = { ...careerState.currentStats };
+    if (randomStatBoost) {
+      // Wild battle - only boost the random stat
+      newStats[randomStatBoost] = newStats[randomStatBoost] + statGain;
+    } else {
+      // Gym leader or event battle - boost all stats
+      newStats.HP = newStats.HP + statGain;
+      newStats.Attack = newStats.Attack + statGain;
+      newStats.Defense = newStats.Defense + statGain;
+      newStats.Instinct = newStats.Instinct + statGain;
+      newStats.Speed = newStats.Speed + statGain;
+    }
+
     const updatedCareerState = {
       ...careerState,
-      currentStats: {
-        ...careerState.currentStats,
-        HP: careerState.currentStats.HP + statGain,
-        Attack: careerState.currentStats.Attack + statGain,
-        Defense: careerState.currentStats.Defense + statGain,
-        Instinct: careerState.currentStats.Instinct + statGain,
-        Speed: careerState.currentStats.Speed + statGain
-      },
+      currentStats: newStats,
       skillPoints: careerState.skillPoints + skillPoints,
       energy: Math.max(0, Math.min(GAME_CONFIG.CAREER.MAX_ENERGY, careerState.energy + energyChange)),
       // Event battles don't progress the turn
@@ -1238,7 +1338,9 @@ router.post('/battle', authenticateToken, async (req, res) => {
               (playerWon ? 'battle_victory' : 'battle_loss'),
         opponent: opponent.name,
         message: playerWon
-          ? `Defeated ${opponent.name}! Gained ${statGain} to all stats${skillPoints > 0 ? ` and ${skillPoints} skill points` : ''}${energyChange < 0 ? `. Cost ${Math.abs(energyChange)} energy.` : ''}`
+          ? (randomStatBoost
+              ? `Defeated ${opponent.name}! Gained ${statGain} ${randomStatBoost}${skillPoints > 0 ? ` and ${skillPoints} skill points` : ''}${energyChange < 0 ? `. Cost ${Math.abs(energyChange)} energy.` : ''}`
+              : `Defeated ${opponent.name}! Gained ${statGain} to all stats${skillPoints > 0 ? ` and ${skillPoints} skill points` : ''}${energyChange < 0 ? `. Cost ${Math.abs(energyChange)} energy.` : ''}`)
           : `Lost to ${opponent.name}.${energyChange < 0 ? ` Lost ${Math.abs(energyChange)} energy.` : ''}`
       }, ...(careerState.turnLog || [])],
       // Move to next gym leader if defeated current one
@@ -1246,7 +1348,8 @@ router.post('/battle', authenticateToken, async (req, res) => {
       // Generate new wild battles for next turn (but keep current ones for event battles)
       availableBattles: isEventBattle ? careerState.availableBattles : generateWildBattles(careerState.turn + 1),
       // Keep current training options for event battles
-      currentTrainingOptions: isEventBattle ? careerState.currentTrainingOptions : null
+      currentTrainingOptions: isEventBattle ? careerState.currentTrainingOptions : null,
+      stateVersion: (careerState.stateVersion || 0) + 1
     };
 
     // Save updated career state
@@ -1254,6 +1357,14 @@ router.post('/battle', authenticateToken, async (req, res) => {
       'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
       [JSON.stringify(updatedCareerState), userId]
     );
+
+    // Award primos for gym leader victories
+    if (primosReward > 0) {
+      await pool.query(
+        'UPDATE users SET primos = primos + $1 WHERE id = $2',
+        [primosReward, userId]
+      );
+    }
 
     const responsePayload = {
       success: true,
@@ -1264,7 +1375,9 @@ router.post('/battle', authenticateToken, async (req, res) => {
           statGain,
           skillPoints,
           energyChange,
-          badge
+          badge,
+          randomStatBoost, // Which stat was boosted for wild battles (null for others)
+          primosReward // Primos earned from gym leader victories
         }
       },
       careerState: updatedCareerState
@@ -1317,7 +1430,22 @@ router.post('/complete', authenticateToken, async (req, res) => {
       [userId]
     );
 
-    res.json({ success: true });
+    // Award primos for career completion
+    // Champion (defeated all Elite Four) gets 20 primos bonus
+    // Regular completion (gym loss or retirement) gets nothing
+    let primosReward = 0;
+    if (completionType === 'champion') {
+      primosReward = 20;
+    }
+
+    if (primosReward > 0) {
+      await pool.query(
+        'UPDATE users SET primos = primos + $1 WHERE id = $2',
+        [primosReward, userId]
+      );
+    }
+
+    res.json({ success: true, primosReward });
   } catch (error) {
     console.error('Complete career error:', error);
     res.status(500).json({ error: 'Failed to complete career' });
@@ -1367,7 +1495,8 @@ router.post('/use-pokeclock', authenticateToken, async (req, res) => {
     const updatedCareerState = {
       ...careerState,
       pokeclocks: careerState.pokeclocks - 1,
-      turn: careerState.turn - 1  // Revert turn so gym battle triggers again
+      turn: careerState.turn - 1,  // Revert turn so gym battle triggers again
+      stateVersion: (careerState.stateVersion || 0) + 1
     };
 
     // Save updated career state
@@ -1386,6 +1515,73 @@ router.post('/use-pokeclock', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Use pokeclock error:', error);
     res.status(500).json({ error: 'Failed to use pokeclock' });
+  }
+});
+
+// ============================================================================
+// STRATEGY SELECTION
+// ============================================================================
+
+// Change the Pokemon's active strategy
+router.post('/change-strategy', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { strategy } = req.body;
+
+    // Validate strategy
+    const validStrategies = ['Scaler', 'Nuker', 'Debuffer', 'Chipper', 'MadLad'];
+    if (!strategy || !validStrategies.includes(strategy)) {
+      return res.status(400).json({ error: 'Invalid strategy' });
+    }
+
+    // Get active career
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Ensure pokemon has strategyAptitudes
+    if (!careerState.pokemon.strategyAptitudes) {
+      return res.status(400).json({ error: 'Pokemon does not have strategy aptitudes' });
+    }
+
+    // Get the grade for the selected strategy
+    const strategyGrade = careerState.pokemon.strategyAptitudes[strategy] || 'C';
+
+    // Update the pokemon's strategy
+    const updatedCareerState = {
+      ...careerState,
+      pokemon: {
+        ...careerState.pokemon,
+        strategy: strategy,
+        strategyGrade: strategyGrade
+      },
+      stateVersion: (careerState.stateVersion || 0) + 1
+    };
+
+    // Save updated career state
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    console.log('[ChangeStrategy] Strategy changed to', strategy, '(grade:', strategyGrade, ')');
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState,
+      strategy: strategy,
+      strategyGrade: strategyGrade
+    });
+  } catch (error) {
+    console.error('Change strategy error:', error);
+    res.status(500).json({ error: 'Failed to change strategy' });
   }
 });
 

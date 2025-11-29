@@ -368,7 +368,8 @@ router.get('/queue/status', authenticateToken, async (req, res) => {
               profileIcon: opponentProfileIcon
             },
             result: {
-              winner: match.winner_id === req.user.userId ? 'you' : 'opponent',
+              // Use battles_won to determine winner (handles AI matches where winner_id may be null)
+              winner: (isPlayer1 ? (match.battles_won_p1 || 0) > (match.battles_won_p2 || 0) : (match.battles_won_p2 || 0) > (match.battles_won_p1 || 0)) ? 'you' : 'opponent',
               yourBattlesWon: isPlayer1 ? match.battles_won_p1 : match.battles_won_p2,
               opponentBattlesWon: isPlayer1 ? match.battles_won_p2 : match.battles_won_p1,
               ratingChange: isPlayer1 ? match.player1_rating_change : match.player2_rating_change
@@ -477,7 +478,8 @@ router.get('/match/:matchId', authenticateToken, async (req, res) => {
         battlesWon: match.battles_won_p2,
         team: match.player2_team
       },
-      winner: match.battles_won_p1 > match.battles_won_p2 ? 'player1' : 'player2',
+      // Determine winner from battles_won (handles AI matches where winner_id may be null)
+      winner: (match.battles_won_p1 || 0) > (match.battles_won_p2 || 0) ? 'player1' : 'player2',
       youAre: isPlayer1 ? 'player1' : 'player2',
       battles: replayData.battles || replayData
     });

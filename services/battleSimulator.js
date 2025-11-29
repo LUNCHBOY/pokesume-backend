@@ -43,20 +43,8 @@ const GAME_CONFIG = {
       'UU': 0.75, 'UU+': 0.7
     }
   },
-  STRATEGY: {
-    // Scaler: buffs first, then powerful moves
-    Scaler: { warmup_mult: 1.2, cooldown_mult: 0.8 },
-    // Nuker: saves stamina for most powerful moves
-    Nuker: { warmup_mult: 0.7, cooldown_mult: 1.3 },
-    // Debuffer: debuffs/weather first, then powerful moves
-    Debuffer: { warmup_mult: 1.0, cooldown_mult: 1.0 },
-    // Chipper: low stamina, low cooldown moves
-    Chipper: { warmup_mult: 0.5, cooldown_mult: 0.7 },
-    // Mad Lad: completely random moves
-    MadLad: { warmup_mult: 1.0, cooldown_mult: 1.0 },
-    // Balanced fallback
-    Balanced: { warmup_mult: 0.9, cooldown_mult: 0.9 }
-  },
+  // Valid strategies (move selection behavior only, no modifiers)
+  VALID_STRATEGIES: ['Scaler', 'Nuker', 'Debuffer', 'Chipper', 'MadLad'],
   TYPE_MATCHUPS: {
     Red: { strong: 'Grass', weak: 'Water' },
     Blue: { strong: 'Fire', weak: 'Grass' },
@@ -402,9 +390,8 @@ function processCombatantTick(combatant, opponent, name, battleState) {
         console.error(`[Battle] Move not found: ${moveName}`);
         return;
       }
-      const strategyMult = GAME_CONFIG.STRATEGY[combatant.strategy] || GAME_CONFIG.STRATEGY.Balanced;
       combatant.moveStates[moveName] = {
-        warmupRemaining: Math.ceil(move.warmup * strategyMult.warmup_mult),
+        warmupRemaining: move.warmup,
         cooldownRemaining: 0,
         everCast: false
       };
@@ -472,7 +459,6 @@ function processCombatantTick(combatant, opponent, name, battleState) {
     if (!move) return false;
 
     const state = combatant.moveStates[moveName];
-    const strategyMult = GAME_CONFIG.STRATEGY[combatant.strategy] || GAME_CONFIG.STRATEGY.Balanced;
     // Use STAMINA_COST multipliers (higher aptitude = lower stamina cost)
     const aptitudeMult = GAME_CONFIG.APTITUDE.STAMINA_COST[combatant.strategyGrade] || 1.0;
     const staminaCost = Math.ceil(move.stamina * aptitudeMult);
@@ -601,11 +587,9 @@ function selectMove(combatant, opponent, available) {
     // Predicted damage
     const predictedDamage = move.damage * attackDefenseRatio * aptitudeMult * typeMatchupMult * avgCritMult;
 
-    const strategyMult = GAME_CONFIG.STRATEGY[combatant.strategy] || GAME_CONFIG.STRATEGY.Balanced;
     // Use STAMINA_COST multipliers (higher aptitude = lower stamina cost)
     const aptGradeMult = GAME_CONFIG.APTITUDE.STAMINA_COST[combatant.strategyGrade] || 1.0;
     const staminaCost = Math.ceil(move.stamina * aptGradeMult);
-    const adjustedCooldown = Math.ceil(move.cooldown * strategyMult.cooldown_mult);
 
     return {
       moveName,
@@ -614,7 +598,7 @@ function selectMove(combatant, opponent, available) {
       predictedDamage,
       damagePerStamina: move.damage > 0 ? predictedDamage / staminaCost : 0,
       staminaCost,
-      cooldown: adjustedCooldown,
+      cooldown: move.cooldown,
       aptitude
     };
   });
@@ -733,19 +717,11 @@ function selectMove(combatant, opponent, available) {
     }
 
     default: {
-      // Balanced (fallback)
-      if (combatant.currentStamina < 30 && Math.random() < 0.5) {
-        return null; // Don't cast
-      }
-
-      if (Math.random() < 0.35) {
-        return movesWithData[Math.floor(Math.random() * movesWithData.length)].moveName;
-      } else {
-        const scored = movesWithData.map(m => ({
-          ...m,
-          score: (m.damagePerStamina * 0.6) + (m.predictedDamage / 100 * 0.4)
-        }));
-        return scored.sort((a, b) => b.score - a.score)[0].moveName;
+      // Fallback: prioritize highest damage moves
+      const damageMoves = movesWithData.filter(m => m.predictedDamage > 0);
+      if (damageMoves.length > 0) {
+        damageMoves.sort((a, b) => b.predictedDamage - a.predictedDamage);
+        return damageMoves[0].moveName;
       }
     }
   }
@@ -762,7 +738,6 @@ function selectMove(combatant, opponent, available) {
  */
 function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   const move = MOVES[moveName];
-  const strategyMult = GAME_CONFIG.STRATEGY[combatant.strategy] || GAME_CONFIG.STRATEGY.Balanced;
   // Use STAMINA_COST multipliers (higher aptitude = lower stamina cost)
   const aptGradeMult = GAME_CONFIG.APTITUDE.STAMINA_COST[combatant.strategyGrade] || 1.0;
   const staminaCost = Math.ceil(move.stamina * aptGradeMult);
@@ -802,7 +777,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   if (hitRoll >= hitChance) {
     // MISS
     const state = combatant.moveStates[moveName];
-    state.cooldownRemaining = Math.ceil(move.cooldown * strategyMult.cooldown_mult);
+    state.cooldownRemaining = move.cooldown;
     state.everCast = true;
     return `${attackerName} used ${moveName} but missed!`;
   }
@@ -1326,7 +1301,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
 
   // Set cooldown
   const state = combatant.moveStates[moveName];
-  state.cooldownRemaining = Math.ceil(move.cooldown * strategyMult.cooldown_mult);
+  state.cooldownRemaining = move.cooldown;
   state.everCast = true;
 
   return message;

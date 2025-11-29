@@ -24,7 +24,8 @@ const GYM_BADGES = [
 const TOURNAMENT_CONFIG = {
   CREATE_INTERVAL_MINUTES: 30, // Create a new tournament every 30 minutes
   REGISTRATION_DURATION_MINUTES: 25, // Registration open for 25 minutes before start
-  DEFAULT_MAX_PLAYERS: 8 // Default bracket size
+  DEFAULT_MAX_PLAYERS: 64, // Default bracket size
+  MIN_PLAYERS_TO_START: 2 // Minimum players required to start tournament
 };
 
 // Create a new tournament automatically with gym theme
@@ -128,7 +129,7 @@ async function generateBracket(tournamentId) {
 
     // Get all entries
     const entriesResult = await db.query(
-      `SELECT 
+      `SELECT
         te.id,
         te.user_id,
         u.username,
@@ -151,6 +152,9 @@ async function generateBracket(tournamentId) {
       throw new Error('Not enough entries to start tournament');
     }
 
+    // Calculate actual total rounds based on number of entries
+    const actualTotalRounds = Math.ceil(Math.log2(entries.length));
+
     // Update bracket positions
     for (let i = 0; i < entries.length; i++) {
       await db.query(
@@ -159,27 +163,34 @@ async function generateBracket(tournamentId) {
       );
     }
 
-    // Create round 1 matches
+    // Create round 1 matches (pair up entries, handle odd numbers with byes)
     const numMatches = Math.floor(entries.length / 2);
+    const byeEntries = []; // Entries that get a bye to round 2
+
+    // If odd number of entries, last entry gets a bye
+    if (entries.length % 2 === 1) {
+      byeEntries.push(entries[entries.length - 1]);
+    }
+
     for (let i = 0; i < numMatches; i++) {
       const player1Entry = entries[i * 2];
       const player2Entry = entries[i * 2 + 1];
 
       await db.query(
-        `INSERT INTO tournament_matches 
+        `INSERT INTO tournament_matches
           (tournament_id, round, position, player1_entry_id, player2_entry_id)
          VALUES ($1, 1, $2, $3, $4)`,
         [tournamentId, i, player1Entry.id, player2Entry.id]
       );
     }
 
-    // Update tournament status
+    // Update tournament status and actual total rounds
     await db.query(
-      'UPDATE tournaments SET status = $1, current_round = 1 WHERE id = $2',
-      ['in_progress', tournamentId]
+      'UPDATE tournaments SET status = $1, current_round = 1, total_rounds = $2 WHERE id = $3',
+      ['in_progress', actualTotalRounds, tournamentId]
     );
 
-    console.log(`Bracket generated: ${numMatches} matches in round 1`);
+    console.log(`Bracket generated: ${numMatches} matches in round 1, ${byeEntries.length} byes, ${actualTotalRounds} total rounds`);
     return true;
   } catch (error) {
     console.error('Generate bracket error:', error);
@@ -257,10 +268,17 @@ async function processRound(tournamentId, round) {
 
       // Update match with results
       await db.query(
-        `UPDATE tournament_matches 
+        `UPDATE tournament_matches
          SET winner_entry_id = $1, battle_results = $2, completed_at = NOW()
          WHERE id = $3`,
         [matchResult.winner, JSON.stringify(matchResult), match.id]
+      );
+
+      // Award 20 primos to the round winner
+      const winnerUserId = matchResult.winner === entry1.id ? entry1.user_id : entry2.user_id;
+      await db.query(
+        'UPDATE users SET primos = primos + 20 WHERE id = $1',
+        [winnerUserId]
       );
 
       winners.push({
@@ -268,7 +286,7 @@ async function processRound(tournamentId, round) {
         position: match.position
       });
 
-      console.log(`Match completed: ${entry1.username} vs ${entry2.username}, Winner: ${matchResult.winner}`);
+      console.log(`Match completed: ${entry1.username} vs ${entry2.username}, Winner: ${matchResult.winner}, +20 primos`);
     }
 
     return { completed: matches.length, winners };
@@ -331,11 +349,50 @@ async function advanceToNextRound(tournamentId, currentRound, winners) {
   try {
     console.log(`Advancing tournament ${tournamentId} to round ${currentRound + 1}`);
 
-    if (winners.length < 2) {
+    // For round 1, also include entries that got a bye (weren't in any match)
+    let allAdvancing = [...winners];
+
+    if (currentRound === 1) {
+      // Find entries that weren't in any round 1 match (bye entries)
+      const byeEntriesResult = await db.query(
+        `SELECT te.id as entry_id
+         FROM tournament_entries te
+         WHERE te.tournament_id = $1
+         AND te.id NOT IN (
+           SELECT player1_entry_id FROM tournament_matches WHERE tournament_id = $1 AND round = 1
+           UNION
+           SELECT player2_entry_id FROM tournament_matches WHERE tournament_id = $1 AND round = 1
+         )`,
+        [tournamentId]
+      );
+
+      for (const bye of byeEntriesResult.rows) {
+        allAdvancing.push({ entryId: bye.entry_id, position: allAdvancing.length });
+      }
+
+      if (byeEntriesResult.rows.length > 0) {
+        console.log(`Including ${byeEntriesResult.rows.length} bye entries in round 2`);
+      }
+    }
+
+    if (allAdvancing.length < 2) {
       // Tournament complete - only 1 winner
-      // Award badge to the winner
-      if (winners.length === 1) {
-        await awardBadge(tournamentId, winners[0].entryId);
+      // Award badge and 100 primos bonus to the winner
+      if (allAdvancing.length === 1) {
+        await awardBadge(tournamentId, allAdvancing[0].entryId);
+
+        // Get winner's user_id and award 100 primos for winning the tournament
+        const winnerResult = await db.query(
+          'SELECT user_id FROM tournament_entries WHERE id = $1',
+          [allAdvancing[0].entryId]
+        );
+        if (winnerResult.rows.length > 0) {
+          await db.query(
+            'UPDATE users SET primos = primos + 100 WHERE id = $1',
+            [winnerResult.rows[0].user_id]
+          );
+          console.log(`Tournament winner awarded 100 primos bonus!`);
+        }
       }
 
       await db.query(
@@ -347,13 +404,13 @@ async function advanceToNextRound(tournamentId, currentRound, winners) {
     }
 
     // Create matches for next round
-    const numMatches = Math.floor(winners.length / 2);
+    const numMatches = Math.floor(allAdvancing.length / 2);
     for (let i = 0; i < numMatches; i++) {
-      const player1 = winners[i * 2];
-      const player2 = winners[i * 2 + 1];
+      const player1 = allAdvancing[i * 2];
+      const player2 = allAdvancing[i * 2 + 1];
 
       await db.query(
-        `INSERT INTO tournament_matches 
+        `INSERT INTO tournament_matches
           (tournament_id, round, position, player1_entry_id, player2_entry_id)
          VALUES ($1, $2, $3, $4, $5)`,
         [tournamentId, currentRound + 1, i, player1.entryId, player2.entryId]
@@ -374,25 +431,50 @@ async function advanceToNextRound(tournamentId, currentRound, winners) {
   }
 }
 
+// Cancel a tournament that didn't get enough players
+async function cancelTournament(tournamentId, reason) {
+  try {
+    await db.query(
+      'UPDATE tournaments SET status = $1 WHERE id = $2',
+      ['cancelled', tournamentId]
+    );
+    console.log(`[Tournament Processor] Tournament ${tournamentId} cancelled: ${reason}`);
+    return true;
+  } catch (error) {
+    console.error('[Tournament Processor] Error cancelling tournament:', error);
+    return false;
+  }
+}
+
 // Main processor - check for tournaments that need processing
 async function processTournaments() {
   try {
     console.log('[Tournament Processor] Checking for tournaments...');
 
-    // First, ensure there's always an upcoming tournament
-    await createScheduledTournament();
-
     // Check for tournaments that should start
     const tournamentsToStartResult = await db.query(
-      `SELECT id FROM tournaments
-       WHERE status IN ('registration', 'upcoming')
-       AND start_time <= NOW()`
+      `SELECT t.id, (SELECT COUNT(*) FROM tournament_entries WHERE tournament_id = t.id) as entries_count
+       FROM tournaments t
+       WHERE t.status IN ('registration', 'upcoming')
+       AND t.start_time <= NOW()`
     );
 
     for (const tournament of tournamentsToStartResult.rows) {
-      console.log(`Starting tournament ${tournament.id}`);
-      await generateBracket(tournament.id);
+      const entryCount = parseInt(tournament.entries_count);
+
+      if (entryCount < TOURNAMENT_CONFIG.MIN_PLAYERS_TO_START) {
+        // Not enough players - cancel the tournament
+        console.log(`[Tournament Processor] Tournament ${tournament.id} has only ${entryCount} entries, cancelling...`);
+        await cancelTournament(tournament.id, `Not enough players (${entryCount}/${TOURNAMENT_CONFIG.MIN_PLAYERS_TO_START} required)`);
+      } else {
+        // Enough players - start the tournament
+        console.log(`Starting tournament ${tournament.id} with ${entryCount} entries`);
+        await generateBracket(tournament.id);
+      }
     }
+
+    // After handling expired tournaments, ensure there's always an upcoming tournament
+    await createScheduledTournament();
 
     // Check for in-progress tournaments that need round processing
     const tournamentsInProgressResult = await db.query(
