@@ -151,6 +151,35 @@ const generateWildBattles = (turn) => {
   });
 };
 
+// Helper function to determine gym leader/Elite Four abilities based on turn
+// Turn 12: 3 moves (defaults), Turn 60: 6 moves (all defaults + learnables)
+const getGymLeaderAbilities = (pokemon, turn, isEliteFour = false) => {
+  const defaultAbilities = pokemon.defaultAbilities || [];
+  const learnableAbilities = pokemon.learnableAbilities || [];
+
+  // Elite Four always get all 6 moves
+  if (isEliteFour) {
+    return [...defaultAbilities, ...learnableAbilities];
+  }
+
+  // Gym leaders scale from 3 moves at turn 12 to 6 moves at turn 60
+  // Linear scaling: (turn - 12) / (60 - 12) = progress from 0 to 1
+  // At turn 12: 3 moves, at turn 36: ~4-5 moves, at turn 60: 6 moves
+  let availableAbilities = [...defaultAbilities]; // Start with 3 default moves
+
+  if (turn >= 20 && learnableAbilities.length > 0) {
+    availableAbilities.push(learnableAbilities[0]); // 4th move at turn 20
+  }
+  if (turn >= 35 && learnableAbilities.length > 1) {
+    availableAbilities.push(learnableAbilities[1]); // 5th move at turn 35
+  }
+  if (turn >= 50 && learnableAbilities.length > 2) {
+    availableAbilities.push(learnableAbilities[2]); // 6th move at turn 50
+  }
+
+  return availableAbilities;
+};
+
 // Helper to migrate old career states
 const migrateCareerState = (careerState) => {
   let updated = false;
@@ -1229,11 +1258,25 @@ router.post('/battle', authenticateToken, async (req, res) => {
       ? deriveStrategyFromAptitudes(opponentAptitudes)
       : { strategy: pokemonData.strategy || opponent.strategy || 'Chipper', strategyGrade: pokemonData.strategyGrade || opponent.strategyGrade || 'C' };
 
+    // Determine opponent abilities based on battle type
+    let opponentAbilities;
+    if (isGymLeader) {
+      const currentTurn = careerState.turn;
+      const eliteFourStartTurn = GAME_CONFIG.CAREER.ELITE_FOUR_START_TURN || 60;
+      const isEliteFour = currentTurn >= eliteFourStartTurn;
+      // Scale gym leader/Elite Four abilities based on turn
+      opponentAbilities = getGymLeaderAbilities(pokemonData, currentTurn, isEliteFour);
+      console.log(`[Battle] ${isEliteFour ? 'Elite Four' : 'Gym leader'} abilities for turn ${currentTurn}:`, opponentAbilities);
+    } else {
+      // Wild or event battles - use abilities as-is (wild battles already have scaled abilities)
+      opponentAbilities = pokemonData.abilities || pokemonData.defaultAbilities || [];
+    }
+
     const opponentPokemon = {
       name: pokemonData.name || opponent.name,
       primaryType: pokemonData.primaryType || opponent.primaryType,
       stats: opponentStats,
-      abilities: pokemonData.abilities || pokemonData.defaultAbilities || [],
+      abilities: opponentAbilities,
       typeAptitudes: pokemonData.typeAptitudes || opponent.typeAptitudes,
       strategy: derivedStrategy.strategy,
       strategyGrade: derivedStrategy.strategyGrade

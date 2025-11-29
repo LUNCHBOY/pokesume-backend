@@ -187,47 +187,82 @@ const MOVES = {
   WillOWisp: { type: 'Fire', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'burn', chance: 0.85, duration: 5, damage: 4 } },
 
   // === CHIPPER MOVES (Low stamina, low cooldown for each type) ===
-  // Fire Chippers
   FlameCharge: { type: 'Fire', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'buff_speed', chance: 1.0, duration: 3 } },
   Incinerate: { type: 'Fire', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: null },
-  // Water Chippers
   AquaJet: { type: 'Water', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
   BubbleBeam: { type: 'Water', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'debuff_speed', chance: 0.1, duration: 2 } },
-  // Grass Chippers
   BulletSeed: { type: 'Grass', damage: 15, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
   MegaDrain: { type: 'Grass', damage: 14, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'drain', chance: 0.3, healPercent: 0.25 } },
-  // Electric Chippers
   Spark: { type: 'Electric', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'paralyze', chance: 0.15, duration: 2 } },
   ChargeBeam: { type: 'Electric', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'buff_instinct', chance: 0.7, duration: 2 } },
-  // Psychic Chippers
   Confusion: { type: 'Psychic', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'confuse', chance: 0.1, duration: 2 } },
   HeartStamp: { type: 'Psychic', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'stun', chance: 0.15, duration: 1 } },
-  // Fighting Chippers
   MachPunch: { type: 'Fighting', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
-  ForceP: { type: 'Fighting', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: null },
+  ForcePalm: { type: 'Fighting', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'paralyze', chance: 0.2, duration: 2 } },
+  Bite: { type: 'Normal', damage: 15, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'stun', chance: 0.15, duration: 1 } },
+  Swift: { type: 'Normal', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: null },
 
-  // === ADDITIONAL BUFF MOVES (For Scaler strategy) ===
+  // === BUFF MOVES (For Scaler strategy) ===
   Agility: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'buff_speed', duration: 4 } },
   Harden: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'buff_defense', duration: 4 } },
   Meditate: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'buff_attack', duration: 4 } },
   Sharpen: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'buff_attack', duration: 3 } },
   WorkUp: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 22, cost: 32, effect: { type: 'buff_attack', duration: 3 } },
   CosmicPower: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 28, cost: 38, effect: { type: 'buff_defense', duration: 4 } },
+  Barrier: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 22, cost: 32, effect: { type: 'buff_defense', duration: 4 } },
+  Amnesia: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 28, cost: 38, effect: { type: 'buff_instinct', duration: 4 } },
 
-  // === ADDITIONAL DEBUFF MOVES (For Debuffer strategy) ===
+  // === DEBUFF MOVES (For Debuffer strategy) ===
   Growl: { type: 'Normal', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_attack', duration: 3 } },
   Leer: { type: 'Normal', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_defense', duration: 3 } },
   TailWhip: { type: 'Normal', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_defense', duration: 3 } },
   SandAttack: { type: 'Fighting', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_accuracy', duration: 3 } },
   Confide: { type: 'Normal', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_instinct', duration: 3 } },
   CharmMove: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'debuff_attack', duration: 4 } },
-  FakeTearsMove: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'debuff_defense', duration: 4 } },
+  FakeTears: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'debuff_defense', duration: 4 } },
   ScaryFace: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'debuff_speed', duration: 4 } },
+  StringShot: { type: 'Grass', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_speed', duration: 3 } },
+  Smokescreen: { type: 'Fire', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_accuracy', duration: 3 } },
 
-  // === WEATHER MOVES (For Debuffer strategy) ===
+  // === WEATHER MOVES ===
   RainDance: { type: 'Water', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_rain', duration: 5 } },
   SunnyDay: { type: 'Fire', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_sun', duration: 5 } },
-  Hail: { type: 'Water', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_hail', duration: 5 } }
+  Hail: { type: 'Water', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_hail', duration: 5 } },
+
+  // === NEW MID-TIER DAMAGE MOVES ===
+  FlameBurst: { type: 'Fire', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: null },
+  Overheat: { type: 'Fire', damage: 38, warmup: 5, cooldown: 6, stamina: 62, cost: 78, effect: { type: 'debuff_instinct_self', duration: 2 } },
+  Scald: { type: 'Water', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 45, effect: { type: 'burn', chance: 0.3, duration: 4, damage: 3 } },
+  AquaTail: { type: 'Water', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 55, effect: null },
+  Brine: { type: 'Water', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'double_if_half_hp' } },
+  SeedBomb: { type: 'Grass', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 50, effect: null },
+  EnergyBall: { type: 'Grass', damage: 30, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: { type: 'debuff_defense', chance: 0.1, duration: 2 } },
+  WoodHammer: { type: 'Grass', damage: 36, warmup: 4, cooldown: 5, stamina: 55, cost: 70, effect: { type: 'recoil', damagePercent: 0.2 } },
+  Discharge: { type: 'Electric', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 50, effect: { type: 'paralyze', chance: 0.25, duration: 3 } },
+  ElectroBall: { type: 'Electric', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: null },
+  ZapCannon: { type: 'Electric', damage: 36, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'paralyze', chance: 0.6, duration: 4 } },
+  Extrasensory: { type: 'Psychic', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: { type: 'stun', chance: 0.15, duration: 1 } },
+  PsychoCut: { type: 'Psychic', damage: 24, warmup: 1, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'high_crit' } },
+  StoredPower: { type: 'Psychic', damage: 20, warmup: 2, cooldown: 3, stamina: 32, cost: 40, effect: { type: 'buff_boost_damage' } },
+  CrossChop: { type: 'Fighting', damage: 32, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'high_crit' } },
+  HammerArm: { type: 'Fighting', damage: 34, warmup: 4, cooldown: 5, stamina: 52, cost: 65, effect: { type: 'debuff_speed_self', duration: 2 } },
+  Superpower: { type: 'Fighting', damage: 36, warmup: 4, cooldown: 5, stamina: 55, cost: 70, effect: { type: 'debuff_attack_self', duration: 2 } },
+  VacuumWave: { type: 'Fighting', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
+  Headbutt: { type: 'Normal', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'stun', chance: 0.2, duration: 1 } },
+  Facade: { type: 'Normal', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 45, effect: { type: 'double_if_status_self' } },
+  Frustration: { type: 'Normal', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: null },
+  Return: { type: 'Normal', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: null },
+  GigaImpact: { type: 'Normal', damage: 42, warmup: 7, cooldown: 8, stamina: 70, cost: 85, effect: { type: 'exhaust', duration: 2 } },
+
+  // === SIGNATURE/UNIQUE MOVES ===
+  SkyAttack: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 58, cost: 72, effect: { type: 'high_crit' } },
+  MindBlown: { type: 'Fire', damage: 40, warmup: 5, cooldown: 6, stamina: 65, cost: 80, effect: { type: 'recoil', damagePercent: 0.25 } },
+  SheerCold: { type: 'Water', damage: 45, warmup: 6, cooldown: 8, stamina: 75, cost: 88, effect: { type: 'ohko', chance: 0.3 } },
+  Frenzy: { type: 'Grass', damage: 42, warmup: 6, cooldown: 8, stamina: 70, cost: 85, effect: { type: 'exhaust', duration: 2 } },
+  Focus: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 5, stamina: 25, cost: 35, effect: { type: 'buff_crit', duration: 3 } },
+  PsychicTerrain: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_psychic', duration: 5 } },
+  ElectricTerrain: { type: 'Electric', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_electric', duration: 5 } },
+  GrassyTerrain: { type: 'Grass', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_grassy', duration: 5 } }
 };
 
 // Type to color mapping for aptitude lookups
