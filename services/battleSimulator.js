@@ -94,7 +94,7 @@ const MOVES = {
   IceBeam: { type: 'Water', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 50, effect: { type: 'freeze', chance: 0.25, duration: 3 } },
   Blizzard: { type: 'Water', damage: 36, warmup: 5, cooldown: 6, stamina: 65, cost: 80, effect: { type: 'freeze', chance: 0.4, duration: 4 } },
   LeafBlade: { type: 'Grass', damage: 27, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: null },
-  GigaDrain: { type: 'Grass', damage: 22, warmup: 3, cooldown: 4, stamina: 35, cost: 45, effect: { type: 'drain', chance: 0.5, duration: 1, healPercent: 0.5 } },
+  GigaDrain: { type: 'Grass', damage: 22, warmup: 3, cooldown: 4, stamina: 35, cost: 45, effect: { type: 'drain', chance: 0.5, duration: 1, healPercent: 0.25 } },
   PowerWhip: { type: 'Grass', damage: 32, warmup: 4, cooldown: 5, stamina: 50, cost: 65, effect: null },
   FireFang: { type: 'Fire', damage: 20, warmup: 1, cooldown: 3, stamina: 30, cost: 40, effect: { type: 'burn', chance: 0.15, duration: 4, damage: 2 } },
   LavaPlume: { type: 'Fire', damage: 30, warmup: 4, cooldown: 5, stamina: 50, cost: 60, effect: { type: 'burn', chance: 0.35, duration: 5, damage: 4 } },
@@ -159,7 +159,7 @@ const MOVES = {
   IronDefense: { type: 'Normal', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_defense', duration: 4 } },
   MeteorMash: { type: 'Normal', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'buff_attack', chance: 0.2, duration: 3 } },
   Metronome: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'random_move' } },
-  MilkDrink: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
+  MilkDrink: { type: 'Normal', damage: 0, warmup: 2, cooldown: 10, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.25 } },
   Moonblast: { type: 'Normal', damage: 31, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'debuff_instinct', chance: 0.3, duration: 2 } },
   Moonlight: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   NastyPlot: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_instinct', duration: 4 } },
@@ -789,10 +789,10 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   const hasAccuracyDebuff = combatant.statusEffects.some(e => e.type === 'debuff_accuracy');
   const accuracyDebuffPenalty = hasAccuracyDebuff ? 0.15 : 0;
 
-  // Miss chance calculation (0.1125 = 11.25% max miss at 0 stamina)
+  // Miss chance calculation
   const missChance = Math.max(0,
     (GAME_CONFIG.BATTLE.MAX_STAMINA - combatant.currentStamina) /
-    GAME_CONFIG.BATTLE.MAX_STAMINA * 0.1125) + paralyzePenalty + accuracyDebuffPenalty;
+    GAME_CONFIG.BATTLE.MAX_STAMINA * 0.075) + paralyzePenalty + accuracyDebuffPenalty;
 
   // Dodge chance when opponent is resting
   let dodgeChance = opponent.isResting
