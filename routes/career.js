@@ -380,10 +380,29 @@ router.get('/active', authenticateToken, async (req, res) => {
 router.post('/start', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { pokemon, selectedSupports } = req.body;
+    const { pokemon, selectedSupports, selectedInspirations } = req.body; // Add selectedInspirations
 
     if (!pokemon || !selectedSupports) {
       return res.status(400).json({ error: 'Pokemon and supports required' });
+    }
+
+    // NEW VALIDATION: Check inspirations
+    if (selectedInspirations && selectedInspirations.length > 0) {
+      // Validate inspirations don't exceed limit
+      if (selectedInspirations.length > 2) {
+        return res.status(400).json({ error: 'Maximum 2 inspirations allowed' });
+      }
+
+      // Check if any inspiration has the same name as the selected Pokemon
+      const hasSameSpecies = selectedInspirations.some(
+        inspiration => inspiration.name === pokemon.name
+      );
+
+      if (hasSameSpecies) {
+        return res.status(400).json({ 
+          error: 'Cannot use the same Pokemon species as inspiration' 
+        });
+      }
     }
 
     // Initialize support friendships with their initial friendship values
@@ -412,7 +431,7 @@ router.post('/start', authenticateToken, async (req, res) => {
       moveHints: {},
       turnHistory: [],
       turnLog: [],
-      inspirations: [],
+      inspirations: selectedInspirations || [], // Store inspirations
       supportFriendships,
       completedHangouts: [],
       pokeclocks: 3,
