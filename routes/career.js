@@ -287,6 +287,26 @@ const findSupportCardByName = (trainerName) => {
   return null;
 };
 
+// Helper function to find hangout event by trainer name
+// The frontend stores support names as simple trainer names (e.g., "Cynthia")
+// but the backend HANGOUT_EVENTS uses compound keys (e.g., "CynthiaGarchomp")
+const findHangoutEventByName = (trainerName) => {
+  // First try direct lookup (in case key matches trainer name)
+  if (HANGOUT_EVENTS[trainerName]) {
+    return HANGOUT_EVENTS[trainerName];
+  }
+
+  // Search through all hangout events to find one with matching trainer name
+  // Check if the key starts with the trainer name (e.g., "CynthiaGarchomp" starts with "Cynthia")
+  for (const [key, event] of Object.entries(HANGOUT_EVENTS)) {
+    if (key.startsWith(trainerName)) {
+      return event;
+    }
+  }
+
+  return null;
+};
+
 // Helper function to get support card attributes
 // Uses actual card values from trainingBonus, appearanceRate, and typeMatchPreference
 const getSupportCardAttributes = (card) => {
@@ -896,7 +916,7 @@ router.post('/trigger-event', authenticateToken, async (req, res) => {
       // If hangouts are available, 50% chance to pick a hangout event
       if (availableHangouts.length > 0 && Math.random() < 0.5) {
         const supportName = availableHangouts[Math.floor(Math.random() * availableHangouts.length)];
-        const hangoutEvent = HANGOUT_EVENTS[supportName];
+        const hangoutEvent = findHangoutEventByName(supportName);
         if (hangoutEvent) {
           eventToSet = {
             type: 'hangout',
