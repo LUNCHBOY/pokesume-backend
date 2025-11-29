@@ -53,16 +53,17 @@ router.get('/', authenticateToken, async (req, res) => {
     );
 
     // Get most powerful pokemon from roster
+    // Stats are nested under pokemon_data.stats
     const topPokemonResult = await db.query(
       `SELECT pokemon_data
        FROM pokemon_rosters
        WHERE user_id = $1
        ORDER BY (
-         (pokemon_data->>'HP')::int +
-         (pokemon_data->>'Attack')::int +
-         (pokemon_data->>'Defense')::int +
-         (pokemon_data->>'Instinct')::int +
-         (pokemon_data->>'Speed')::int
+         (pokemon_data->'stats'->>'HP')::int +
+         (pokemon_data->'stats'->>'Attack')::int +
+         (pokemon_data->'stats'->>'Defense')::int +
+         (pokemon_data->'stats'->>'Instinct')::int +
+         (pokemon_data->'stats'->>'Speed')::int
        ) DESC
        LIMIT 1`,
       [req.user.userId]
