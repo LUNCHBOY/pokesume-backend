@@ -425,6 +425,154 @@ router.get('/primos', authenticateToken, async (req, res) => {
   }
 });
 
+// ============================================================================
+// LIMIT BREAK WITH SHARDS
+// ============================================================================
+
+const SHARD_COST_PER_LIMIT_BREAK = 10;
+
+// Limit break a Pokemon using shards
+router.post('/pokemon/:id/limit-break', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const pokemonId = req.params.id;
+
+    // Get current Pokemon and user shards
+    const pokemonResult = await pool.query(
+      'SELECT id, pokemon_name, limit_break_level FROM pokemon_inventory WHERE id = $1 AND user_id = $2',
+      [pokemonId, userId]
+    );
+
+    if (pokemonResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Pokemon not found' });
+    }
+
+    const pokemon = pokemonResult.rows[0];
+    const currentLevel = pokemon.limit_break_level || 0;
+
+    if (currentLevel >= MAX_LIMIT_BREAK) {
+      return res.status(400).json({ error: 'Pokemon is already at max limit break level' });
+    }
+
+    // Check user's shards
+    const userResult = await pool.query(
+      'SELECT limit_break_shards FROM users WHERE id = $1',
+      [userId]
+    );
+
+    const currentShards = userResult.rows[0].limit_break_shards || 0;
+
+    if (currentShards < SHARD_COST_PER_LIMIT_BREAK) {
+      return res.status(400).json({
+        error: 'Not enough limit break shards',
+        required: SHARD_COST_PER_LIMIT_BREAK,
+        current: currentShards
+      });
+    }
+
+    // Deduct shards and increase limit break level
+    const newLevel = currentLevel + 1;
+
+    await pool.query(
+      'UPDATE users SET limit_break_shards = limit_break_shards - $1 WHERE id = $2',
+      [SHARD_COST_PER_LIMIT_BREAK, userId]
+    );
+
+    await pool.query(
+      'UPDATE pokemon_inventory SET limit_break_level = $1 WHERE id = $2',
+      [newLevel, pokemonId]
+    );
+
+    // Get updated values
+    const updatedUserResult = await pool.query(
+      'SELECT limit_break_shards FROM users WHERE id = $1',
+      [userId]
+    );
+
+    res.json({
+      success: true,
+      pokemon_name: pokemon.pokemon_name,
+      newLimitBreakLevel: newLevel,
+      shardsSpent: SHARD_COST_PER_LIMIT_BREAK,
+      remainingShards: updatedUserResult.rows[0].limit_break_shards
+    });
+  } catch (error) {
+    console.error('Pokemon limit break error:', error);
+    res.status(500).json({ error: 'Failed to limit break Pokemon' });
+  }
+});
+
+// Limit break a Support using shards
+router.post('/supports/:id/limit-break', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const supportId = req.params.id;
+
+    // Get current Support and user shards
+    const supportResult = await pool.query(
+      'SELECT id, support_name, limit_break_level FROM support_inventory WHERE id = $1 AND user_id = $2',
+      [supportId, userId]
+    );
+
+    if (supportResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Support not found' });
+    }
+
+    const support = supportResult.rows[0];
+    const currentLevel = support.limit_break_level || 0;
+
+    if (currentLevel >= MAX_LIMIT_BREAK) {
+      return res.status(400).json({ error: 'Support is already at max limit break level' });
+    }
+
+    // Check user's shards
+    const userResult = await pool.query(
+      'SELECT limit_break_shards FROM users WHERE id = $1',
+      [userId]
+    );
+
+    const currentShards = userResult.rows[0].limit_break_shards || 0;
+
+    if (currentShards < SHARD_COST_PER_LIMIT_BREAK) {
+      return res.status(400).json({
+        error: 'Not enough limit break shards',
+        required: SHARD_COST_PER_LIMIT_BREAK,
+        current: currentShards
+      });
+    }
+
+    // Deduct shards and increase limit break level
+    const newLevel = currentLevel + 1;
+
+    await pool.query(
+      'UPDATE users SET limit_break_shards = limit_break_shards - $1 WHERE id = $2',
+      [SHARD_COST_PER_LIMIT_BREAK, userId]
+    );
+
+    await pool.query(
+      'UPDATE support_inventory SET limit_break_level = $1 WHERE id = $2',
+      [newLevel, supportId]
+    );
+
+    // Get updated values
+    const updatedUserResult = await pool.query(
+      'SELECT limit_break_shards FROM users WHERE id = $1',
+      [userId]
+    );
+
+    res.json({
+      success: true,
+      support_name: support.support_name,
+      newLimitBreakLevel: newLevel,
+      shardsSpent: SHARD_COST_PER_LIMIT_BREAK,
+      remainingShards: updatedUserResult.rows[0].limit_break_shards
+    });
+  } catch (error) {
+    console.error('Support limit break error:', error);
+    res.status(500).json({ error: 'Failed to limit break Support' });
+  }
+});
+
 // Update user's Primos (add or subtract)
 router.post('/primos', authenticateToken, async (req, res) => {
   try {
