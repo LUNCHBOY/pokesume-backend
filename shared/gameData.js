@@ -541,7 +541,7 @@ const POKEMON = {
     typeAptitudes: { Red: 'A', Blue: 'D', Green: 'C', Purple: 'B', Yellow: 'B', Orange: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'BodySlam', 'FireBlast', 'WaterGun', 'ThunderShock'],
+    learnableAbilities: ['Flamethrower', 'FireBlast', 'ShadowBall'],
     isStarter: true
   },
   Squirtle: {
@@ -551,7 +551,7 @@ const POKEMON = {
     typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'B', Yellow: 'B', Orange: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'B', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'BodySlam', 'HydroPump', 'VineWhip', 'Ember'],
+    learnableAbilities: ['Surf', 'QuickAttack', 'PsyBeam'],
     isStarter: true
   },
   Bulbasaur: {
@@ -561,7 +561,7 @@ const POKEMON = {
     typeAptitudes: { Red: 'D', Blue: 'C', Green: 'A', Purple: 'B', Yellow: 'B', Orange: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'BodySlam', 'SolarBeam', 'WaterGun', 'PsyBeam'],
+    learnableAbilities: ['RazorLeaf', 'SwordsDance', 'Psychic'],
     isStarter: true
   },
   Pikachu: {
@@ -571,8 +571,7 @@ const POKEMON = {
     typeAptitudes: { Red: 'B', Blue: 'C', Green: 'B', Purple: 'C', Yellow: 'A', Orange: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
-    learnableAbilities: ['Tackle', 'QuickAttack', 'Thunderbolt', 'BodySlam', 'Thunder', 'BrickBreak', 'HyperBeam', 'Ember'],
-    isStarter: true
+    learnableAbilities: ['Thunderbolt', 'Thunder', 'Flamethrower']
   },
   Gastly: {
     name: 'Gastly',
@@ -581,10 +580,9 @@ const POKEMON = {
     typeAptitudes: { Red: 'B', Blue: 'B', Green: 'C', Purple: 'A', Yellow: 'D', Orange: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'A', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['Psychic', 'BodySlam', 'PsychicBlast', 'VineWhip', 'ThunderShock'],
-    isStarter: true
+    learnableAbilities: ['Psychic', 'Hypnosis', 'Flamethrower']
   },
-  
+
   // 25 Additional Wild Pokemons
   Growlithe: {
     name: 'Growlithe',
