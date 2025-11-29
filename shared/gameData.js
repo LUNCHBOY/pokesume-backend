@@ -3093,7 +3093,7 @@ const GYM_LEADER_POKEMON = {
     defaultAbilities: ['Flamethrower', 'FireFang', 'FlareBlitz'],
     learnableAbilities: ['FireBlast', 'HyperBeam', 'Crunch']
   },
-  Misty: {
+  MistyStarmie: {
     name: 'Starmie',
     primaryType: 'Water',
     baseStats: { HP: 115, Attack: 85, Defense: 90, Instinct: 115, Speed: 95 },
@@ -3201,7 +3201,7 @@ const GYM_LEADER_POKEMON = {
     defaultAbilities: ['SolarBeam', 'Psychic', 'GigaDrain'],
     learnableAbilities: ['LeafStorm', 'PsychicBlast', 'SludgeBomb']
   },
-  Bruno: {
+  BrunoMachamp: {
     name: 'Machamp',
     primaryType: 'Fighting',
     baseStats: { HP: 130, Attack: 130, Defense: 85, Instinct: 70, Speed: 60 },
