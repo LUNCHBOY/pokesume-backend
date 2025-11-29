@@ -56,23 +56,23 @@ const GAME_CONFIG = {
 };
 
 const MOVES = {
-  Ember: { type: 'Fire', damage: 12, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
+  Ember: { type: 'Fire', damage: 16, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
   Flamethrower: { type: 'Fire', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: { type: 'burn', chance: 0.2, duration: 5, damage: 3 } },
   FireBlast: { type: 'Fire', damage: 35, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'burn', chance: 0.4, duration: 6, damage: 5 } },
-  WaterGun: { type: 'Water', damage: 12, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
+  WaterGun: { type: 'Water', damage: 16, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
   Surf: { type: 'Water', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: null },
   HydroPump: { type: 'Water', damage: 35, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'soak', chance: 0.3, duration: 4 } },
-  VineWhip: { type: 'Grass', damage: 14, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
+  VineWhip: { type: 'Grass', damage: 18, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
   RazorLeaf: { type: 'Grass', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: null },
   SolarBeam: { type: 'Grass', damage: 35, warmup: 6, cooldown: 5, stamina: 55, cost: 75, effect: { type: 'energize', chance: 0.25, duration: 3, staminaBoost: 5 } },
-  PsyBeam: { type: 'Psychic', damage: 11, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: { type: 'confuse', chance: 0.3, duration: 3 } },
+  PsyBeam: { type: 'Psychic', damage: 15, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: { type: 'confuse', chance: 0.3, duration: 3 } },
   Psychic: { type: 'Psychic', damage: 25, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: { type: 'confuse', chance: 0.5, duration: 4 } },
   PsychicBlast: { type: 'Psychic', damage: 34, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'confuse', chance: 0.7, duration: 5 } },
-  ThunderShock: { type: 'Electric', damage: 11, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: { type: 'paralyze', chance: 0.2, duration: 3 } },
+  ThunderShock: { type: 'Electric', damage: 15, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: { type: 'paralyze', chance: 0.2, duration: 3 } },
   Thunderbolt: { type: 'Electric', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: { type: 'paralyze', chance: 0.3, duration: 4 } },
   Thunder: { type: 'Electric', damage: 35, warmup: 5, cooldown: 6, stamina: 65, cost: 75, effect: { type: 'paralyze', chance: 0.5, duration: 5 } },
-  LowKick: { type: 'Fighting', damage: 10, warmup: 0, cooldown: 2, stamina: 20, cost: 25, effect: null },
-  KarateChop: { type: 'Fighting', damage: 12, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
+  LowKick: { type: 'Fighting', damage: 14, warmup: 0, cooldown: 2, stamina: 20, cost: 25, effect: null },
+  KarateChop: { type: 'Fighting', damage: 16, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
   Submission: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 50, cost: 50, effect: { type: 'recoil', damagePercent: 0.1 } },
   BrickBreak: { type: 'Fighting', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: null },
   CloseCombat: { type: 'Fighting', damage: 35, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'recoil', damagePercent: 0.15 } },
@@ -80,7 +80,7 @@ const MOVES = {
   AuraSphere: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 50, effect: null },
   DrainPunch: { type: 'Fighting', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'drain', chance: 0.5, duration: 1, healPercent: 0.5 } },
   DynamicPunch: { type: 'Fighting', damage: 30, warmup: 4, cooldown: 5, stamina: 50, cost: 60, effect: { type: 'confuse', chance: 0.5, duration: 3 } },
-  Tackle: { type: 'Normal', damage: 7, warmup: 1, cooldown: 2, stamina: 20, cost: 30, effect: null },
+  Tackle: { type: 'Normal', damage: 12, warmup: 1, cooldown: 2, stamina: 20, cost: 30, effect: null },
   BodySlam: { type: 'Normal', damage: 21, warmup: 2, cooldown: 3, stamina: 42, cost: 35, effect: { type: 'stun', chance: 0.2, duration: 2 } },
   HyperBeam: { type: 'Normal', damage: 38, warmup: 8, cooldown: 8, stamina: 65, cost: 80, effect: { type: 'exhaust', duration: 3 } },
   SacredFire: { type: 'Fire', damage: 38, warmup: 6, cooldown: 6, stamina: 85, cost: 80, effect: { type: 'burn', duration: 2 } },
@@ -103,7 +103,7 @@ const MOVES = {
   Hypnosis: { type: 'Psychic', damage: 20, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'sleep', chance: 0.6, duration: 3 } },
   Psyshock: { type: 'Psychic', damage: 28, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: { type: 'confuse', chance: 0.35, duration: 4 } },
   ZenHeadbutt: { type: 'Psychic', damage: 24, warmup: 2, cooldown: 4, stamina: 35, cost: 45, effect: { type: 'confuse', chance: 0.25, duration: 3 } },
-  QuickAttack: { type: 'Normal', damage: 10, warmup: 0, cooldown: 2, stamina: 22, cost: 30, effect: null },
+  QuickAttack: { type: 'Normal', damage: 14, warmup: 0, cooldown: 2, stamina: 22, cost: 30, effect: null },
   ExtremeSpeed: { type: 'Normal', damage: 19, warmup: 0, cooldown: 3, stamina: 38, cost: 52, effect: null },
   DoubleEdge: { type: 'Normal', damage: 34, warmup: 3, cooldown: 5, stamina: 58, cost: 68, effect: { type: 'recoil', damagePercent: 0.25 } },
   StoneEdge: { type: 'Normal', damage: 27, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: null },
@@ -721,24 +721,42 @@ function selectMove(combatant, opponent, available) {
     }
 
     case 'Chipper': {
-      // Chipper: low stamina, low cooldown moves - chip away constantly
-      const chipperMoves = movesWithData.filter(m => m.category === 'chipper' || (m.staminaCost <= 25 && m.cooldown <= 3));
-      const allMoves = movesWithData.filter(m => m.predictedDamage > 0);
+      // Chipper: cycles through low cooldown moves, occasionally uses a big finisher
+      // Should feel like rapid hits compared to a nuker's big single blows
+      const quickMoves = movesWithData.filter(m => m.cooldown <= 3 && m.predictedDamage > 0);
+      const finisherMoves = movesWithData.filter(m => m.cooldown >= 4 && m.predictedDamage >= 20);
+      const allDamageMoves = movesWithData.filter(m => m.predictedDamage > 0);
 
-      // Strongly prefer chipper moves
-      if (chipperMoves.length > 0 && Math.random() < 0.9) {
-        // Pick based on efficiency (damage per stamina)
-        chipperMoves.sort((a, b) => b.damagePerStamina - a.damagePerStamina);
-        if (Math.random() < 0.3 && chipperMoves.length > 1) {
-          return chipperMoves[Math.floor(Math.random() * chipperMoves.length)].moveName;
-        }
-        return chipperMoves[0].moveName;
+      // Track consecutive quick moves using combatant state (or use random chance as proxy)
+      // Every ~4-5 quick moves, throw in a finisher if available
+      const useFinisher = Math.random() < 0.2; // ~20% chance to use finisher
+
+      if (useFinisher && finisherMoves.length > 0 && combatant.currentStamina >= 40) {
+        // Use the highest damage finisher available
+        finisherMoves.sort((a, b) => b.predictedDamage - a.predictedDamage);
+        return finisherMoves[0].moveName;
       }
 
-      // Fallback to any move, preferring efficiency
-      if (allMoves.length > 0) {
-        allMoves.sort((a, b) => b.damagePerStamina - a.damagePerStamina);
-        return allMoves[0].moveName;
+      // Primary behavior: cycle through quick moves
+      if (quickMoves.length > 0) {
+        // Sort by lowest cooldown first (fastest cycling), then by damage
+        quickMoves.sort((a, b) => {
+          if (a.cooldown !== b.cooldown) return a.cooldown - b.cooldown;
+          return b.predictedDamage - a.predictedDamage;
+        });
+        // Add some variety - pick from the fastest moves
+        const fastestCooldown = quickMoves[0].cooldown;
+        const fastestMoves = quickMoves.filter(m => m.cooldown === fastestCooldown);
+        if (fastestMoves.length > 1 && Math.random() < 0.5) {
+          return fastestMoves[Math.floor(Math.random() * fastestMoves.length)].moveName;
+        }
+        return quickMoves[0].moveName;
+      }
+
+      // Fallback to any damage move
+      if (allDamageMoves.length > 0) {
+        allDamageMoves.sort((a, b) => a.cooldown - b.cooldown);
+        return allDamageMoves[0].moveName;
       }
       break;
     }
