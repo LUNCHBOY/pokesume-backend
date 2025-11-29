@@ -267,46 +267,6 @@ const migrateCareerState = (careerState) => {
   return { migrated, updated };
 };
 
-// Helper function to find support card by trainer name
-// The frontend stores support names as simple trainer names (e.g., "Cynthia")
-// but the backend SUPPORT_CARDS uses compound keys (e.g., "CynthiaGarchomp")
-// This function finds the matching card by checking the trainer field
-const findSupportCardByName = (trainerName) => {
-  // First try direct lookup (in case key matches trainer name)
-  if (SUPPORT_CARDS[trainerName]) {
-    return SUPPORT_CARDS[trainerName];
-  }
-
-  // Search through all support cards to find one with matching trainer name
-  for (const [key, card] of Object.entries(SUPPORT_CARDS)) {
-    if (card.trainer === trainerName || card.name === trainerName) {
-      return card;
-    }
-  }
-
-  return null;
-};
-
-// Helper function to find hangout event by trainer name
-// The frontend stores support names as simple trainer names (e.g., "Cynthia")
-// but the backend HANGOUT_EVENTS uses compound keys (e.g., "CynthiaGarchomp")
-const findHangoutEventByName = (trainerName) => {
-  // First try direct lookup (in case key matches trainer name)
-  if (HANGOUT_EVENTS[trainerName]) {
-    return HANGOUT_EVENTS[trainerName];
-  }
-
-  // Search through all hangout events to find one with matching trainer name
-  // Check if the key starts with the trainer name (e.g., "CynthiaGarchomp" starts with "Cynthia")
-  for (const [key, event] of Object.entries(HANGOUT_EVENTS)) {
-    if (key.startsWith(trainerName)) {
-      return event;
-    }
-  }
-
-  return null;
-};
-
 // Helper function to get support card attributes
 // Uses actual card values from trainingBonus, appearanceRate, and typeMatchPreference
 const getSupportCardAttributes = (card) => {
@@ -341,8 +301,7 @@ const generateTrainingOptionsWithAppearanceChance = (selectedSupports, careerSta
 
   // Process each support with appearance chance
   selectedSupports.forEach(supportName => {
-    // Use findSupportCardByName to handle both direct keys and trainer name lookups
-    const supportCard = findSupportCardByName(supportName);
+    const supportCard = SUPPORT_CARDS[supportName];
     if (!supportCard) return;
 
     const support = getSupportCardAttributes(supportCard);
@@ -430,7 +389,7 @@ router.post('/start', authenticateToken, async (req, res) => {
     // Initialize support friendships with their initial friendship values
     const supportFriendships = {};
     selectedSupports.forEach(supportName => {
-      const supportCard = findSupportCardByName(supportName);
+      const supportCard = SUPPORT_CARDS[supportName];
       supportFriendships[supportName] = supportCard?.initialFriendship || 0;
     });
 
@@ -629,7 +588,7 @@ router.post('/train', authenticateToken, async (req, res) => {
     let energyRegenBonus = 0; // Bonus energy regen for Speed training from support cards
 
     option.supports.forEach(supportName => {
-      const supportCard = findSupportCardByName(supportName);
+      const supportCard = SUPPORT_CARDS[supportName];
       if (!supportCard) return;
 
       const support = getSupportCardAttributes(supportCard);
@@ -697,7 +656,7 @@ router.post('/train', authenticateToken, async (req, res) => {
     // Calculate max energy (base 100 + any maxEnergyBonus from selected support cards)
     let maxEnergy = GAME_CONFIG.CAREER.MAX_ENERGY;
     careerState.selectedSupports.forEach(supportName => {
-      const supportCard = findSupportCardByName(supportName);
+      const supportCard = SUPPORT_CARDS[supportName];
       if (supportCard?.specialEffect?.maxEnergyBonus) {
         maxEnergy += supportCard.specialEffect.maxEnergyBonus;
       }
@@ -797,7 +756,7 @@ router.post('/rest', authenticateToken, async (req, res) => {
     // Calculate max energy (base 100 + any maxEnergyBonus from selected support cards)
     let maxEnergy = GAME_CONFIG.CAREER.MAX_ENERGY;
     careerState.selectedSupports.forEach(supportName => {
-      const supportCard = findSupportCardByName(supportName);
+      const supportCard = SUPPORT_CARDS[supportName];
       if (supportCard?.specialEffect?.maxEnergyBonus) {
         maxEnergy += supportCard.specialEffect.maxEnergyBonus;
       }
@@ -916,7 +875,7 @@ router.post('/trigger-event', authenticateToken, async (req, res) => {
       // If hangouts are available, 50% chance to pick a hangout event
       if (availableHangouts.length > 0 && Math.random() < 0.5) {
         const supportName = availableHangouts[Math.floor(Math.random() * availableHangouts.length)];
-        const hangoutEvent = findHangoutEventByName(supportName);
+        const hangoutEvent = HANGOUT_EVENTS[supportName];
         if (hangoutEvent) {
           eventToSet = {
             type: 'hangout',
