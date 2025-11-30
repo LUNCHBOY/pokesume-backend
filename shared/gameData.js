@@ -5151,6 +5151,195 @@ const HANGOUT_EVENTS = {
     description: 'Archie channels the power of the seas.',
     flavor: 'Archie roars, "The ocean\'s fury is unstoppable—embrace its power!"',
     effect: { stats: { HP: 13, Defense: 11 }, moveHint: 'HydroPump', energy: 17 }
+  },
+  // ============================================================================
+  // NEW GENERATION TRAINERS (Galar, Paldea, DLC)
+  // ============================================================================
+  Leon: {
+    name: 'Champion Time',
+    description: 'Leon demonstrates his undefeated battling style.',
+    flavor: 'Leon strikes his signature pose. "Let\'s have a champion time!" he exclaims with infectious enthusiasm.',
+    effect: { stats: { Attack: 15, Speed: 10 }, moveHint: 'FlareBlitz', energy: 18 }
+  },
+  Selene: {
+    name: 'Moonlit Training',
+    description: 'Selene shares the mystical power of Alola\'s moon.',
+    flavor: 'Selene gazes at the moon. "The night reveals hidden strength," she whispers serenely.',
+    effect: { stats: { Instinct: 14, Defense: 10 }, moveHint: 'Moonblast', skillPoints: 14 }
+  },
+  Gloria: {
+    name: 'Sword & Shield',
+    description: 'Gloria teaches balanced offensive and defensive techniques.',
+    flavor: 'Gloria readies her stance. "A true champion masters both attack and defense!" she declares.',
+    effect: { stats: { Attack: 14, Defense: 11 }, moveHint: 'BehemothBlade', energy: 16 }
+  },
+  Nemona: {
+    name: 'Battle Enthusiasm',
+    description: 'Nemona\'s endless energy is contagious!',
+    flavor: 'Nemona bounces excitedly. "Another battle?! Yes! Let\'s go, let\'s GO!" she cheers.',
+    effect: { stats: { Speed: 14, Attack: 10 }, moveHint: 'CloseCombat', energy: 20 }
+  },
+  Mustard: {
+    name: 'Dojo Training',
+    description: 'Mustard shares ancient martial arts wisdom.',
+    flavor: 'Mustard strokes his mustache. "True power flows from inner peace," he teaches calmly.',
+    effect: { stats: { Attack: 16, HP: 8 }, moveHint: 'CloseCombat', skillPoints: 14 }
+  },
+  Victor: {
+    name: 'Dynamax Power',
+    description: 'Victor demonstrates the power of Dynamax energy.',
+    flavor: 'Victor channels Dynamax energy. "Feel the power surge through you!" he shouts.',
+    effect: { stats: { Instinct: 12, HP: 12 }, moveHint: 'DynamaxCannon', energy: 18 }
+  },
+  Arven: {
+    name: 'Picnic Break',
+    description: 'Arven prepares a restorative meal for you and your Pokemon.',
+    flavor: 'Arven serves his signature sandwich. "Food is the best medicine—eat up!" he says warmly.',
+    effect: { stats: { HP: 16, Defense: 8 }, energy: 25 }
+  },
+  Penny: {
+    name: 'Team Star Strategy',
+    description: 'Penny shares tactical insights from leading Team Star.',
+    flavor: 'Penny types rapidly. "Analyzing battle data... found optimal strategy!" she reports.',
+    effect: { stats: { Defense: 14, Instinct: 10 }, moveHint: 'Moonblast', skillPoints: 12 }
+  },
+  Sonia: {
+    name: 'Research Session',
+    description: 'Sonia shares her latest Pokemon research findings.',
+    flavor: 'Sonia\'s eyes light up. "I\'ve discovered something fascinating—look at this data!" she exclaims.',
+    effect: { stats: { Instinct: 15, Speed: 9 }, skillPoints: 18, energy: 16 }
+  },
+  Hop: {
+    name: 'Rival\'s Determination',
+    description: 'Hop\'s boundless optimism inspires you to train harder.',
+    flavor: 'Hop pumps his fist. "We\'re going to be the greatest! Just you wait!" he declares.',
+    effect: { stats: { HP: 14, Attack: 10 }, moveHint: 'BehemothBash', energy: 18 }
+  },
+  Geeta: {
+    name: 'Top Champion\'s Guidance',
+    description: 'Geeta provides strategic wisdom from her championship experience.',
+    flavor: 'Geeta nods approvingly. "Precision and patience define a true champion," she advises.',
+    effect: { stats: { Instinct: 14, Defense: 10 }, moveHint: 'SwordsDance', skillPoints: 15 }
+  },
+  Kieran: {
+    name: 'Crystalline Focus',
+    description: 'Kieran channels intense determination into training.',
+    flavor: 'Kieran\'s eyes burn with intensity. "I won\'t lose again—not to anyone!" he vows.',
+    effect: { stats: { Instinct: 13, Attack: 11 }, moveHint: 'TeraStarstorm', energy: 17 }
+  },
+  Carmine: {
+    name: 'Festival Dance',
+    description: 'Carmine teaches the traditional Kitakami festival dances.',
+    flavor: 'Carmine spins gracefully. "The mask festival honors our bond with Pokemon!" she explains.',
+    effect: { stats: { Speed: 14, Attack: 10 }, moveHint: 'IvyCudgel', energy: 16 }
+  },
+  Drayton: {
+    name: 'Laid-Back Lesson',
+    description: 'Drayton shares surprisingly effective lazy training methods.',
+    flavor: 'Drayton yawns. "Sometimes the best strategy is to let your opponent tire themselves out," he mumbles.',
+    effect: { stats: { Defense: 15, HP: 9 }, moveHint: 'DracoMeteor', energy: 18 }
+  },
+  Lacey: {
+    name: 'Elite Drilling',
+    description: 'Lacey demonstrates her high-speed ground techniques.',
+    flavor: 'Lacey drills through obstacles. "Speed and precision—that\'s the Blueberry way!" she shouts.',
+    effect: { stats: { Speed: 15, Attack: 9 }, moveHint: 'Earthquake', energy: 15 }
+  },
+  Raihan: {
+    name: 'Weather Control',
+    description: 'Raihan teaches weather manipulation strategies.',
+    flavor: 'Raihan takes a selfie mid-battle. "The forecast? Total domination!" he grins.',
+    effect: { stats: { Defense: 13, Instinct: 11 }, moveHint: 'SteelBeam', skillPoints: 13 }
+  },
+  Marnie: {
+    name: 'Punk Rock Power',
+    description: 'Marnie shares the strength that comes from unwavering loyalty.',
+    flavor: 'Marnie gives a rare smile. "My Pokemon and fans give me strength," she admits quietly.',
+    effect: { stats: { Attack: 13, Defense: 11 }, moveHint: 'DarkPulse', energy: 15 }
+  },
+  Nessa: {
+    name: 'Wave Rider Training',
+    description: 'Nessa teaches the flow of water-type combat.',
+    flavor: 'Nessa poses elegantly. "Ride the wave—don\'t fight against it!" she advises.',
+    effect: { stats: { HP: 14, Speed: 10 }, moveHint: 'Liquidation', energy: 16 }
+  },
+  Bea: {
+    name: 'Fighting Spirit',
+    description: 'Bea demonstrates intense martial arts training.',
+    flavor: 'Bea\'s expression remains stoic. "Emotions are distractions. Focus only on the fight," she instructs.',
+    effect: { stats: { Attack: 15, Speed: 9 }, moveHint: 'CloseCombat', energy: 14 }
+  },
+  Opal: {
+    name: 'Fairy Quiz Time',
+    description: 'Opal tests your knowledge with her signature quiz.',
+    flavor: 'Opal smiles mischievously. "Answer correctly and receive my blessing!" she chuckles.',
+    effect: { stats: { HP: 12, Instinct: 12 }, moveHint: 'DazzlingGleam', energy: 18 }
+  },
+  Piers: {
+    name: 'Midnight Concert',
+    description: 'Piers performs an energizing midnight concert.',
+    flavor: 'Piers strums his guitar. "Music speaks louder than any battle cry," he sings.',
+    effect: { stats: { Speed: 14, Instinct: 10 }, moveHint: 'Overdrive', energy: 17 }
+  },
+  Rika: {
+    name: 'Interrogation Training',
+    description: 'Rika questions your battle strategies to find weaknesses.',
+    flavor: 'Rika leans in curiously. "Interesting strategy... but have you considered this angle?" she probes.',
+    effect: { stats: { HP: 13, Defense: 11 }, moveHint: 'Earthquake', skillPoints: 12 }
+  },
+  Poppy: {
+    name: 'Hammer Time',
+    description: 'Poppy playfully demonstrates her hammer techniques.',
+    flavor: 'Poppy giggles. "Bonk bonk! That\'s how you win battles!" she cheers innocently.',
+    effect: { stats: { Defense: 14, Attack: 10 }, moveHint: 'GigatonHammer', energy: 16 }
+  },
+  Milo: {
+    name: 'Farm Fresh Training',
+    description: 'Milo shares wholesome farming-inspired training methods.',
+    flavor: 'Milo flexes. "Hard work in the fields builds strength and character!" he beams.',
+    effect: { stats: { HP: 13, Defense: 11 }, moveHint: 'GigaDrain', energy: 18 }
+  },
+  Kabu: {
+    name: 'Burning Dedication',
+    description: 'Kabu demonstrates his legendary training discipline.',
+    flavor: 'Kabu nods solemnly. "Dedication burns hotter than any flame," he teaches.',
+    effect: { stats: { Attack: 13, HP: 11 }, moveHint: 'Flamethrower', skillPoints: 12 }
+  },
+  Melony: {
+    name: 'Motherly Care',
+    description: 'Melony provides warm encouragement and recovery tips.',
+    flavor: 'Melony wraps you in a cozy scarf. "Rest well—tomorrow we train harder!" she says gently.',
+    effect: { stats: { HP: 15, Defense: 9 }, energy: 22 }
+  },
+  Gordie: {
+    name: 'Rock Solid Will',
+    description: 'Gordie teaches mental toughness through rock climbing.',
+    flavor: 'Gordie adjusts his sunglasses. "Nothing breaks someone who stands firm!" he declares.',
+    effect: { stats: { Defense: 14, HP: 10 }, moveHint: 'StoneEdge', energy: 15 }
+  },
+  Klara: {
+    name: 'Toxic Charm',
+    description: 'Klara teaches the art of misdirection and poison.',
+    flavor: 'Klara winks. "A little poison goes a long way, sweetie!" she giggles deviously.',
+    effect: { stats: { Defense: 13, Instinct: 11 }, moveHint: 'SludgeBomb', skillPoints: 11 }
+  },
+  Avery: {
+    name: 'Psychic Elegance',
+    description: 'Avery demonstrates refined psychic techniques.',
+    flavor: 'Avery poses dramatically. "True elegance requires psychic precision!" he proclaims.',
+    effect: { stats: { Speed: 13, Instinct: 11 }, moveHint: 'Psychic', energy: 14 }
+  },
+  Iono: {
+    name: 'Stream Special',
+    description: 'Iono turns your training into a viral streaming event!',
+    flavor: 'Iono points her phone. "What\'s up, everyone?! Today\'s training is LIVE!" she announces.',
+    effect: { stats: { Speed: 13, Instinct: 11 }, moveHint: 'Thunderbolt', energy: 19 }
+  },
+  Grusha: {
+    name: 'Cool Composure',
+    description: 'Grusha teaches the value of staying cool under pressure.',
+    flavor: 'Grusha speaks calmly. "Panic leads to mistakes. Stay frosty," he advises.',
+    effect: { stats: { Defense: 13, Speed: 11 }, moveHint: 'IceBeam', energy: 15 }
   }
 };
 

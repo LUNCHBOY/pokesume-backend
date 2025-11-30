@@ -112,6 +112,20 @@ const deriveStrategyFromAptitudes = (strategyAptitudes) => {
   return { strategy: bestStrategy, strategyGrade: bestGrade };
 };
 
+// Helper function to calculate max energy including support card bonuses
+const calculateMaxEnergy = (careerState) => {
+  let maxEnergy = GAME_CONFIG.CAREER.MAX_ENERGY;
+  if (careerState.selectedSupports) {
+    careerState.selectedSupports.forEach(supportName => {
+      const supportCard = SUPPORT_CARDS[supportName];
+      if (supportCard?.specialEffect?.maxEnergyBonus) {
+        maxEnergy += supportCard.specialEffect.maxEnergyBonus;
+      }
+    });
+  }
+  return maxEnergy;
+};
+
 // Helper function to generate wild battles
 const generateWildBattles = (turn) => {
   const gymLeaderMult = calculateDifficultyMultiplier(turn);
@@ -879,6 +893,29 @@ router.post('/trigger-event', authenticateToken, async (req, res) => {
 
     const careerState = careerResult.rows[0].career_state;
 
+    // Inspiration turns are reserved - no random events allowed
+    const inspirationTurns = [11, 23, 35, 47, 59];
+    if (inspirationTurns.includes(careerState.turn)) {
+      // On inspiration turns, skip events and just generate training
+      const trainingOptions = generateTrainingOptionsWithAppearanceChance(
+        careerState.pokemon,
+        careerState.selectedSupports,
+        careerState.supportFriendships
+      );
+      const updatedCareerState = {
+        ...careerState,
+        currentTrainingOptions: trainingOptions
+      };
+      await pool.query(
+        'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+        [JSON.stringify(updatedCareerState), userId]
+      );
+      return res.json({
+        success: true,
+        careerState: updatedCareerState
+      });
+    }
+
     // 50% chance for an event to occur
     if (Math.random() < 0.5) {
       // Check for available hangout events - requires MAX friendship (100)
@@ -1095,10 +1132,13 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
 
     const shouldShowResult = pendingEvent.type === 'choice' || pendingEvent.type === 'hangout';
 
+    // Calculate max energy with support bonuses so events don't cap at base 100
+    const maxEnergy = calculateMaxEnergy(careerState);
+
     const updatedCareerState = {
       ...careerState,
       currentStats: newStats,
-      energy: Math.max(0, Math.min(GAME_CONFIG.CAREER.MAX_ENERGY, careerState.energy + energyChange)),
+      energy: Math.max(0, Math.min(maxEnergy, careerState.energy + energyChange)),
       skillPoints: careerState.skillPoints + skillPointsChange,
       supportFriendships: newFriendships,
       moveHints: newMoveHints,
@@ -1398,11 +1438,14 @@ router.post('/battle', authenticateToken, async (req, res) => {
       newStats.Speed = newStats.Speed + statGain;
     }
 
+    // Calculate max energy with support bonuses so battles don't cap at base 100
+    const maxEnergy = calculateMaxEnergy(careerState);
+
     const updatedCareerState = {
       ...careerState,
       currentStats: newStats,
       skillPoints: careerState.skillPoints + skillPoints,
-      energy: Math.max(0, Math.min(GAME_CONFIG.CAREER.MAX_ENERGY, careerState.energy + energyChange)),
+      energy: Math.max(0, Math.min(maxEnergy, careerState.energy + energyChange)),
       // Event battles don't progress the turn
       turn: isEventBattle ? careerState.turn : careerState.turn + 1,
       turnLog: [{
