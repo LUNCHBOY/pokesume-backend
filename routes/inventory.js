@@ -602,4 +602,101 @@ router.post('/primos', authenticateToken, async (req, res) => {
   }
 });
 
+// ============================================================================
+// SUPPORT DECKS
+// ============================================================================
+
+const TOTAL_DECKS = 5;
+const SLOTS_PER_DECK = 5;
+
+// Get all support decks for user
+router.get('/support-decks', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Check if support_decks column exists in users table, if not return default
+    const result = await pool.query(
+      'SELECT support_decks FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Return existing decks or default empty decks
+    const decks = result.rows[0].support_decks ||
+      Array(TOTAL_DECKS).fill(null).map(() => Array(SLOTS_PER_DECK).fill(null));
+
+    res.json({ decks });
+  } catch (error) {
+    // If support_decks column doesn't exist, return default empty decks
+    if (error.code === '42703') { // undefined_column error
+      console.log('support_decks column not found, returning default');
+      return res.json({
+        decks: Array(TOTAL_DECKS).fill(null).map(() => Array(SLOTS_PER_DECK).fill(null))
+      });
+    }
+    console.error('Get support decks error:', error);
+    res.status(500).json({ error: 'Failed to get support decks' });
+  }
+});
+
+// Save a specific support deck
+router.put('/support-decks/:deckIndex', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const deckIndex = parseInt(req.params.deckIndex);
+    const { supports } = req.body;
+
+    // Validate deck index
+    if (deckIndex < 0 || deckIndex >= TOTAL_DECKS) {
+      return res.status(400).json({ error: 'Invalid deck index' });
+    }
+
+    // Validate supports array
+    if (!Array.isArray(supports) || supports.length !== SLOTS_PER_DECK) {
+      return res.status(400).json({ error: 'Invalid supports array - must have exactly 5 slots' });
+    }
+
+    // Get current decks
+    const currentResult = await pool.query(
+      'SELECT support_decks FROM users WHERE id = $1',
+      [userId]
+    );
+
+    if (currentResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get existing decks or create default
+    let decks = currentResult.rows[0].support_decks ||
+      Array(TOTAL_DECKS).fill(null).map(() => Array(SLOTS_PER_DECK).fill(null));
+
+    // Update the specific deck
+    decks[deckIndex] = supports;
+
+    // Save updated decks
+    const result = await pool.query(
+      'UPDATE users SET support_decks = $1 WHERE id = $2 RETURNING support_decks',
+      [JSON.stringify(decks), userId]
+    );
+
+    res.json({
+      success: true,
+      decks: result.rows[0].support_decks
+    });
+  } catch (error) {
+    // If support_decks column doesn't exist, we need to create it first
+    if (error.code === '42703') { // undefined_column error
+      console.error('support_decks column not found - please run database migration');
+      return res.status(500).json({
+        error: 'Database migration required - support_decks column missing'
+      });
+    }
+    console.error('Save support deck error:', error);
+    res.status(500).json({ error: 'Failed to save support deck' });
+  }
+});
+
 module.exports = router;

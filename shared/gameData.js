@@ -289,31 +289,31 @@ const GAME_CONFIG = {
 };
 
 const MOVES = {
-  Ember: { type: 'Fire', damage: 16, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
+  Ember: { type: 'Fire', damage: 12, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
   Flamethrower: { type: 'Fire', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: { type: 'burn', chance: 0.2, duration: 5, damage: 3 } },
   FireBlast: { type: 'Fire', damage: 35, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'burn', chance: 0.4, duration: 6, damage: 5 } },
-  WaterGun: { type: 'Water', damage: 16, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
+  WaterGun: { type: 'Water', damage: 12, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
   Surf: { type: 'Water', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: null },
   HydroPump: { type: 'Water', damage: 35, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'soak', chance: 0.3, duration: 4 } },
-  VineWhip: { type: 'Grass', damage: 18, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
+  VineWhip: { type: 'Grass', damage: 14, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
   RazorLeaf: { type: 'Grass', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: null },
   SolarBeam: { type: 'Grass', damage: 35, warmup: 6, cooldown: 5, stamina: 55, cost: 75, effect: { type: 'energize', chance: 0.25, duration: 3, staminaBoost: 5 } },
-  PsyBeam: { type: 'Psychic', damage: 15, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: { type: 'confuse', chance: 0.3, duration: 3 } },
+  PsyBeam: { type: 'Psychic', damage: 11, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: { type: 'confuse', chance: 0.3, duration: 3 } },
   Psychic: { type: 'Psychic', damage: 25, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: { type: 'confuse', chance: 0.5, duration: 4 } },
   PsychicBlast: { type: 'Psychic', damage: 34, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'confuse', chance: 0.7, duration: 5 } },
-  ThunderShock: { type: 'Electric', damage: 15, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: { type: 'paralyze', chance: 0.2, duration: 3 } },
+  ThunderShock: { type: 'Electric', damage: 11, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: { type: 'paralyze', chance: 0.2, duration: 3 } },
   Thunderbolt: { type: 'Electric', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: { type: 'paralyze', chance: 0.3, duration: 4 } },
   Thunder: { type: 'Electric', damage: 35, warmup: 5, cooldown: 6, stamina: 65, cost: 75, effect: { type: 'paralyze', chance: 0.5, duration: 5 } },
-  LowKick: { type: 'Fighting', damage: 14, warmup: 0, cooldown: 2, stamina: 20, cost: 25, effect: null },
-  KarateChop: { type: 'Fighting', damage: 16, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
+  LowKick: { type: 'Fighting', damage: 10, warmup: 0, cooldown: 2, stamina: 20, cost: 25, effect: null },
+  KarateChop: { type: 'Fighting', damage: 12, warmup: 0, cooldown: 2, stamina: 25, cost: 30, effect: null },
   Submission: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 50, cost: 50, effect: { type: 'recoil', damagePercent: 0.1 } },
   BrickBreak: { type: 'Fighting', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: null },
   CloseCombat: { type: 'Fighting', damage: 35, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'recoil', damagePercent: 0.15 } },
   Earthquake: { type: 'Fighting', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 55, effect: null },
   AuraSphere: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 50, effect: null },
-  DrainPunch: { type: 'Fighting', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'drain', chance: 0.5, duration: 1, healPercent: 0.25 } },
+  DrainPunch: { type: 'Fighting', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'drain', chance: 0.5, duration: 1, healPercent: 0.5 } },
   DynamicPunch: { type: 'Fighting', damage: 30, warmup: 4, cooldown: 5, stamina: 50, cost: 60, effect: { type: 'confuse', chance: 0.5, duration: 3 } },
-  Tackle: { type: 'Normal', damage: 12, warmup: 1, cooldown: 2, stamina: 20, cost: 30, effect: null },
+  Tackle: { type: 'Normal', damage: 7, warmup: 1, cooldown: 2, stamina: 20, cost: 30, effect: null },
   BodySlam: { type: 'Normal', damage: 21, warmup: 2, cooldown: 3, stamina: 42, cost: 35, effect: { type: 'stun', chance: 0.2, duration: 2 } },
   HyperBeam: { type: 'Normal', damage: 38, warmup: 8, cooldown: 8, stamina: 65, cost: 80, effect: { type: 'exhaust', duration: 3 } },
   SacredFire: { type: 'Fire', damage: 38, warmup: 6, cooldown: 6, stamina: 85, cost: 80, effect: { type: 'burn', duration: 2 } },
@@ -336,7 +336,7 @@ const MOVES = {
   Hypnosis: { type: 'Psychic', damage: 20, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'sleep', chance: 0.6, duration: 3 } },
   Psyshock: { type: 'Psychic', damage: 28, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: { type: 'confuse', chance: 0.35, duration: 4 } },
   ZenHeadbutt: { type: 'Psychic', damage: 24, warmup: 2, cooldown: 4, stamina: 35, cost: 45, effect: { type: 'confuse', chance: 0.25, duration: 3 } },
-  QuickAttack: { type: 'Normal', damage: 14, warmup: 0, cooldown: 2, stamina: 22, cost: 30, effect: null },
+  QuickAttack: { type: 'Normal', damage: 10, warmup: 0, cooldown: 2, stamina: 22, cost: 30, effect: null },
   ExtremeSpeed: { type: 'Normal', damage: 19, warmup: 0, cooldown: 3, stamina: 38, cost: 52, effect: null },
   DoubleEdge: { type: 'Normal', damage: 34, warmup: 3, cooldown: 5, stamina: 58, cost: 68, effect: { type: 'recoil', damagePercent: 0.25 } },
   StoneEdge: { type: 'Normal', damage: 27, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: null },
@@ -358,7 +358,7 @@ const MOVES = {
   // Additional moves from support card hints
   AirSlash: { type: 'Normal', damage: 25, warmup: 2, cooldown: 3, stamina: 40, cost: 50, effect: { type: 'confuse', chance: 0.3, duration: 2 } },
   AncientPower: { type: 'Normal', damage: 20, warmup: 2, cooldown: 3, stamina: 35, cost: 45, effect: { type: 'buff_all', chance: 0.1 } },
-  AquaRing: { type: 'Water', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'regen', duration: 5, healPercent: 0.02 } },
+  AquaRing: { type: 'Water', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'regen', duration: 5, healPercent: 0.06 } },
   Attract: { type: 'Normal', damage: 0, warmup: 1, cooldown: 5, stamina: 25, cost: 35, effect: { type: 'infatuate', chance: 0.5, duration: 3 } },
   BlastBurn: { type: 'Fire', damage: 42, warmup: 6, cooldown: 8, stamina: 68, cost: 85, effect: { type: 'exhaust', duration: 2 } },
   BraveBird: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 58, cost: 72, effect: { type: 'recoil', damagePercent: 0.25 } },
@@ -391,18 +391,18 @@ const MOVES = {
   IronDefense: { type: 'Normal', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_defense', duration: 4 } },
   MeteorMash: { type: 'Normal', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'buff_attack', chance: 0.2, duration: 3 } },
   Metronome: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'random_move' } },
-  MilkDrink: { type: 'Normal', damage: 0, warmup: 2, cooldown: 10, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.25 } },
+  MilkDrink: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   Moonblast: { type: 'Normal', damage: 31, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'debuff_instinct', chance: 0.3, duration: 2 } },
-  Moonlight: { type: 'Normal', damage: 0, warmup: 2, cooldown: 10, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.25 } },
+  Moonlight: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   NastyPlot: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_instinct', duration: 4 } },
   Outrage: { type: 'Fighting', damage: 36, warmup: 4, cooldown: 6, stamina: 58, cost: 72, effect: { type: 'confuse_self_after', duration: 2 } },
   PowerGem: { type: 'Normal', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
   Present: { type: 'Normal', damage: 20, warmup: 1, cooldown: 3, stamina: 30, cost: 40, effect: { type: 'random_damage_or_heal' } },
   RapidSpin: { type: 'Normal', damage: 15, warmup: 1, cooldown: 2, stamina: 25, cost: 35, effect: { type: 'remove_hazards' } },
-  Recover: { type: 'Normal', damage: 0, warmup: 2, cooldown: 10, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.25 } },
+  Recover: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   RockPolish: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_speed', duration: 4 } },
   Rollout: { type: 'Normal', damage: 12, warmup: 1, cooldown: 2, stamina: 25, cost: 35, effect: { type: 'consecutive_boost', maxHits: 5 } },
-  Roost: { type: 'Normal', damage: 0, warmup: 2, cooldown: 10, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.25 } },
+  Roost: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   Sandstorm: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_sand', duration: 5 } },
   Screech: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'debuff_defense', duration: 3 } },
   Slash: { type: 'Normal', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 48, effect: { type: 'high_crit' } },
@@ -411,7 +411,7 @@ const MOVES = {
   Spikes: { type: 'Normal', damage: 0, warmup: 2, cooldown: 6, stamina: 30, cost: 40, effect: { type: 'entry_hazard', layers: 3 } },
   StealthRock: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 6, stamina: 30, cost: 40, effect: { type: 'entry_hazard_rock' } },
   SwordsDance: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack', duration: 4 } },
-  Synthesis: { type: 'Grass', damage: 0, warmup: 2, cooldown: 10, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.25 } },
+  Synthesis: { type: 'Grass', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   ThunderWave: { type: 'Electric', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'paralyze', chance: 0.9, duration: 5 } },
   Toxic: { type: 'Grass', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'badly_poison', duration: 6 } },
   Transform: { type: 'Normal', damage: 0, warmup: 3, cooldown: 10, stamina: 40, cost: 50, effect: { type: 'copy_opponent' } },
@@ -541,7 +541,7 @@ const POKEMON = {
     typeAptitudes: { Red: 'A', Blue: 'D', Green: 'C', Purple: 'B', Yellow: 'B', Orange: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'ShadowBall'],
+    learnableAbilities: ['Flamethrower', 'BodySlam', 'FireBlast', 'WaterGun', 'ThunderShock'],
     isStarter: true
   },
   Squirtle: {
@@ -551,7 +551,7 @@ const POKEMON = {
     typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'B', Yellow: 'B', Orange: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'B', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'QuickAttack', 'PsyBeam'],
+    learnableAbilities: ['Surf', 'BodySlam', 'HydroPump', 'VineWhip', 'Ember'],
     isStarter: true
   },
   Bulbasaur: {
@@ -561,7 +561,7 @@ const POKEMON = {
     typeAptitudes: { Red: 'D', Blue: 'C', Green: 'A', Purple: 'B', Yellow: 'B', Orange: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'SwordsDance', 'Psychic'],
+    learnableAbilities: ['RazorLeaf', 'BodySlam', 'SolarBeam', 'WaterGun', 'PsyBeam'],
     isStarter: true
   },
   Pikachu: {
@@ -571,7 +571,8 @@ const POKEMON = {
     typeAptitudes: { Red: 'B', Blue: 'C', Green: 'B', Purple: 'C', Yellow: 'A', Orange: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
-    learnableAbilities: ['Thunderbolt', 'Thunder', 'Flamethrower']
+    learnableAbilities: ['Tackle', 'QuickAttack', 'Thunderbolt', 'BodySlam', 'Thunder', 'BrickBreak', 'HyperBeam', 'Ember'],
+    isStarter: true
   },
   Gastly: {
     name: 'Gastly',
@@ -580,9 +581,10 @@ const POKEMON = {
     typeAptitudes: { Red: 'B', Blue: 'B', Green: 'C', Purple: 'A', Yellow: 'D', Orange: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'A', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['Psychic', 'Hypnosis', 'Flamethrower']
+    learnableAbilities: ['Psychic', 'BodySlam', 'PsychicBlast', 'VineWhip', 'ThunderShock'],
+    isStarter: true
   },
-
+  
   // 25 Additional Wild Pokemons
   Growlithe: {
     name: 'Growlithe',
@@ -2154,15 +2156,6 @@ const POKEMON = {
     defaultAbilities: ['Headbutt', 'IronDefense', 'Spark'],
     learnableAbilities: ['BodySlam', 'DoubleEdge', 'Thunderbolt']
   },
-  Skitty: {
-    name: 'Skitty',
-    primaryType: 'Normal',
-    baseStats: { HP: 81, Attack: 65, Defense: 63, Instinct: 83, Speed: 88 },
-    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
-    defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'PlayRough']
-  },
   Gulpin: {
     name: 'Gulpin',
     primaryType: 'Psychic',
@@ -2534,15 +2527,6 @@ const POKEMON = {
     defaultAbilities: ['Tackle'],
     learnableAbilities: ['StoneEdge', 'BodySlam']
   },
-  Skorupi: {
-    name: 'Skorupi',
-    primaryType: 'Psychic',
-    baseStats: { HP: 79, Attack: 77, Defense: 84, Instinct: 69, Speed: 71 },
-    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'D' },
-    defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['Psychic', 'BodySlam']
-  },
   Carnivine: {
     name: 'Carnivine',
     primaryType: 'Grass',
@@ -2731,15 +2715,6 @@ const POKEMON = {
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
     learnableAbilities: ['Thunderbolt', 'BodySlam']
-  },
-  Klefki: {
-    name: 'Klefki',
-    primaryType: 'Normal',
-    baseStats: { HP: 79, Attack: 71, Defense: 85, Instinct: 82, Speed: 83 },
-    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'D' },
-    defaultAbilities: ['Tackle'],
-    learnableAbilities: ['PlayRough', 'BodySlam']
   },
   Carbink: {
     name: 'Carbink',
@@ -3199,14 +3174,461 @@ const GYM_LEADER_POKEMON = {
     defaultAbilities: ['SolarBeam', 'Psychic', 'GigaDrain'],
     learnableAbilities: ['LeafStorm', 'PsychicBlast', 'SludgeBomb']
   },
-  BrunoMachamp: {
-    name: 'Machamp',
+  // ============================================================================
+  // COMMON TIER SUPPORTS AS GYM LEADERS
+  // ============================================================================
+  WhitneyMiltank: {
+    name: 'Miltank',
+    primaryType: 'Normal',
+    baseStats: { HP: 140, Attack: 90, Defense: 115, Instinct: 65, Speed: 85 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'B' },
+    defaultAbilities: ['BodySlam', 'IronHead', 'Earthquake'],
+    learnableAbilities: ['HyperBeam', 'StoneEdge', 'IronDefense']
+  },
+  ChuckPoliwrath: {
+    name: 'Poliwrath',
     primaryType: 'Fighting',
-    baseStats: { HP: 130, Attack: 130, Defense: 85, Instinct: 70, Speed: 60 },
-    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'D', Yellow: 'C', Orange: 'S' },
+    baseStats: { HP: 130, Attack: 105, Defense: 100, Instinct: 80, Speed: 80 },
+    typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'C', Yellow: 'C', Orange: 'A' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'B', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['CloseCombat', 'Surf', 'IceBeam'],
+    learnableAbilities: ['HydroPump', 'Earthquake', 'BulkUp']
+  },
+  PryceDelibird: {
+    name: 'Piloswine',
+    primaryType: 'Water',
+    baseStats: { HP: 140, Attack: 105, Defense: 95, Instinct: 70, Speed: 65 },
+    typeAptitudes: { Red: 'D', Blue: 'B', Green: 'C', Purple: 'C', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'B', Debuffer: 'C', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['Blizzard', 'Earthquake', 'IceBeam'],
+    learnableAbilities: ['StoneEdge', 'IronHead', 'AncientPower']
+  },
+
+  // ============================================================================
+  // UNCOMMON TIER SUPPORTS AS GYM LEADERS
+  // ============================================================================
+  BrockOnix: {
+    name: 'Golem',
+    primaryType: 'Fighting',
+    baseStats: { HP: 125, Attack: 115, Defense: 140, Instinct: 60, Speed: 55 },
+    typeAptitudes: { Red: 'B', Blue: 'D', Green: 'C', Purple: 'C', Yellow: 'C', Orange: 'A' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'C', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
+    defaultAbilities: ['Earthquake', 'StoneEdge', 'RockSlide'],
+    learnableAbilities: ['IronHead', 'Explosion', 'IronDefense']
+  },
+  KogaMuk: {
+    name: 'Muk',
+    primaryType: 'Psychic',
+    baseStats: { HP: 145, Attack: 115, Defense: 90, Instinct: 75, Speed: 65 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'B', Purple: 'A', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'B', Debuffer: 'A', Chipper: 'C', MadLad: 'C' },
+    defaultAbilities: ['SludgeBomb', 'DarkPulse', 'ShadowBall'],
+    learnableAbilities: ['Explosion', 'Flamethrower', 'IceBeam']
+  },
+  JasmineSteelix: {
+    name: 'Steelix',
+    primaryType: 'Fighting',
+    baseStats: { HP: 120, Attack: 95, Defense: 200, Instinct: 70, Speed: 40 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'B', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'S', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
+    defaultAbilities: ['IronTail', 'Earthquake', 'StoneEdge'],
+    learnableAbilities: ['IronHead', 'DragonTail', 'IronDefense']
+  },
+  KarenUmbreon: {
+    name: 'Umbreon',
+    primaryType: 'Psychic',
+    baseStats: { HP: 145, Attack: 75, Defense: 130, Instinct: 115, Speed: 75 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'S', Yellow: 'C', Orange: 'D' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'A', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['DarkPulse', 'ShadowBall', 'Psychic'],
+    learnableAbilities: ['Moonblast', 'IronDefense', 'Curse']
+  },
+  MiloEldegoss: {
+    name: 'Eldegoss',
+    primaryType: 'Grass',
+    baseStats: { HP: 115, Attack: 65, Defense: 100, Instinct: 105, Speed: 80 },
+    typeAptitudes: { Red: 'D', Blue: 'B', Green: 'A', Purple: 'C', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['GigaDrain', 'LeafStorm', 'SolarBeam'],
+    learnableAbilities: ['SludgeBomb', 'CottonGuard', 'Moonblast']
+  },
+  KabuCentiskorch: {
+    name: 'Centiskorch',
+    primaryType: 'Fire',
+    baseStats: { HP: 140, Attack: 125, Defense: 80, Instinct: 75, Speed: 75 },
+    typeAptitudes: { Red: 'S', Blue: 'D', Green: 'B', Purple: 'C', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['FlareBlitz', 'FireBlast', 'Crunch'],
+    learnableAbilities: ['LavaPlume', 'PowerWhip', 'HyperBeam']
+  },
+  MelonyLapras: {
+    name: 'Froslass',
+    primaryType: 'Water',
+    baseStats: { HP: 100, Attack: 90, Defense: 80, Instinct: 110, Speed: 110 },
+    typeAptitudes: { Red: 'D', Blue: 'B', Green: 'C', Purple: 'A', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'A', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['Blizzard', 'ShadowBall', 'IceBeam'],
+    learnableAbilities: ['Psychic', 'Thunderbolt', 'DestinyBond']
+  },
+  GordieCoalossal: {
+    name: 'Coalossal',
+    primaryType: 'Fire',
+    baseStats: { HP: 150, Attack: 95, Defense: 140, Instinct: 65, Speed: 40 },
+    typeAptitudes: { Red: 'A', Blue: 'D', Green: 'C', Purple: 'C', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'S', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
+    defaultAbilities: ['FlareBlitz', 'StoneEdge', 'Earthquake'],
+    learnableAbilities: ['FireBlast', 'IronHead', 'IronDefense']
+  },
+  KlaraSlowbro: {
+    name: 'Slowbro',
+    primaryType: 'Psychic',
+    baseStats: { HP: 135, Attack: 85, Defense: 130, Instinct: 105, Speed: 40 },
+    typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'A', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'C', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
+    defaultAbilities: ['Psychic', 'Surf', 'SludgeBomb'],
+    learnableAbilities: ['IceBeam', 'Flamethrower', 'IronDefense']
+  },
+  AverySlowking: {
+    name: 'Slowking',
+    primaryType: 'Psychic',
+    baseStats: { HP: 135, Attack: 85, Defense: 95, Instinct: 130, Speed: 40 },
+    typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'S', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'B', Debuffer: 'A', Chipper: 'C', MadLad: 'C' },
+    defaultAbilities: ['PsychicBlast', 'Surf', 'ShadowBall'],
+    learnableAbilities: ['IceBeam', 'Flamethrower', 'CalmMind']
+  },
+  IonoBellibolt: {
+    name: 'Bellibolt',
+    primaryType: 'Electric',
+    baseStats: { HP: 160, Attack: 85, Defense: 100, Instinct: 105, Speed: 45 },
+    typeAptitudes: { Red: 'C', Blue: 'B', Green: 'C', Purple: 'C', Yellow: 'S', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'C', Debuffer: 'B', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['Thunder', 'Thunderbolt', 'Surf'],
+    learnableAbilities: ['WildCharge', 'SludgeBomb', 'IronDefense']
+  },
+  GrushaAltaria: {
+    name: 'Altaria',
+    primaryType: 'Grass',
+    baseStats: { HP: 115, Attack: 80, Defense: 105, Instinct: 105, Speed: 85 },
+    typeAptitudes: { Red: 'B', Blue: 'B', Green: 'B', Purple: 'C', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'C', Debuffer: 'B', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['DragonPulse', 'Moonblast', 'IceBeam'],
+    learnableAbilities: ['DragonDance', 'SkyAttack', 'Earthquake']
+  },
+
+  // ============================================================================
+  // RARE TIER SUPPORTS AS GYM LEADERS
+  // ============================================================================
+  MortyGengar: {
+    name: 'Gengar',
+    primaryType: 'Psychic',
+    baseStats: { HP: 110, Attack: 130, Defense: 70, Instinct: 140, Speed: 120 },
+    typeAptitudes: { Red: 'B', Blue: 'B', Green: 'C', Purple: 'S', Yellow: 'D', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'A', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['ShadowBall', 'Psychic', 'DarkPulse'],
+    learnableAbilities: ['SludgeBomb', 'Hypnosis', 'DreamEater']
+  },
+  IrisHaxorus: {
+    name: 'Haxorus',
+    primaryType: 'Fighting',
+    baseStats: { HP: 120, Attack: 155, Defense: 100, Instinct: 65, Speed: 105 },
+    typeAptitudes: { Red: 'B', Blue: 'B', Green: 'B', Purple: 'C', Yellow: 'C', Orange: 'A' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'S', Debuffer: 'D', Chipper: 'B', MadLad: 'A' },
+    defaultAbilities: ['DragonClaw', 'Earthquake', 'IronHead'],
+    learnableAbilities: ['DragonDance', 'Outrage', 'StoneEdge']
+  },
+  BlueBlastoise: {
+    name: 'Blastoise',
+    primaryType: 'Water',
+    baseStats: { HP: 129, Attack: 93, Defense: 120, Instinct: 95, Speed: 88 },
+    typeAptitudes: { Red: 'C', Blue: 'S', Green: 'D', Purple: 'B', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'B', Debuffer: 'C', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['HydroPump', 'IceBeam', 'DragonPulse'],
+    learnableAbilities: ['Surf', 'Earthquake', 'IronDefense']
+  },
+  MaxieCamerupt: {
+    name: 'Camerupt',
+    primaryType: 'Fire',
+    baseStats: { HP: 130, Attack: 115, Defense: 90, Instinct: 115, Speed: 45 },
+    typeAptitudes: { Red: 'A', Blue: 'D', Green: 'C', Purple: 'C', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['Eruption', 'Earthquake', 'LavaPlume'],
+    learnableAbilities: ['FlareBlitz', 'StoneEdge', 'IronHead']
+  },
+  ArchieSharpedo: {
+    name: 'Sharpedo',
+    primaryType: 'Water',
+    baseStats: { HP: 100, Attack: 140, Defense: 55, Instinct: 105, Speed: 105 },
+    typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'B', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'S', Debuffer: 'C', Chipper: 'A', MadLad: 'A' },
+    defaultAbilities: ['HydroPump', 'Crunch', 'IceBeam'],
+    learnableAbilities: ['Surf', 'DarkPulse', 'Earthquake']
+  },
+  RaihanDuraludon: {
+    name: 'Duraludon',
+    primaryType: 'Electric',
+    baseStats: { HP: 100, Attack: 105, Defense: 125, Instinct: 135, Speed: 85 },
+    typeAptitudes: { Red: 'B', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'A', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['DragonPulse', 'Thunderbolt', 'IronHead'],
+    learnableAbilities: ['FlashCannon', 'DracoMeteor', 'BodyPress']
+  },
+  MarnieGrimmsnarl: {
+    name: 'Grimmsnarl',
+    primaryType: 'Psychic',
+    baseStats: { HP: 135, Attack: 130, Defense: 75, Instinct: 90, Speed: 70 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'C', Orange: 'D' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'B', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['DarkPulse', 'PlayRough', 'ShadowBall'],
+    learnableAbilities: ['BulkUp', 'IronHead', 'DrainPunch']
+  },
+  NessaDrednaw: {
+    name: 'Drednaw',
+    primaryType: 'Water',
+    baseStats: { HP: 130, Attack: 125, Defense: 110, Instinct: 70, Speed: 80 },
+    typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'C', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['HydroPump', 'StoneEdge', 'Crunch'],
+    learnableAbilities: ['Surf', 'Earthquake', 'IronDefense']
+  },
+  BeaSirfetchd: {
+    name: 'Sirfetchd',
+    primaryType: 'Fighting',
+    baseStats: { HP: 112, Attack: 145, Defense: 105, Instinct: 68, Speed: 75 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'B', Purple: 'D', Yellow: 'C', Orange: 'S' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'S', Debuffer: 'C', Chipper: 'B', MadLad: 'A' },
+    defaultAbilities: ['CloseCombat', 'LeafBlade', 'BraveBird'],
+    learnableAbilities: ['SwordsDance', 'IronHead', 'KnockOff']
+  },
+  OpalAlcremie: {
+    name: 'Alcremie',
+    primaryType: 'Normal',
+    baseStats: { HP: 115, Attack: 70, Defense: 85, Instinct: 130, Speed: 75 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'B', Yellow: 'C', Orange: 'D' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'C', Debuffer: 'B', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['Moonblast', 'DazzlingGleam', 'Psychic'],
+    learnableAbilities: ['CalmMind', 'Recover', 'Encore']
+  },
+  PiersObstagoon: {
+    name: 'Obstagoon',
+    primaryType: 'Psychic',
+    baseStats: { HP: 128, Attack: 110, Defense: 105, Instinct: 70, Speed: 102 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'C', Orange: 'D' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'B', Debuffer: 'B', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['DarkPulse', 'CloseCombat', 'ShadowBall'],
+    learnableAbilities: ['IronHead', 'IceBeam', 'Earthquake']
+  },
+  RikaClodsire: {
+    name: 'Clodsire',
+    primaryType: 'Fighting',
+    baseStats: { HP: 175, Attack: 85, Defense: 105, Instinct: 75, Speed: 30 },
+    typeAptitudes: { Red: 'C', Blue: 'B', Green: 'C', Purple: 'B', Yellow: 'D', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'S', Nuker: 'D', Debuffer: 'A', Chipper: 'C', MadLad: 'C' },
+    defaultAbilities: ['Earthquake', 'SludgeBomb', 'Surf'],
+    learnableAbilities: ['IceBeam', 'IronDefense', 'Recover']
+  },
+  PoppyTinkaton: {
+    name: 'Tinkaton',
+    primaryType: 'Normal',
+    baseStats: { HP: 110, Attack: 85, Defense: 90, Instinct: 100, Speed: 104 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'B', Yellow: 'B', Orange: 'D' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['PlayRough', 'IronHead', 'StoneEdge'],
+    learnableAbilities: ['SwordsDance', 'DrainPunch', 'Thunderbolt']
+  },
+
+  // ============================================================================
+  // LEGENDARY TIER SUPPORTS AS GYM LEADERS
+  // ============================================================================
+  CynthiaGarchomp: {
+    name: 'Garchomp',
+    primaryType: 'Fighting',
+    baseStats: { HP: 148, Attack: 140, Defense: 105, Instinct: 90, Speed: 112 },
+    typeAptitudes: { Red: 'B', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'C', Orange: 'A' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'A', MadLad: 'A' },
+    defaultAbilities: ['Earthquake', 'DragonClaw', 'StoneEdge'],
+    learnableAbilities: ['DragonDance', 'Outrage', 'IronHead']
+  },
+  RedCharizard: {
+    name: 'Charizard',
+    primaryType: 'Fire',
+    baseStats: { HP: 128, Attack: 94, Defense: 88, Instinct: 115, Speed: 120 },
+    typeAptitudes: { Red: 'S', Blue: 'D', Green: 'B', Purple: 'C', Yellow: 'C', Orange: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
-    defaultAbilities: ['CloseCombat', 'DynamicPunch', 'Earthquake'],
-    learnableAbilities: ['StoneEdge', 'BulkUp', 'KnockOff']
+    defaultAbilities: ['FlareBlitz', 'AirSlash', 'DragonPulse'],
+    learnableAbilities: ['BlastBurn', 'DragonDance', 'Earthquake']
+  },
+  StevenMetagross: {
+    name: 'Metagross',
+    primaryType: 'Psychic',
+    baseStats: { HP: 130, Attack: 145, Defense: 140, Instinct: 100, Speed: 80 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'B', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['IronHead', 'Psychic', 'Earthquake'],
+    learnableAbilities: ['MeteorMash', 'ZenHeadbutt', 'IronDefense']
+  },
+  NReshiram: {
+    name: 'Reshiram',
+    primaryType: 'Fire',
+    baseStats: { HP: 140, Attack: 135, Defense: 105, Instinct: 145, Speed: 100 },
+    typeAptitudes: { Red: 'S', Blue: 'C', Green: 'C', Purple: 'B', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'S', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['BlueFlare', 'DragonPulse', 'AncientPower'],
+    learnableAbilities: ['DracoMeteor', 'FlareBlitz', 'Psychic']
+  },
+  ProfessorOakDragonite: {
+    name: 'Dragonite',
+    primaryType: 'Fighting',
+    baseStats: { HP: 141, Attack: 144, Defense: 105, Instinct: 110, Speed: 90 },
+    typeAptitudes: { Red: 'B', Blue: 'B', Green: 'B', Purple: 'C', Yellow: 'B', Orange: 'A' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['DragonClaw', 'ExtremeSpeed', 'Earthquake'],
+    learnableAbilities: ['DragonDance', 'Outrage', 'IceBeam']
+  },
+  DianthaDiancie: {
+    name: 'Gardevoir',
+    primaryType: 'Psychic',
+    baseStats: { HP: 118, Attack: 75, Defense: 75, Instinct: 145, Speed: 90 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'S', Yellow: 'C', Orange: 'D' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'B', Chipper: 'A', MadLad: 'C' },
+    defaultAbilities: ['Psychic', 'Moonblast', 'ShadowBall'],
+    learnableAbilities: ['DracoMeteor', 'CalmMind', 'Hypnosis']
+  },
+  LeonCharizardGmax: {
+    name: 'Charizard',
+    primaryType: 'Fire',
+    baseStats: { HP: 138, Attack: 104, Defense: 98, Instinct: 125, Speed: 110 },
+    typeAptitudes: { Red: 'S', Blue: 'D', Green: 'B', Purple: 'C', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'S', Debuffer: 'C', Chipper: 'B', MadLad: 'A' },
+    defaultAbilities: ['BlastBurn', 'AirSlash', 'DragonPulse'],
+    learnableAbilities: ['FlareBlitz', 'DragonDance', 'SolarBeam']
+  },
+  SeleneLunala: {
+    name: 'Lunala',
+    primaryType: 'Psychic',
+    baseStats: { HP: 147, Attack: 123, Defense: 99, Instinct: 147, Speed: 107 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'S', Yellow: 'C', Orange: 'D' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'B', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['PsychicBlast', 'ShadowBall', 'Moonblast'],
+    learnableAbilities: ['DracoMeteor', 'IceBeam', 'CalmMind']
+  },
+  GloriaZacian: {
+    name: 'Zacian',
+    primaryType: 'Normal',
+    baseStats: { HP: 142, Attack: 150, Defense: 125, Instinct: 90, Speed: 148 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'B', Yellow: 'B', Orange: 'A' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'S', Debuffer: 'C', Chipper: 'A', MadLad: 'A' },
+    defaultAbilities: ['IronHead', 'PlayRough', 'CloseCombat'],
+    learnableAbilities: ['SwordsDance', 'DragonClaw', 'WildCharge']
+  },
+  NemonaKoraidon: {
+    name: 'Koraidon',
+    primaryType: 'Fighting',
+    baseStats: { HP: 140, Attack: 155, Defense: 100, Instinct: 95, Speed: 155 },
+    typeAptitudes: { Red: 'B', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'C', Orange: 'S' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'S', Debuffer: 'C', Chipper: 'A', MadLad: 'S' },
+    defaultAbilities: ['CloseCombat', 'DragonClaw', 'FlareBlitz'],
+    learnableAbilities: ['DragonDance', 'Outrage', 'Earthquake']
+  },
+  MustardUrshifu: {
+    name: 'Urshifu',
+    primaryType: 'Fighting',
+    baseStats: { HP: 140, Attack: 140, Defense: 105, Instinct: 75, Speed: 107 },
+    typeAptitudes: { Red: 'C', Blue: 'B', Green: 'C', Purple: 'B', Yellow: 'C', Orange: 'S' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'S', Debuffer: 'C', Chipper: 'B', MadLad: 'A' },
+    defaultAbilities: ['CloseCombat', 'DarkPulse', 'Surf'],
+    learnableAbilities: ['DrainPunch', 'IronHead', 'Earthquake']
+  },
+  VictorCalyrex: {
+    name: 'Calyrex',
+    primaryType: 'Psychic',
+    baseStats: { HP: 140, Attack: 90, Defense: 90, Instinct: 155, Speed: 100 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'B', Purple: 'S', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'A', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['Psychic', 'GigaDrain', 'ShadowBall'],
+    learnableAbilities: ['CalmMind', 'DracoMeteor', 'Recover']
+  },
+  ArvenMabosstiff: {
+    name: 'Mabosstiff',
+    primaryType: 'Psychic',
+    baseStats: { HP: 150, Attack: 130, Defense: 95, Instinct: 70, Speed: 75 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['DarkPulse', 'Crunch', 'PlayRough'],
+    learnableAbilities: ['CloseCombat', 'IronHead', 'DrainPunch']
+  },
+  PennySylveon: {
+    name: 'Sylveon',
+    primaryType: 'Normal',
+    baseStats: { HP: 135, Attack: 75, Defense: 75, Instinct: 140, Speed: 70 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'B', Yellow: 'C', Orange: 'D' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'B', Debuffer: 'B', Chipper: 'A', MadLad: 'C' },
+    defaultAbilities: ['Moonblast', 'Psychic', 'ShadowBall'],
+    learnableAbilities: ['CalmMind', 'DrainingKiss', 'HyperVoice']
+  },
+  SoniaBoltund: {
+    name: 'Boltund',
+    primaryType: 'Electric',
+    baseStats: { HP: 109, Attack: 100, Defense: 70, Instinct: 85, Speed: 131 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'A', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['WildCharge', 'Thunderbolt', 'PlayRough'],
+    learnableAbilities: ['Thunder', 'Crunch', 'VoltSwitch']
+  },
+  HopZamazenta: {
+    name: 'Zamazenta',
+    primaryType: 'Fighting',
+    baseStats: { HP: 142, Attack: 140, Defense: 150, Instinct: 90, Speed: 138 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'B', Orange: 'A' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['CloseCombat', 'IronHead', 'PlayRough'],
+    learnableAbilities: ['IronDefense', 'Crunch', 'WildCharge']
+  },
+  GeetaKingambit: {
+    name: 'Kingambit',
+    primaryType: 'Psychic',
+    baseStats: { HP: 140, Attack: 150, Defense: 130, Instinct: 75, Speed: 50 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'B', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'S', Debuffer: 'C', Chipper: 'C', MadLad: 'B' },
+    defaultAbilities: ['IronHead', 'DarkPulse', 'CloseCombat'],
+    learnableAbilities: ['SwordsDance', 'StoneEdge', 'Earthquake']
+  },
+  KieranTerapagos: {
+    name: 'Terapagos',
+    primaryType: 'Normal',
+    baseStats: { HP: 150, Attack: 100, Defense: 130, Instinct: 120, Speed: 80 },
+    typeAptitudes: { Red: 'B', Blue: 'B', Green: 'B', Purple: 'B', Yellow: 'B', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'B', Debuffer: 'B', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['Psychic', 'EarthPower', 'IceBeam'],
+    learnableAbilities: ['DracoMeteor', 'Flamethrower', 'Recover']
+  },
+  CarmineOgerpon: {
+    name: 'Ogerpon',
+    primaryType: 'Grass',
+    baseStats: { HP: 120, Attack: 140, Defense: 100, Instinct: 70, Speed: 130 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'S', Purple: 'C', Yellow: 'C', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'A', MadLad: 'A' },
+    defaultAbilities: ['LeafBlade', 'PlayRough', 'CloseCombat'],
+    learnableAbilities: ['SwordsDance', 'PowerWhip', 'DrainPunch']
+  },
+  DraytonArchaludon: {
+    name: 'Archaludon',
+    primaryType: 'Electric',
+    baseStats: { HP: 120, Attack: 105, Defense: 145, Instinct: 135, Speed: 85 },
+    typeAptitudes: { Red: 'B', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'A', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['Thunderbolt', 'DragonPulse', 'IronHead'],
+    learnableAbilities: ['DracoMeteor', 'FlashCannon', 'BodyPress']
+  },
+  LaceyExcadrill: {
+    name: 'Excadrill',
+    primaryType: 'Fighting',
+    baseStats: { HP: 130, Attack: 145, Defense: 70, Instinct: 55, Speed: 108 },
+    typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'C', Yellow: 'B', Orange: 'A' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'A' },
+    defaultAbilities: ['Earthquake', 'IronHead', 'RockSlide'],
+    learnableAbilities: ['SwordsDance', 'StoneEdge', 'DrillRun']
   }
 };
 
@@ -3292,11 +3714,10 @@ const SUPPORT_CARDS = {
   Cynthia: {
     name: 'Cynthia',
     trainer: 'Cynthia',
-    pokemon: 'Garchomp',
     rarity: 'Legendary',
     supportType: 'Instinct',
     baseStats: { HP: 0, Attack: 20, Defense: 0, Instinct: 45, Speed: 10 },
-    trainingBonus: { typeMatch: 9, otherStats: 2, maxFriendshipTypeMatch: 24 },
+    trainingBonus: { typeMatch: 14, otherStats: 2, maxFriendshipTypeMatch: 36 },
     initialFriendship: 10,
     appearanceRate: 0.38,
     typeMatchPreference: 0.05,
@@ -3307,11 +3728,10 @@ const SUPPORT_CARDS = {
   Red: {
     name: 'Red',
     trainer: 'Red',
-    pokemon: 'Charizard',
     rarity: 'Legendary',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 80, Defense: 0, Instinct: 10, Speed: 20 },
-    trainingBonus: { typeMatch: 10, otherStats: 1, maxFriendshipTypeMatch: 27 },
+    trainingBonus: { typeMatch: 15, otherStats: 1, maxFriendshipTypeMatch: 41 },
     initialFriendship: 0,
     appearanceRate: 0.28,
     typeMatchPreference: 0.55,
@@ -3322,7 +3742,6 @@ const SUPPORT_CARDS = {
   Steven: {
     name: 'Steven',
     trainer: 'Steven',
-    pokemon: 'Metagross',
     rarity: 'Legendary',
     supportType: 'Defense',
     baseStats: { HP: 30, Attack: 0, Defense: 60, Instinct: 10, Speed: 0 },
@@ -3337,7 +3756,6 @@ const SUPPORT_CARDS = {
   N: {
     name: 'N',
     trainer: 'N',
-    pokemon: 'Reshiram',
     rarity: 'Legendary',
     supportType: 'Instinct',
     baseStats: { HP: 0, Attack: 15, Defense: 0, Instinct: 65, Speed: 15 },
@@ -3352,7 +3770,6 @@ const SUPPORT_CARDS = {
   ProfessorOak: {
     name: 'Professor Oak',
     trainer: 'Professor Oak',
-    pokemon: 'Mew',
     rarity: 'Legendary',
     supportType: 'Instinct',
     baseStats: { HP: 20, Attack: 15, Defense: 15, Instinct: 35, Speed: 15 },
@@ -3367,7 +3784,6 @@ const SUPPORT_CARDS = {
   Diantha: {
     name: 'Diantha',
     trainer: 'Diantha',
-    pokemon: 'Diancie',
     rarity: 'Legendary',
     supportType: 'Instinct',
     baseStats: { HP: 10, Attack: 0, Defense: 15, Instinct: 40, Speed: 5 },
@@ -3382,11 +3798,10 @@ const SUPPORT_CARDS = {
   Leon: {
     name: 'Leon',
     trainer: 'Leon',
-    pokemon: 'Charizard',
     rarity: 'Legendary',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 70, Defense: 0, Instinct: 10, Speed: 25 },
-    trainingBonus: { typeMatch: 9, otherStats: 2, maxFriendshipTypeMatch: 24 },
+    trainingBonus: { typeMatch: 14, otherStats: 2, maxFriendshipTypeMatch: 36 },
     initialFriendship: 15,
     appearanceRate: 0.40,
     typeMatchPreference: 0.10,
@@ -3397,7 +3812,6 @@ const SUPPORT_CARDS = {
   Selene: {
     name: 'Selene',
     trainer: 'Selene',
-    pokemon: 'Lunala',
     rarity: 'Legendary',
     supportType: 'Instinct',
     baseStats: { HP: 15, Attack: 0, Defense: 10, Instinct: 60, Speed: 15 },
@@ -3412,7 +3826,6 @@ const SUPPORT_CARDS = {
   Gloria: {
     name: 'Gloria',
     trainer: 'Gloria',
-    pokemon: 'Zacian',
     rarity: 'Legendary',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 75, Defense: 10, Instinct: 5, Speed: 20 },
@@ -3427,7 +3840,6 @@ const SUPPORT_CARDS = {
   Nemona: {
     name: 'Nemona',
     trainer: 'Nemona',
-    pokemon: 'Koraidon',
     rarity: 'Legendary',
     supportType: 'Speed',
     baseStats: { HP: 10, Attack: 25, Defense: 0, Instinct: 10, Speed: 55 },
@@ -3442,11 +3854,10 @@ const SUPPORT_CARDS = {
   Mustard: {
     name: 'Mustard',
     trainer: 'Mustard',
-    pokemon: 'Urshifu',
     rarity: 'Legendary',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 75, Defense: 10, Instinct: 5, Speed: 15 },
-    trainingBonus: { typeMatch: 10, otherStats: 1, maxFriendshipTypeMatch: 26 },
+    trainingBonus: { typeMatch: 15, otherStats: 1, maxFriendshipTypeMatch: 39 },
     initialFriendship: 5,
     appearanceRate: 0.30,
     typeMatchPreference: 0.45,
@@ -3457,7 +3868,6 @@ const SUPPORT_CARDS = {
   Victor: {
     name: 'Victor',
     trainer: 'Victor',
-    pokemon: 'Eternatus',
     rarity: 'Legendary',
     supportType: 'Instinct',
     baseStats: { HP: 10, Attack: 10, Defense: 0, Instinct: 40, Speed: 10 },
@@ -3472,7 +3882,6 @@ const SUPPORT_CARDS = {
   Arven: {
     name: 'Arven',
     trainer: 'Arven',
-    pokemon: 'Mabosstiff',
     rarity: 'Legendary',
     supportType: 'HP',
     baseStats: { HP: 55, Attack: 20, Defense: 15, Instinct: 0, Speed: 5 },
@@ -3487,7 +3896,6 @@ const SUPPORT_CARDS = {
   Penny: {
     name: 'Penny',
     trainer: 'Penny',
-    pokemon: 'Sylveon',
     rarity: 'Legendary',
     supportType: 'Defense',
     baseStats: { HP: 30, Attack: 0, Defense: 50, Instinct: 20, Speed: 0 },
@@ -3502,7 +3910,6 @@ const SUPPORT_CARDS = {
   Sonia: {
     name: 'Sonia',
     trainer: 'Sonia',
-    pokemon: 'Yamper',
     rarity: 'Legendary',
     supportType: 'Instinct',
     baseStats: { HP: 15, Attack: 10, Defense: 10, Instinct: 50, Speed: 15 },
@@ -3517,7 +3924,6 @@ const SUPPORT_CARDS = {
   Hop: {
     name: 'Hop',
     trainer: 'Hop',
-    pokemon: 'Zamazenta',
     rarity: 'Legendary',
     supportType: 'HP',
     baseStats: { HP: 60, Attack: 10, Defense: 20, Instinct: 5, Speed: 10 },
@@ -3532,11 +3938,10 @@ const SUPPORT_CARDS = {
   Geeta: {
     name: 'Geeta',
     trainer: 'Geeta',
-    pokemon: 'Kingambit',
     rarity: 'Legendary',
     supportType: 'Instinct',
     baseStats: { HP: 10, Attack: 15, Defense: 10, Instinct: 40, Speed: 0 },
-    trainingBonus: { typeMatch: 9, otherStats: 2, maxFriendshipTypeMatch: 23 },
+    trainingBonus: { typeMatch: 14, otherStats: 2, maxFriendshipTypeMatch: 35 },
     initialFriendship: 10,
     appearanceRate: 0.35,
     typeMatchPreference: 0.35,
@@ -3547,7 +3952,6 @@ const SUPPORT_CARDS = {
   Kieran: {
     name: 'Kieran',
     trainer: 'Kieran',
-    pokemon: 'Terapagos',
     rarity: 'Legendary',
     supportType: 'Instinct',
     baseStats: { HP: 20, Attack: 0, Defense: 10, Instinct: 35, Speed: 5 },
@@ -3562,7 +3966,6 @@ const SUPPORT_CARDS = {
   Carmine: {
     name: 'Carmine',
     trainer: 'Carmine',
-    pokemon: 'Ogerpon',
     rarity: 'Legendary',
     supportType: 'Speed',
     baseStats: { HP: 10, Attack: 25, Defense: 5, Instinct: 5, Speed: 55 },
@@ -3577,7 +3980,6 @@ const SUPPORT_CARDS = {
   Drayton: {
     name: 'Drayton',
     trainer: 'Drayton',
-    pokemon: 'Archaludon',
     rarity: 'Legendary',
     supportType: 'Defense',
     baseStats: { HP: 20, Attack: 15, Defense: 55, Instinct: 10, Speed: 0 },
@@ -3592,7 +3994,6 @@ const SUPPORT_CARDS = {
   Lacey: {
     name: 'Lacey',
     trainer: 'Lacey',
-    pokemon: 'Excadrill',
     rarity: 'Legendary',
     supportType: 'Speed',
     baseStats: { HP: 0, Attack: 25, Defense: 5, Instinct: 10, Speed: 55 },
@@ -3613,11 +4014,10 @@ const SUPPORT_CARDS = {
   Lance: {
     name: 'Lance',
     trainer: 'Lance',
-    pokemon: 'Dragonite',
     rarity: 'Rare',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 55, Defense: 0, Instinct: 10, Speed: 15 },
-    trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 20 },
+    trainingBonus: { typeMatch: 11, otherStats: 2, maxFriendshipTypeMatch: 30 },
     initialFriendship: 15,
     appearanceRate: 0.35,
     typeMatchPreference: 0.10,
@@ -3628,11 +4028,10 @@ const SUPPORT_CARDS = {
   Sabrina: {
     name: 'Sabrina',
     trainer: 'Sabrina',
-    pokemon: 'Alakazam',
     rarity: 'Rare',
     supportType: 'Instinct',
     baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 55, Speed: 20 },
-    trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 18 },
+    trainingBonus: { typeMatch: 11, otherStats: 2, maxFriendshipTypeMatch: 27 },
     initialFriendship: 10,
     appearanceRate: 0.32,
     typeMatchPreference: 0.15,
@@ -3643,7 +4042,6 @@ const SUPPORT_CARDS = {
   Morty: {
     name: 'Morty',
     trainer: 'Morty',
-    pokemon: 'Gengar',
     rarity: 'Rare',
     supportType: 'Speed',
     baseStats: { HP: 0, Attack: 10, Defense: 0, Instinct: 15, Speed: 45 },
@@ -3658,7 +4056,6 @@ const SUPPORT_CARDS = {
   Wallace: {
     name: 'Wallace',
     trainer: 'Wallace',
-    pokemon: 'Milotic',
     rarity: 'Rare',
     supportType: 'HP',
     baseStats: { HP: 50, Attack: 0, Defense: 15, Instinct: 5, Speed: 0 },
@@ -3673,7 +4070,6 @@ const SUPPORT_CARDS = {
   Iris: {
     name: 'Iris',
     trainer: 'Iris',
-    pokemon: 'Haxorus',
     rarity: 'Rare',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 50, Defense: 0, Instinct: 5, Speed: 15 },
@@ -3688,7 +4084,6 @@ const SUPPORT_CARDS = {
   Blue: {
     name: 'Blue',
     trainer: 'Blue',
-    pokemon: 'Pidgeot',
     rarity: 'Rare',
     supportType: 'Speed',
     baseStats: { HP: 0, Attack: 10, Defense: 5, Instinct: 10, Speed: 45 },
@@ -3703,11 +4098,10 @@ const SUPPORT_CARDS = {
   Giovanni: {
     name: 'Giovanni',
     trainer: 'Giovanni',
-    pokemon: 'Persian',
     rarity: 'Rare',
     supportType: 'Speed',
     baseStats: { HP: 0, Attack: 15, Defense: 0, Instinct: 10, Speed: 45 },
-    trainingBonus: { typeMatch: 8, otherStats: 1, maxFriendshipTypeMatch: 21 },
+    trainingBonus: { typeMatch: 12, otherStats: 1, maxFriendshipTypeMatch: 32 },
     initialFriendship: 0,
     appearanceRate: 0.30,
     typeMatchPreference: 0.55,
@@ -3718,7 +4112,6 @@ const SUPPORT_CARDS = {
   Maxie: {
     name: 'Maxie',
     trainer: 'Maxie',
-    pokemon: 'Groudon',
     rarity: 'Rare',
     supportType: 'Defense',
     baseStats: { HP: 15, Attack: 15, Defense: 40, Instinct: 0, Speed: 0 },
@@ -3733,7 +4126,6 @@ const SUPPORT_CARDS = {
   Archie: {
     name: 'Archie',
     trainer: 'Archie',
-    pokemon: 'Kyogre',
     rarity: 'Rare',
     supportType: 'HP',
     baseStats: { HP: 55, Attack: 0, Defense: 10, Instinct: 5, Speed: 0 },
@@ -3748,7 +4140,6 @@ const SUPPORT_CARDS = {
   Raihan: {
     name: 'Raihan',
     trainer: 'Raihan',
-    pokemon: 'Duraludon',
     rarity: 'Rare',
     supportType: 'Defense',
     baseStats: { HP: 10, Attack: 15, Defense: 40, Instinct: 5, Speed: 5 },
@@ -3763,7 +4154,6 @@ const SUPPORT_CARDS = {
   Marnie: {
     name: 'Marnie',
     trainer: 'Marnie',
-    pokemon: 'Grimmsnarl',
     rarity: 'Rare',
     supportType: 'Attack',
     baseStats: { HP: 10, Attack: 45, Defense: 15, Instinct: 5, Speed: 5 },
@@ -3778,7 +4168,6 @@ const SUPPORT_CARDS = {
   Nessa: {
     name: 'Nessa',
     trainer: 'Nessa',
-    pokemon: 'Drednaw',
     rarity: 'Rare',
     supportType: 'HP',
     baseStats: { HP: 45, Attack: 15, Defense: 10, Instinct: 0, Speed: 5 },
@@ -3793,11 +4182,10 @@ const SUPPORT_CARDS = {
   Bea: {
     name: 'Bea',
     trainer: 'Bea',
-    pokemon: 'Machamp',
     rarity: 'Rare',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 55, Defense: 10, Instinct: 0, Speed: 10 },
-    trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 18 },
+    trainingBonus: { typeMatch: 11, otherStats: 2, maxFriendshipTypeMatch: 27 },
     initialFriendship: 10,
     appearanceRate: 0.35,
     typeMatchPreference: 0.30,
@@ -3808,7 +4196,6 @@ const SUPPORT_CARDS = {
   Opal: {
     name: 'Opal',
     trainer: 'Opal',
-    pokemon: 'Alcremie',
     rarity: 'Rare',
     supportType: 'HP',
     baseStats: { HP: 45, Attack: 0, Defense: 15, Instinct: 15, Speed: 0 },
@@ -3823,7 +4210,6 @@ const SUPPORT_CARDS = {
   Piers: {
     name: 'Piers',
     trainer: 'Piers',
-    pokemon: 'Toxtricity',
     rarity: 'Rare',
     supportType: 'Speed',
     baseStats: { HP: 0, Attack: 20, Defense: 0, Instinct: 5, Speed: 45 },
@@ -3838,7 +4224,6 @@ const SUPPORT_CARDS = {
   Rika: {
     name: 'Rika',
     trainer: 'Rika',
-    pokemon: 'Whiscash',
     rarity: 'Rare',
     supportType: 'HP',
     baseStats: { HP: 50, Attack: 10, Defense: 10, Instinct: 5, Speed: 0 },
@@ -3853,7 +4238,6 @@ const SUPPORT_CARDS = {
   Poppy: {
     name: 'Poppy',
     trainer: 'Poppy',
-    pokemon: 'Tinkaton',
     rarity: 'Rare',
     supportType: 'Defense',
     baseStats: { HP: 10, Attack: 20, Defense: 35, Instinct: 5, Speed: 5 },
@@ -3874,11 +4258,10 @@ const SUPPORT_CARDS = {
   Misty: {
     name: 'Misty',
     trainer: 'Misty',
-    pokemon: 'Starmie',
     rarity: 'Uncommon',
     supportType: 'HP',
     baseStats: { HP: 35, Attack: 0, Defense: 10, Instinct: 5, Speed: 5 },
-    trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 14 },
+    trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 21 },
     initialFriendship: 30,
     appearanceRate: 0.48,
     typeMatchPreference: 0.25,
@@ -3889,7 +4272,6 @@ const SUPPORT_CARDS = {
   Brock: {
     name: 'Brock',
     trainer: 'Brock',
-    pokemon: 'Onix',
     rarity: 'Uncommon',
     supportType: 'Defense',
     baseStats: { HP: 10, Attack: 0, Defense: 35, Instinct: 0, Speed: 0 },
@@ -3904,7 +4286,6 @@ const SUPPORT_CARDS = {
   Erika: {
     name: 'Erika',
     trainer: 'Erika',
-    pokemon: 'Tangela',
     rarity: 'Uncommon',
     supportType: 'HP',
     baseStats: { HP: 35, Attack: 0, Defense: 10, Instinct: 0, Speed: 0 },
@@ -3919,11 +4300,10 @@ const SUPPORT_CARDS = {
   Blaine: {
     name: 'Blaine',
     trainer: 'Blaine',
-    pokemon: 'Magmar',
     rarity: 'Uncommon',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 40, Defense: 0, Instinct: 5, Speed: 5 },
-    trainingBonus: { typeMatch: 6, otherStats: 2, maxFriendshipTypeMatch: 15 },
+    trainingBonus: { typeMatch: 9, otherStats: 2, maxFriendshipTypeMatch: 23 },
     initialFriendship: 15,
     appearanceRate: 0.30,
     typeMatchPreference: 0.10,
@@ -3934,11 +4314,10 @@ const SUPPORT_CARDS = {
   Koga: {
     name: 'Koga',
     trainer: 'Koga',
-    pokemon: 'Weezing',
     rarity: 'Uncommon',
     supportType: 'Speed',
     baseStats: { HP: 0, Attack: 5, Defense: 10, Instinct: 5, Speed: 30 },
-    trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 14 },
+    trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 21 },
     initialFriendship: 10,
     appearanceRate: 0.35,
     typeMatchPreference: 0.35,
@@ -3949,11 +4328,10 @@ const SUPPORT_CARDS = {
   Jasmine: {
     name: 'Jasmine',
     trainer: 'Jasmine',
-    pokemon: 'Steelix',
     rarity: 'Uncommon',
     supportType: 'Defense',
     baseStats: { HP: 10, Attack: 0, Defense: 35, Instinct: 0, Speed: 0 },
-    trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 14 },
+    trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 21 },
     initialFriendship: 30,
     appearanceRate: 0.40,
     typeMatchPreference: 0.30,
@@ -3964,7 +4342,6 @@ const SUPPORT_CARDS = {
   Winona: {
     name: 'Winona',
     trainer: 'Winona',
-    pokemon: 'Skarmory',
     rarity: 'Uncommon',
     supportType: 'Speed',
     baseStats: { HP: 0, Attack: 5, Defense: 15, Instinct: 0, Speed: 30 },
@@ -3979,11 +4356,10 @@ const SUPPORT_CARDS = {
   Karen: {
     name: 'Karen',
     trainer: 'Karen',
-    pokemon: 'Umbreon',
     rarity: 'Uncommon',
     supportType: 'Defense',
     baseStats: { HP: 10, Attack: 0, Defense: 30, Instinct: 10, Speed: 0 },
-    trainingBonus: { typeMatch: 6, otherStats: 2, maxFriendshipTypeMatch: 15 },
+    trainingBonus: { typeMatch: 9, otherStats: 2, maxFriendshipTypeMatch: 23 },
     initialFriendship: 5,
     appearanceRate: 0.25,
     typeMatchPreference: 0.15,
@@ -3994,11 +4370,10 @@ const SUPPORT_CARDS = {
   Agatha: {
     name: 'Agatha',
     trainer: 'Agatha',
-    pokemon: 'Gengar',
     rarity: 'Uncommon',
     supportType: 'Instinct',
     baseStats: { HP: 0, Attack: 10, Defense: 0, Instinct: 35, Speed: 5 },
-    trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 14 },
+    trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 21 },
     initialFriendship: 20,
     appearanceRate: 0.32,
     typeMatchPreference: 0.40,
@@ -4009,7 +4384,6 @@ const SUPPORT_CARDS = {
   Milo: {
     name: 'Milo',
     trainer: 'Milo',
-    pokemon: 'Eldegoss',
     rarity: 'Uncommon',
     supportType: 'HP',
     baseStats: { HP: 35, Attack: 0, Defense: 10, Instinct: 5, Speed: 0 },
@@ -4024,11 +4398,10 @@ const SUPPORT_CARDS = {
   Kabu: {
     name: 'Kabu',
     trainer: 'Kabu',
-    pokemon: 'Centiskorch',
     rarity: 'Uncommon',
     supportType: 'Attack',
     baseStats: { HP: 5, Attack: 38, Defense: 5, Instinct: 0, Speed: 5 },
-    trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 14 },
+    trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 21 },
     initialFriendship: 15,
     appearanceRate: 0.38,
     typeMatchPreference: 0.25,
@@ -4039,7 +4412,6 @@ const SUPPORT_CARDS = {
   Melony: {
     name: 'Melony',
     trainer: 'Melony',
-    pokemon: 'Lapras',
     rarity: 'Uncommon',
     supportType: 'HP',
     baseStats: { HP: 40, Attack: 0, Defense: 10, Instinct: 5, Speed: 0 },
@@ -4054,7 +4426,6 @@ const SUPPORT_CARDS = {
   Gordie: {
     name: 'Gordie',
     trainer: 'Gordie',
-    pokemon: 'Coalossal',
     rarity: 'Uncommon',
     supportType: 'Defense',
     baseStats: { HP: 10, Attack: 5, Defense: 35, Instinct: 0, Speed: 0 },
@@ -4069,7 +4440,6 @@ const SUPPORT_CARDS = {
   Klara: {
     name: 'Klara',
     trainer: 'Klara',
-    pokemon: 'Slowbro',
     rarity: 'Uncommon',
     supportType: 'Defense',
     baseStats: { HP: 15, Attack: 0, Defense: 30, Instinct: 5, Speed: 0 },
@@ -4084,7 +4454,6 @@ const SUPPORT_CARDS = {
   Avery: {
     name: 'Avery',
     trainer: 'Avery',
-    pokemon: 'Rapidash',
     rarity: 'Uncommon',
     supportType: 'Speed',
     baseStats: { HP: 0, Attack: 10, Defense: 5, Instinct: 10, Speed: 30 },
@@ -4099,11 +4468,10 @@ const SUPPORT_CARDS = {
   Iono: {
     name: 'Iono',
     trainer: 'Iono',
-    pokemon: 'Luxray',
     rarity: 'Uncommon',
     supportType: 'Speed',
     baseStats: { HP: 0, Attack: 15, Defense: 0, Instinct: 10, Speed: 30 },
-    trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 14 },
+    trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 21 },
     initialFriendship: 60,
     appearanceRate: 0.60,
     typeMatchPreference: 0.15,
@@ -4114,7 +4482,6 @@ const SUPPORT_CARDS = {
   Grusha: {
     name: 'Grusha',
     trainer: 'Grusha',
-    pokemon: 'Altaria',
     rarity: 'Uncommon',
     supportType: 'Defense',
     baseStats: { HP: 10, Attack: 0, Defense: 30, Instinct: 10, Speed: 5 },
@@ -4135,7 +4502,6 @@ const SUPPORT_CARDS = {
   Whitney: {
     name: 'Whitney',
     trainer: 'Whitney',
-    pokemon: 'Miltank',
     rarity: 'Common',
     supportType: 'HP',
     baseStats: { HP: 25, Attack: 0, Defense: 5, Instinct: 0, Speed: 0 },
@@ -4150,11 +4516,10 @@ const SUPPORT_CARDS = {
   Chuck: {
     name: 'Chuck',
     trainer: 'Chuck',
-    pokemon: 'Poliwrath',
     rarity: 'Common',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 30, Defense: 0, Instinct: 0, Speed: 5 },
-    trainingBonus: { typeMatch: 5, otherStats: 1, maxFriendshipTypeMatch: 12 },
+    trainingBonus: { typeMatch: 8, otherStats: 1, maxFriendshipTypeMatch: 18 },
     initialFriendship: 5,
     appearanceRate: 0.35,
     typeMatchPreference: 0.30,
@@ -4165,7 +4530,6 @@ const SUPPORT_CARDS = {
   Pryce: {
     name: 'Pryce',
     trainer: 'Pryce',
-    pokemon: 'Delibird',
     rarity: 'Common',
     supportType: 'Defense',
     baseStats: { HP: 20, Attack: 0, Defense: 5, Instinct: 5, Speed: 0 },
@@ -4180,7 +4544,6 @@ const SUPPORT_CARDS = {
   Wattson: {
     name: 'Wattson',
     trainer: 'Wattson',
-    pokemon: 'Magneton',
     rarity: 'Common',
     supportType: 'Instinct',
     baseStats: { HP: 0, Attack: 0, Defense: 5, Instinct: 25, Speed: 5 },
@@ -4195,7 +4558,6 @@ const SUPPORT_CARDS = {
   Flannery: {
     name: 'Flannery',
     trainer: 'Flannery',
-    pokemon: 'Camerupt',
     rarity: 'Common',
     supportType: 'Attack',
     baseStats: { HP: 0, Attack: 5, Defense: 0, Instinct: 20, Speed: 0 },
@@ -4209,6 +4571,87 @@ const SUPPORT_CARDS = {
   }
 };
 
+
+// ============================================================================
+// LEGACY SUPPORT NAME MAPPING
+// Maps old support card names (with Pokemon) to new names (trainer only)
+// This ensures backwards compatibility with existing database entries
+// ============================================================================
+const LEGACY_SUPPORT_NAME_MAP = {
+  // Legendary
+  CynthiaGarchomp: 'Cynthia',
+  RedCharizard: 'Red',
+  StevenMetagross: 'Steven',
+  NReshiram: 'N',
+  ProfessorOakMew: 'ProfessorOak',
+  DianthaDiancie: 'Diantha',
+  LeonCharizard: 'Leon',
+  SeleneLunala: 'Selene',
+  GloriaZacian: 'Gloria',
+  NemonaKoraidon: 'Nemona',
+  MustardUrshifu: 'Mustard',
+  VictorCalyrex: 'Victor',
+  ArvenMabosstiff: 'Arven',
+  PennyEevee: 'Penny',
+  SoniaYamper: 'Sonia',
+  HopZamazenta: 'Hop',
+  GeetaKingambit: 'Geeta',
+  KieranOgerpon: 'Kieran',
+  CarmineBloodmoon: 'Carmine',
+  DraytonArchaludon: 'Drayton',
+  LaceyExcadrill: 'Lacey',
+  // Rare
+  LanceDragonite: 'Lance',
+  SabrinaAlakazam: 'Sabrina',
+  MortyGengar: 'Morty',
+  WallaceMillotic: 'Wallace',
+  IrisHaxorus: 'Iris',
+  BlueBlastoise: 'Blue',
+  GiovanniPersian: 'Giovanni',
+  MaxieCamerupt: 'Maxie',
+  ArchieSharpedo: 'Archie',
+  RaihanDuraludon: 'Raihan',
+  MarnieGrimmsnarl: 'Marnie',
+  NessaDrednaw: 'Nessa',
+  BeaSirfetchd: 'Bea',
+  OpalAlcremie: 'Opal',
+  PiersObstagoon: 'Piers',
+  RikaClodsire: 'Rika',
+  PoppyTinkaton: 'Poppy',
+  // Uncommon
+  MistyStarmie: 'Misty',
+  BrockOnix: 'Brock',
+  ErikaTangela: 'Erika',
+  BlaineMagmar: 'Blaine',
+  KogaWeezing: 'Koga',
+  JasmineSteelix: 'Jasmine',
+  WinonaAltaria: 'Winona',
+  KarenUmbreon: 'Karen',
+  AgathaGengar: 'Agatha',
+  MiloEldegoss: 'Milo',
+  KabuCentiskorch: 'Kabu',
+  MelonyLapras: 'Melony',
+  GordieCoalossal: 'Gordie',
+  KlaraSlowbro: 'Klara',
+  AverySlowking: 'Avery',
+  IonoBellibolt: 'Iono',
+  GrushaAltaria: 'Grusha',
+  // Common
+  WhitneyMiltank: 'Whitney',
+  ChuckPoliwrath: 'Chuck',
+  PryceDelibird: 'Pryce',
+  WattsonMagneton: 'Wattson',
+  FlanneryCamerupt: 'Flannery'
+};
+
+/**
+ * Normalizes a support name by converting legacy names to new format
+ * @param {string} supportName - The support name (may be legacy or new format)
+ * @returns {string} - The normalized support name
+ */
+const normalizeSupportName = (supportName) => {
+  return LEGACY_SUPPORT_NAME_MAP[supportName] || supportName;
+};
 
 // ============================================================================
 // GACHA POOLS
@@ -5096,7 +5539,7 @@ const HANGOUT_EVENTS = {
   },
   N: {
     name: 'Truth\'s Flame',
-    description: 'N shares ideals about the bond between Pokemon and trainer.',
+    description: 'N shares ideals with legendary power.',
     flavor: 'N speaks passionately, "Only through honesty can Pokemon and trainer unite!"',
     effect: { stats: { Attack: 14, Instinct: 12 }, moveHint: 'BlueFlare', skillPoints: 16 }
   },
@@ -5132,7 +5575,7 @@ const HANGOUT_EVENTS = {
   },
   ProfessorOak: {
     name: 'Legendary Research',
-    description: 'Professor Oak shares his vast knowledge.',
+    description: 'Professor Oak shares knowledge with you.',
     flavor: 'Oak beams. "The bond between Pokemon and trainer transcends science!" he declares.',
     effect: { stats: { Instinct: 14, Speed: 10 }, skillPoints: 18, energy: 20 }
   },
@@ -5365,5 +5808,7 @@ module.exports = {
   SUPPORT_GACHA_RARITY,
   GACHA_RARITY,
   RANDOM_EVENTS,
-  HANGOUT_EVENTS
+  HANGOUT_EVENTS,
+  LEGACY_SUPPORT_NAME_MAP,
+  normalizeSupportName
 };
