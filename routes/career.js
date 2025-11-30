@@ -543,24 +543,97 @@ router.post('/start', authenticateToken, async (req, res) => {
 
 // DEPRECATED: Update career state (INSECURE - replaced by server-authoritative endpoints)
 // This endpoint should be removed once all actions are server-authoritative
-router.put('/update', authenticateToken, async (req, res) => {
+// Apply inspirations to career (server-authoritative)
+// This is the ONLY way to update career state - all other updates go through specific endpoints
+router.post('/apply-inspirations', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { careerState } = req.body;
+    const { inspirationUpdates } = req.body;
 
-    if (!careerState) {
-      return res.status(400).json({ error: 'Career state required' });
+    if (!inspirationUpdates) {
+      return res.status(400).json({ error: 'Inspiration updates required' });
     }
+
+    // Get current career state from server
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Validate and apply inspiration updates with caps
+    const newStats = { ...careerState.currentStats };
+    const newAptitudes = { ...careerState.pokemon.typeAptitudes };
+    const newStrategyAptitudes = { ...careerState.pokemon.strategyAptitudes };
+
+    // Apply stat bonus (capped at reasonable values per inspiration)
+    if (inspirationUpdates.statBonus) {
+      const { stat, amount } = inspirationUpdates.statBonus;
+      const validStats = ['HP', 'Attack', 'Defense', 'Instinct', 'Speed'];
+      if (validStats.includes(stat) && typeof amount === 'number') {
+        // Cap inspiration stat bonus at 50 per application
+        const cappedAmount = Math.min(Math.max(0, amount), 50);
+        newStats[stat] = (newStats[stat] || 0) + cappedAmount;
+      }
+    }
+
+    // Apply aptitude upgrade (only one grade level at a time)
+    if (inspirationUpdates.aptitudeUpgrade) {
+      const { color, newGrade } = inspirationUpdates.aptitudeUpgrade;
+      const validColors = ['Red', 'Blue', 'Green', 'Yellow', 'Purple', 'Orange'];
+      const gradeOrder = ['F', 'E', 'D', 'C', 'B', 'A', 'S'];
+      if (validColors.includes(color) && gradeOrder.includes(newGrade)) {
+        const currentGrade = newAptitudes[color] || 'F';
+        const currentIndex = gradeOrder.indexOf(currentGrade);
+        const newIndex = gradeOrder.indexOf(newGrade);
+        // Only allow upgrade by one level
+        if (newIndex === currentIndex + 1) {
+          newAptitudes[color] = newGrade;
+        }
+      }
+    }
+
+    // Apply strategy aptitude upgrade (only one grade level at a time)
+    if (inspirationUpdates.strategyUpgrade) {
+      const { strategy, newGrade } = inspirationUpdates.strategyUpgrade;
+      const validStrategies = ['Scaler', 'Nuker', 'Debuffer', 'Chipper', 'MadLad'];
+      const gradeOrder = ['F', 'E', 'D', 'C', 'B', 'A', 'S'];
+      if (validStrategies.includes(strategy) && gradeOrder.includes(newGrade)) {
+        const currentGrade = newStrategyAptitudes[strategy] || 'F';
+        const currentIndex = gradeOrder.indexOf(currentGrade);
+        const newIndex = gradeOrder.indexOf(newGrade);
+        // Only allow upgrade by one level
+        if (newIndex === currentIndex + 1) {
+          newStrategyAptitudes[strategy] = newGrade;
+        }
+      }
+    }
+
+    const updatedCareerState = {
+      ...careerState,
+      currentStats: newStats,
+      pokemon: {
+        ...careerState.pokemon,
+        typeAptitudes: newAptitudes,
+        strategyAptitudes: newStrategyAptitudes
+      },
+      stateVersion: (careerState.stateVersion || 0) + 1
+    };
 
     await pool.query(
       'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
-      [JSON.stringify(careerState), userId]
+      [JSON.stringify(updatedCareerState), userId]
     );
 
-    res.json({ success: true });
+    res.json({ success: true, careerState: updatedCareerState });
   } catch (error) {
-    console.error('Update career error:', error);
-    res.status(500).json({ error: 'Failed to update career' });
+    console.error('Apply inspirations error:', error);
+    res.status(500).json({ error: 'Failed to apply inspirations' });
   }
 });
 
@@ -1331,6 +1404,31 @@ router.post('/battle', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Not enough energy for wild battle' });
     }
 
+    // SERVER-AUTHORITATIVE: For wild battles, validate opponent against server's availableBattles
+    let validatedOpponent = opponent;
+    if (!isGymLeader && !isEventBattle) {
+      const availableBattles = careerState.availableBattles || [];
+      const opponentName = opponent.name || (opponent.pokemon && opponent.pokemon.name);
+
+      // Find matching battle from server's available battles
+      const serverBattle = availableBattles.find(b => b.name === opponentName);
+
+      if (!serverBattle) {
+        console.error('[Battle] Wild battle opponent validation failed:', {
+          requestedOpponent: opponentName,
+          availableBattles: availableBattles.map(b => b.name)
+        });
+        return res.status(400).json({
+          error: 'Invalid wild battle opponent - not in available battles',
+          code: 'INVALID_OPPONENT'
+        });
+      }
+
+      // Use the SERVER's battle data instead of client-sent data
+      validatedOpponent = serverBattle;
+      console.log('[Battle] Wild battle opponent validated:', serverBattle.name);
+    }
+
     // Prepare player Pokemon
     const playerPokemon = {
       name: careerState.pokemon.name,
@@ -1344,14 +1442,15 @@ router.post('/battle', authenticateToken, async (req, res) => {
 
     // Prepare opponent Pokemon - normalize to consistent structure
     // All data sources use baseStats, normalize to stats for battle
-    // Handle: wild battles (direct stats), gym leaders (baseStats), Elite Four (pokemon.baseStats)
-    const pokemonData = opponent.pokemon || opponent; // Elite Four has nested pokemon object
+    // Handle: wild battles (validated server data), gym leaders (baseStats), Elite Four (pokemon.baseStats)
+    // Use validatedOpponent for wild battles (server-authoritative), original opponent for gym/event battles
+    const pokemonData = validatedOpponent.pokemon || validatedOpponent; // Elite Four has nested pokemon object
 
     // Get base stats from opponent data
     let opponentStats = pokemonData.stats || pokemonData.baseStats;
 
     console.log('[Battle] Opponent data:', {
-      name: pokemonData.name || opponent.name,
+      name: pokemonData.name || validatedOpponent.name,
       isGymLeader,
       isEventBattle,
       hasStats: !!pokemonData.stats,
@@ -1379,10 +1478,10 @@ router.post('/battle', authenticateToken, async (req, res) => {
     }
 
     // Derive opponent strategy from strategyAptitudes if available
-    const opponentAptitudes = pokemonData.strategyAptitudes || opponent.strategyAptitudes;
+    const opponentAptitudes = pokemonData.strategyAptitudes || validatedOpponent.strategyAptitudes;
     const derivedStrategy = opponentAptitudes
       ? deriveStrategyFromAptitudes(opponentAptitudes)
-      : { strategy: pokemonData.strategy || opponent.strategy || 'Chipper', strategyGrade: pokemonData.strategyGrade || opponent.strategyGrade || 'C' };
+      : { strategy: pokemonData.strategy || validatedOpponent.strategy || 'Chipper', strategyGrade: pokemonData.strategyGrade || validatedOpponent.strategyGrade || 'C' };
 
     // Determine opponent abilities based on battle type
     let opponentAbilities;
@@ -1394,23 +1493,23 @@ router.post('/battle', authenticateToken, async (req, res) => {
       opponentAbilities = getGymLeaderAbilities(pokemonData, currentTurn, isEliteFour);
       console.log(`[Battle] ${isEliteFour ? 'Elite Four' : 'Gym leader'} abilities for turn ${currentTurn}:`, opponentAbilities);
     } else {
-      // Wild or event battles - use abilities as-is (wild battles already have scaled abilities)
+      // Wild or event battles - use abilities from server-validated data
       opponentAbilities = pokemonData.abilities || pokemonData.defaultAbilities || [];
     }
 
     const opponentPokemon = {
-      name: pokemonData.name || opponent.name,
-      primaryType: pokemonData.primaryType || opponent.primaryType,
+      name: pokemonData.name || validatedOpponent.name,
+      primaryType: pokemonData.primaryType || validatedOpponent.primaryType,
       stats: opponentStats,
       abilities: opponentAbilities,
-      typeAptitudes: pokemonData.typeAptitudes || opponent.typeAptitudes,
+      typeAptitudes: pokemonData.typeAptitudes || validatedOpponent.typeAptitudes,
       strategy: derivedStrategy.strategy,
       strategyGrade: derivedStrategy.strategyGrade
     };
 
     // Validate opponent has required fields
     if (!opponentPokemon.stats) {
-      console.error('Battle error: Opponent missing stats', { opponent, opponentPokemon });
+      console.error('Battle error: Opponent missing stats', { validatedOpponent, opponentPokemon });
       return res.status(400).json({ error: 'Invalid opponent data - missing stats' });
     }
 
@@ -1566,34 +1665,60 @@ router.post('/battle', authenticateToken, async (req, res) => {
   }
 });
 
-// Complete career (save to trained pokemon)
+// Complete career (save to trained pokemon) - SERVER-AUTHORITATIVE
+// Uses server's career state, not client data, to prevent stat manipulation
 router.post('/complete', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { careerState, completionType } = req.body;
+    const { completionType, inspirations } = req.body;
 
-    if (!careerState || !completionType) {
-      return res.status(400).json({ error: 'Career state and completion type required' });
+    if (!completionType) {
+      return res.status(400).json({ error: 'Completion type required' });
     }
 
-    // Save to pokemon_rosters (trained pokemon)
+    // Validate completion type
+    const validCompletionTypes = ['champion', 'defeat', 'abandon'];
+    if (!validCompletionTypes.includes(completionType)) {
+      return res.status(400).json({ error: 'Invalid completion type' });
+    }
+
+    // Get the ACTUAL career state from the server - don't trust client data
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const serverCareerState = careerResult.rows[0].career_state;
+
+    // Validate completion type matches game state
+    // Champion requires defeating all Elite Four (currentGymIndex >= 9)
+    if (completionType === 'champion' && serverCareerState.currentGymIndex < 9) {
+      return res.status(400).json({ error: 'Cannot claim champion status - Elite Four not defeated' });
+    }
+
+    // Save to pokemon_rosters using SERVER's career state (not client data)
     const pokemonData = {
-      name: careerState.pokemon.name,
-      primaryType: careerState.pokemon.primaryType,
-      stats: careerState.currentStats,
-      abilities: careerState.knownAbilities,
-      typeAptitudes: careerState.pokemon.typeAptitudes,
-      strategy: careerState.pokemon.strategy,
-      strategyGrade: careerState.pokemon.strategyGrade,
-      inspirations: careerState.inspirations || null,
+      name: serverCareerState.pokemon.name,
+      primaryType: serverCareerState.pokemon.primaryType,
+      stats: serverCareerState.currentStats,  // Use server's stats
+      abilities: serverCareerState.knownAbilities,  // Use server's abilities
+      typeAptitudes: serverCareerState.pokemon.typeAptitudes,
+      strategyAptitudes: serverCareerState.pokemon.strategyAptitudes,
+      strategy: serverCareerState.pokemon.strategy,
+      strategyGrade: serverCareerState.pokemon.strategyGrade,
+      inspirations: inspirations || serverCareerState.inspirations || null,
       completionType,
-      turnNumber: careerState.turn,
-      gymsDefeated: careerState.currentGymIndex || 0
+      turnNumber: serverCareerState.turn,
+      gymsDefeated: serverCareerState.currentGymIndex || 0
     };
 
     await pool.query(
       'INSERT INTO pokemon_rosters (user_id, pokemon_data, turn_number) VALUES ($1, $2, $3)',
-      [userId, JSON.stringify(pokemonData), careerState.turn]
+      [userId, JSON.stringify(pokemonData), serverCareerState.turn]
     );
 
     // Delete active career
@@ -1617,7 +1742,7 @@ router.post('/complete', authenticateToken, async (req, res) => {
       );
     }
 
-    res.json({ success: true, primosReward });
+    res.json({ success: true, primosReward, trainedPokemon: pokemonData });
   } catch (error) {
     console.error('Complete career error:', error);
     res.status(500).json({ error: 'Failed to complete career' });

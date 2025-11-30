@@ -230,8 +230,8 @@ const GAME_CONFIG = {
     GYM_ABILITY_COUNTS: [3, 4, 4, 5],
     ELITE_FOUR_ABILITY_COUNT: 6,
     // Global multiplier applied to all enemy Pokemon stats (wild, event, gym leaders, Elite Four)
-    // 0.8 = 20% reduction from base scaling
-    ENEMY_STAT_MULTIPLIER: 0.8
+    // 0.88 = 12% reduction from base scaling (10% stronger than previous 0.8)
+    ENEMY_STAT_MULTIPLIER: 0.88
   },
   TRAINING: {
     ENERGY_COSTS: { HP: 20, Attack: 25, Defense: 15, Instinct: 20, Speed: -5 },
@@ -4770,79 +4770,79 @@ const GACHA_RARITY = {
 // ============================================================================
 
 const RANDOM_EVENTS = {
-  // Stat increase events (10)
+  // Stat increase events (10) - Stats reduced by 50%
   wildEncounter: {
     type: 'stat_increase',
     name: 'Wild Pokemon Spar',
     description: 'A friendly wild Pokemon wants to battle for fun!',
-    effect: { HP: 4, Attack: 2, Defense: 2, Instinct: 2, Speed: 2 }
+    effect: { HP: 2, Attack: 1, Defense: 1, Instinct: 1, Speed: 1 }
   },
   trainingDummies: {
     type: 'stat_increase',
     name: 'Training Dummies',
     description: 'You find a set of battle training dummies at the Pokemon Center!',
-    effect: { HP: 6, Attack: 4, Defense: 3, Instinct: 3, Speed: 2 }
+    effect: { HP: 3, Attack: 2, Defense: 2, Instinct: 2, Speed: 1 }
   },
   climbingRocks: {
     type: 'stat_increase',
     name: 'Rock Climb Practice',
     description: 'Practicing Rock Climb on Mt. Moon has toughened you up!',
-    effect: { HP: 8, Defense: 4, Speed: 3 }
+    effect: { HP: 4, Defense: 2, Speed: 2 }
   },
   psychicMeditation: {
     type: 'stat_increase',
     name: 'Psychic Training',
     description: 'A Psychic-type trainer teaches you meditation techniques!',
-    effect: { Instinct: 6, Defense: 2, Speed: 2 }
+    effect: { Instinct: 3, Defense: 1, Speed: 1 }
   },
   cyclingRoad: {
     type: 'stat_increase',
     name: 'Cycling Road Sprint',
     description: 'Racing down Cycling Road has boosted your speed!',
-    effect: { Speed: 8, Instinct: 3, HP: 2 }
+    effect: { Speed: 4, Instinct: 2, HP: 1 }
   },
   fightingDojo: {
     type: 'stat_increase',
     name: 'Fighting Dojo Session',
     description: 'Training with Fighting-types at the dojo increased your power!',
-    effect: { Attack: 6, HP: 4, Defense: 2 }
+    effect: { Attack: 3, HP: 2, Defense: 1 }
   },
   doubleTeam: {
     type: 'stat_increase',
     name: 'Double Team Training',
     description: 'Practicing evasion techniques has sharpened your reflexes!',
-    effect: { Instinct: 4, Speed: 4, Defense: 2 }
+    effect: { Instinct: 2, Speed: 2, Defense: 1 }
   },
   marathonRun: {
     type: 'stat_increase',
     name: 'Route Marathon',
     description: 'Running the entire length of Route 9 built your endurance!',
-    effect: { HP: 9, Speed: 4, Defense: 3 }
+    effect: { HP: 5, Speed: 2, Defense: 2 }
   },
   strengthBoulders: {
     type: 'stat_increase',
     name: 'Strength Training',
     description: 'Moving massive boulders with Strength dramatically increased your power!',
-    effect: { Attack: 8, Defense: 4, HP: 4 }
+    effect: { Attack: 4, Defense: 2, HP: 2 }
   },
   balancedWorkout: {
     type: 'stat_increase',
     name: 'Balanced Training',
     description: 'A well-rounded training session at the gym improved all your stats!',
-    effect: { HP: 3, Attack: 2, Defense: 2, Instinct: 2, Speed: 2 }
+    effect: { HP: 2, Attack: 1, Defense: 1, Instinct: 1, Speed: 1 }
   },
-  
-  // Choice events with risk/reward (25)
+
+  // Choice events with risk/reward (25) - Stats reduced by 50%
   mysteriousItem: {
     type: 'choice',
     name: 'Strange Berry',
     description: 'You found a strange berry on the path! Your Pokemon sniffs it curiously.',
     choices: [
-      { 
+      {
         text: 'Let your Pokemon eat it (RISKY)',
         outcomes: [
-          { chance: 0.5, effect: { stats: { HP: 23, Attack: 12, Defense: 12, Instinct: 12, Speed: 12 } }, flavor: 'Jackpot! It was a rare Liechi Berry! Your Pokemon feels incredibly powerful!' },
-          { chance: 0.5, effect: { stats: { HP: -8, Attack: -4, Defense: -4 }, energy: -15 }, flavor: 'Ugh! That berry was poisonous! Your Pokemon feels terrible!' }
+          { chance: 0.5, effect: { stats: { HP: 12, Attack: 6, Defense: 6, Instinct: 6, Speed: 6 } }, flavor: 'Jackpot! It was a rare Liechi Berry! Your Pokemon feels incredibly powerful!' },
+          { chance: 0.5, effect: { stats: { HP: -4, Attack: -2, Defense: -2 }, energy: -15 }, flavor: 'Ugh! That berry was poisonous! Your Pokemon feels terrible!' }
         ]
       },
       {
@@ -4861,7 +4861,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Rocky mountain trail',
         outcomes: [
-          { chance: 1.0, effect: { stats: { HP: 15, Defense: 10, Attack: 5 } }, flavor: 'The tough terrain provides excellent training for your Pokemon!' }
+          { chance: 1.0, effect: { stats: { HP: 8, Defense: 5, Attack: 3 } }, flavor: 'The tough terrain provides excellent training for your Pokemon!' }
         ]
       },
       {
@@ -4880,7 +4880,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Accept the items',
         outcomes: [
-          { chance: 1.0, effect: { stats: { HP: 6, Attack: 4, Defense: 4 } }, flavor: 'They gave you protein supplements! Your Pokemon grows stronger!' }
+          { chance: 1.0, effect: { stats: { HP: 3, Attack: 2, Defense: 2 } }, flavor: 'They gave you protein supplements! Your Pokemon grows stronger!' }
         ]
       },
       {
@@ -4899,7 +4899,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Touch the symbols',
         outcomes: [
-          { chance: 1.0, effect: { stats: { HP: 9, Instinct: 8, Speed: 8 } }, flavor: 'The ancient power flows into your Pokemon, awakening hidden potential!' }
+          { chance: 1.0, effect: { stats: { HP: 5, Instinct: 4, Speed: 4 } }, flavor: 'The ancient power flows into your Pokemon, awakening hidden potential!' }
         ]
       },
       {
@@ -4918,8 +4918,8 @@ const RANDOM_EVENTS = {
       {
         text: 'Accept the training (RISKY)',
         outcomes: [
-          { chance: 0.5, effect: { stats: { Attack: 23, Speed: 18, Instinct: 11 } }, flavor: 'Incredible training! You learn advanced techniques from the veteran!' },
-          { chance: 0.5, effect: { stats: { HP: -11, Defense: -6 }, energy: -22 }, flavor: 'The training was too brutal! Your Pokemon is exhausted and hurt!' }
+          { chance: 0.5, effect: { stats: { Attack: 12, Speed: 9, Instinct: 6 } }, flavor: 'Incredible training! You learn advanced techniques from the veteran!' },
+          { chance: 0.5, effect: { stats: { HP: -6, Defense: -3 }, energy: -22 }, flavor: 'The training was too brutal! Your Pokemon is exhausted and hurt!' }
         ]
       },
       {
@@ -4938,7 +4938,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Enter the tournament',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Attack: 9, Instinct: 8, Speed: 8 } }, flavor: 'You make it to semifinals! Great battle experience gained!' }
+          { chance: 1.0, effect: { stats: { Attack: 5, Instinct: 4, Speed: 4 } }, flavor: 'You make it to semifinals! Great battle experience gained!' }
         ]
       },
       {
@@ -4957,8 +4957,8 @@ const RANDOM_EVENTS = {
       {
         text: 'Explore the cave (RISKY)',
         outcomes: [
-          { chance: 0.5, effect: { stats: { HP: 18, Attack: 18, Instinct: 18 }, skillPoints: 19 }, flavor: 'You find a hidden chamber with rare evolutionary stones! Incredible!' },
-          { chance: 0.5, effect: { stats: { HP: -11, Defense: -8 }, energy: -19 }, flavor: 'Wild Zubat swarm attacks! You barely escape!' }
+          { chance: 0.5, effect: { stats: { HP: 9, Attack: 9, Instinct: 9 }, skillPoints: 19 }, flavor: 'You find a hidden chamber with rare evolutionary stones! Incredible!' },
+          { chance: 0.5, effect: { stats: { HP: -6, Defense: -4 }, energy: -19 }, flavor: 'Wild Zubat swarm attacks! You barely escape!' }
         ]
       },
       {
@@ -4977,7 +4977,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Use Surf to cross',
         outcomes: [
-          { chance: 1.0, effect: { stats: { HP: 9, Speed: 8, Defense: 8 } }, flavor: 'Your Pokemon powers through the current—excellent water training!' }
+          { chance: 1.0, effect: { stats: { HP: 5, Speed: 4, Defense: 4 } }, flavor: 'Your Pokemon powers through the current—excellent water training!' }
         ]
       },
       {
@@ -4996,8 +4996,8 @@ const RANDOM_EVENTS = {
       {
         text: 'Let Pokemon eat them (RISKY)',
         outcomes: [
-          { chance: 0.5, effect: { stats: { HP: 29, Instinct: 14 }, energy: 28 }, flavor: 'They were premium Oran Berries! Your Pokemon is fully revitalized!' },
-          { chance: 0.5, effect: { stats: { HP: -8 }, energy: -19 }, flavor: 'Those were bitter Razz Berries—your Pokemon feels sick!' }
+          { chance: 0.5, effect: { stats: { HP: 15, Instinct: 7 }, energy: 28 }, flavor: 'They were premium Oran Berries! Your Pokemon is fully revitalized!' },
+          { chance: 0.5, effect: { stats: { HP: -4 }, energy: -19 }, flavor: 'Those were bitter Razz Berries—your Pokemon feels sick!' }
         ]
       },
       {
@@ -5016,7 +5016,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Venture through',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Instinct: 11, Speed: 8, Attack: 4 } }, flavor: 'Your Pokemon bonds with wild Gastly! What an amazing experience!' }
+          { chance: 1.0, effect: { stats: { Instinct: 6, Speed: 4, Attack: 2 } }, flavor: 'Your Pokemon bonds with wild Gastly! What an amazing experience!' }
         ]
       },
       {
@@ -5035,7 +5035,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Register and compete',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Attack: 9, Speed: 8, Instinct: 8 } }, flavor: 'You win several matches! Great battle experience!' }
+          { chance: 1.0, effect: { stats: { Attack: 5, Speed: 4, Instinct: 4 } }, flavor: 'You win several matches! Great battle experience!' }
         ]
       },
       {
@@ -5054,7 +5054,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Join the picnic',
         outcomes: [
-          { chance: 1.0, effect: { stats: { HP: 11, Defense: 8 } }, flavor: 'The homemade Poffins provide excellent nutrition!' }
+          { chance: 1.0, effect: { stats: { HP: 6, Defense: 4 } }, flavor: 'The homemade Poffins provide excellent nutrition!' }
         ]
       },
       {
@@ -5073,7 +5073,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Study intensely',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Instinct: 11, Attack: 10 } }, flavor: 'The Champion\'s strategies are brilliant! You learn so much!' }
+          { chance: 1.0, effect: { stats: { Instinct: 6, Attack: 5 } }, flavor: 'The Champion\'s strategies are brilliant! You learn so much!' }
         ]
       },
       {
@@ -5092,7 +5092,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Train in the rain',
         outcomes: [
-          { chance: 1.0, effect: { stats: { HP: 11, Defense: 9, Instinct: 8 } }, flavor: 'Training in the storm tempers your body and mind like steel!' }
+          { chance: 1.0, effect: { stats: { HP: 6, Defense: 5, Instinct: 4 } }, flavor: 'Training in the storm tempers your body and mind like steel!' }
         ]
       },
       {
@@ -5111,13 +5111,13 @@ const RANDOM_EVENTS = {
       {
         text: 'Search for the Pokemon',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Instinct: 8, HP: 8 }, skillPoints: 8 }, flavor: 'You find their Pikachu! The grateful parent rewards you!' }
+          { chance: 1.0, effect: { stats: { Instinct: 4, HP: 4 }, skillPoints: 8 }, flavor: 'You find their Pikachu! The grateful parent rewards you!' }
         ]
       },
       {
         text: 'Keep moving',
         outcomes: [
-          { chance: 1.0, effect: { energy: 8, stats: { Attack: 6, Speed: 6 } }, flavor: 'You focus on your own journey, making steady progress.' }
+          { chance: 1.0, effect: { energy: 8, stats: { Attack: 3, Speed: 3 } }, flavor: 'You focus on your own journey, making steady progress.' }
         ]
       }
     ]
@@ -5130,8 +5130,8 @@ const RANDOM_EVENTS = {
       {
         text: 'Learn the move (RISKY)',
         outcomes: [
-          { chance: 0.5, effect: { stats: { Attack: 23, Instinct: 18 }, skillPoints: 25 }, flavor: 'You master the secret technique! Devastating new power unlocked!' },
-          { chance: 0.5, effect: { stats: { HP: -11, Defense: -8, Attack: -6 } }, flavor: 'The technique backfires horribly, leaving you worse than before!' }
+          { chance: 0.5, effect: { stats: { Attack: 12, Instinct: 9 }, skillPoints: 25 }, flavor: 'You master the secret technique! Devastating new power unlocked!' },
+          { chance: 0.5, effect: { stats: { HP: -6, Defense: -4, Attack: -3 } }, flavor: 'The technique backfires horribly, leaving you worse than before!' }
         ]
       },
       {
@@ -5150,7 +5150,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Bathe in the spring',
         outcomes: [
-          { chance: 1.0, effect: { stats: { HP: 14, Defense: 12 } }, flavor: 'The mineral-rich waters invigorate and strengthen your Pokemon!' }
+          { chance: 1.0, effect: { stats: { HP: 7, Defense: 6 } }, flavor: 'The mineral-rich waters invigorate and strengthen your Pokemon!' }
         ]
       },
       {
@@ -5169,7 +5169,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Accept the battle',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Attack: 11, Defense: 9, Instinct: 10 } }, flavor: 'You hold your own against the elite! Advanced techniques learned!' }
+          { chance: 1.0, effect: { stats: { Attack: 6, Defense: 5, Instinct: 5 } }, flavor: 'You hold your own against the elite! Advanced techniques learned!' }
         ]
       },
       {
@@ -5188,14 +5188,14 @@ const RANDOM_EVENTS = {
       {
         text: 'Dig for items (RISKY)',
         outcomes: [
-          { chance: 0.5, effect: { skillPoints: 31, stats: { HP: 18 } }, flavor: 'You unearth a cache of Rare Candies and TMs! Amazing find!' },
-          { chance: 0.5, effect: { stats: { HP: -14, Defense: -8 }, energy: -22 }, flavor: 'It was a Voltorb nest! You escape but worse for wear!' }
+          { chance: 0.5, effect: { skillPoints: 31, stats: { HP: 9 } }, flavor: 'You unearth a cache of Rare Candies and TMs! Amazing find!' },
+          { chance: 0.5, effect: { stats: { HP: -7, Defense: -4 }, energy: -22 }, flavor: 'It was a Voltorb nest! You escape but worse for wear!' }
         ]
       },
       {
         text: 'Skip the search (SAFE)',
         outcomes: [
-          { chance: 1.0, effect: { energy: 11, stats: { Defense: 6 } }, flavor: 'You wisely ignore the too-good-to-be-true signal and stay safe.' }
+          { chance: 1.0, effect: { energy: 11, stats: { Defense: 3 } }, flavor: 'You wisely ignore the too-good-to-be-true signal and stay safe.' }
         ]
       }
     ]
@@ -5208,13 +5208,13 @@ const RANDOM_EVENTS = {
       {
         text: 'Attend the lecture',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Instinct: 14, Defense: 10 }, skillPoints: 12 }, flavor: 'The Professor\'s wisdom opens your mind to new strategies!' }
+          { chance: 1.0, effect: { stats: { Instinct: 7, Defense: 5 }, skillPoints: 12 }, flavor: 'The Professor\'s wisdom opens your mind to new strategies!' }
         ]
       },
       {
         text: 'Pass on it',
         outcomes: [
-          { chance: 1.0, effect: { energy: 10, stats: { Speed: 8 } }, flavor: 'You politely decline and continue training at your own pace.' }
+          { chance: 1.0, effect: { energy: 10, stats: { Speed: 4 } }, flavor: 'You politely decline and continue training at your own pace.' }
         ]
       }
     ]
@@ -5227,7 +5227,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Accept the race',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Speed: 14, Instinct: 10 } }, flavor: 'You keep pace with Rapidash, proving your superior speed!' }
+          { chance: 1.0, effect: { stats: { Speed: 7, Instinct: 5 } }, flavor: 'You keep pace with Rapidash, proving your superior speed!' }
         ]
       },
       {
@@ -5246,8 +5246,8 @@ const RANDOM_EVENTS = {
       {
         text: 'Take a dip (RISKY)',
         outcomes: [
-          { chance: 0.5, effect: { stats: { HP: 36, Attack: 23, Instinct: 18 } }, flavor: 'The legendary springs grant your Pokemon incredible power!' },
-          { chance: 0.5, effect: { stats: { HP: -11, Attack: -9 }, energy: -19 }, flavor: 'The springs were cursed by a Hex! Your Pokemon weakens!' }
+          { chance: 0.5, effect: { stats: { HP: 18, Attack: 12, Instinct: 9 } }, flavor: 'The legendary springs grant your Pokemon incredible power!' },
+          { chance: 0.5, effect: { stats: { HP: -6, Attack: -5 }, energy: -19 }, flavor: 'The springs were cursed by a Hex! Your Pokemon weakens!' }
         ]
       },
       {
@@ -5266,13 +5266,13 @@ const RANDOM_EVENTS = {
       {
         text: 'Maximum effort',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Speed: 11, Attack: 9, Instinct: 10 } }, flavor: 'You complete the match flawlessly, proving your capabilities!' }
+          { chance: 1.0, effect: { stats: { Speed: 6, Attack: 5, Instinct: 5 } }, flavor: 'You complete the match flawlessly, proving your capabilities!' }
         ]
       },
       {
         text: 'Moderate pace',
         outcomes: [
-          { chance: 1.0, effect: { energy: 11, stats: { HP: 8, Defense: 8 } }, flavor: 'Slow and steady wins the race—you train safely.' }
+          { chance: 1.0, effect: { energy: 11, stats: { HP: 4, Defense: 4 } }, flavor: 'Slow and steady wins the race—you train safely.' }
         ]
       }
     ]
@@ -5285,7 +5285,7 @@ const RANDOM_EVENTS = {
       {
         text: 'Buy the Lucky Egg',
         outcomes: [
-          { chance: 1.0, effect: { stats: { Instinct: 9, HP: 10 }, skillPoints: 10 }, flavor: 'The Lucky Egg works! You feel fortune smiling upon you!' }
+          { chance: 1.0, effect: { stats: { Instinct: 5, HP: 5 }, skillPoints: 10 }, flavor: 'The Lucky Egg works! You feel fortune smiling upon you!' }
         ]
       },
       {
@@ -5304,62 +5304,62 @@ const RANDOM_EVENTS = {
       {
         text: 'Investigate (RISKY)',
         outcomes: [
-          { chance: 0.5, effect: { stats: { HP: 29, Attack: 23, Defense: 18, Instinct: 18, Speed: 18 } }, flavor: 'Fortune favors the bold! Everything goes perfectly!' },
-          { chance: 0.5, effect: { stats: { HP: -15, Attack: -11, Defense: -9 }, energy: -22 }, flavor: 'Your gamble backfires spectacularly—sometimes caution is best!' }
+          { chance: 0.5, effect: { stats: { HP: 15, Attack: 12, Defense: 9, Instinct: 9, Speed: 9 } }, flavor: 'Fortune favors the bold! Everything goes perfectly!' },
+          { chance: 0.5, effect: { stats: { HP: -8, Attack: -6, Defense: -5 }, energy: -22 }, flavor: 'Your gamble backfires spectacularly—sometimes caution is best!' }
         ]
       },
       {
         text: 'Ignore it (SAFE)',
         outcomes: [
-          { chance: 1.0, effect: { energy: 11, stats: { HP: 8, Defense: 6 } }, flavor: 'You choose the safe path, making modest but reliable progress.' }
+          { chance: 1.0, effect: { energy: 11, stats: { HP: 4, Defense: 3 } }, flavor: 'You choose the safe path, making modest but reliable progress.' }
         ]
       }
     ]
   },
-  
-  // Battle events (5)
+
+  // Battle events (5) - Stats reduced by 50%
   championChallenge: {
     type: 'battle',
     name: 'Champion Challenge',
     description: 'A powerful wandering Champion challenges you!',
     difficulty: 1.5,
-    rewards: { stats: { HP: 18, Attack: 12, Defense: 12, Instinct: 12, Speed: 12 }, skillPoints: 30, energy: -22 }
+    rewards: { stats: { HP: 9, Attack: 6, Defense: 6, Instinct: 6, Speed: 6 }, skillPoints: 30, energy: -22 }
   },
   eliteWarrior: {
     type: 'battle',
     name: 'Elite Four Member',
     description: 'An Elite Four member is training here and wants to battle!',
     difficulty: 1.6,
-    rewards: { stats: { Attack: 22, Defense: 15, Instinct: 15 }, skillPoints: 36, energy: -26 }
+    rewards: { stats: { Attack: 11, Defense: 8, Instinct: 8 }, skillPoints: 36, energy: -26 }
   },
   legendaryPokemon: {
     type: 'battle',
     name: 'Legendary Pokemon',
     description: 'A legendary Pokemon appears before you!',
     difficulty: 1.8,
-    rewards: { stats: { HP: 22, Attack: 18, Defense: 18, Instinct: 18, Speed: 18 }, skillPoints: 50, energy: -30 }
+    rewards: { stats: { HP: 11, Attack: 9, Defense: 9, Instinct: 9, Speed: 9 }, skillPoints: 50, energy: -30 }
   },
   rivalAppears: {
     type: 'battle',
     name: 'Rival Battle',
     description: 'Your rival shows up demanding a battle!',
     difficulty: 1.4,
-    rewards: { stats: { Attack: 15, Instinct: 15, Speed: 12 }, skillPoints: 24, energy: -19 }
+    rewards: { stats: { Attack: 8, Instinct: 8, Speed: 6 }, skillPoints: 24, energy: -19 }
   },
   ancientGuardian: {
     type: 'battle',
     name: 'Ruin Guardian',
     description: 'An ancient guardian Golem awakens to test you!',
     difficulty: 1.7,
-    rewards: { stats: { HP: 27, Defense: 22, Instinct: 18 }, skillPoints: 40, energy: -28 }
+    rewards: { stats: { HP: 14, Defense: 11, Instinct: 9 }, skillPoints: 40, energy: -28 }
   },
   
-  // Negative events (10)
+  // Negative events (10) - Stats reduced by 50%
   injury: {
     type: 'negative',
     name: 'Training Injury',
     description: 'You pushed too hard and your Pokemon got injured!',
-    effect: { stats: { HP: -6, Attack: -3, Defense: -3 }, energy: -11 }
+    effect: { stats: { HP: -3, Attack: -2, Defense: -2 }, energy: -11 }
   },
   fatigue: {
     type: 'negative',
@@ -5371,19 +5371,19 @@ const RANDOM_EVENTS = {
     type: 'negative',
     name: 'Pokerus Infection',
     description: 'Your Pokemon caught a mild case of Pokerus and needs rest.',
-    effect: { stats: { HP: -8, Speed: -4 }, energy: -15 }
+    effect: { stats: { HP: -4, Speed: -2 }, energy: -15 }
   },
   badFood: {
     type: 'negative',
     name: 'Spoiled Berries',
     description: 'You ate spoiled berries and feel terrible.',
-    effect: { stats: { HP: -9, Defense: -4 }, energy: -22 }
+    effect: { stats: { HP: -5, Defense: -2 }, energy: -22 }
   },
   accident: {
     type: 'negative',
     name: 'Training Accident',
     description: 'A training accident with your Pokemon has set you back.',
-    effect: { stats: { HP: -11, Attack: -6 }, energy: -15 }
+    effect: { stats: { HP: -6, Attack: -3 }, energy: -15 }
   },
   weatherDelay: {
     type: 'negative',
@@ -5395,7 +5395,7 @@ const RANDOM_EVENTS = {
     type: 'negative',
     name: 'Broken TM',
     description: 'Your TM breaks during training!',
-    effect: { stats: { Attack: -4, Defense: -4 }, skillPoints: -5 }
+    effect: { stats: { Attack: -2, Defense: -2 }, skillPoints: -5 }
   },
   distraction: {
     type: 'negative',
@@ -5407,13 +5407,13 @@ const RANDOM_EVENTS = {
     type: 'negative',
     name: 'Unlucky Day',
     description: 'Everything seems to go wrong today.',
-    effect: { stats: { HP: -4, Attack: -2, Defense: -2, Instinct: -2, Speed: -2 } }
+    effect: { stats: { HP: -2, Attack: -1, Defense: -1, Instinct: -1, Speed: -1 } }
   },
   overtraining: {
     type: 'negative',
     name: 'Overtraining',
     description: 'You overtrained your Pokemon and it needs serious rest.',
-    effect: { stats: { HP: -8, Speed: -6 }, energy: -26 }
+    effect: { stats: { HP: -4, Speed: -3 }, energy: -26 }
   }
 };
 

@@ -7,6 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { pool } = require('../config/database');
 const authenticateToken = require('../middleware/auth');
+const { POKEMON, LEGENDARY_POKEMON, GACHA_RARITY, SUPPORT_CARDS, SUPPORT_GACHA_RARITY } = require('../shared/gameData');
 
 // Limit break shard rewards by rarity (when pulling max limit break duplicates)
 const LIMIT_BREAK_SHARD_REWARDS = {
@@ -55,15 +56,43 @@ router.get('/pokemon', authenticateToken, async (req, res) => {
   }
 });
 
-// Add Pokemon to inventory (gacha pull) with limit break system
+// Add Pokemon to inventory (gacha pull) with limit break system - SERVER-AUTHORITATIVE
 router.post('/pokemon', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { pokemonName, pokemonData, rarity } = req.body;
+    const { pokemonName } = req.body;
 
-    if (!pokemonName || !pokemonData) {
-      return res.status(400).json({ error: 'Pokemon name and data required' });
+    if (!pokemonName) {
+      return res.status(400).json({ error: 'Pokemon name required' });
     }
+
+    // SERVER-AUTHORITATIVE: Validate Pokemon exists and get server data
+    // Check both regular and legendary Pokemon pools
+    const serverPokemon = POKEMON[pokemonName] || LEGENDARY_POKEMON[pokemonName];
+
+    if (!serverPokemon) {
+      console.error('[Inventory] Invalid Pokemon name in gacha:', pokemonName);
+      return res.status(400).json({
+        error: 'Invalid Pokemon - not found in game data',
+        code: 'INVALID_POKEMON'
+      });
+    }
+
+    // Determine rarity from server data (don't trust client)
+    const isLegendary = !!LEGENDARY_POKEMON[pokemonName];
+    const rarity = isLegendary ? 'Legendary' : (serverPokemon.rarity || 'Common');
+
+    // Use SERVER's Pokemon data instead of client-sent data
+    const pokemonData = {
+      name: serverPokemon.name,
+      primaryType: serverPokemon.primaryType,
+      baseStats: serverPokemon.baseStats,
+      defaultAbilities: serverPokemon.defaultAbilities,
+      learnableAbilities: serverPokemon.learnableAbilities,
+      typeAptitudes: serverPokemon.typeAptitudes,
+      strategyAptitudes: serverPokemon.strategyAptitudes,
+      rarity: rarity
+    };
 
     // Check if user already owns this Pokemon
     const existingResult = await pool.query(
@@ -203,15 +232,45 @@ router.get('/supports', authenticateToken, async (req, res) => {
   }
 });
 
-// Add Support to inventory (gacha pull) with limit break system
+// Add Support to inventory (gacha pull) with limit break system - SERVER-AUTHORITATIVE
 router.post('/supports', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { supportName, supportData, rarity } = req.body;
+    const { supportName } = req.body;
 
-    if (!supportName || !supportData) {
-      return res.status(400).json({ error: 'Support name and data required' });
+    if (!supportName) {
+      return res.status(400).json({ error: 'Support name required' });
     }
+
+    // SERVER-AUTHORITATIVE: Validate Support exists and get server data
+    const serverSupport = SUPPORT_CARDS[supportName];
+
+    if (!serverSupport) {
+      console.error('[Inventory] Invalid Support name in gacha:', supportName);
+      return res.status(400).json({
+        error: 'Invalid Support - not found in game data',
+        code: 'INVALID_SUPPORT'
+      });
+    }
+
+    // Determine rarity from server data (don't trust client)
+    const rarity = serverSupport.rarity || 'Common';
+
+    // Use SERVER's Support data instead of client-sent data
+    const supportData = {
+      name: serverSupport.name,
+      trainer: serverSupport.trainer,
+      rarity: rarity,
+      supportType: serverSupport.supportType,
+      baseStats: serverSupport.baseStats,
+      trainingBonus: serverSupport.trainingBonus,
+      initialFriendship: serverSupport.initialFriendship,
+      appearanceRate: serverSupport.appearanceRate,
+      typeMatchPreference: serverSupport.typeMatchPreference,
+      specialEffect: serverSupport.specialEffect,
+      moveHints: serverSupport.moveHints,
+      description: serverSupport.description
+    };
 
     // Check if user already owns this Support
     const existingResult = await pool.query(
