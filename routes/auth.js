@@ -11,7 +11,7 @@ const router = express.Router();
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Common supports granted to new accounts
-const STARTER_SUPPORTS = ['WhitneyMiltank', 'ChuckPoliwrath', 'PryceDelibird', 'WattsonMagneton', 'FlanneryCamerupt'];
+const STARTER_SUPPORTS = ['Whitney', 'Chuck', 'Pryce', 'Wattson', 'Flannery'];
 
 // Grant starter supports to a new user
 async function grantStarterSupports(userId) {
