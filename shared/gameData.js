@@ -4282,6 +4282,8 @@ const GACHA_RARITY = {
     Rare: {
         rate: 0.09, // 9%
         pokemon: [
+            // Starter Pokemon
+            'Charmander', 'Squirtle', 'Bulbasaur',
             // Original 37
             'Magmar', 'Electabuzz', 'Clefairy', 'Jigglypuff',
             'Phanpy', 'Spheal', 'Spoink', 'Deerling', 'Tangela',
