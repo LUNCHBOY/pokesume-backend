@@ -58,31 +58,31 @@ const GAME_CONFIG = {
 const MOVES = {
   Ember: { type: 'Fire', damage: 14, warmup: 0, cooldown: 3, stamina: 25, cost: 30, effect: null },
   Flamethrower: { type: 'Fire', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: { type: 'burn', chance: 0.2, duration: 5, damage: 3 } },
-  FireBlast: { type: 'Fire', damage: 28, warmup: 7, cooldown: 6, stamina: 70, cost: 75, effect: { type: 'burn', chance: 0.4, duration: 6, damage: 5 } },
+  FireBlast: { type: 'Fire', damage: 24, warmup: 8, cooldown: 6, stamina: 75, cost: 75, effect: { type: 'burn', chance: 0.4, duration: 6, damage: 5 } },
   WaterGun: { type: 'Water', damage: 14, warmup: 0, cooldown: 3, stamina: 25, cost: 30, effect: null },
   Surf: { type: 'Water', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: null },
-  HydroPump: { type: 'Water', damage: 28, warmup: 7, cooldown: 6, stamina: 70, cost: 75, effect: { type: 'soak', chance: 0.3, duration: 4 } },
+  HydroPump: { type: 'Water', damage: 24, warmup: 8, cooldown: 6, stamina: 75, cost: 75, effect: { type: 'soak', chance: 0.3, duration: 4 } },
   VineWhip: { type: 'Grass', damage: 16, warmup: 0, cooldown: 3, stamina: 25, cost: 30, effect: null },
   RazorLeaf: { type: 'Grass', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: null },
-  SolarBeam: { type: 'Grass', damage: 28, warmup: 8, cooldown: 6, stamina: 65, cost: 75, effect: { type: 'energize', chance: 0.25, duration: 3, staminaBoost: 5 } },
+  SolarBeam: { type: 'Grass', damage: 24, warmup: 9, cooldown: 6, stamina: 70, cost: 75, effect: { type: 'energize', chance: 0.25, duration: 3, staminaBoost: 5 } },
   PsyBeam: { type: 'Psychic', damage: 13, warmup: 0, cooldown: 3, stamina: 25, cost: 30, effect: { type: 'confuse', chance: 0.3, duration: 3 } },
   Psychic: { type: 'Psychic', damage: 25, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: { type: 'confuse', chance: 0.5, duration: 4 } },
-  PsychicBlast: { type: 'Psychic', damage: 27, warmup: 7, cooldown: 6, stamina: 70, cost: 75, effect: { type: 'confuse', chance: 0.7, duration: 5 } },
+  PsychicBlast: { type: 'Psychic', damage: 23, warmup: 8, cooldown: 6, stamina: 75, cost: 75, effect: { type: 'confuse', chance: 0.7, duration: 5 } },
   ThunderShock: { type: 'Electric', damage: 13, warmup: 0, cooldown: 3, stamina: 25, cost: 30, effect: { type: 'paralyze', chance: 0.2, duration: 3 } },
   Thunderbolt: { type: 'Electric', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: { type: 'paralyze', chance: 0.3, duration: 4 } },
-  Thunder: { type: 'Electric', damage: 28, warmup: 7, cooldown: 6, stamina: 75, cost: 75, effect: { type: 'paralyze', chance: 0.5, duration: 5 } },
+  Thunder: { type: 'Electric', damage: 24, warmup: 8, cooldown: 6, stamina: 80, cost: 75, effect: { type: 'paralyze', chance: 0.5, duration: 5 } },
   LowKick: { type: 'Fighting', damage: 12, warmup: 0, cooldown: 3, stamina: 20, cost: 25, effect: null },
   KarateChop: { type: 'Fighting', damage: 14, warmup: 0, cooldown: 3, stamina: 25, cost: 30, effect: null },
   Submission: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 50, cost: 50, effect: { type: 'recoil', damagePercent: 0.1 } },
   BrickBreak: { type: 'Fighting', damage: 26, warmup: 3, cooldown: 4, stamina: 45, cost: 45, effect: null },
-  CloseCombat: { type: 'Fighting', damage: 28, warmup: 7, cooldown: 6, stamina: 70, cost: 75, effect: { type: 'recoil', damagePercent: 0.15 } },
+  CloseCombat: { type: 'Fighting', damage: 24, warmup: 8, cooldown: 6, stamina: 75, cost: 75, effect: { type: 'recoil', damagePercent: 0.15 } },
   Earthquake: { type: 'Fighting', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 55, effect: null },
   AuraSphere: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 50, effect: null },
   DrainPunch: { type: 'Fighting', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'drain', chance: 0.5, duration: 1, healPercent: 0.25 } },
   DynamicPunch: { type: 'Fighting', damage: 30, warmup: 4, cooldown: 5, stamina: 50, cost: 60, effect: { type: 'confuse', chance: 0.5, duration: 3 } },
   Tackle: { type: 'Normal', damage: 12, warmup: 1, cooldown: 2, stamina: 20, cost: 30, effect: null },
   BodySlam: { type: 'Normal', damage: 21, warmup: 2, cooldown: 3, stamina: 42, cost: 35, effect: { type: 'stun', chance: 0.2, duration: 2 } },
-  HyperBeam: { type: 'Normal', damage: 30, warmup: 10, cooldown: 9, stamina: 80, cost: 80, effect: { type: 'exhaust', duration: 3 } },
+  HyperBeam: { type: 'Normal', damage: 26, warmup: 11, cooldown: 9, stamina: 85, cost: 80, effect: { type: 'exhaust', duration: 3 } },
   SacredFire: { type: 'Fire', damage: 38, warmup: 6, cooldown: 6, stamina: 85, cost: 80, effect: { type: 'burn', duration: 2 } },
   Psystrike: { type: 'Psychic', damage: 40, warmup: 7, cooldown: 7, stamina: 90, cost: 85, effect: { type: 'confuse', chance: 1.0, duration: 2 } },
   OriginPulse: { type: 'Water', damage: 39, warmup: 7, cooldown: 6, stamina: 90, cost: 85 },
@@ -1244,41 +1244,41 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           type: 'debuff_defense',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.55
+          multiplier: 0.7
         });
-        message += ` Opponent's Defense fell harshly!`;
+        message += ` Opponent's Defense fell!`;
       } else if (effect.type === 'debuff_instinct') {
         opponent.statusEffects.push({
           type: 'debuff_instinct',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.55
+          multiplier: 0.7
         });
-        message += ` Opponent's Instinct fell harshly!`;
+        message += ` Opponent's Instinct fell!`;
       } else if (effect.type === 'debuff_attack') {
         opponent.statusEffects.push({
           type: 'debuff_attack',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.55
+          multiplier: 0.7
         });
-        message += ` Opponent's Attack fell harshly!`;
+        message += ` Opponent's Attack fell!`;
       } else if (effect.type === 'debuff_speed') {
         opponent.statusEffects.push({
           type: 'debuff_speed',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.55
+          multiplier: 0.7
         });
-        message += ` Opponent's Speed fell harshly!`;
+        message += ` Opponent's Speed fell!`;
       } else if (effect.type === 'debuff_accuracy') {
         opponent.statusEffects.push({
           type: 'debuff_accuracy',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.55
+          multiplier: 0.7
         });
-        message += ` Opponent's Accuracy fell harshly!`;
+        message += ` Opponent's Accuracy fell!`;
       } else if (effect.type === 'energize') {
         combatant.statusEffects.push({
           type: 'energize',
