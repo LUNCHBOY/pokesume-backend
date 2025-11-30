@@ -10,23 +10,78 @@ const authenticateToken = require('../middleware/auth');
 const { simulateBattle } = require('../services/battleSimulator');
 const { LEGENDARY_POKEMON, GYM_LEADER_POKEMON, ELITE_FOUR, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS } = require('../shared/gameData');
 
-// Helper function to generate gym leaders (now uses non-legendary signature Pokemon)
+// Helper function to generate gym leaders
+// Pool includes all Support Card trainers EXCEPT Elite Four members (Lorelei, Bruno, Agatha, Lance)
 const generateGymLeaders = () => {
   const allGymLeaders = [
+    // Original Gym Leaders (kept from original pool, minus Elite Four)
     { name: 'Blaine', type: 'Fire', pokemon: GYM_LEADER_POKEMON.BlaineArcanine },
     { name: 'Misty', type: 'Water', pokemon: GYM_LEADER_POKEMON.MistyStarmie },
     { name: 'Erika', type: 'Grass', pokemon: GYM_LEADER_POKEMON.ErikaVileplume },
     { name: 'Lt. Surge', type: 'Electric', pokemon: GYM_LEADER_POKEMON.SurgeRaichu },
-    { name: 'Agatha', type: 'Poison', pokemon: GYM_LEADER_POKEMON.AgathaNidoking },
     { name: 'Giovanni', type: 'Fire', pokemon: GYM_LEADER_POKEMON.GiovanniRapidash },
     { name: 'Wallace', type: 'Water', pokemon: GYM_LEADER_POKEMON.WallaceLapras },
     { name: 'Wattson', type: 'Electric', pokemon: GYM_LEADER_POKEMON.WattsonElectabuzz },
-    { name: 'Will', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.WillWeezing },
     { name: 'Flannery', type: 'Fire', pokemon: GYM_LEADER_POKEMON.FlanneryMagmar },
     { name: 'Sabrina', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.SabrinaArbok },
-    { name: 'Juan', type: 'Water', pokemon: GYM_LEADER_POKEMON.JuanVaporeon },
     { name: 'Winona', type: 'Grass', pokemon: GYM_LEADER_POKEMON.WinonaExeggutor },
-    { name: 'Bruno', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.BrunoMachamp }
+
+    // Common Tier Supports
+    { name: 'Whitney', type: 'Normal', pokemon: GYM_LEADER_POKEMON.WhitneyMiltank },
+    { name: 'Chuck', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.ChuckPoliwrath },
+    { name: 'Pryce', type: 'Water', pokemon: GYM_LEADER_POKEMON.PryceDelibird },
+
+    // Uncommon Tier Supports
+    { name: 'Brock', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.BrockOnix },
+    { name: 'Koga', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.KogaMuk },
+    { name: 'Jasmine', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.JasmineSteelix },
+    { name: 'Karen', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.KarenUmbreon },
+    { name: 'Milo', type: 'Grass', pokemon: GYM_LEADER_POKEMON.MiloEldegoss },
+    { name: 'Kabu', type: 'Fire', pokemon: GYM_LEADER_POKEMON.KabuCentiskorch },
+    { name: 'Melony', type: 'Water', pokemon: GYM_LEADER_POKEMON.MelonyLapras },
+    { name: 'Gordie', type: 'Fire', pokemon: GYM_LEADER_POKEMON.GordieCoalossal },
+    { name: 'Klara', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.KlaraSlowbro },
+    { name: 'Avery', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.AverySlowking },
+    { name: 'Iono', type: 'Electric', pokemon: GYM_LEADER_POKEMON.IonoBellibolt },
+    { name: 'Grusha', type: 'Grass', pokemon: GYM_LEADER_POKEMON.GrushaAltaria },
+
+    // Rare Tier Supports
+    { name: 'Morty', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.MortyGengar },
+    { name: 'Iris', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.IrisHaxorus },
+    { name: 'Blue', type: 'Water', pokemon: GYM_LEADER_POKEMON.BlueBlastoise },
+    { name: 'Maxie', type: 'Fire', pokemon: GYM_LEADER_POKEMON.MaxieCamerupt },
+    { name: 'Archie', type: 'Water', pokemon: GYM_LEADER_POKEMON.ArchieSharpedo },
+    { name: 'Raihan', type: 'Electric', pokemon: GYM_LEADER_POKEMON.RaihanDuraludon },
+    { name: 'Marnie', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.MarnieGrimmsnarl },
+    { name: 'Nessa', type: 'Water', pokemon: GYM_LEADER_POKEMON.NessaDrednaw },
+    { name: 'Bea', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.BeaSirfetchd },
+    { name: 'Opal', type: 'Normal', pokemon: GYM_LEADER_POKEMON.OpalAlcremie },
+    { name: 'Piers', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.PiersObstagoon },
+    { name: 'Rika', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.RikaClodsire },
+    { name: 'Poppy', type: 'Normal', pokemon: GYM_LEADER_POKEMON.PoppyTinkaton },
+
+    // Legendary Tier Supports
+    { name: 'Cynthia', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.CynthiaGarchomp },
+    { name: 'Red', type: 'Fire', pokemon: GYM_LEADER_POKEMON.RedCharizard },
+    { name: 'Steven', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.StevenMetagross },
+    { name: 'N', type: 'Fire', pokemon: GYM_LEADER_POKEMON.NReshiram },
+    { name: 'Professor Oak', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.ProfessorOakDragonite },
+    { name: 'Diantha', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.DianthaDiancie },
+    { name: 'Leon', type: 'Fire', pokemon: GYM_LEADER_POKEMON.LeonCharizardGmax },
+    { name: 'Selene', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.SeleneLunala },
+    { name: 'Gloria', type: 'Normal', pokemon: GYM_LEADER_POKEMON.GloriaZacian },
+    { name: 'Nemona', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.NemonaKoraidon },
+    { name: 'Mustard', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.MustardUrshifu },
+    { name: 'Victor', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.VictorCalyrex },
+    { name: 'Arven', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.ArvenMabosstiff },
+    { name: 'Penny', type: 'Normal', pokemon: GYM_LEADER_POKEMON.PennySylveon },
+    { name: 'Sonia', type: 'Electric', pokemon: GYM_LEADER_POKEMON.SoniaBoltund },
+    { name: 'Hop', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.HopZamazenta },
+    { name: 'Geeta', type: 'Psychic', pokemon: GYM_LEADER_POKEMON.GeetaKingambit },
+    { name: 'Kieran', type: 'Normal', pokemon: GYM_LEADER_POKEMON.KieranTerapagos },
+    { name: 'Carmine', type: 'Grass', pokemon: GYM_LEADER_POKEMON.CarmineOgerpon },
+    { name: 'Drayton', type: 'Electric', pokemon: GYM_LEADER_POKEMON.DraytonArchaludon },
+    { name: 'Lacey', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.LaceyExcadrill }
   ];
 
   // Randomly shuffle and pick 4 gym leaders (Elite 4 on turns 60-63)
