@@ -80,7 +80,7 @@ const MOVES = {
   AuraSphere: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 50, effect: null },
   DrainPunch: { type: 'Fighting', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'drain', chance: 0.5, duration: 1, healPercent: 0.25 } },
   DynamicPunch: { type: 'Fighting', damage: 30, warmup: 4, cooldown: 5, stamina: 50, cost: 60, effect: { type: 'confuse', chance: 0.5, duration: 3 } },
-  Tackle: { type: 'Normal', damage: 12, warmup: 1, cooldown: 2, stamina: 20, cost: 30, effect: null },
+  Tackle: { type: 'Normal', damage: 12, warmup: 1, cooldown: 3, stamina: 20, cost: 30, effect: null },
   BodySlam: { type: 'Normal', damage: 21, warmup: 2, cooldown: 3, stamina: 42, cost: 35, effect: { type: 'stun', chance: 0.2, duration: 2 } },
   HyperBeam: { type: 'Normal', damage: 26, warmup: 11, cooldown: 9, stamina: 85, cost: 80, effect: { type: 'exhaust', duration: 3 } },
   SacredFire: { type: 'Fire', damage: 38, warmup: 6, cooldown: 6, stamina: 85, cost: 80, effect: { type: 'burn', duration: 2 } },
