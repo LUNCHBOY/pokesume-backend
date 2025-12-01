@@ -1065,11 +1065,21 @@ router.post('/trigger-event', authenticateToken, async (req, res) => {
     // 50% chance for an event to occur
     if (Math.random() < 0.5) {
       // Check for available hangout events - requires MAX friendship (100)
-      const selectedSupports = careerState.selectedSupports;
+      const selectedSupports = careerState.selectedSupports || [];
       const availableHangouts = selectedSupports.filter(supportName => {
-        const friendship = careerState.supportFriendships[supportName] || 0;
-        // Hangout events only unlock after reaching max friendship (100)
-        return friendship >= 100 && !careerState.completedHangouts.includes(supportName);
+        const friendship = careerState.supportFriendships?.[supportName] || 0;
+        const hasHangoutEvent = !!HANGOUT_EVENTS[supportName];
+        const alreadyCompleted = (careerState.completedHangouts || []).includes(supportName);
+        // Hangout events only unlock after reaching max friendship (100) AND have a hangout event defined
+        return friendship >= 100 && hasHangoutEvent && !alreadyCompleted;
+      });
+
+      console.log('[Trigger Event] Hangout check:', {
+        selectedSupports,
+        friendships: careerState.supportFriendships,
+        completedHangouts: careerState.completedHangouts || [],
+        availableHangouts,
+        hangoutEventKeys: Object.keys(HANGOUT_EVENTS).slice(0, 10) // First 10 keys for debug
       });
 
       let eventToSet = null;
@@ -1078,6 +1088,7 @@ router.post('/trigger-event', authenticateToken, async (req, res) => {
       if (availableHangouts.length > 0 && Math.random() < 0.5) {
         const supportName = availableHangouts[Math.floor(Math.random() * availableHangouts.length)];
         const hangoutEvent = HANGOUT_EVENTS[supportName];
+        console.log('[Trigger Event] Selected hangout:', { supportName, hangoutEvent: !!hangoutEvent });
         if (hangoutEvent) {
           eventToSet = {
             type: 'hangout',
