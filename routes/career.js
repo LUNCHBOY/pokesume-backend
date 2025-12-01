@@ -1263,6 +1263,16 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
     // Calculate max energy with support bonuses so events don't cap at base 100
     const maxEnergy = calculateMaxEnergy(careerState);
 
+    // For events that don't show a result (stat_increase, negative), generate training options immediately
+    // This prevents the frontend from triggering another event
+    let trainingOptions = careerState.currentTrainingOptions;
+    if (!shouldShowResult) {
+      trainingOptions = generateTrainingOptionsWithAppearanceChance(
+        careerState.selectedSupports,
+        careerState
+      );
+    }
+
     const updatedCareerState = {
       ...careerState,
       currentStats: newStats,
@@ -1281,7 +1291,7 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
         flavor: outcome.flavor || null
       } : null,
       pendingEvent: null,
-      currentTrainingOptions: !shouldShowResult ? null : careerState.currentTrainingOptions,
+      currentTrainingOptions: trainingOptions,
       stateVersion: (careerState.stateVersion || 0) + 1
     };
 
@@ -1670,14 +1680,16 @@ router.post('/battle', authenticateToken, async (req, res) => {
 router.post('/complete', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { completionType, inspirations } = req.body;
+    // Support both formats: { completionType, inspirations } and { careerState, completionType }
+    const { completionType, careerState } = req.body;
+    const inspirations = req.body.inspirations || careerState?.inspirations || null;
 
     if (!completionType) {
       return res.status(400).json({ error: 'Completion type required' });
     }
 
     // Validate completion type
-    const validCompletionTypes = ['champion', 'defeat', 'abandon'];
+    const validCompletionTypes = ['champion', 'defeat', 'defeated', 'abandon'];
     if (!validCompletionTypes.includes(completionType)) {
       return res.status(400).json({ error: 'Invalid completion type' });
     }
@@ -1879,6 +1891,115 @@ router.post('/change-strategy', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Change strategy error:', error);
     res.status(500).json({ error: 'Failed to change strategy' });
+  }
+});
+
+// ============================================================================
+// FORGET ABILITY
+// ============================================================================
+
+// Forget an ability (move from known to learnable)
+router.post('/forget-ability', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { moveName } = req.body;
+
+    if (!moveName) {
+      return res.status(400).json({ error: 'Move name required' });
+    }
+
+    // Get active career
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Validate move is currently known
+    if (!careerState.knownAbilities.includes(moveName)) {
+      return res.status(400).json({ error: 'Move is not known' });
+    }
+
+    // Remove from known abilities
+    const newKnownAbilities = careerState.knownAbilities.filter(m => m !== moveName);
+
+    // Add to learnable abilities if not already there
+    const newLearnableAbilities = [...(careerState.learnableAbilities || [])];
+    if (!newLearnableAbilities.includes(moveName)) {
+      newLearnableAbilities.push(moveName);
+    }
+
+    const updatedCareerState = {
+      ...careerState,
+      knownAbilities: newKnownAbilities,
+      learnableAbilities: newLearnableAbilities,
+      stateVersion: (careerState.stateVersion || 0) + 1
+    };
+
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    console.log('[ForgetAbility] Forgot move:', moveName);
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState
+    });
+  } catch (error) {
+    console.error('Forget ability error:', error);
+    res.status(500).json({ error: 'Failed to forget ability' });
+  }
+});
+
+// ============================================================================
+// GENERIC UPDATE (for backward compatibility)
+// ============================================================================
+
+// Generic career state update
+router.put('/update', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { careerState: newCareerState } = req.body;
+
+    if (!newCareerState) {
+      return res.status(400).json({ error: 'Career state required' });
+    }
+
+    // Get active career to validate
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    // Update with provided state (increment version)
+    const updatedCareerState = {
+      ...newCareerState,
+      stateVersion: (newCareerState.stateVersion || 0) + 1
+    };
+
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState
+    });
+  } catch (error) {
+    console.error('Update career error:', error);
+    res.status(500).json({ error: 'Failed to update career' });
   }
 });
 

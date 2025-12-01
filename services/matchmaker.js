@@ -10,10 +10,10 @@ const { simulateBattle } = require('./battleSimulator');
 // Configuration
 const CONFIG = {
   POLL_INTERVAL_MS: 5000,        // Check queue every 5 seconds
-  BASE_RATING_RANGE: 100,        // Initial rating range for matching
-  RATING_EXPANSION_RATE: 2,      // Expand range by 2 per second
-  MAX_RATING_RANGE: 500,         // Maximum rating range
-  AI_TIMEOUT_SECONDS: 15,        // Generate AI opponent after 15 seconds
+  BASE_RATING_RANGE: 300,        // Initial rating range for matching (wide to ensure real matches)
+  RATING_EXPANSION_RATE: 10,     // Expand range by 10 per second
+  MAX_RATING_RANGE: 1000,        // Maximum rating range
+  AI_TIMEOUT_SECONDS: 30,        // Generate AI opponent after 30 seconds (give more time for real matches)
   K_FACTOR: 96,                  // Base Elo K-factor (tripled from 32)
   PLATINUM_RATING: 1400,         // Rating where inflation converges to 0
   MAX_INFLATION_BONUS: 0.5       // Max 50% bonus for wins / 50% reduction for losses at low rating
@@ -137,6 +137,7 @@ const POWER_MOVES_BY_TYPE = {
 
 let isRunning = false;
 let intervalId = null;
+let isProcessing = false; // Prevent concurrent queue processing
 
 /**
  * Get rating tier and corresponding stat ranges for AI generation
@@ -563,21 +564,28 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
       );
     }
 
-    // Update queue entries
-    await db.query(
-      `UPDATE pvp_queue SET status = 'completed', match_id = $1 WHERE id = $2`,
-      [matchId, entry1.id]
-    );
-
+    // Update queue entries - update BOTH in a single query to prevent race conditions
+    // where one player sees 'completed' but the other still sees 'waiting'
     if (!isAIMatch) {
+      // For real matches: update both entries in one query using IN clause
       await db.query(
-        `UPDATE pvp_queue SET status = 'completed', match_id = $1, matched_with_id = $2 WHERE id = $3`,
+        `UPDATE pvp_queue SET status = 'completed', match_id = $1 WHERE id IN ($2, $3)`,
         [matchId, entry1.id, entry2.id]
       );
-
+      // Then set matched_with_id for cross-referencing
       await db.query(
         `UPDATE pvp_queue SET matched_with_id = $1 WHERE id = $2`,
         [entry2.id, entry1.id]
+      );
+      await db.query(
+        `UPDATE pvp_queue SET matched_with_id = $1 WHERE id = $2`,
+        [entry1.id, entry2.id]
+      );
+    } else {
+      // For AI matches: only update entry1
+      await db.query(
+        `UPDATE pvp_queue SET status = 'completed', match_id = $1 WHERE id = $2`,
+        [matchId, entry1.id]
       );
     }
 
@@ -592,8 +600,19 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
 
 /**
  * Main matchmaking loop
+ * Two-pass algorithm:
+ * 1. First pass: Match all real players within rating range (prioritize real matches)
+ * 2. Second pass: Generate AI for players who've waited too long
  */
 async function processQueue() {
+  // Prevent concurrent runs - if already processing, skip this iteration
+  if (isProcessing) {
+    console.log('[Matchmaker] Already processing, skipping this iteration');
+    return;
+  }
+
+  isProcessing = true;
+
   try {
     // Get all waiting entries ordered by queue time
     const queueResult = await db.query(
@@ -617,6 +636,7 @@ async function processQueue() {
 
     const processedIds = new Set();
 
+    // PASS 1: Try to match all real players first (prioritize human vs human)
     for (const entry of waitingEntries) {
       // Skip if already processed this cycle
       if (processedIds.has(entry.id)) {
@@ -626,7 +646,7 @@ async function processQueue() {
       const secondsInQueue = parseFloat(entry.seconds_in_queue);
       const ratingRange = getRatingRange(secondsInQueue);
 
-      // Try to find an opponent
+      // Try to find a real opponent
       let opponent = null;
 
       for (const potentialOpponent of waitingEntries) {
@@ -642,13 +662,24 @@ async function processQueue() {
       }
 
       if (opponent) {
-        // Found a match!
+        // Found a real match!
         console.log(`[Matchmaker] Matched ${entry.username} (${entry.rating_at_queue}) vs ${opponent.username} (${opponent.rating_at_queue})`);
         processedIds.add(entry.id);
         processedIds.add(opponent.id);
 
         await processMatch(entry, opponent, false);
-      } else if (secondsInQueue >= CONFIG.AI_TIMEOUT_SECONDS) {
+      }
+    }
+
+    // PASS 2: Generate AI for those who've waited too long (only after all real matches are made)
+    for (const entry of waitingEntries) {
+      if (processedIds.has(entry.id)) {
+        continue;
+      }
+
+      const secondsInQueue = parseFloat(entry.seconds_in_queue);
+
+      if (secondsInQueue >= CONFIG.AI_TIMEOUT_SECONDS) {
         // No opponent found after timeout, generate AI
         console.log(`[Matchmaker] No opponent found for ${entry.username}, generating AI (waited ${Math.floor(secondsInQueue)}s)`);
         processedIds.add(entry.id);
@@ -658,6 +689,8 @@ async function processQueue() {
     }
   } catch (error) {
     console.error('[Matchmaker] Error in queue processing:', error);
+  } finally {
+    isProcessing = false;
   }
 }
 

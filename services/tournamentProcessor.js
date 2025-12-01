@@ -522,15 +522,15 @@ async function processTournaments() {
   }
 }
 
-// Run every 5 minutes
+// Run every 15 seconds (fast tournament processing for responsive gameplay)
 function startTournamentProcessor() {
   console.log('[Tournament Processor] Starting...');
-  
+
   // Run immediately on start
   processTournaments();
-  
-  // Then every 5 minutes
-  setInterval(processTournaments, 5 * 60 * 1000);
+
+  // Then every 15 seconds for fast tournament progression
+  setInterval(processTournaments, 15 * 1000);
 }
 
 module.exports = { startTournamentProcessor, processTournaments, createScheduledTournament, GYM_BADGES };
