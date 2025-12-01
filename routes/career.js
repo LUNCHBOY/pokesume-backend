@@ -1138,9 +1138,8 @@ router.post('/trigger-event', authenticateToken, async (req, res) => {
     if (inspirationTurns.includes(careerState.turn)) {
       // On inspiration turns, skip events and just generate training
       const trainingOptions = generateTrainingOptionsWithAppearanceChance(
-        careerState.pokemon,
         careerState.selectedSupports,
-        careerState.supportFriendships
+        careerState
       );
       const updatedCareerState = {
         ...careerState,
@@ -1801,7 +1800,14 @@ router.post('/battle', authenticateToken, async (req, res) => {
     let pendingEvent = null;
     let currentTrainingOptions = null;
 
-    if (isEventBattle) {
+    // Check if career just ended (defeated final Elite Four - currentGymIndex is now 9)
+    const careerComplete = baseUpdatedState.currentGymIndex >= 9;
+
+    if (careerComplete) {
+      // Career is complete - don't generate training options, frontend will call completeCareer
+      pendingEvent = null;
+      currentTrainingOptions = null;
+    } else if (isEventBattle) {
       // Event battles keep current training options
       currentTrainingOptions = careerState.currentTrainingOptions;
     } else {
