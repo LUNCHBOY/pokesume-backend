@@ -410,6 +410,91 @@ const generateTrainingOptionsWithAppearanceChance = (selectedSupports, careerSta
   return trainingOptions;
 };
 
+/**
+ * Helper function to check if an event should occur after an action (train/rest/battle)
+ * Returns { pendingEvent, currentTrainingOptions } - one will be set, the other null
+ * Events have 50% chance to occur, and skip on inspiration turns and turn 1
+ */
+const checkForEventOrGenerateTraining = (careerState) => {
+  const inspirationTurns = [11, 23, 35, 47, 59];
+  const nextTurn = careerState.turn; // This is already the NEW turn after action
+
+  // Skip events on turn 1 and inspiration turns
+  if (nextTurn === 1 || inspirationTurns.includes(nextTurn)) {
+    return {
+      pendingEvent: null,
+      currentTrainingOptions: generateTrainingOptionsWithAppearanceChance(
+        careerState.selectedSupports,
+        careerState
+      )
+    };
+  }
+
+  // 50% chance for an event to occur
+  if (Math.random() < 0.5) {
+    // Check for available hangout events - requires MAX friendship (100)
+    const selectedSupports = careerState.selectedSupports || [];
+    const availableHangouts = selectedSupports.filter(supportName => {
+      const friendship = careerState.supportFriendships?.[supportName] || 0;
+      const hasHangoutEvent = !!HANGOUT_EVENTS[supportName];
+      const alreadyCompleted = (careerState.completedHangouts || []).includes(supportName);
+      return friendship >= 100 && hasHangoutEvent && !alreadyCompleted;
+    });
+
+    let eventToSet = null;
+
+    // If hangouts are available, 50% chance to pick a hangout event
+    if (availableHangouts.length > 0 && Math.random() < 0.5) {
+      const supportName = availableHangouts[Math.floor(Math.random() * availableHangouts.length)];
+      const hangoutEvent = HANGOUT_EVENTS[supportName];
+      if (hangoutEvent) {
+        eventToSet = {
+          type: 'hangout',
+          supportName,
+          ...hangoutEvent
+        };
+      }
+    }
+
+    if (!eventToSet) {
+      // Pick a random event - 70% chance to exclude negative events
+      const eventKeys = Object.keys(RANDOM_EVENTS);
+      let filteredKeys = eventKeys;
+
+      if (Math.random() < 0.7) {
+        filteredKeys = eventKeys.filter(key => RANDOM_EVENTS[key].type !== 'negative');
+      }
+
+      if (filteredKeys.length === 0) {
+        filteredKeys = eventKeys;
+      }
+
+      const randomKey = filteredKeys[Math.floor(Math.random() * filteredKeys.length)];
+      const event = RANDOM_EVENTS[randomKey];
+
+      if (event && event.type && event.name) {
+        eventToSet = { ...event, key: randomKey };
+      }
+    }
+
+    if (eventToSet) {
+      return {
+        pendingEvent: eventToSet,
+        currentTrainingOptions: null
+      };
+    }
+  }
+
+  // No event - generate training options
+  return {
+    pendingEvent: null,
+    currentTrainingOptions: generateTrainingOptionsWithAppearanceChance(
+      careerState.selectedSupports,
+      careerState
+    )
+  };
+};
+
 // Get active career state
 router.get('/active', authenticateToken, async (req, res) => {
   try {
@@ -708,13 +793,8 @@ router.post('/train', authenticateToken, async (req, res) => {
       // Training failed - failures do NOT progress training levels and do NOT cost energy
       const statLoss = stat === 'Speed' ? 0 : GAME_CONFIG.TRAINING.STAT_LOSS_ON_FAILURE;
 
-      // Generate new training options immediately so frontend doesn't need a second request
-      const newTrainingOptions = generateTrainingOptionsWithAppearanceChance(
-        careerState.selectedSupports,
-        careerState
-      );
-
-      const updatedCareerState = {
+      // Build the base updated state first (with new turn number)
+      const baseUpdatedState = {
         ...careerState,
         currentStats: {
           ...careerState.currentStats,
@@ -728,13 +808,21 @@ router.post('/train', authenticateToken, async (req, res) => {
           stat,
           message: stat === 'Speed' ? `Training ${stat} failed! No stat loss.` : `Training ${stat} failed! Lost ${statLoss} ${stat}. No energy lost.`
         }, ...(careerState.turnLog || [])],
-        currentTrainingOptions: newTrainingOptions,
         // Preserve training levels and progress (failures don't affect them)
         trainingLevels: careerState.trainingLevels || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
         trainingProgress: careerState.trainingProgress || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
         // Regenerate wild battles with new turn's scaling
         availableBattles: generateWildBattles(careerState.turn + 1),
         stateVersion: (careerState.stateVersion || 0) + 1
+      };
+
+      // Check if an event should occur (50% chance) or generate training options
+      const { pendingEvent, currentTrainingOptions } = checkForEventOrGenerateTraining(baseUpdatedState);
+
+      const updatedCareerState = {
+        ...baseUpdatedState,
+        pendingEvent,
+        currentTrainingOptions
       };
 
       await pool.query(
@@ -836,13 +924,8 @@ router.post('/train', authenticateToken, async (req, res) => {
     }
     newEnergy = Math.max(0, Math.min(maxEnergy, newEnergy));
 
-    // Generate new training options immediately so frontend doesn't need a second request
-    const newTrainingOptions = generateTrainingOptionsWithAppearanceChance(
-      careerState.selectedSupports,
-      careerState
-    );
-
-    const updatedCareerState = {
+    // Build the base updated state first (with new turn number)
+    const baseUpdatedState = {
       ...careerState,
       currentStats: {
         ...careerState.currentStats,
@@ -866,10 +949,18 @@ router.post('/train', authenticateToken, async (req, res) => {
           ? `Trained ${stat} successfully! Gained ${statGain} ${stat}. ${stat} training leveled up to ${newLevel}!`
           : `Trained ${stat} successfully! Gained ${statGain} ${stat}.`
       }, ...(careerState.turnLog || [])],
-      currentTrainingOptions: newTrainingOptions,
       // Regenerate wild battles with new turn's scaling
       availableBattles: generateWildBattles(careerState.turn + 1),
       stateVersion: (careerState.stateVersion || 0) + 1
+    };
+
+    // Check if an event should occur (50% chance) or generate training options
+    const { pendingEvent, currentTrainingOptions } = checkForEventOrGenerateTraining(baseUpdatedState);
+
+    const updatedCareerState = {
+      ...baseUpdatedState,
+      pendingEvent,
+      currentTrainingOptions
     };
 
     await pool.query(
@@ -945,21 +1036,24 @@ router.post('/rest', authenticateToken, async (req, res) => {
       message: `Rested and recovered ${energyGain} energy.`
     };
 
-    // Generate new training options immediately so frontend doesn't need a second request
-    const newTrainingOptions = generateTrainingOptionsWithAppearanceChance(
-      careerState.selectedSupports,
-      careerState
-    );
-
-    const updatedCareerState = {
+    // Build the base updated state first (with new turn number)
+    const baseUpdatedState = {
       ...careerState,
       energy: newEnergy,
       turn: careerState.turn + 1,
       turnLog: [logEntry, ...(careerState.turnLog || [])],
-      currentTrainingOptions: newTrainingOptions,
       // Regenerate wild battles with new turn's scaling
       availableBattles: generateWildBattles(careerState.turn + 1),
       stateVersion: (careerState.stateVersion || 0) + 1
+    };
+
+    // Check if an event should occur (50% chance) or generate training options
+    const { pendingEvent, currentTrainingOptions } = checkForEventOrGenerateTraining(baseUpdatedState);
+
+    const updatedCareerState = {
+      ...baseUpdatedState,
+      pendingEvent,
+      currentTrainingOptions
     };
 
     await pool.query(
@@ -1631,12 +1725,8 @@ router.post('/battle', authenticateToken, async (req, res) => {
     // Calculate max energy with support bonuses so battles don't cap at base 100
     const maxEnergy = calculateMaxEnergy(careerState);
 
-    // Generate new training options for non-event battles so frontend doesn't need a second request
-    const newTrainingOptions = isEventBattle
-      ? careerState.currentTrainingOptions
-      : generateTrainingOptionsWithAppearanceChance(careerState.selectedSupports, careerState);
-
-    const updatedCareerState = {
+    // Build the base updated state first
+    const baseUpdatedState = {
       ...careerState,
       currentStats: newStats,
       skillPoints: careerState.skillPoints + skillPoints,
@@ -1659,9 +1749,27 @@ router.post('/battle', authenticateToken, async (req, res) => {
       currentGymIndex: (isGymLeader && playerWon) ? careerState.currentGymIndex + 1 : careerState.currentGymIndex,
       // Generate new wild battles for next turn (but keep current ones for event battles)
       availableBattles: isEventBattle ? careerState.availableBattles : generateWildBattles(careerState.turn + 1),
-      // Keep current training options for event battles, generate new ones for regular battles
-      currentTrainingOptions: newTrainingOptions,
       stateVersion: (careerState.stateVersion || 0) + 1
+    };
+
+    // For event battles, keep current training options. For other battles, check for events
+    let pendingEvent = null;
+    let currentTrainingOptions = null;
+
+    if (isEventBattle) {
+      // Event battles keep current training options
+      currentTrainingOptions = careerState.currentTrainingOptions;
+    } else {
+      // Non-event battles (wild/gym) can trigger events
+      const eventOrTraining = checkForEventOrGenerateTraining(baseUpdatedState);
+      pendingEvent = eventOrTraining.pendingEvent;
+      currentTrainingOptions = eventOrTraining.currentTrainingOptions;
+    }
+
+    const updatedCareerState = {
+      ...baseUpdatedState,
+      pendingEvent,
+      currentTrainingOptions
     };
 
     // Save updated career state
