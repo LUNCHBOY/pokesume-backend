@@ -351,7 +351,23 @@ router.post('/matches/:matchId/simulate', authenticateToken, async (req, res) =>
       const pokemon2 = player2Team[i];
 
       const battleResult = simulateBattle(pokemon1, pokemon2);
-      battleResults.push(battleResult);
+
+      // Include pokemon data for replay display (sprites, types, stats)
+      battleResults.push({
+        ...battleResult,
+        pokemon1: {
+          name: pokemon1.name,
+          primaryType: pokemon1.primaryType,
+          stats: pokemon1.stats,
+          type: pokemon1.primaryType
+        },
+        pokemon2: {
+          name: pokemon2.name,
+          primaryType: pokemon2.primaryType,
+          stats: pokemon2.stats,
+          type: pokemon2.primaryType
+        }
+      });
 
       if (battleResult.winner === 1) {
         player1Wins++;
