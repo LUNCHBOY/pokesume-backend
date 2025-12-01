@@ -90,7 +90,7 @@ const generateGymLeaders = () => {
 };
 
 // Helper function to calculate difficulty multiplier based on turn
-// Scaling: 1.0x until turn 12, then quadratic curve to 3.25x effective at turn 60
+// Scaling: 1.0x until turn 12, then curve to 3.25x effective at turn 60
 // ENEMY_STAT_MULTIPLIER (0.8) is applied, so base reaches 4.06x
 const calculateDifficultyMultiplier = (turn) => {
   const enemyStatMult = GAME_CONFIG.CAREER.ENEMY_STAT_MULTIPLIER || 1.0;
@@ -99,12 +99,13 @@ const calculateDifficultyMultiplier = (turn) => {
   if (turn < 12) {
     return 1.0 * enemyStatMult;
   }
-  // After turn 12, use quadratic scaling to match player power curve
+  // After turn 12, use mixed scaling to match player power curve
   // Progress from 0 to 1 over 48 turns (turn 12 to 60)
   const progress = (turn - 12) / 48;
-  // Quadratic curve: starts slow, accelerates late game
-  // At turn 12: 1.0x, at turn 36 (midpoint): ~1.53x, at turn 60: 4.06x base (3.25x effective)
-  const baseMultiplier = 1.0 + (1.56 * progress * progress) + (1.5 * progress);
+  // More linear curve: stronger mid-game challenge, same start/end points
+  // At turn 12: 1.0x, at turn 36 (midpoint): ~2.44x, at turn 60: 4.06x base (3.25x effective)
+  // Old formula was 1.56*p² + 1.5*p (midpoint ~2.14x), new is 0.36*p² + 2.7*p (midpoint ~2.44x)
+  const baseMultiplier = 1.0 + (0.36 * progress * progress) + (2.7 * progress);
   return baseMultiplier * enemyStatMult;
 };
 
