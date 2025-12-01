@@ -1263,15 +1263,12 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
     // Calculate max energy with support bonuses so events don't cap at base 100
     const maxEnergy = calculateMaxEnergy(careerState);
 
-    // For events that don't show a result (stat_increase, negative), generate training options immediately
-    // This prevents the frontend from triggering another event
-    let trainingOptions = careerState.currentTrainingOptions;
-    if (!shouldShowResult) {
-      trainingOptions = generateTrainingOptionsWithAppearanceChance(
-        careerState.selectedSupports,
-        careerState
-      );
-    }
+    // Always generate fresh training options after resolving any event
+    // This prevents the frontend useEffect from triggering another event when eventResult is cleared
+    const trainingOptions = generateTrainingOptionsWithAppearanceChance(
+      careerState.selectedSupports,
+      careerState
+    );
 
     const updatedCareerState = {
       ...careerState,

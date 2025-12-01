@@ -43,10 +43,17 @@ router.post('/create', authenticateToken, async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const result = await db.query(
-      `SELECT 
+      `SELECT
         t.*,
-        (SELECT COUNT(*) FROM tournament_entries WHERE tournament_id = t.id) as entries_count
+        (SELECT COUNT(*) FROM tournament_entries WHERE tournament_id = t.id) as entries_count,
+        winner_u.id as winner_user_id,
+        winner_u.username as winner_username
       FROM tournaments t
+      LEFT JOIN tournament_matches final_match ON final_match.tournament_id = t.id
+        AND final_match.round = t.total_rounds
+        AND final_match.winner_entry_id IS NOT NULL
+      LEFT JOIN tournament_entries winner_te ON winner_te.id = final_match.winner_entry_id
+      LEFT JOIN users winner_u ON winner_u.id = winner_te.user_id
       WHERE t.status IN ('upcoming', 'registration', 'in_progress')
         OR (t.status = 'completed' AND t.created_at > NOW() - INTERVAL '7 days')
       ORDER BY t.start_time ASC`
@@ -63,10 +70,17 @@ router.get('/', async (req, res) => {
 router.get('/:tournamentId', async (req, res) => {
   try {
     const tournamentResult = await db.query(
-      `SELECT 
+      `SELECT
         t.*,
-        (SELECT COUNT(*) FROM tournament_entries WHERE tournament_id = t.id) as entries_count
+        (SELECT COUNT(*) FROM tournament_entries WHERE tournament_id = t.id) as entries_count,
+        winner_u.id as winner_user_id,
+        winner_u.username as winner_username
       FROM tournaments t
+      LEFT JOIN tournament_matches final_match ON final_match.tournament_id = t.id
+        AND final_match.round = t.total_rounds
+        AND final_match.winner_entry_id IS NOT NULL
+      LEFT JOIN tournament_entries winner_te ON winner_te.id = final_match.winner_entry_id
+      LEFT JOIN users winner_u ON winner_u.id = winner_te.user_id
       WHERE t.id = $1`,
       [req.params.tournamentId]
     );
