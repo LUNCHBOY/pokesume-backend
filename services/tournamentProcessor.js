@@ -83,6 +83,18 @@ function simulateBestOf3(entry1, entry2) {
     battle: 1,
     pokemon1Name: entry1.pokemon1_data.name,
     pokemon2Name: entry2.pokemon1_data.name,
+    pokemon1: {
+      name: entry1.pokemon1_data.name,
+      primaryType: entry1.pokemon1_data.primaryType,
+      stats: entry1.pokemon1_data.stats,
+      type: entry1.pokemon1_data.primaryType
+    },
+    pokemon2: {
+      name: entry2.pokemon1_data.name,
+      primaryType: entry2.pokemon1_data.primaryType,
+      stats: entry2.pokemon1_data.stats,
+      type: entry2.pokemon1_data.primaryType
+    },
     winner: battle1.winner,
     battleLog: battle1.battleLog
   });
@@ -95,6 +107,18 @@ function simulateBestOf3(entry1, entry2) {
     battle: 2,
     pokemon1Name: entry1.pokemon2_data.name,
     pokemon2Name: entry2.pokemon2_data.name,
+    pokemon1: {
+      name: entry1.pokemon2_data.name,
+      primaryType: entry1.pokemon2_data.primaryType,
+      stats: entry1.pokemon2_data.stats,
+      type: entry1.pokemon2_data.primaryType
+    },
+    pokemon2: {
+      name: entry2.pokemon2_data.name,
+      primaryType: entry2.pokemon2_data.primaryType,
+      stats: entry2.pokemon2_data.stats,
+      type: entry2.pokemon2_data.primaryType
+    },
     winner: battle2.winner,
     battleLog: battle2.battleLog
   });
@@ -107,6 +131,18 @@ function simulateBestOf3(entry1, entry2) {
     battle: 3,
     pokemon1Name: entry1.pokemon3_data.name,
     pokemon2Name: entry2.pokemon3_data.name,
+    pokemon1: {
+      name: entry1.pokemon3_data.name,
+      primaryType: entry1.pokemon3_data.primaryType,
+      stats: entry1.pokemon3_data.stats,
+      type: entry1.pokemon3_data.primaryType
+    },
+    pokemon2: {
+      name: entry2.pokemon3_data.name,
+      primaryType: entry2.pokemon3_data.primaryType,
+      stats: entry2.pokemon3_data.stats,
+      type: entry2.pokemon3_data.primaryType
+    },
     winner: battle3.winner,
     battleLog: battle3.battleLog
   });
