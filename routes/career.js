@@ -90,7 +90,7 @@ const generateGymLeaders = () => {
 };
 
 // Helper function to calculate difficulty multiplier based on turn
-// Scaling: 1.0x until turn 12, then scales using quadratic curve to ~4.2x at turn 60
+// Scaling: 1.0x until turn 12, then scales using quadratic curve to ~3.57x at turn 60
 // Now applies ENEMY_STAT_MULTIPLIER (0.8 = 20% reduction)
 // Uses quadratic scaling to match player's accelerating growth curve
 const calculateDifficultyMultiplier = (turn) => {
@@ -104,19 +104,19 @@ const calculateDifficultyMultiplier = (turn) => {
   // Progress from 0 to 1 over 48 turns (turn 12 to 60)
   const progress = (turn - 12) / 48;
   // Quadratic curve: starts slow, accelerates late game
-  // At turn 12: 1.0x, at turn 36 (midpoint): ~1.8x, at turn 60: 4.2x
-  const baseMultiplier = 1.0 + (3.2 * progress * progress) + (1.2 * progress);
+  // At turn 12: 1.0x, at turn 36 (midpoint): ~1.5x, at turn 60: 3.57x (15% lower than previous 4.2x)
+  const baseMultiplier = 1.0 + (2.72 * progress * progress) + (1.02 * progress);
   return baseMultiplier * enemyStatMult;
 };
 
 // Elite Four fixed base multipliers (used instead of turn-based scaling)
 // ENEMY_STAT_MULTIPLIER is applied when these are used
-// Increased ~20% from original values to match player late-game scaling
+// Reduced 15% from previous values for better balance
 const ELITE_FOUR_BASE_MULTIPLIERS = {
-  0: 4.2,   // Lorelei (turn 60)
-  1: 4.5,   // Bruno (turn 61)
-  2: 4.8,   // Agatha (turn 62)
-  3: 5.2    // Lance (turn 63)
+  0: 3.57,  // Lorelei (turn 60) - was 4.2
+  1: 3.83,  // Bruno (turn 61) - was 4.5
+  2: 4.08,  // Agatha (turn 62) - was 4.8
+  3: 4.42   // Lance (turn 63) - was 5.2
 };
 
 // Get Elite Four multiplier with ENEMY_STAT_MULTIPLIER applied
