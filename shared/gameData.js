@@ -5317,41 +5317,41 @@ const RANDOM_EVENTS = {
     ]
   },
 
-  // Battle events (5) - Stats reduced by 50%
+  // Battle events (5) - Difficulty between 1.0x and 1.25x of baseline wild pokemon
   championChallenge: {
     type: 'battle',
     name: 'Champion Challenge',
     description: 'A powerful wandering Champion challenges you!',
-    difficulty: 1.5,
-    rewards: { stats: { HP: 9, Attack: 6, Defense: 6, Instinct: 6, Speed: 6 }, skillPoints: 30, energy: -22 }
+    difficulty: 1.15,
+    rewards: { stats: { HP: 5, Attack: 4, Defense: 4, Instinct: 4, Speed: 4 }, skillPoints: 18, energy: -15 }
   },
   eliteWarrior: {
     type: 'battle',
     name: 'Elite Four Member',
     description: 'An Elite Four member is training here and wants to battle!',
-    difficulty: 1.6,
-    rewards: { stats: { Attack: 11, Defense: 8, Instinct: 8 }, skillPoints: 36, energy: -26 }
+    difficulty: 1.20,
+    rewards: { stats: { Attack: 6, Defense: 5, Instinct: 5 }, skillPoints: 20, energy: -16 }
   },
   legendaryPokemon: {
     type: 'battle',
     name: 'Legendary Pokemon',
     description: 'A legendary Pokemon appears before you!',
-    difficulty: 1.8,
-    rewards: { stats: { HP: 11, Attack: 9, Defense: 9, Instinct: 9, Speed: 9 }, skillPoints: 50, energy: -30 }
+    difficulty: 1.25,
+    rewards: { stats: { HP: 6, Attack: 5, Defense: 5, Instinct: 5, Speed: 5 }, skillPoints: 25, energy: -18 }
   },
   rivalAppears: {
     type: 'battle',
     name: 'Rival Battle',
     description: 'Your rival shows up demanding a battle!',
-    difficulty: 1.4,
-    rewards: { stats: { Attack: 8, Instinct: 8, Speed: 6 }, skillPoints: 24, energy: -19 }
+    difficulty: 1.05,
+    rewards: { stats: { Attack: 4, Instinct: 4, Speed: 3 }, skillPoints: 12, energy: -12 }
   },
   ancientGuardian: {
     type: 'battle',
     name: 'Ruin Guardian',
     description: 'An ancient guardian Golem awakens to test you!',
-    difficulty: 1.7,
-    rewards: { stats: { HP: 14, Defense: 11, Instinct: 9 }, skillPoints: 40, energy: -28 }
+    difficulty: 1.20,
+    rewards: { stats: { HP: 7, Defense: 6, Instinct: 5 }, skillPoints: 22, energy: -17 }
   },
   
   // Negative events (10) - Stats reduced by 50%
