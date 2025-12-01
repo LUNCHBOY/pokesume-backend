@@ -1431,6 +1431,51 @@ router.post('/resolve-event', authenticateToken, async (req, res) => {
   }
 });
 
+// Clear event result (when user clicks Continue on the result screen)
+router.post('/clear-event-result', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const careerResult = await pool.query(
+      'SELECT career_state FROM active_careers WHERE user_id = $1',
+      [userId]
+    );
+
+    if (careerResult.rows.length === 0) {
+      return res.status(400).json({ error: 'No active career found' });
+    }
+
+    const careerState = careerResult.rows[0].career_state;
+
+    // Only clear if there's actually an event result to clear
+    if (!careerState.eventResult) {
+      return res.json({
+        success: true,
+        careerState: careerState
+      });
+    }
+
+    const updatedCareerState = {
+      ...careerState,
+      eventResult: null,
+      stateVersion: (careerState.stateVersion || 0) + 1
+    };
+
+    await pool.query(
+      'UPDATE active_careers SET career_state = $1, last_updated = NOW() WHERE user_id = $2',
+      [JSON.stringify(updatedCareerState), userId]
+    );
+
+    res.json({
+      success: true,
+      careerState: updatedCareerState
+    });
+  } catch (error) {
+    console.error('Clear event result error:', error);
+    res.status(500).json({ error: 'Failed to clear event result' });
+  }
+});
+
 // Learn ability (server-authoritative)
 router.post('/learn-ability', authenticateToken, async (req, res) => {
   try {
