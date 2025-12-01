@@ -708,6 +708,12 @@ router.post('/train', authenticateToken, async (req, res) => {
       // Training failed - failures do NOT progress training levels and do NOT cost energy
       const statLoss = stat === 'Speed' ? 0 : GAME_CONFIG.TRAINING.STAT_LOSS_ON_FAILURE;
 
+      // Generate new training options immediately so frontend doesn't need a second request
+      const newTrainingOptions = generateTrainingOptionsWithAppearanceChance(
+        careerState.selectedSupports,
+        careerState
+      );
+
       const updatedCareerState = {
         ...careerState,
         currentStats: {
@@ -722,7 +728,7 @@ router.post('/train', authenticateToken, async (req, res) => {
           stat,
           message: stat === 'Speed' ? `Training ${stat} failed! No stat loss.` : `Training ${stat} failed! Lost ${statLoss} ${stat}. No energy lost.`
         }, ...(careerState.turnLog || [])],
-        currentTrainingOptions: null,
+        currentTrainingOptions: newTrainingOptions,
         // Preserve training levels and progress (failures don't affect them)
         trainingLevels: careerState.trainingLevels || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
         trainingProgress: careerState.trainingProgress || { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
@@ -830,6 +836,12 @@ router.post('/train', authenticateToken, async (req, res) => {
     }
     newEnergy = Math.max(0, Math.min(maxEnergy, newEnergy));
 
+    // Generate new training options immediately so frontend doesn't need a second request
+    const newTrainingOptions = generateTrainingOptionsWithAppearanceChance(
+      careerState.selectedSupports,
+      careerState
+    );
+
     const updatedCareerState = {
       ...careerState,
       currentStats: {
@@ -854,7 +866,7 @@ router.post('/train', authenticateToken, async (req, res) => {
           ? `Trained ${stat} successfully! Gained ${statGain} ${stat}. ${stat} training leveled up to ${newLevel}!`
           : `Trained ${stat} successfully! Gained ${statGain} ${stat}.`
       }, ...(careerState.turnLog || [])],
-      currentTrainingOptions: null,
+      currentTrainingOptions: newTrainingOptions,
       // Regenerate wild battles with new turn's scaling
       availableBattles: generateWildBattles(careerState.turn + 1),
       stateVersion: (careerState.stateVersion || 0) + 1
@@ -933,12 +945,18 @@ router.post('/rest', authenticateToken, async (req, res) => {
       message: `Rested and recovered ${energyGain} energy.`
     };
 
+    // Generate new training options immediately so frontend doesn't need a second request
+    const newTrainingOptions = generateTrainingOptionsWithAppearanceChance(
+      careerState.selectedSupports,
+      careerState
+    );
+
     const updatedCareerState = {
       ...careerState,
       energy: newEnergy,
       turn: careerState.turn + 1,
       turnLog: [logEntry, ...(careerState.turnLog || [])],
-      currentTrainingOptions: null,
+      currentTrainingOptions: newTrainingOptions,
       // Regenerate wild battles with new turn's scaling
       availableBattles: generateWildBattles(careerState.turn + 1),
       stateVersion: (careerState.stateVersion || 0) + 1
@@ -1602,6 +1620,11 @@ router.post('/battle', authenticateToken, async (req, res) => {
     // Calculate max energy with support bonuses so battles don't cap at base 100
     const maxEnergy = calculateMaxEnergy(careerState);
 
+    // Generate new training options for non-event battles so frontend doesn't need a second request
+    const newTrainingOptions = isEventBattle
+      ? careerState.currentTrainingOptions
+      : generateTrainingOptionsWithAppearanceChance(careerState.selectedSupports, careerState);
+
     const updatedCareerState = {
       ...careerState,
       currentStats: newStats,
@@ -1625,8 +1648,8 @@ router.post('/battle', authenticateToken, async (req, res) => {
       currentGymIndex: (isGymLeader && playerWon) ? careerState.currentGymIndex + 1 : careerState.currentGymIndex,
       // Generate new wild battles for next turn (but keep current ones for event battles)
       availableBattles: isEventBattle ? careerState.availableBattles : generateWildBattles(careerState.turn + 1),
-      // Keep current training options for event battles
-      currentTrainingOptions: isEventBattle ? careerState.currentTrainingOptions : null,
+      // Keep current training options for event battles, generate new ones for regular battles
+      currentTrainingOptions: newTrainingOptions,
       stateVersion: (careerState.stateVersion || 0) + 1
     };
 

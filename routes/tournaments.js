@@ -47,7 +47,8 @@ router.get('/', async (req, res) => {
         t.*,
         (SELECT COUNT(*) FROM tournament_entries WHERE tournament_id = t.id) as entries_count,
         winner_u.id as winner_user_id,
-        winner_u.username as winner_username
+        winner_u.username as winner_username,
+        winner_u.profile_icon as winner_profile_icon
       FROM tournaments t
       LEFT JOIN tournament_matches final_match ON final_match.tournament_id = t.id
         AND final_match.round = t.total_rounds
@@ -74,7 +75,8 @@ router.get('/:tournamentId', async (req, res) => {
         t.*,
         (SELECT COUNT(*) FROM tournament_entries WHERE tournament_id = t.id) as entries_count,
         winner_u.id as winner_user_id,
-        winner_u.username as winner_username
+        winner_u.username as winner_username,
+        winner_u.profile_icon as winner_profile_icon
       FROM tournaments t
       LEFT JOIN tournament_matches final_match ON final_match.tournament_id = t.id
         AND final_match.round = t.total_rounds
