@@ -90,8 +90,9 @@ const generateGymLeaders = () => {
 };
 
 // Helper function to calculate difficulty multiplier based on turn
-// Scaling: 1.0x until turn 12, then scales to 3.5x at turn 60
+// Scaling: 1.0x until turn 12, then scales using quadratic curve to ~4.2x at turn 60
 // Now applies ENEMY_STAT_MULTIPLIER (0.8 = 20% reduction)
+// Uses quadratic scaling to match player's accelerating growth curve
 const calculateDifficultyMultiplier = (turn) => {
   const enemyStatMult = GAME_CONFIG.CAREER.ENEMY_STAT_MULTIPLIER || 1.0;
 
@@ -99,20 +100,23 @@ const calculateDifficultyMultiplier = (turn) => {
   if (turn < 12) {
     return 1.0 * enemyStatMult;
   }
-  // After turn 12, scale from 1.0 to 3.5x at turn 60
-  // 48 turns (12 to 60) to go from 1.0 to 3.5 = 2.5 increase over 48 turns
-  const growthPerTurn = 2.5 / 48; // ~0.052 per turn
-  const baseMultiplier = 1.0 + ((turn - 12) * growthPerTurn);
+  // After turn 12, use quadratic scaling to match player power curve
+  // Progress from 0 to 1 over 48 turns (turn 12 to 60)
+  const progress = (turn - 12) / 48;
+  // Quadratic curve: starts slow, accelerates late game
+  // At turn 12: 1.0x, at turn 36 (midpoint): ~1.8x, at turn 60: 4.2x
+  const baseMultiplier = 1.0 + (3.2 * progress * progress) + (1.2 * progress);
   return baseMultiplier * enemyStatMult;
 };
 
 // Elite Four fixed base multipliers (used instead of turn-based scaling)
 // ENEMY_STAT_MULTIPLIER is applied when these are used
+// Increased ~20% from original values to match player late-game scaling
 const ELITE_FOUR_BASE_MULTIPLIERS = {
-  0: 3.5,   // Lorelei (turn 60)
-  1: 3.7,   // Bruno (turn 61)
-  2: 3.9,   // Agatha (turn 62)
-  3: 4.25   // Lance (turn 63)
+  0: 4.2,   // Lorelei (turn 60)
+  1: 4.5,   // Bruno (turn 61)
+  2: 4.8,   // Agatha (turn 62)
+  3: 5.2    // Lance (turn 63)
 };
 
 // Get Elite Four multiplier with ENEMY_STAT_MULTIPLIER applied
@@ -1790,7 +1794,11 @@ router.post('/battle', authenticateToken, async (req, res) => {
           : `Lost to ${opponent.name}.${energyChange < 0 ? ` Lost ${Math.abs(energyChange)} energy.` : ''}`
       }, ...(careerState.turnLog || [])],
       // Move to next gym leader if defeated current one
-      currentGymIndex: (isGymLeader && playerWon) ? careerState.currentGymIndex + 1 : careerState.currentGymIndex,
+      currentGymIndex: (() => {
+        const newIndex = (isGymLeader && playerWon) ? careerState.currentGymIndex + 1 : careerState.currentGymIndex;
+        console.log('[Battle] GymIndex update: isGymLeader=', isGymLeader, 'playerWon=', playerWon, 'old=', careerState.currentGymIndex, 'new=', newIndex);
+        return newIndex;
+      })(),
       // Generate new wild battles for next turn (but keep current ones for event battles)
       availableBattles: isEventBattle ? careerState.availableBattles : generateWildBattles(careerState.turn + 1),
       stateVersion: (careerState.stateVersion || 0) + 1
@@ -1895,10 +1903,12 @@ router.post('/complete', authenticateToken, async (req, res) => {
     }
 
     const serverCareerState = careerResult.rows[0].career_state;
+    console.log('[Complete Career] Server career state - currentGymIndex:', serverCareerState.currentGymIndex, 'completionType:', completionType);
 
     // Validate completion type matches game state
     // Champion requires defeating all Elite Four (currentGymIndex >= 9)
     if (completionType === 'champion' && serverCareerState.currentGymIndex < 9) {
+      console.log('[Complete Career] REJECTED: currentGymIndex', serverCareerState.currentGymIndex, '< 9');
       return res.status(400).json({ error: 'Cannot claim champion status - Elite Four not defeated' });
     }
 
@@ -1944,6 +1954,7 @@ router.post('/complete', authenticateToken, async (req, res) => {
       );
     }
 
+    console.log('[Complete Career] SUCCESS - Career deleted, pokemon saved, primos awarded:', primosReward);
     res.json({ success: true, primosReward, trainedPokemon: pokemonData });
   } catch (error) {
     console.error('Complete career error:', error);
