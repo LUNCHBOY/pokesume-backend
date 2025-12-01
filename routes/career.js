@@ -90,9 +90,8 @@ const generateGymLeaders = () => {
 };
 
 // Helper function to calculate difficulty multiplier based on turn
-// Scaling: 1.0x until turn 12, then scales using quadratic curve to ~3.57x at turn 60
-// Now applies ENEMY_STAT_MULTIPLIER (0.8 = 20% reduction)
-// Uses quadratic scaling to match player's accelerating growth curve
+// Scaling: 1.0x until turn 12, then quadratic curve to 3.25x effective at turn 60
+// ENEMY_STAT_MULTIPLIER (0.8) is applied, so base reaches 4.06x
 const calculateDifficultyMultiplier = (turn) => {
   const enemyStatMult = GAME_CONFIG.CAREER.ENEMY_STAT_MULTIPLIER || 1.0;
 
@@ -104,19 +103,19 @@ const calculateDifficultyMultiplier = (turn) => {
   // Progress from 0 to 1 over 48 turns (turn 12 to 60)
   const progress = (turn - 12) / 48;
   // Quadratic curve: starts slow, accelerates late game
-  // At turn 12: 1.0x, at turn 36 (midpoint): ~1.5x, at turn 60: 3.57x (15% lower than previous 4.2x)
-  const baseMultiplier = 1.0 + (2.72 * progress * progress) + (1.02 * progress);
+  // At turn 12: 1.0x, at turn 36 (midpoint): ~1.53x, at turn 60: 4.06x base (3.25x effective)
+  const baseMultiplier = 1.0 + (1.56 * progress * progress) + (1.5 * progress);
   return baseMultiplier * enemyStatMult;
 };
 
 // Elite Four fixed base multipliers (used instead of turn-based scaling)
-// ENEMY_STAT_MULTIPLIER is applied when these are used
-// Reduced 15% from previous values for better balance
+// ENEMY_STAT_MULTIPLIER (0.8) is applied, giving effective multipliers in comments
+// Cascades smoothly from quadratic curve endpoint, capping at 3.75x for Lance
 const ELITE_FOUR_BASE_MULTIPLIERS = {
-  0: 3.57,  // Lorelei (turn 60) - was 4.2
-  1: 3.83,  // Bruno (turn 61) - was 4.5
-  2: 4.08,  // Agatha (turn 62) - was 4.8
-  3: 4.42   // Lance (turn 63) - was 5.2
+  0: 4.06,  // Lorelei (turn 60) - 3.25x effective
+  1: 4.25,  // Bruno (turn 61) - 3.40x effective
+  2: 4.44,  // Agatha (turn 62) - 3.55x effective
+  3: 4.69   // Lance (turn 63) - 3.75x effective (Champion cap)
 };
 
 // Get Elite Four multiplier with ENEMY_STAT_MULTIPLIER applied
