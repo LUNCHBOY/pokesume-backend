@@ -1794,11 +1794,7 @@ router.post('/battle', authenticateToken, async (req, res) => {
           : `Lost to ${opponent.name}.${energyChange < 0 ? ` Lost ${Math.abs(energyChange)} energy.` : ''}`
       }, ...(careerState.turnLog || [])],
       // Move to next gym leader if defeated current one
-      currentGymIndex: (() => {
-        const newIndex = (isGymLeader && playerWon) ? careerState.currentGymIndex + 1 : careerState.currentGymIndex;
-        console.log('[Battle] GymIndex update: isGymLeader=', isGymLeader, 'playerWon=', playerWon, 'old=', careerState.currentGymIndex, 'new=', newIndex);
-        return newIndex;
-      })(),
+      currentGymIndex: (isGymLeader && playerWon) ? careerState.currentGymIndex + 1 : careerState.currentGymIndex,
       // Generate new wild battles for next turn (but keep current ones for event battles)
       availableBattles: isEventBattle ? careerState.availableBattles : generateWildBattles(careerState.turn + 1),
       stateVersion: (careerState.stateVersion || 0) + 1
@@ -1903,12 +1899,10 @@ router.post('/complete', authenticateToken, async (req, res) => {
     }
 
     const serverCareerState = careerResult.rows[0].career_state;
-    console.log('[Complete Career] Server career state - currentGymIndex:', serverCareerState.currentGymIndex, 'completionType:', completionType);
 
     // Validate completion type matches game state
-    // Champion requires defeating all Elite Four (currentGymIndex >= 9)
-    if (completionType === 'champion' && serverCareerState.currentGymIndex < 9) {
-      console.log('[Complete Career] REJECTED: currentGymIndex', serverCareerState.currentGymIndex, '< 9');
+    // Champion requires defeating all Elite Four (4 gyms + 4 Elite Four = 8 total, so currentGymIndex >= 8)
+    if (completionType === 'champion' && serverCareerState.currentGymIndex < 8) {
       return res.status(400).json({ error: 'Cannot claim champion status - Elite Four not defeated' });
     }
 
@@ -1954,7 +1948,6 @@ router.post('/complete', authenticateToken, async (req, res) => {
       );
     }
 
-    console.log('[Complete Career] SUCCESS - Career deleted, pokemon saved, primos awarded:', primosReward);
     res.json({ success: true, primosReward, trainedPokemon: pokemonData });
   } catch (error) {
     console.error('Complete career error:', error);
