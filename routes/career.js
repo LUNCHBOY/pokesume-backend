@@ -544,6 +544,13 @@ router.post('/start', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Pokemon and supports required' });
     }
 
+    // SECURITY: Validate Pokemon name and get server-side data
+    const pokemonName = pokemon.name;
+    const serverPokemonData = POKEMON[pokemonName];
+    if (!serverPokemonData) {
+      return res.status(400).json({ error: 'Invalid Pokemon' });
+    }
+
     // NEW VALIDATION: Check inspirations
     if (selectedInspirations && selectedInspirations.length > 0) {
       // Validate inspirations don't exceed limit
@@ -553,15 +560,158 @@ router.post('/start', authenticateToken, async (req, res) => {
 
       // Check if any inspiration has the same name as the selected Pokemon
       const hasSameSpecies = selectedInspirations.some(
-        inspiration => inspiration.name === pokemon.name
+        inspiration => inspiration.name === pokemonName
       );
 
       if (hasSameSpecies) {
-        return res.status(400).json({ 
-          error: 'Cannot use the same Pokemon species as inspiration' 
+        return res.status(400).json({
+          error: 'Cannot use the same Pokemon species as inspiration'
         });
       }
+
+      // TODO: Validate inspiration ownership from user's trained_pokemon table
     }
+
+    // SECURITY: SERVER-SIDE CALCULATION OF INSPIRATION BONUSES
+    const calculateInspirationBonuses = () => {
+      const aptitudeStars = {};
+      const strategyStars = {};
+      const statBonuses = {};
+
+      (selectedInspirations || []).forEach(insp => {
+        if (!insp.inspirations) return;
+
+        // Type aptitude stars
+        if (insp.inspirations.aptitude) {
+          const color = insp.inspirations.aptitude.color;
+          if (color) {
+            aptitudeStars[color] = (aptitudeStars[color] || 0) + (insp.inspirations.aptitude.stars || 0);
+          }
+        }
+
+        // Strategy stars - track per strategy name
+        if (insp.inspirations.strategy) {
+          const strategyName = insp.inspirations.strategy.name;
+          if (strategyName) {
+            strategyStars[strategyName] = (strategyStars[strategyName] || 0) + (insp.inspirations.strategy.stars || 0);
+          }
+        }
+
+        // Stat bonuses (1★=+10, 2★=+25, 3★=+50)
+        if (insp.inspirations.stat) {
+          const statName = insp.inspirations.stat.name;
+          const stars = insp.inspirations.stat.stars;
+          if (statName && stars) {
+            const bonus = stars === 1 ? 10 : stars === 2 ? 25 : 50;
+            statBonuses[statName] = (statBonuses[statName] || 0) + bonus;
+          }
+        }
+      });
+
+      // Calculate aptitude upgrades: every 2 stars = 1 grade upgrade (max A grade)
+      const aptitudeUpgrades = {};
+      Object.keys(aptitudeStars).forEach(color => {
+        aptitudeUpgrades[color] = Math.floor(aptitudeStars[color] / 2);
+      });
+
+      // Calculate strategy upgrades: every 2 stars = 1 grade upgrade per strategy (max A grade)
+      const strategyUpgrades = {};
+      Object.keys(strategyStars).forEach(strategyName => {
+        strategyUpgrades[strategyName] = Math.floor(strategyStars[strategyName] / 2);
+      });
+
+      return { aptitudeUpgrades, strategyUpgrades, statBonuses };
+    };
+
+    // Apply grade upgrades (capped at A)
+    const applyGradeUpgrades = (aptitudes, upgrades) => {
+      const gradeOrder = ['F', 'E', 'D', 'C', 'B', 'A', 'S'];
+      const maxGradeIndex = gradeOrder.indexOf('A');
+      const upgraded = { ...aptitudes };
+
+      Object.keys(upgrades).forEach(color => {
+        const currentGrade = upgraded[color];
+        if (!currentGrade) return;
+        const currentIndex = gradeOrder.indexOf(currentGrade);
+        const targetIndex = currentIndex + upgrades[color];
+        const newIndex = Math.min(targetIndex, maxGradeIndex);
+        upgraded[color] = gradeOrder[newIndex];
+      });
+
+      return upgraded;
+    };
+
+    // Apply strategy grade upgrades (only to specific strategies, capped at A)
+    const applyStrategyAptitudesUpgrade = (strategyAptitudes, upgrades) => {
+      if (!strategyAptitudes || !upgrades || Object.keys(upgrades).length === 0) return strategyAptitudes;
+
+      const gradeOrder = ['F', 'E', 'D', 'C', 'B', 'A', 'S'];
+      const maxGradeIndex = gradeOrder.indexOf('A');
+      const upgraded = { ...strategyAptitudes };
+
+      for (const [strategyName, upgradeAmount] of Object.entries(upgrades)) {
+        if (upgraded[strategyName]) {
+          const currentGrade = upgraded[strategyName];
+          const currentIndex = gradeOrder.indexOf(currentGrade);
+          if (currentIndex !== -1) {
+            const targetIndex = currentIndex + upgradeAmount;
+            const newIndex = Math.min(targetIndex, maxGradeIndex);
+            upgraded[strategyName] = gradeOrder[newIndex];
+          }
+        }
+      }
+
+      return upgraded;
+    };
+
+    // Derive best strategy from aptitudes
+    const deriveStrategyFromAptitudes = (strategyAptitudes) => {
+      const gradeRank = { 'S': 6, 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'E': 1, 'F': 0 };
+      let bestStrategy = 'Chipper';
+      let bestGrade = 'C';
+      let bestRank = 0;
+
+      if (strategyAptitudes) {
+        for (const [strategy, grade] of Object.entries(strategyAptitudes)) {
+          const rank = gradeRank[grade] || 0;
+          if (rank > bestRank) {
+            bestStrategy = strategy;
+            bestGrade = grade;
+            bestRank = rank;
+          }
+        }
+      }
+
+      return { strategy: bestStrategy, strategyGrade: bestGrade };
+    };
+
+    // Calculate bonuses from inspirations
+    const { aptitudeUpgrades, strategyUpgrades, statBonuses } = calculateInspirationBonuses();
+
+    // Apply bonuses to server-side Pokemon data
+    const upgradedAptitudes = applyGradeUpgrades(serverPokemonData.typeAptitudes || {}, aptitudeUpgrades);
+    const upgradedStrategyAptitudes = applyStrategyAptitudesUpgrade(serverPokemonData.strategyAptitudes || {}, strategyUpgrades);
+    const { strategy: defaultStrategy, strategyGrade: defaultStrategyGrade } = deriveStrategyFromAptitudes(upgradedStrategyAptitudes);
+
+    // Apply initial stat bonuses from inspirations
+    const baseStats = serverPokemonData.baseStats || { HP: 150, Attack: 50, Defense: 50, Instinct: 50, Speed: 50 };
+    const upgradedBaseStats = { ...baseStats };
+    Object.keys(statBonuses).forEach(statName => {
+      if (upgradedBaseStats[statName] !== undefined) {
+        upgradedBaseStats[statName] += statBonuses[statName];
+      }
+    });
+
+    // Build validated Pokemon object from server data + bonuses
+    const validatedPokemon = {
+      ...serverPokemonData,
+      name: pokemonName,
+      baseStats: upgradedBaseStats,
+      typeAptitudes: upgradedAptitudes,
+      strategyAptitudes: upgradedStrategyAptitudes,
+      strategy: defaultStrategy,
+      strategyGrade: defaultStrategyGrade
+    };
 
     // Initialize support friendships with their initial friendship values
     const supportFriendships = {};
@@ -574,18 +724,18 @@ router.post('/start', authenticateToken, async (req, res) => {
     const gymLeaders = generateGymLeaders();
     const availableBattles = generateWildBattles(1);
 
-    // Initialize career state
+    // Initialize career state with validated Pokemon
     const careerState = {
-      pokemon,
+      pokemon: validatedPokemon,
       selectedSupports,
-      basePokemonName: pokemon.name,
+      basePokemonName: pokemonName,
       evolutionStage: 0,
-      currentStats: { ...pokemon.baseStats },
+      currentStats: { ...validatedPokemon.baseStats },
       energy: 100,
       turn: 1,
       skillPoints: 30,
-      knownAbilities: [...pokemon.defaultAbilities],
-      learnableAbilities: [...(pokemon.learnableAbilities || [])],
+      knownAbilities: [...serverPokemonData.defaultAbilities],
+      learnableAbilities: [...(serverPokemonData.learnableAbilities || [])],
       moveHints: {},
       turnHistory: [],
       turnLog: [],
