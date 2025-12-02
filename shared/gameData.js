@@ -362,14 +362,14 @@ const MOVES = {
   Attract: { type: 'Normal', damage: 0, warmup: 1, cooldown: 5, stamina: 25, cost: 35, effect: { type: 'infatuate', chance: 0.5, duration: 3 } },
   BlastBurn: { type: 'Fire', damage: 42, warmup: 6, cooldown: 8, stamina: 68, cost: 85, effect: { type: 'exhaust', duration: 2 } },
   BraveBird: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 58, cost: 72, effect: { type: 'recoil', damagePercent: 0.25 } },
-  BulkUp: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack_defense', duration: 4 } },
+  BulkUp: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack_defense', duration: 999 } },
   BulletPunch: { type: 'Fighting', damage: 16, warmup: 0, cooldown: 2, stamina: 28, cost: 38, effect: null },
-  CalmMind: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_instinct', duration: 4 } },
+  CalmMind: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_instinct', duration: 999 } },
   Curse: { type: 'Psychic', damage: 0, warmup: 3, cooldown: 6, stamina: 40, cost: 50, effect: { type: 'curse', duration: 5, damage: 6 } },
   DazzlingGleam: { type: 'Normal', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
   DestinyBond: { type: 'Psychic', damage: 0, warmup: 3, cooldown: 8, stamina: 50, cost: 60, effect: { type: 'destiny_bond', duration: 2 } },
   DracoMeteor: { type: 'Fire', damage: 40, warmup: 6, cooldown: 7, stamina: 65, cost: 82, effect: { type: 'debuff_instinct_self', duration: 2 } },
-  DragonDance: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack_speed', duration: 4 } },
+  DragonDance: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack_speed', duration: 999 } },
   DragonPulse: { type: 'Fire', damage: 29, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
   DragonRush: { type: 'Fighting', damage: 32, warmup: 4, cooldown: 5, stamina: 52, cost: 65, effect: { type: 'stun', chance: 0.2, duration: 1 } },
   DragonTail: { type: 'Fighting', damage: 20, warmup: 2, cooldown: 4, stamina: 35, cost: 45, effect: { type: 'push_back' } },
@@ -388,19 +388,19 @@ const MOVES = {
   Hex: { type: 'Psychic', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 45, effect: { type: 'double_if_status' } },
   Hurricane: { type: 'Normal', damage: 36, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'confuse', chance: 0.3, duration: 3 } },
   IcePunch: { type: 'Water', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 48, effect: { type: 'freeze', chance: 0.2, duration: 3 } },
-  IronDefense: { type: 'Normal', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_defense', duration: 4 } },
-  MeteorMash: { type: 'Normal', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'buff_attack', chance: 0.2, duration: 3 } },
+  IronDefense: { type: 'Normal', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_defense', duration: 999 } },
+  MeteorMash: { type: 'Normal', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'buff_attack', chance: 0.2, duration: 999 } },
   Metronome: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'random_move' } },
   MilkDrink: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   Moonblast: { type: 'Normal', damage: 31, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'debuff_instinct', chance: 0.3, duration: 2 } },
   Moonlight: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
-  NastyPlot: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_instinct', duration: 4 } },
+  NastyPlot: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_instinct', duration: 999 } },
   Outrage: { type: 'Fighting', damage: 36, warmup: 4, cooldown: 6, stamina: 58, cost: 72, effect: { type: 'confuse_self_after', duration: 2 } },
   PowerGem: { type: 'Normal', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
   Present: { type: 'Normal', damage: 20, warmup: 1, cooldown: 3, stamina: 30, cost: 40, effect: { type: 'random_damage_or_heal' } },
   RapidSpin: { type: 'Normal', damage: 15, warmup: 1, cooldown: 2, stamina: 25, cost: 35, effect: { type: 'remove_hazards' } },
   Recover: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
-  RockPolish: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_speed', duration: 4 } },
+  RockPolish: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_speed', duration: 999 } },
   Rollout: { type: 'Normal', damage: 12, warmup: 1, cooldown: 2, stamina: 25, cost: 35, effect: { type: 'consecutive_boost', maxHits: 5 } },
   Roost: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   Sandstorm: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'weather_sand', duration: 5 } },
@@ -410,7 +410,7 @@ const MOVES = {
   SludgeWave: { type: 'Grass', damage: 31, warmup: 3, cooldown: 4, stamina: 48, cost: 58, effect: { type: 'poison', chance: 0.3, duration: 4, damage: 4 } },
   Spikes: { type: 'Normal', damage: 0, warmup: 2, cooldown: 6, stamina: 30, cost: 40, effect: { type: 'entry_hazard', layers: 3 } },
   StealthRock: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 6, stamina: 30, cost: 40, effect: { type: 'entry_hazard_rock' } },
-  SwordsDance: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack', duration: 4 } },
+  SwordsDance: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack', duration: 999 } },
   Synthesis: { type: 'Grass', damage: 0, warmup: 2, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'heal_self', healPercent: 0.5 } },
   ThunderWave: { type: 'Electric', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'paralyze', chance: 0.9, duration: 5 } },
   Toxic: { type: 'Grass', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'badly_poison', duration: 6 } },
@@ -420,14 +420,14 @@ const MOVES = {
   WillOWisp: { type: 'Fire', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 40, effect: { type: 'burn', chance: 0.85, duration: 5, damage: 4 } },
 
   // === CHIPPER MOVES (Low stamina, low cooldown for each type) ===
-  FlameCharge: { type: 'Fire', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'buff_speed', chance: 1.0, duration: 3 } },
+  FlameCharge: { type: 'Fire', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'buff_speed', chance: 1.0, duration: 999 } },
   Incinerate: { type: 'Fire', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: null },
   AquaJet: { type: 'Water', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
   BubbleBeam: { type: 'Water', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'debuff_speed', chance: 0.1, duration: 2 } },
   BulletSeed: { type: 'Grass', damage: 15, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
   MegaDrain: { type: 'Grass', damage: 14, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'drain', chance: 0.3, healPercent: 0.25 } },
   Spark: { type: 'Electric', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'paralyze', chance: 0.15, duration: 2 } },
-  ChargeBeam: { type: 'Electric', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'buff_instinct', chance: 0.7, duration: 2 } },
+  ChargeBeam: { type: 'Electric', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'buff_instinct', chance: 0.7, duration: 999 } },
   Confusion: { type: 'Psychic', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: { type: 'confuse', chance: 0.1, duration: 2 } },
   HeartStamp: { type: 'Psychic', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: { type: 'stun', chance: 0.15, duration: 1 } },
   MachPunch: { type: 'Fighting', damage: 14, warmup: 0, cooldown: 2, stamina: 18, cost: 28, effect: null },
@@ -436,14 +436,14 @@ const MOVES = {
   Swift: { type: 'Normal', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 30, effect: null },
 
   // === BUFF MOVES (For Scaler strategy) ===
-  Agility: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'buff_speed', duration: 4 } },
-  Harden: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'buff_defense', duration: 4 } },
-  Meditate: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'buff_attack', duration: 4 } },
-  Sharpen: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'buff_attack', duration: 3 } },
-  WorkUp: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 22, cost: 32, effect: { type: 'buff_attack', duration: 3 } },
-  CosmicPower: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 28, cost: 38, effect: { type: 'buff_defense', duration: 4 } },
-  Barrier: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 22, cost: 32, effect: { type: 'buff_defense', duration: 4 } },
-  Amnesia: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 28, cost: 38, effect: { type: 'buff_instinct', duration: 4 } },
+  Agility: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'buff_speed', duration: 999 } },
+  Harden: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'buff_defense', duration: 999 } },
+  Meditate: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 35, effect: { type: 'buff_attack', duration: 999 } },
+  Sharpen: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 20, cost: 30, effect: { type: 'buff_attack', duration: 999 } },
+  WorkUp: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 22, cost: 32, effect: { type: 'buff_attack', duration: 999 } },
+  CosmicPower: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 28, cost: 38, effect: { type: 'buff_defense', duration: 999 } },
+  Barrier: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 4, stamina: 22, cost: 32, effect: { type: 'buff_defense', duration: 999 } },
+  Amnesia: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 4, stamina: 28, cost: 38, effect: { type: 'buff_instinct', duration: 999 } },
 
   // === DEBUFF MOVES (For Debuffer strategy) ===
   Growl: { type: 'Normal', damage: 0, warmup: 0, cooldown: 3, stamina: 15, cost: 25, effect: { type: 'debuff_attack', duration: 3 } },
@@ -492,10 +492,49 @@ const MOVES = {
   MindBlown: { type: 'Fire', damage: 40, warmup: 5, cooldown: 6, stamina: 65, cost: 80, effect: { type: 'recoil', damagePercent: 0.25 } },
   SheerCold: { type: 'Water', damage: 45, warmup: 6, cooldown: 8, stamina: 75, cost: 88, effect: { type: 'ohko', chance: 0.3 } },
   Frenzy: { type: 'Grass', damage: 42, warmup: 6, cooldown: 8, stamina: 70, cost: 85, effect: { type: 'exhaust', duration: 2 } },
-  Focus: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 5, stamina: 25, cost: 35, effect: { type: 'buff_crit', duration: 3 } },
+  Focus: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 5, stamina: 25, cost: 35, effect: { type: 'buff_crit', duration: 999 } },
   PsychicTerrain: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_psychic', duration: 5 } },
   ElectricTerrain: { type: 'Electric', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_electric', duration: 5 } },
-  GrassyTerrain: { type: 'Grass', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_grassy', duration: 5 } }
+  GrassyTerrain: { type: 'Grass', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_grassy', duration: 5 } },
+
+  // === SUPPORT CARD HINT MOVES (Gen 8-9) ===
+  // Zacian/Zamazenta signature moves
+  BehemothBlade: { type: 'Normal', damage: 38, warmup: 4, cooldown: 5, stamina: 58, cost: 72, effect: null },
+  BehemothBash: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 55, cost: 70, effect: { type: 'buff_defense', chance: 0.3, duration: 3 } },
+  SacredSword: { type: 'Fighting', damage: 30, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
+
+  // Eternatus signature move
+  DynamaxCannon: { type: 'Psychic', damage: 38, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: null },
+
+  // Terapagos signature move
+  TeraStarstorm: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 55, cost: 70, effect: null },
+
+  // Ogerpon signature move
+  IvyCudgel: { type: 'Grass', damage: 30, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: { type: 'high_crit' } },
+
+  // Duraludon signature move
+  SteelBeam: { type: 'Normal', damage: 38, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'recoil', damagePercent: 0.25 } },
+
+  // Drednaw moves
+  Liquidation: { type: 'Water', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 52, effect: { type: 'debuff_defense', chance: 0.2, duration: 2 } },
+  RockTomb: { type: 'Fighting', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'debuff_speed', chance: 0.5, duration: 3 } },
+  JawLock: { type: 'Psychic', damage: 24, warmup: 2, cooldown: 4, stamina: 40, cost: 48, effect: { type: 'trap', duration: 3 } },
+  ShellSmash: { type: 'Normal', damage: 0, warmup: 1, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'buff_attack_speed', duration: 5 } },
+  HeadSmash: { type: 'Fighting', damage: 40, warmup: 5, cooldown: 6, stamina: 65, cost: 80, effect: { type: 'recoil', damagePercent: 0.3 } },
+
+  // Toxtricity signature move
+  Overdrive: { type: 'Electric', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 52, effect: null },
+  BoomBurst: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 55, cost: 70, effect: null },
+  ShiftGear: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack_speed', duration: 5 } },
+
+  // Tinkaton signature move
+  GigatonHammer: { type: 'Normal', damage: 42, warmup: 5, cooldown: 7, stamina: 68, cost: 85, effect: null },
+
+  // Additional missing moves from Pokemon moveHints
+  CrossPoison: { type: 'Grass', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 45, effect: { type: 'poison', chance: 0.2, duration: 4, damage: 3 } },
+  HornLeech: { type: 'Grass', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: { type: 'drain', chance: 0.5, healPercent: 0.25 } },
+  BodyPress: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
+  Crunch: { type: 'Psychic', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: { type: 'debuff_defense', chance: 0.2, duration: 2 } }
 };
 
 const calculateBaseStats = (rawStats, evolutionStages) => {
@@ -539,7 +578,7 @@ const POKEMON = {
     primaryType: 'Fire',
     baseStats: calculateBaseStats({ HP: 93, Attack: 68, Defense: 58, Instinct: 78, Speed: 83 }, 2),
     typeAptitudes: { Red: 'A', Blue: 'D', Green: 'C', Purple: 'B', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['Ember', 'Tackle'],
     learnableAbilities: ['Flamethrower', 'BodySlam', 'FireBlast', 'WaterGun', 'ThunderShock'],
     isStarter: true
@@ -549,7 +588,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 98, Attack: 59, Defense: 66, Instinct: 81, Speed: 76 }, 2),
     typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'B', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'B', Chipper: 'A', MadLad: 'D' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'C', Chipper: 'A', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'Tackle'],
     learnableAbilities: ['Surf', 'BodySlam', 'HydroPump', 'VineWhip', 'Ember'],
     isStarter: true
@@ -559,7 +598,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 100, Attack: 70, Defense: 70, Instinct: 75, Speed: 65 }, 2),
     typeAptitudes: { Red: 'D', Blue: 'C', Green: 'A', Purple: 'B', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
     learnableAbilities: ['RazorLeaf', 'BodySlam', 'SolarBeam', 'WaterGun', 'PsyBeam'],
     isStarter: true
@@ -569,7 +608,7 @@ const POKEMON = {
     primaryType: 'Electric',
     baseStats: calculateBaseStats({ HP: 82, Attack: 57, Defense: 52, Instinct: 87, Speed: 102 }, 1),
     typeAptitudes: { Red: 'B', Blue: 'C', Green: 'B', Purple: 'C', Yellow: 'A', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
     learnableAbilities: ['Tackle', 'QuickAttack', 'Thunderbolt', 'BodySlam', 'Thunder', 'BrickBreak', 'HyperBeam', 'Ember'],
     isStarter: true
@@ -579,7 +618,7 @@ const POKEMON = {
     primaryType: 'Psychic',
     baseStats: calculateBaseStats({ HP: 96, Attack: 81, Defense: 61, Instinct: 71, Speed: 71 }, 2),
     typeAptitudes: { Red: 'B', Blue: 'B', Green: 'C', Purple: 'A', Yellow: 'D', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'A', Chipper: 'B', MadLad: 'B' },
+    strategyAptitudes: { Scaler: 'E', Nuker: 'C', Debuffer: 'A', Chipper: 'D', MadLad: 'B' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
     learnableAbilities: ['Psychic', 'BodySlam', 'PsychicBlast', 'VineWhip', 'ThunderShock'],
     isStarter: true
@@ -591,7 +630,7 @@ const POKEMON = {
     primaryType: 'Fire',
     baseStats: calculateBaseStats({ HP: 88, Attack: 78, Defense: 53, Instinct: 73, Speed: 88 }, 1),
     typeAptitudes: { Red: 'A', Blue: 'E', Green: 'C', Purple: 'B', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'E', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['Ember', 'Tackle'],
     learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
   },
@@ -600,7 +639,7 @@ const POKEMON = {
     primaryType: 'Fire',
     baseStats: { HP: 106, Attack: 86, Defense: 71, Instinct: 61, Speed: 56 },
     typeAptitudes: { Red: 'S', Blue: 'D', Green: 'B', Purple: 'C', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'E', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['Ember', 'Tackle'],
     learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
   },
@@ -609,7 +648,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: { HP: 91, Attack: 61, Defense: 76, Instinct: 86, Speed: 66 },
     typeAptitudes: { Red: 'D', Blue: 'A', Green: 'E', Purple: 'B', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'D' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'F' },
     defaultAbilities: ['WaterGun', 'Tackle'],
     learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
   },
@@ -618,7 +657,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 111, Attack: 66, Defense: 81, Instinct: 76, Speed: 46 }, 0),
     typeAptitudes: { Red: 'C', Blue: 'S', Green: 'D', Purple: 'B', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'D', Chipper: 'A', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'Tackle'],
     learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
   },
@@ -627,7 +666,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: { HP: 96, Attack: 76, Defense: 81, Instinct: 66, Speed: 61 },
     typeAptitudes: { Red: 'E', Blue: 'C', Green: 'A', Purple: 'C', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'D', Debuffer: 'A', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'Tackle'],
     learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
   },
@@ -636,7 +675,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: { HP: 81, Attack: 66, Defense: 66, Instinct: 81, Speed: 86 },
     typeAptitudes: { Red: 'D', Blue: 'B', Green: 'A', Purple: 'B', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'A', Chipper: 'E', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
     learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
   },
@@ -644,8 +683,8 @@ const POKEMON = {
     name: 'Zapdos',
     primaryType: 'Electric',
     baseStats: calculateBaseStats({ HP: 76, Attack: 61, Defense: 56, Instinct: 91, Speed: 96 }, 0),
-    typeAptitudes: { Red: 'C', Blue: 'B', Green: 'C', Purple: 'B', Yellow: 'A', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    typeAptitudes: { Red: 'B', Blue: 'B', Green: 'C', Purple: 'B', Yellow: 'S', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
     learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
   },
@@ -654,7 +693,7 @@ const POKEMON = {
     primaryType: 'Electric',
     baseStats: { HP: 86, Attack: 71, Defense: 61, Instinct: 81, Speed: 81 },
     typeAptitudes: { Red: 'B', Blue: 'C', Green: 'B', Purple: 'D', Yellow: 'S', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'E', Chipper: 'A', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
     learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
   },
@@ -663,7 +702,7 @@ const POKEMON = {
     primaryType: 'Psychic',
     baseStats: { HP: 91, Attack: 86, Defense: 66, Instinct: 76, Speed: 61 },
     typeAptitudes: { Red: 'C', Blue: 'B', Green: 'D', Purple: 'A', Yellow: 'E', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'E', Nuker: 'C', Debuffer: 'A', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
     learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
   },
@@ -672,7 +711,7 @@ const POKEMON = {
     primaryType: 'Psychic',
     baseStats: { HP: 81, Attack: 91, Defense: 71, Instinct: 66, Speed: 71 },
     typeAptitudes: { Red: 'B', Blue: 'C', Green: 'C', Purple: 'S', Yellow: 'D', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
     learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
   },
@@ -681,7 +720,7 @@ const POKEMON = {
     primaryType: 'Fire',
     baseStats: { HP: 96, Attack: 81, Defense: 61, Instinct: 76, Speed: 66 },
     typeAptitudes: { Red: 'A', Blue: 'D', Green: 'B', Purple: 'C', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'D' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'F' },
     defaultAbilities: ['Ember', 'Tackle'],
     learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
   },
@@ -689,8 +728,8 @@ const POKEMON = {
     name: 'Starmie',
     primaryType: 'Water',
     baseStats: { HP: 86, Attack: 71, Defense: 86, Instinct: 71, Speed: 66 },
-    typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'A', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
+    typeAptitudes: { Red: 'D', Blue: 'A', Green: 'E', Purple: 'B', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['WaterGun', 'Tackle'],
     learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
   },
@@ -699,7 +738,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: { HP: 91, Attack: 61, Defense: 76, Instinct: 86, Speed: 66 },
     typeAptitudes: { Red: 'D', Blue: 'B', Green: 'A', Purple: 'B', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
     learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
   },
@@ -708,7 +747,7 @@ const POKEMON = {
     primaryType: 'Electric',
     baseStats: { HP: 81, Attack: 64, Defense: 57, Instinct: 87, Speed: 91 },
     typeAptitudes: { Red: 'B', Blue: 'C', Green: 'B', Purple: 'C', Yellow: 'A', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'E', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
     learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
   },
@@ -717,7 +756,7 @@ const POKEMON = {
     primaryType: 'Psychic',
     baseStats: { HP: 101, Attack: 76, Defense: 66, Instinct: 81, Speed: 56 },
     typeAptitudes: { Red: 'B', Blue: 'B', Green: 'C', Purple: 'A', Yellow: 'E', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'D' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'F', Debuffer: 'B', Chipper: 'E', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
     learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
   },
@@ -726,7 +765,7 @@ const POKEMON = {
     primaryType: 'Fire',
     baseStats: { HP: 99, Attack: 89, Defense: 66, Instinct: 69, Speed: 57 },
     typeAptitudes: { Red: 'S', Blue: 'E', Green: 'C', Purple: 'B', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['Ember', 'Tackle'],
     learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
   },
@@ -734,8 +773,8 @@ const POKEMON = {
     name: 'Vaporeon',
     primaryType: 'Water',
     baseStats: { HP: 93, Attack: 69, Defense: 79, Instinct: 79, Speed: 60 },
-    typeAptitudes: { Red: 'D', Blue: 'A', Green: 'E', Purple: 'A', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    typeAptitudes: { Red: 'E', Blue: 'A', Green: 'D', Purple: 'C', Yellow: 'C', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'C', Chipper: 'A', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'Tackle'],
     learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
   },
@@ -744,7 +783,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: { HP: 89, Attack: 83, Defense: 69, Instinct: 73, Speed: 66 },
     typeAptitudes: { Red: 'E', Blue: 'C', Green: 'A', Purple: 'B', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'A', Chipper: 'E', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
     learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
   },
@@ -753,7 +792,7 @@ const POKEMON = {
     primaryType: 'Electric',
     baseStats: { HP: 85, Attack: 71, Defense: 61, Instinct: 83, Speed: 80 },
     typeAptitudes: { Red: 'C', Blue: 'B', Green: 'C', Purple: 'C', Yellow: 'A', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'E', Chipper: 'A', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
     learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
   },
@@ -762,7 +801,7 @@ const POKEMON = {
     primaryType: 'Psychic',
     baseStats: { HP: 94, Attack: 79, Defense: 69, Instinct: 75, Speed: 63 },
     typeAptitudes: { Red: 'C', Blue: 'B', Green: 'D', Purple: 'A', Yellow: 'D', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'E', Debuffer: 'A', Chipper: 'D', MadLad: 'B' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
     learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
   },
@@ -771,7 +810,7 @@ const POKEMON = {
     primaryType: 'Fire',
     baseStats: { HP: 88, Attack: 84, Defense: 59, Instinct: 73, Speed: 76 },
     typeAptitudes: { Red: 'A', Blue: 'D', Green: 'C', Purple: 'B', Yellow: 'C', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['Ember', 'Tackle'],
     learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
   },
@@ -780,7 +819,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: { HP: 92, Attack: 65, Defense: 73, Instinct: 83, Speed: 67 },
     typeAptitudes: { Red: 'C', Blue: 'A', Green: 'D', Purple: 'B', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'D' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'F' },
     defaultAbilities: ['WaterGun', 'Tackle'],
     learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
   },
@@ -789,7 +828,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: { HP: 85, Attack: 79, Defense: 73, Instinct: 77, Speed: 66 },
     typeAptitudes: { Red: 'D', Blue: 'C', Green: 'A', Purple: 'C', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'E', Debuffer: 'A', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['VineWhip', 'Tackle'],
     learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
   },
@@ -798,7 +837,7 @@ const POKEMON = {
     primaryType: 'Electric',
     baseStats: { HP: 79, Attack: 69, Defense: 55, Instinct: 93, Speed: 94 },
     typeAptitudes: { Red: 'B', Blue: 'C', Green: 'B', Purple: 'D', Yellow: 'S', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
     learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
   },
@@ -806,8 +845,8 @@ const POKEMON = {
     name: 'Tentacruel',
     primaryType: 'Psychic',
     baseStats: { HP: 97, Attack: 75, Defense: 71, Instinct: 69, Speed: 68 },
-    typeAptitudes: { Red: 'B', Blue: 'A', Green: 'C', Purple: 'A', Yellow: 'E', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
+    typeAptitudes: { Red: 'C', Blue: 'B', Green: 'D', Purple: 'A', Yellow: 'E', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'A', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
     learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
   },
@@ -815,8 +854,8 @@ const POKEMON = {
     name: 'Mew',
     primaryType: 'Normal',
     baseStats: calculateBaseStats({ HP: 100, Attack: 100, Defense: 100, Instinct: 100, Speed: 100 }, 0),
-    typeAptitudes: { Red: 'A', Blue: 'A', Green: 'A', Purple: 'A', Yellow: 'A', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    typeAptitudes: { Red: 'A', Blue: 'A', Green: 'A', Purple: 'A', Yellow: 'A', Orange: 'B' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'A', Debuffer: 'A', Chipper: 'A', MadLad: 'A' },
     defaultAbilities: ['Tackle', 'Ember'],
     learnableAbilities: ['BodySlam', 'HyperBeam', 'Flamethrower', 'Surf', 'RazorLeaf', 'Thunderbolt', 'Psychic']
   },
@@ -824,9 +863,8 @@ const POKEMON = {
     name: 'Mewtwo',
     primaryType: 'Psychic',
     baseStats: calculateBaseStats({ HP: 106, Attack: 110, Defense: 90, Instinct: 154, Speed: 130 }, 0),
-    typeAptitudes: { Red: 'S', Blue: 'S', Green: 'S', Purple: 'S', Yellow: 'S', Orange: 'C' },
-    strategy: 'Nuker',
-    strategyGrade: 'UU',
+    typeAptitudes: { Red: 'S', Blue: 'S', Green: 'S', Purple: 'S', Yellow: 'S', Orange: 'A' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'S', Debuffer: 'A', Chipper: 'B', MadLad: 'A' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
     learnableAbilities: ['BodySlam', 'HyperBeam', 'Flamethrower', 'FireBlast', 'Surf', 'HydroPump', 'RazorLeaf', 'SolarBeam', 'Thunderbolt', 'Thunder', 'Psychic', 'PsychicBlast']
   },
@@ -835,7 +873,7 @@ const POKEMON = {
     primaryType: 'Normal',
     baseStats: calculateBaseStats({ HP: 160, Attack: 110, Defense: 65, Instinct: 65, Speed: 30 }, 0),
     typeAptitudes: { Red: 'B', Blue: 'B', Green: 'B', Purple: 'B', Yellow: 'B', Orange: 'C' },
-    strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'F', MadLad: 'D' },
     defaultAbilities: ['Tackle', 'BodySlam'],
     learnableAbilities: ['HyperBeam', 'Ember', 'WaterGun', 'VineWhip', 'ThunderShock']
   },

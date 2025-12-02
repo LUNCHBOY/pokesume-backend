@@ -262,10 +262,49 @@ const MOVES = {
   MindBlown: { type: 'Fire', damage: 40, warmup: 5, cooldown: 6, stamina: 65, cost: 80, effect: { type: 'recoil', damagePercent: 0.25 } },
   SheerCold: { type: 'Water', damage: 45, warmup: 6, cooldown: 8, stamina: 75, cost: 88, effect: { type: 'ohko', chance: 0.3 } },
   Frenzy: { type: 'Grass', damage: 42, warmup: 6, cooldown: 8, stamina: 70, cost: 85, effect: { type: 'exhaust', duration: 2 } },
-  Focus: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 5, stamina: 25, cost: 35, effect: { type: 'buff_crit', duration: 3 } },
+  Focus: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 5, stamina: 25, cost: 35, effect: { type: 'buff_instinct', duration: 3 } },
   PsychicTerrain: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_psychic', duration: 5 } },
   ElectricTerrain: { type: 'Electric', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_electric', duration: 5 } },
-  GrassyTerrain: { type: 'Grass', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_grassy', duration: 5 } }
+  GrassyTerrain: { type: 'Grass', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 45, effect: { type: 'terrain_grassy', duration: 5 } },
+
+  // === SUPPORT CARD HINT MOVES (Gen 8-9) ===
+  // Zacian/Zamazenta signature moves
+  BehemothBlade: { type: 'Normal', damage: 38, warmup: 4, cooldown: 5, stamina: 58, cost: 72, effect: null },
+  BehemothBash: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 55, cost: 70, effect: { type: 'buff_defense', chance: 0.3, duration: 3 } },
+  SacredSword: { type: 'Fighting', damage: 30, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
+
+  // Eternatus signature move
+  DynamaxCannon: { type: 'Psychic', damage: 38, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: null },
+
+  // Terapagos signature move
+  TeraStarstorm: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 55, cost: 70, effect: null },
+
+  // Ogerpon signature move
+  IvyCudgel: { type: 'Grass', damage: 30, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: { type: 'high_crit' } },
+
+  // Duraludon signature move
+  SteelBeam: { type: 'Normal', damage: 38, warmup: 5, cooldown: 6, stamina: 60, cost: 75, effect: { type: 'recoil', damagePercent: 0.25 } },
+
+  // Drednaw moves
+  Liquidation: { type: 'Water', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 52, effect: { type: 'debuff_defense', chance: 0.2, duration: 2 } },
+  RockTomb: { type: 'Fighting', damage: 22, warmup: 2, cooldown: 3, stamina: 35, cost: 42, effect: { type: 'debuff_speed', chance: 0.5, duration: 3 } },
+  JawLock: { type: 'Psychic', damage: 24, warmup: 2, cooldown: 4, stamina: 40, cost: 48, effect: { type: 'trap', duration: 3 } },
+  ShellSmash: { type: 'Normal', damage: 0, warmup: 1, cooldown: 5, stamina: 35, cost: 45, effect: { type: 'buff_attack_speed', duration: 5 } },
+  HeadSmash: { type: 'Fighting', damage: 40, warmup: 5, cooldown: 6, stamina: 65, cost: 80, effect: { type: 'recoil', damagePercent: 0.3 } },
+
+  // Toxtricity signature move
+  Overdrive: { type: 'Electric', damage: 28, warmup: 2, cooldown: 3, stamina: 42, cost: 52, effect: null },
+  BoomBurst: { type: 'Normal', damage: 36, warmup: 4, cooldown: 5, stamina: 55, cost: 70, effect: null },
+  ShiftGear: { type: 'Normal', damage: 0, warmup: 1, cooldown: 4, stamina: 30, cost: 40, effect: { type: 'buff_attack_speed', duration: 5 } },
+
+  // Tinkaton signature move
+  GigatonHammer: { type: 'Normal', damage: 42, warmup: 5, cooldown: 7, stamina: 68, cost: 85, effect: null },
+
+  // Additional missing moves from Pokemon moveHints
+  CrossPoison: { type: 'Grass', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 45, effect: { type: 'poison', chance: 0.2, duration: 4, damage: 3 } },
+  HornLeech: { type: 'Grass', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: { type: 'drain', chance: 0.5, healPercent: 0.25 } },
+  BodyPress: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 45, cost: 55, effect: null },
+  Crunch: { type: 'Psychic', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: { type: 'debuff_defense', chance: 0.2, duration: 2 } }
 };
 
 // Type to color mapping for aptitude lookups
@@ -328,7 +367,30 @@ function simulateBattle(player1, player2) {
 
     battleState.tick++;
 
-    // Save current state to log
+    // Collect messages for this tick
+    const tickMessages = [];
+
+    // Process player 1
+    const p1Message = processCombatantTick(battleState.player1, battleState.player2, 'Player 1', battleState);
+    if (p1Message) {
+      tickMessages.push(p1Message);
+    }
+
+    // Process player 2 if still alive
+    if (battleState.player2.currentHP > 0) {
+      const p2Message = processCombatantTick(battleState.player2, battleState.player1, 'Player 2', battleState);
+      if (p2Message) {
+        tickMessages.push(p2Message);
+      }
+    }
+
+    // Process weather effects at end of tick
+    if (battleState.weather.type && battleState.weather.ticksRemaining > 0) {
+      const weatherMessages = processWeatherEffects(battleState);
+      tickMessages.push(...weatherMessages);
+    }
+
+    // Save state to log AFTER all actions - HP reflects the result of this tick's actions
     battleState.battleLog.push({
       tick: battleState.tick,
       player1: {
@@ -346,34 +408,8 @@ function simulateBattle(player1, player2) {
         statusEffects: [...battleState.player2.statusEffects]
       },
       weather: battleState.weather.type ? { ...battleState.weather } : null,
-      message: null
+      message: tickMessages.length > 0 ? tickMessages.join(' | ') : null
     });
-
-    // Process player 1
-    const p1Message = processCombatantTick(battleState.player1, battleState.player2, 'Player 1', battleState);
-    if (p1Message) {
-      battleState.battleLog[battleState.battleLog.length - 1].message = p1Message;
-    }
-
-    // Process player 2 if still alive
-    if (battleState.player2.currentHP > 0) {
-      const p2Message = processCombatantTick(battleState.player2, battleState.player1, 'Player 2', battleState);
-      if (p2Message) {
-        const lastLog = battleState.battleLog[battleState.battleLog.length - 1];
-        lastLog.message = lastLog.message ? `${lastLog.message} | ${p2Message}` : p2Message;
-      }
-    }
-
-    // Process weather effects at end of tick
-    if (battleState.weather.type && battleState.weather.ticksRemaining > 0) {
-      const weatherMessages = processWeatherEffects(battleState);
-      if (weatherMessages.length > 0) {
-        const lastLog = battleState.battleLog[battleState.battleLog.length - 1];
-        lastLog.message = lastLog.message
-          ? `${lastLog.message} | ${weatherMessages.join(' | ')}`
-          : weatherMessages.join(' | ');
-      }
-    }
   }
 
   // Determine winner
@@ -527,7 +563,13 @@ function processCombatantTick(combatant, opponent, name, battleState) {
   } else {
     // Rest and recover stamina
     const baseRestGain = GAME_CONFIG.BATTLE.BASE_REST_STAMINA_GAIN;
-    const speedBonus = Math.floor(combatant.stats.Speed / GAME_CONFIG.BATTLE.SPEED_STAMINA_DENOMINATOR);
+    // Apply speed buffs/debuffs to stamina regen
+    let effectiveSpeed = combatant.stats.Speed;
+    combatant.statusEffects.forEach(e => {
+      if (e.type === 'buff_speed' && e.multiplier) effectiveSpeed *= e.multiplier;
+      if (e.type === 'debuff_speed' && e.multiplier) effectiveSpeed *= e.multiplier;
+    });
+    const speedBonus = Math.floor(effectiveSpeed / GAME_CONFIG.BATTLE.SPEED_STAMINA_DENOMINATOR);
     const restGain = baseRestGain + speedBonus;
     combatant.currentStamina = Math.min(GAME_CONFIG.BATTLE.MAX_STAMINA, combatant.currentStamina + restGain);
     combatant.isResting = true;
@@ -614,13 +656,28 @@ function selectMove(combatant, opponent, available) {
       }
     }
 
+    // Calculate effective stats with buffs/debuffs
+    let effectiveAttack = combatant.stats.Attack;
+    let effectiveInstinct = combatant.stats.Instinct;
+    combatant.statusEffects.forEach(e => {
+      if (e.type === 'buff_attack' && e.multiplier) effectiveAttack *= e.multiplier;
+      if (e.type === 'debuff_attack' && e.multiplier) effectiveAttack *= e.multiplier;
+      if (e.type === 'buff_instinct' && e.multiplier) effectiveInstinct *= e.multiplier;
+      if (e.type === 'debuff_instinct' && e.multiplier) effectiveInstinct *= e.multiplier;
+    });
+    let effectiveDefense = opponent.stats.Defense;
+    opponent.statusEffects.forEach(e => {
+      if (e.type === 'buff_defense' && e.multiplier) effectiveDefense *= e.multiplier;
+      if (e.type === 'debuff_defense' && e.multiplier) effectiveDefense *= e.multiplier;
+    });
+
     // Critical hit averaging
     const critChance = GAME_CONFIG.BATTLE.BASE_CRIT_CHANCE +
-                       (combatant.stats.Instinct / GAME_CONFIG.BATTLE.INSTINCT_CRIT_DENOMINATOR);
+                       (effectiveInstinct / GAME_CONFIG.BATTLE.INSTINCT_CRIT_DENOMINATOR);
     const avgCritMult = (1 - critChance) * 1 + critChance * 2;
 
     // Attack/Defense ratio
-    const attackDefenseRatio = combatant.stats.Attack / Math.max(1, opponent.stats.Defense);
+    const attackDefenseRatio = effectiveAttack / Math.max(1, effectiveDefense);
 
     // Predicted damage
     const predictedDamage = move.damage * attackDefenseRatio * aptitudeMult * typeMatchupMult * avgCritMult;
@@ -822,9 +879,15 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
     GAME_CONFIG.BATTLE.MAX_STAMINA * 0.075) + paralyzePenalty + accuracyDebuffPenalty;
 
   // Dodge chance when opponent is resting
+  // Apply instinct buffs/debuffs to effective instinct
+  let effectiveInstinct = opponent.stats.Instinct;
+  opponent.statusEffects.forEach(e => {
+    if (e.type === 'buff_instinct' && e.multiplier) effectiveInstinct *= e.multiplier;
+    if (e.type === 'debuff_instinct' && e.multiplier) effectiveInstinct *= e.multiplier;
+  });
   let dodgeChance = opponent.isResting
     ? GAME_CONFIG.BATTLE.BASE_DODGE_CHANCE +
-      (opponent.stats.Instinct / GAME_CONFIG.BATTLE.INSTINCT_DODGE_DENOMINATOR)
+      (effectiveInstinct / GAME_CONFIG.BATTLE.INSTINCT_DODGE_DENOMINATOR)
     : 0;
 
   // Check for evasion effect (ShadowForce) - greatly increases dodge chance
@@ -837,11 +900,15 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   const hitChance = 1.0 - dodgeChance - missChance;
 
   if (hitRoll >= hitChance) {
-    // MISS
+    // MISS - include opponent name for clarity
     const state = combatant.moveStates[moveName];
     state.cooldownRemaining = move.cooldown;
     state.everCast = true;
-    return `${attackerName} used ${moveName} but missed!`;
+    const opponentName = opponent.name || 'opponent';
+    const dodged = dodgeChance > missChance;
+    return dodged
+      ? `${attackerName} used ${moveName}! ${opponentName} dodged the attack!`
+      : `${attackerName} used ${moveName} but missed!`;
   }
 
   // HIT - Calculate damage
@@ -883,12 +950,14 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   let attackStat = combatant.stats.Attack;
   let defenseStat = opponent.stats.Defense;
 
-  // Apply attack buffs/debuffs
+  // Apply attack buffs/debuffs to attacker
   combatant.statusEffects.forEach(e => {
     if (e.type === 'buff_attack' && e.multiplier) attackStat *= e.multiplier;
     if (e.type === 'debuff_attack' && e.multiplier) attackStat *= e.multiplier;
   });
+  // Apply defense buffs/debuffs to defender
   opponent.statusEffects.forEach(e => {
+    if (e.type === 'buff_defense' && e.multiplier) defenseStat *= e.multiplier;
     if (e.type === 'debuff_defense' && e.multiplier) defenseStat *= e.multiplier;
   });
 
@@ -902,18 +971,20 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   }
 
   // Critical hit calculation with high_crit modifier
+  // Apply instinct buffs/debuffs to effective instinct for crit chance
+  let effectiveInstinctForCrit = combatant.stats.Instinct;
+  combatant.statusEffects.forEach(e => {
+    if (e.type === 'buff_instinct' && e.multiplier) effectiveInstinctForCrit *= e.multiplier;
+    if (e.type === 'debuff_instinct' && e.multiplier) effectiveInstinctForCrit *= e.multiplier;
+  });
   let critChance = GAME_CONFIG.BATTLE.BASE_CRIT_CHANCE +
-                   (combatant.stats.Instinct / GAME_CONFIG.BATTLE.INSTINCT_CRIT_DENOMINATOR);
+                   (effectiveInstinctForCrit / GAME_CONFIG.BATTLE.INSTINCT_CRIT_DENOMINATOR);
 
   // High crit moves (Slash) have 3x crit chance
   if (move.effect && move.effect.type === 'high_crit') {
     critChance *= 3;
   }
 
-  // Apply instinct buffs to crit chance
-  combatant.statusEffects.forEach(e => {
-    if (e.type === 'buff_instinct' && e.multiplier) critChance *= e.multiplier;
-  });
 
   const isCrit = Math.random() < critChance;
   if (isCrit) {
@@ -936,9 +1007,10 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
     }
   }
 
-  // Build message
+  // Build message - include opponent name so it's clear who took damage
+  const opponentName = opponent.name || 'opponent';
   let message = damage > 0
-    ? `${attackerName} used ${moveName}! Dealt ${damage} damage!`
+    ? `${attackerName} used ${moveName}! ${opponentName} took ${damage} damage!`
     : `${attackerName} used ${moveName}!`;
   if (isCrit && damage > 0) message += ' *** CRITICAL HIT! ***';
   if (typeBonus > 1.0 && damage > 0) message += ' Super effective!';
@@ -980,82 +1052,82 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
       combatant.currentHP = Math.min(combatant.stats.HP, combatant.currentHP + healAmount);
       message += ` ${attackerName} recovered ${healAmount} HP!`;
     } else if (effect.type === 'buff_attack') {
-      // Attack buff (SwordsDance, MeteorMash)
+      // Attack buff (SwordsDance, MeteorMash) - reduced 50% since buffs last entire battle
       if (effectApplied) {
         combatant.statusEffects.push({
           type: 'buff_attack',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 2.0
+          multiplier: 1.5
         });
         message += ` ${attackerName}'s Attack rose sharply!`;
       }
     } else if (effect.type === 'buff_defense') {
-      // Defense buff (IronDefense)
+      // Defense buff (IronDefense) - reduced 50% since buffs last entire battle
       combatant.statusEffects.push({
         type: 'buff_defense',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.8
+        multiplier: 1.4
       });
       message += ` ${attackerName}'s Defense rose sharply!`;
     } else if (effect.type === 'buff_speed') {
-      // Speed buff (RockPolish)
+      // Speed buff (RockPolish) - reduced 50% since buffs last entire battle
       combatant.statusEffects.push({
         type: 'buff_speed',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.8
+        multiplier: 1.4
       });
       message += ` ${attackerName}'s Speed rose sharply!`;
     } else if (effect.type === 'buff_instinct') {
-      // Instinct buff (CalmMind, NastyPlot)
+      // Instinct buff (CalmMind, NastyPlot) - reduced 50% since buffs last entire battle
       combatant.statusEffects.push({
         type: 'buff_instinct',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.8
+        multiplier: 1.4
       });
       message += ` ${attackerName}'s Instinct rose sharply!`;
     } else if (effect.type === 'buff_attack_defense') {
-      // Attack + Defense buff (BulkUp)
+      // Attack + Defense buff (BulkUp) - reduced 50% since buffs last entire battle
       combatant.statusEffects.push({
         type: 'buff_attack',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.3
+        multiplier: 1.15
       });
       combatant.statusEffects.push({
         type: 'buff_defense',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.3
+        multiplier: 1.15
       });
       message += ` ${attackerName}'s Attack and Defense rose!`;
     } else if (effect.type === 'buff_attack_speed') {
-      // Attack + Speed buff (DragonDance)
+      // Attack + Speed buff (DragonDance) - reduced 50% since buffs last entire battle
       combatant.statusEffects.push({
         type: 'buff_attack',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.3
+        multiplier: 1.15
       });
       combatant.statusEffects.push({
         type: 'buff_speed',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.3
+        multiplier: 1.15
       });
       message += ` ${attackerName}'s Attack and Speed rose!`;
     } else if (effect.type === 'buff_all') {
-      // All stats buff (AncientPower - 10% chance)
+      // All stats buff (AncientPower - 10% chance) - reduced 50% since buffs last entire battle
       if (effectApplied) {
         ['buff_attack', 'buff_defense', 'buff_speed', 'buff_instinct'].forEach(buffType => {
           combatant.statusEffects.push({
             type: buffType,
             duration: 4,
             ticksRemaining: 4,
-            multiplier: 1.2
+            multiplier: 1.1
           });
         });
         message += ` ${attackerName}'s stats rose!`;
@@ -1146,7 +1218,18 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
       // Use opponent's Attack stat (FoulPlay) - already calculated with modified formula
       // The damage calculation should use opponent.stats.Attack instead of combatant.stats.Attack
       // For simplicity, we'll add bonus damage based on opponent's Attack
-      const attackDiff = opponent.stats.Attack - combatant.stats.Attack;
+      // Apply attack buffs/debuffs to both combatant and opponent for this comparison
+      let effectiveOpponentAttack = opponent.stats.Attack;
+      opponent.statusEffects.forEach(e => {
+        if (e.type === 'buff_attack' && e.multiplier) effectiveOpponentAttack *= e.multiplier;
+        if (e.type === 'debuff_attack' && e.multiplier) effectiveOpponentAttack *= e.multiplier;
+      });
+      let effectiveCombatantAttack = combatant.stats.Attack;
+      combatant.statusEffects.forEach(e => {
+        if (e.type === 'buff_attack' && e.multiplier) effectiveCombatantAttack *= e.multiplier;
+        if (e.type === 'debuff_attack' && e.multiplier) effectiveCombatantAttack *= e.multiplier;
+      });
+      const attackDiff = effectiveOpponentAttack - effectiveCombatantAttack;
       if (attackDiff > 0) {
         const bonusDamage = Math.floor(move.damage * (attackDiff / 100));
         opponent.currentHP = Math.max(0, opponent.currentHP - bonusDamage);
@@ -1163,7 +1246,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           ticksRemaining: effect.duration,
           damage: effect.damage || 4
         });
-        message += ` Opponent was burned!`;
+        message += ` ${opponentName} was burned!`;
       } else if (effect.type === 'poison') {
         opponent.statusEffects.push({
           type: 'poison',
@@ -1171,7 +1254,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           ticksRemaining: effect.duration,
           damage: effect.damage || 4
         });
-        message += ` Opponent was poisoned!`;
+        message += ` ${opponentName} was poisoned!`;
       } else if (effect.type === 'badly_poison') {
         // Toxic - damage increases each turn
         opponent.statusEffects.push({
@@ -1181,49 +1264,49 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           damage: 2,
           turnsActive: 0
         });
-        message += ` Opponent was badly poisoned!`;
+        message += ` ${opponentName} was badly poisoned!`;
       } else if (effect.type === 'paralyze') {
         opponent.statusEffects.push({
           type: 'paralyze',
           duration: effect.duration,
           ticksRemaining: effect.duration
         });
-        message += ` Opponent was paralyzed!`;
+        message += ` ${opponentName} was paralyzed!`;
       } else if (effect.type === 'freeze') {
         opponent.statusEffects.push({
           type: 'freeze',
           duration: effect.duration,
           ticksRemaining: effect.duration
         });
-        message += ` Opponent was frozen!`;
+        message += ` ${opponentName} was frozen!`;
       } else if (effect.type === 'sleep') {
         opponent.statusEffects.push({
           type: 'sleep',
           duration: effect.duration,
           ticksRemaining: effect.duration
         });
-        message += ` Opponent fell asleep!`;
+        message += ` ${opponentName} fell asleep!`;
       } else if (effect.type === 'confuse') {
         opponent.statusEffects.push({
           type: 'confuse',
           duration: effect.duration,
           ticksRemaining: effect.duration
         });
-        message += ` Opponent became confused!`;
+        message += ` ${opponentName} became confused!`;
       } else if (effect.type === 'stun') {
         opponent.statusEffects.push({
           type: 'stun',
           duration: effect.duration,
           ticksRemaining: effect.duration
         });
-        message += ` Opponent flinched!`;
+        message += ` ${opponentName} flinched!`;
       } else if (effect.type === 'infatuate') {
         opponent.statusEffects.push({
           type: 'infatuate',
           duration: effect.duration,
           ticksRemaining: effect.duration
         });
-        message += ` Opponent fell in love!`;
+        message += ` ${opponentName} fell in love!`;
       } else if (effect.type === 'curse') {
         opponent.statusEffects.push({
           type: 'curse',
@@ -1231,14 +1314,14 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           ticksRemaining: effect.duration,
           damage: effect.damage || 6
         });
-        message += ` Opponent was cursed!`;
+        message += ` ${opponentName} was cursed!`;
       } else if (effect.type === 'soak') {
         opponent.statusEffects.push({
           type: 'soak',
           duration: effect.duration,
           ticksRemaining: effect.duration
         });
-        message += ` Opponent got soaked!`;
+        message += ` ${opponentName} got soaked!`;
       } else if (effect.type === 'debuff_defense') {
         opponent.statusEffects.push({
           type: 'debuff_defense',
@@ -1246,7 +1329,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           ticksRemaining: effect.duration,
           multiplier: 0.7
         });
-        message += ` Opponent's Defense fell!`;
+        message += ` ${opponentName}'s Defense fell!`;
       } else if (effect.type === 'debuff_instinct') {
         opponent.statusEffects.push({
           type: 'debuff_instinct',
@@ -1254,7 +1337,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           ticksRemaining: effect.duration,
           multiplier: 0.7
         });
-        message += ` Opponent's Instinct fell!`;
+        message += ` ${opponentName}'s Instinct fell!`;
       } else if (effect.type === 'debuff_attack') {
         opponent.statusEffects.push({
           type: 'debuff_attack',
@@ -1262,7 +1345,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           ticksRemaining: effect.duration,
           multiplier: 0.7
         });
-        message += ` Opponent's Attack fell!`;
+        message += ` ${opponentName}'s Attack fell!`;
       } else if (effect.type === 'debuff_speed') {
         opponent.statusEffects.push({
           type: 'debuff_speed',
@@ -1270,7 +1353,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           ticksRemaining: effect.duration,
           multiplier: 0.7
         });
-        message += ` Opponent's Speed fell!`;
+        message += ` ${opponentName}'s Speed fell!`;
       } else if (effect.type === 'debuff_accuracy') {
         opponent.statusEffects.push({
           type: 'debuff_accuracy',
@@ -1278,7 +1361,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           ticksRemaining: effect.duration,
           multiplier: 0.7
         });
-        message += ` Opponent's Accuracy fell!`;
+        message += ` ${opponentName}'s Accuracy fell!`;
       } else if (effect.type === 'energize') {
         combatant.statusEffects.push({
           type: 'energize',
@@ -1320,7 +1403,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
             state.warmupRemaining += 1;
           }
         });
-        message += ` Opponent was pushed back!`;
+        message += ` ${opponentName} was pushed back!`;
       } else if (effect.type === 'consecutive_boost') {
         // Rollout - tracking consecutive hits (simplified: just normal damage)
         // Would need state tracking across turns for full implementation
@@ -1423,7 +1506,13 @@ function processStatusEffects(combatant, name) {
     } else if (effect.type === 'confuse' && effect.ticksRemaining > 0) {
       // 33% chance to hurt self when confused (even if they can act)
       if (Math.random() < 0.33) {
-        const confuseDamage = Math.floor(combatant.stats.Attack * 0.1);
+        // Apply attack buffs/debuffs to confusion self-damage
+        let effectiveAttackForConfuse = combatant.stats.Attack;
+        combatant.statusEffects.forEach(e => {
+          if (e.type === 'buff_attack' && e.multiplier) effectiveAttackForConfuse *= e.multiplier;
+          if (e.type === 'debuff_attack' && e.multiplier) effectiveAttackForConfuse *= e.multiplier;
+        });
+        const confuseDamage = Math.floor(effectiveAttackForConfuse * 0.1);
         combatant.currentHP = Math.max(0, combatant.currentHP - confuseDamage);
         messages.push(`${name} hurt itself in confusion for ${confuseDamage} damage!`);
       }
