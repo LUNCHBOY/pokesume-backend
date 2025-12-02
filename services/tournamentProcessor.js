@@ -22,8 +22,9 @@ const GYM_BADGES = [
 ];
 
 const TOURNAMENT_CONFIG = {
-  CREATE_INTERVAL_MINUTES: 30, // Create a new tournament every 30 minutes
-  REGISTRATION_DURATION_MINUTES: 25, // Registration open for 25 minutes before start
+  CREATE_INTERVAL_HOURS: 12, // Create a new tournament every 12 hours
+  REGISTRATION_DURATION_HOURS: 24, // Registration open for 24 hours before start
+  CLEANUP_AFTER_HOURS: 24, // Remove completed tournaments after 24 hours
   DEFAULT_MAX_PLAYERS: 64, // Default bracket size
   MIN_PLAYERS_TO_START: 2 // Minimum players required to start tournament
 };
@@ -47,9 +48,9 @@ async function createScheduledTournament() {
     const gymBadge = GYM_BADGES[Math.floor(Math.random() * GYM_BADGES.length)];
     const tournamentName = `${gymBadge.leader}'s ${gymBadge.type} Challenge`;
 
-    // Set start time to REGISTRATION_DURATION_MINUTES from now
+    // Set start time to REGISTRATION_DURATION_HOURS from now
     const startTime = new Date();
-    startTime.setMinutes(startTime.getMinutes() + TOURNAMENT_CONFIG.REGISTRATION_DURATION_MINUTES);
+    startTime.setHours(startTime.getHours() + TOURNAMENT_CONFIG.REGISTRATION_DURATION_HOURS);
 
     const maxPlayers = TOURNAMENT_CONFIG.DEFAULT_MAX_PLAYERS;
     const totalRounds = Math.log2(maxPlayers);
@@ -482,10 +483,60 @@ async function cancelTournament(tournamentId, reason) {
   }
 }
 
+// Clean up old completed tournaments (remove them from database after 24 hours)
+async function cleanupCompletedTournaments() {
+  try {
+    const cutoffTime = new Date();
+    cutoffTime.setHours(cutoffTime.getHours() - TOURNAMENT_CONFIG.CLEANUP_AFTER_HOURS);
+
+    // Find tournaments to delete
+    const tournamentsToDelete = await db.query(
+      `SELECT id, name FROM tournaments
+       WHERE status IN ('completed', 'cancelled')
+       AND start_time < $1`,
+      [cutoffTime]
+    );
+
+    if (tournamentsToDelete.rows.length === 0) {
+      return 0;
+    }
+
+    const tournamentIds = tournamentsToDelete.rows.map(t => t.id);
+
+    // Delete related records (cascade should handle this, but being explicit)
+    await db.query(
+      'DELETE FROM tournament_matches WHERE tournament_id = ANY($1)',
+      [tournamentIds]
+    );
+
+    await db.query(
+      'DELETE FROM tournament_entries WHERE tournament_id = ANY($1)',
+      [tournamentIds]
+    );
+
+    // Delete the tournaments
+    await db.query(
+      'DELETE FROM tournaments WHERE id = ANY($1)',
+      [tournamentIds]
+    );
+
+    console.log(`[Tournament Cleanup] Removed ${tournamentsToDelete.rows.length} old tournaments:`,
+      tournamentsToDelete.rows.map(t => t.name).join(', '));
+
+    return tournamentsToDelete.rows.length;
+  } catch (error) {
+    console.error('[Tournament Cleanup] Error:', error);
+    return 0;
+  }
+}
+
 // Main processor - check for tournaments that need processing
 async function processTournaments() {
   try {
     console.log('[Tournament Processor] Checking for tournaments...');
+
+    // Clean up old completed tournaments first
+    await cleanupCompletedTournaments();
 
     // Check for tournaments that should start
     const tournamentsToStartResult = await db.query(
