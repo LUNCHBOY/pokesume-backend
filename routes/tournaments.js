@@ -56,7 +56,7 @@ router.get('/', async (req, res) => {
       LEFT JOIN tournament_entries winner_te ON winner_te.id = final_match.winner_entry_id
       LEFT JOIN users winner_u ON winner_u.id = winner_te.user_id
       WHERE t.status IN ('upcoming', 'registration', 'in_progress')
-        OR (t.status = 'completed' AND t.created_at > NOW() - INTERVAL '7 days')
+        OR (t.status = 'completed' AND t.start_time > NOW() - INTERVAL '24 hours')
       ORDER BY t.start_time ASC`
     );
 
