@@ -370,18 +370,26 @@ function simulateBattle(player1, player2) {
     // Collect messages for this tick
     const tickMessages = [];
 
-    // Process player 1
+    // Process player 1 move/rest
     const p1Message = processCombatantTick(battleState.player1, battleState.player2, 'Player 1', battleState);
     if (p1Message) {
       tickMessages.push(p1Message);
     }
 
-    // Process player 2 if still alive
+    // Process player 2 move/rest if still alive
     if (battleState.player2.currentHP > 0) {
       const p2Message = processCombatantTick(battleState.player2, battleState.player1, 'Player 2', battleState);
       if (p2Message) {
         tickMessages.push(p2Message);
       }
+    }
+
+    // Apply status effect damage (DoT, confusion, etc.) - before log save so HP is accurate
+    const p1StatusMessages = applyStatusEffectDamage(battleState.player1, battleState.player1.name);
+    tickMessages.push(...p1StatusMessages);
+    if (battleState.player2.currentHP > 0) {
+      const p2StatusMessages = applyStatusEffectDamage(battleState.player2, battleState.player2.name);
+      tickMessages.push(...p2StatusMessages);
     }
 
     // Process weather effects at end of tick
@@ -391,6 +399,7 @@ function simulateBattle(player1, player2) {
     }
 
     // Save state to log AFTER all actions - HP reflects the result of this tick's actions
+    // Status effects are saved with their current ticksRemaining (before decrement)
     battleState.battleLog.push({
       tick: battleState.tick,
       player1: {
@@ -410,6 +419,10 @@ function simulateBattle(player1, player2) {
       weather: battleState.weather.type ? { ...battleState.weather } : null,
       message: tickMessages.length > 0 ? tickMessages.join(' | ') : null
     });
+
+    // Decrement status effect durations AFTER log save so buffs display for full duration
+    tickStatusEffects(battleState.player1);
+    tickStatusEffects(battleState.player2);
   }
 
   // Determine winner
@@ -520,9 +533,8 @@ function processCombatantTick(combatant, opponent, name, battleState) {
       if (state.cooldownRemaining > 0) state.cooldownRemaining--;
     });
 
-    // Process status effects (damage over time, etc.)
-    const effectMessages = processStatusEffects(combatant, name);
-    messages.push(...effectMessages);
+    // Note: Status effect tick processing (decrement, DoT damage) moved to main battle loop
+    // to happen AFTER log is saved, so buff durations display correctly
 
     return messages.join(' | ');
   }
@@ -583,9 +595,8 @@ function processCombatantTick(combatant, opponent, name, battleState) {
     if (state.cooldownRemaining > 0) state.cooldownRemaining--;
   });
 
-  // Process status effects
-  const effectMessages = processStatusEffects(combatant, name);
-  messages.push(...effectMessages);
+  // Note: Status effect tick processing (decrement, DoT damage) moved to main battle loop
+  // to happen AFTER log is saved, so buff durations display correctly
 
   return messages.join(' | ');
 }
@@ -1454,14 +1465,14 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
 }
 
 /**
- * Process status effects and return messages
+ * Apply status effect damage/healing (DoT, HoT, confusion, etc.)
+ * Called BEFORE saving to battle log so HP reflects correct values
+ * Does NOT decrement ticksRemaining - that happens after log save
  */
-function processStatusEffects(combatant, name) {
+function applyStatusEffectDamage(combatant, name) {
   const messages = [];
 
-  combatant.statusEffects = combatant.statusEffects.filter(effect => {
-    effect.ticksRemaining--;
-
+  combatant.statusEffects.forEach(effect => {
     // === DAMAGE OVER TIME ===
     if (effect.type === 'burn' || effect.type === 'poison') {
       combatant.currentHP = Math.max(0, combatant.currentHP - effect.damage);
@@ -1475,8 +1486,8 @@ function processStatusEffects(combatant, name) {
     } else if (effect.type === 'curse') {
       combatant.currentHP = Math.max(0, combatant.currentHP - effect.damage);
       messages.push(`${name} is hurt by the curse!`);
-    } else if (effect.type === 'delayed_damage' && effect.ticksRemaining === 0) {
-      // FutureSight damage hits when timer expires
+    } else if (effect.type === 'delayed_damage' && effect.ticksRemaining === 1) {
+      // FutureSight damage hits when timer is about to expire (will be 0 after decrement)
       combatant.currentHP = Math.max(0, combatant.currentHP - effect.damage);
       messages.push(`${name} was hit by the foreseen attack for ${effect.damage} damage!`);
     }
@@ -1517,24 +1528,20 @@ function processStatusEffects(combatant, name) {
         messages.push(`${name} hurt itself in confusion for ${confuseDamage} damage!`);
       }
     }
-
-    // === BUFF/DEBUFF EFFECTS (these are passive, checked during damage calc) ===
-    // buff_attack, buff_defense, buff_speed, buff_instinct, debuff_defense, debuff_instinct
-    // These don't need per-tick processing, they're checked when calculating damage
-
-    // === SPECIAL STATES ===
-    else if (effect.type === 'evasion' && effect.ticksRemaining > 0) {
-      // Evasion is checked during hit calculation
-    } else if (effect.type === 'destiny_bond' && effect.ticksRemaining > 0) {
-      // Destiny bond is checked when combatant faints
-    } else if (effect.type === 'soak' && effect.ticksRemaining > 0) {
-      // Soak changes type effectiveness (simplified: reduces fire damage taken)
-    }
-
-    return effect.ticksRemaining > 0;
   });
 
   return messages;
+}
+
+/**
+ * Decrement status effect durations and remove expired effects
+ * Called AFTER saving to battle log so buffs show for their full duration
+ */
+function tickStatusEffects(combatant) {
+  combatant.statusEffects = combatant.statusEffects.filter(effect => {
+    effect.ticksRemaining--;
+    return effect.ticksRemaining > 0;
+  });
 }
 
 /**
