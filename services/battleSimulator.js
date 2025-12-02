@@ -1536,9 +1536,21 @@ function applyStatusEffectDamage(combatant, name) {
 /**
  * Decrement status effect durations and remove expired effects
  * Called AFTER saving to battle log so buffs show for their full duration
+ * Note: Stat buffs and debuffs last the entire battle (don't decrement)
  */
 function tickStatusEffects(combatant) {
+  // Stat buff/debuff types that last the entire battle
+  const permanentEffects = [
+    'buff_attack', 'buff_defense', 'buff_speed', 'buff_instinct',
+    'debuff_attack', 'debuff_defense', 'debuff_speed', 'debuff_instinct', 'debuff_accuracy'
+  ];
+
   combatant.statusEffects = combatant.statusEffects.filter(effect => {
+    // Stat buffs/debuffs last the entire battle
+    if (permanentEffects.includes(effect.type)) {
+      return true;
+    }
+    // Other effects decrement normally
     effect.ticksRemaining--;
     return effect.ticksRemaining > 0;
   });
