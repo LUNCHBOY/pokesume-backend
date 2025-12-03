@@ -230,8 +230,7 @@ const GAME_CONFIG = {
     GYM_ABILITY_COUNTS: [3, 4, 4, 5],
     ELITE_FOUR_ABILITY_COUNT: 6,
     // Global multiplier applied to all enemy Pokemon stats (wild, event, gym leaders, Elite Four)
-    // 0.8 = 20% reduction from base scaling
-    ENEMY_STAT_MULTIPLIER: 0.8
+    ENEMY_STAT_MULTIPLIER: 1.0
   },
   TRAINING: {
     ENERGY_COSTS: { HP: 20, Attack: 25, Defense: 15, Instinct: 20, Speed: -5 },
