@@ -1739,7 +1739,16 @@ const POKEMON = {
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'PsyBeam'],
     learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
   },
-  
+  Dratini: {
+    name: 'Dratini',
+    primaryType: 'Water',
+    baseStats: { HP: 81, Attack: 84, Defense: 65, Instinct: 70, Speed: 80 },
+    typeAptitudes: { Red: 'C', Blue: 'A', Green: 'C', Purple: 'B', Yellow: 'D', Orange: 'C' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
+    defaultAbilities: ['WaterGun', 'Tackle'],
+    learnableAbilities: ['Surf', 'HydroPump', 'BodySlam', 'HyperBeam']
+  },
+
   // Legendary Pokemon
   Moltres: {
     name: 'Moltres',
@@ -2581,7 +2590,7 @@ const POKEMON = {
     baseStats: { HP: 91, Attack: 79, Defense: 85, Instinct: 65, Speed: 60 },
     typeAptitudes: { Red: 'B', Blue: 'C', Green: 'C', Purple: 'D', Yellow: 'C', Orange: 'A' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
-    defaultAbilities: ['Tackle'],
+    defaultAbilities: ['Tackle', 'LowKick'],
     learnableAbilities: ['StoneEdge', 'BodySlam']
   },
   Carnivine: {
@@ -2681,7 +2690,7 @@ const POKEMON = {
     typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'D', Orange: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['Tackle', 'QuickAttack'],
-    learnableAbilities: ['BodySlam']
+    learnableAbilities: ['BodySlam', 'DarkPulse', 'AirSlash']
   },
   Heatmor: {
     name: 'Heatmor',
@@ -2707,8 +2716,8 @@ const POKEMON = {
     baseStats: calculateBaseStats({ HP: 92, Attack: 75, Defense: 60, Instinct: 65, Speed: 68 }, 2),
     typeAptitudes: { Red: 'B', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'D', Orange: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
-    defaultAbilities: ['Tackle'],
-    learnableAbilities: ['BodySlam']
+    defaultAbilities: ['Tackle', 'PsyBeam'],
+    learnableAbilities: ['BodySlam', 'DarkPulse', 'Psychic']
   },
   Espurr: {
     name: 'Espurr',
@@ -2725,7 +2734,7 @@ const POKEMON = {
     baseStats: { HP: 85, Attack: 59, Defense: 75, Instinct: 91, Speed: 70 },
     typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'D', Orange: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
-    defaultAbilities: ['Tackle'],
+    defaultAbilities: ['Tackle', 'PsyBeam'],
     learnableAbilities: ['PlayRough', 'BodySlam']
   },
   Swirlix: {
@@ -2734,7 +2743,7 @@ const POKEMON = {
     baseStats: { HP: 79, Attack: 75, Defense: 75, Instinct: 75, Speed: 76 },
     typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'A', Yellow: 'D', Orange: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
-    defaultAbilities: ['Tackle'],
+    defaultAbilities: ['Tackle', 'QuickAttack'],
     learnableAbilities: ['PlayRough', 'BodySlam']
   },
   Bergmite: {
@@ -2779,7 +2788,7 @@ const POKEMON = {
     baseStats: { HP: 81, Attack: 55, Defense: 135, Instinct: 95, Speed: 54 },
     typeAptitudes: { Red: 'C', Blue: 'C', Green: 'C', Purple: 'D', Yellow: 'C', Orange: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'F', Debuffer: 'A', Chipper: 'E', MadLad: 'D' },
-    defaultAbilities: ['Tackle'],
+    defaultAbilities: ['Tackle', 'LowKick'],
     learnableAbilities: ['PlayRough', 'BodySlam']
   },
 
@@ -3925,14 +3934,14 @@ const SUPPORT_CARDS = {
   Victor: {
     name: 'Victor',
     trainer: 'Victor',
-    rarity: 'Legendary',
+    rarity: 'Rare',
     supportType: 'Instinct',
-    baseStats: { HP: 15, Attack: 12, Defense: 0, Instinct: 48, Speed: 12 },
-    trainingBonus: { typeMatch: 9, otherStats: 4, maxFriendshipTypeMatch: 22 },
-    initialFriendship: 35,
-    appearanceRate: 0.48,
-    typeMatchPreference: 0.30,
-    specialEffect: { maxEnergyBonus: 15, statGainMultiplier: 1.15 },
+    baseStats: { HP: 10, Attack: 8, Defense: 0, Instinct: 42, Speed: 10 },
+    trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 20 },
+    initialFriendship: 30,
+    appearanceRate: 0.42,
+    typeMatchPreference: 0.25,
+    specialEffect: { maxEnergyBonus: 10 },
     moveHints: ['DynamaxCannon', 'CrossPoison', 'DragonPulse', 'Flamethrower', 'Recover'],
     description: 'The Galar Champion harnesses infinite potential'
   },
@@ -3967,14 +3976,14 @@ const SUPPORT_CARDS = {
   Sonia: {
     name: 'Sonia',
     trainer: 'Sonia',
-    rarity: 'Legendary',
+    rarity: 'Rare',
     supportType: 'Instinct',
-    baseStats: { HP: 15, Attack: 10, Defense: 10, Instinct: 50, Speed: 15 },
-    trainingBonus: { typeMatch: 6, otherStats: 5, maxFriendshipTypeMatch: 17 },
-    initialFriendship: 65,
-    appearanceRate: 0.60,
-    typeMatchPreference: 0.05,
-    specialEffect: { skillPointMultiplier: 1.6, friendshipGainBonus: 8 },
+    baseStats: { HP: 10, Attack: 5, Defense: 5, Instinct: 45, Speed: 10 },
+    trainingBonus: { typeMatch: 7, otherStats: 3, maxFriendshipTypeMatch: 18 },
+    initialFriendship: 50,
+    appearanceRate: 0.52,
+    typeMatchPreference: 0.10,
+    specialEffect: { skillPointMultiplier: 1.4, friendshipGainBonus: 5 },
     moveHints: ['Spark', 'Nuzzle', 'PlayRough', 'WildCharge', 'Charm'],
     description: 'The new Professor researches with curiosity'
   },
@@ -3995,28 +4004,28 @@ const SUPPORT_CARDS = {
   Geeta: {
     name: 'Geeta',
     trainer: 'Geeta',
-    rarity: 'Legendary',
+    rarity: 'Uncommon',
     supportType: 'Instinct',
-    baseStats: { HP: 10, Attack: 15, Defense: 10, Instinct: 40, Speed: 0 },
-    trainingBonus: { typeMatch: 14, otherStats: 2, maxFriendshipTypeMatch: 35 },
-    initialFriendship: 10,
-    appearanceRate: 0.35,
-    typeMatchPreference: 0.35,
-    specialEffect: { statGainMultiplier: 1.22 },
+    baseStats: { HP: 5, Attack: 8, Defense: 5, Instinct: 30, Speed: 0 },
+    trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 18 },
+    initialFriendship: 15,
+    appearanceRate: 0.40,
+    typeMatchPreference: 0.30,
+    specialEffect: null,
     moveHints: ['KowtowCleave', 'SuckerPunch', 'IronHead', 'SwordsDance', 'LowKick'],
     description: 'The Paldea Champion leads with strategic growth'
   },
   Kieran: {
     name: 'Kieran',
     trainer: 'Kieran',
-    rarity: 'Legendary',
+    rarity: 'Uncommon',
     supportType: 'Instinct',
-    baseStats: { HP: 25, Attack: 0, Defense: 12, Instinct: 42, Speed: 6 },
-    trainingBonus: { typeMatch: 9, otherStats: 4, maxFriendshipTypeMatch: 22 },
-    initialFriendship: 15,
-    appearanceRate: 0.38,
-    typeMatchPreference: 0.30,
-    specialEffect: { maxEnergyBonus: 20, statGainMultiplier: 1.15 },
+    baseStats: { HP: 12, Attack: 0, Defense: 8, Instinct: 28, Speed: 4 },
+    trainingBonus: { typeMatch: 6, otherStats: 2, maxFriendshipTypeMatch: 16 },
+    initialFriendship: 20,
+    appearanceRate: 0.42,
+    typeMatchPreference: 0.25,
+    specialEffect: { maxEnergyBonus: 8 },
     moveHints: ['TeraStarstorm', 'EarthPower', 'DarkPulse', 'Psychic', 'Recover'],
     description: 'The Blueberry Champion commands crystalline potential'
   },
@@ -4253,14 +4262,14 @@ const SUPPORT_CARDS = {
   Opal: {
     name: 'Opal',
     trainer: 'Opal',
-    rarity: 'Rare',
+    rarity: 'Legendary',
     supportType: 'HP',
-    baseStats: { HP: 45, Attack: 0, Defense: 15, Instinct: 15, Speed: 0 },
-    trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
-    initialFriendship: 45,
-    appearanceRate: 0.52,
-    typeMatchPreference: 0.15,
-    specialEffect: { maxEnergyBonus: 10, restBonus: 5 },
+    baseStats: { HP: 60, Attack: 0, Defense: 20, Instinct: 20, Speed: 0 },
+    trainingBonus: { typeMatch: 8, otherStats: 4, maxFriendshipTypeMatch: 22 },
+    initialFriendship: 40,
+    appearanceRate: 0.48,
+    typeMatchPreference: 0.20,
+    specialEffect: { maxEnergyBonus: 18, restBonus: 8, statGainMultiplier: 1.12 },
     moveHints: ['DrainingKiss', 'DazzlingGleam', 'Recover', 'CalmMind', 'Encore'],
     description: 'The Ballonlea Gym Leader sweetens training'
   },
@@ -4281,14 +4290,14 @@ const SUPPORT_CARDS = {
   Rika: {
     name: 'Rika',
     trainer: 'Rika',
-    rarity: 'Rare',
+    rarity: 'Legendary',
     supportType: 'HP',
-    baseStats: { HP: 50, Attack: 10, Defense: 10, Instinct: 5, Speed: 0 },
-    trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
-    initialFriendship: 40,
-    appearanceRate: 0.50,
-    typeMatchPreference: 0.25,
-    specialEffect: { maxEnergyBonus: 12 },
+    baseStats: { HP: 65, Attack: 15, Defense: 15, Instinct: 8, Speed: 0 },
+    trainingBonus: { typeMatch: 7, otherStats: 4, maxFriendshipTypeMatch: 20 },
+    initialFriendship: 35,
+    appearanceRate: 0.45,
+    typeMatchPreference: 0.30,
+    specialEffect: { maxEnergyBonus: 20, failRateReduction: 0.10 },
     moveHints: ['Earthquake', 'IceBeam', 'Surf', 'ZenHeadbutt', 'Rest'],
     description: 'The Elite Four member interrogates the earth'
   },
@@ -4413,14 +4422,14 @@ const SUPPORT_CARDS = {
   Karen: {
     name: 'Karen',
     trainer: 'Karen',
-    rarity: 'Uncommon',
+    rarity: 'Legendary',
     supportType: 'Defense',
-    baseStats: { HP: 10, Attack: 0, Defense: 25, Instinct: 10, Speed: 0 },
-    trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 20 },
-    initialFriendship: 5,
-    appearanceRate: 0.25,
-    typeMatchPreference: 0.15,
-    specialEffect: null,
+    baseStats: { HP: 18, Attack: 0, Defense: 50, Instinct: 18, Speed: 0 },
+    trainingBonus: { typeMatch: 12, otherStats: 3, maxFriendshipTypeMatch: 30 },
+    initialFriendship: 10,
+    appearanceRate: 0.32,
+    typeMatchPreference: 0.25,
+    specialEffect: { failRateReduction: 0.15, statGainMultiplier: 1.18 },
     moveHints: ['FoulPlay', 'Moonlight', 'Toxic', 'Curse', 'DarkPulse'],
     description: 'The Elite Four member embraces darkness'
   },
@@ -4511,14 +4520,14 @@ const SUPPORT_CARDS = {
   Avery: {
     name: 'Avery',
     trainer: 'Avery',
-    rarity: 'Uncommon',
+    rarity: 'Legendary',
     supportType: 'Speed',
-    baseStats: { HP: 0, Attack: 10, Defense: 5, Instinct: 10, Speed: 30 },
-    trainingBonus: { typeMatch: 4, otherStats: 2, maxFriendshipTypeMatch: 11 },
+    baseStats: { HP: 0, Attack: 18, Defense: 10, Instinct: 18, Speed: 55 },
+    trainingBonus: { typeMatch: 10, otherStats: 3, maxFriendshipTypeMatch: 25 },
     initialFriendship: 15,
-    appearanceRate: 0.45,
-    typeMatchPreference: 0.20,
-    specialEffect: null,
+    appearanceRate: 0.38,
+    typeMatchPreference: 0.30,
+    specialEffect: { energyRegenBonus: 8, statGainMultiplier: 1.15 },
     moveHints: ['PsychoCut', 'PlayRough', 'HighHorsepower', 'Agility', 'Megahorn'],
     description: 'The aspiring Psychic specialist pursues perfection'
   },
@@ -4723,25 +4732,25 @@ const SUPPORT_GACHA_RARITY = {
   Uncommon: {
     rate: 0.35,
     supports: ['Misty', 'Brock', 'Erika', 'Blaine', 'Koga',
-               'Jasmine', 'Winona', 'Karen', 'Agatha',
+               'Jasmine', 'Winona', 'Agatha', 'Geeta',
                'Milo', 'Kabu', 'Melony', 'Gordie',
-               'Klara', 'Avery', 'Iono', 'Grusha']
+               'Klara', 'Kieran', 'Iono', 'Grusha']
   },
   Rare: {
     rate: 0.13,
     supports: ['Lance', 'Sabrina', 'Morty', 'Wallace',
                'Iris', 'Blue', 'Giovanni',
                'Maxie', 'Archie', 'Raihan', 'Marnie',
-               'Nessa', 'Bea', 'Opal', 'Piers',
-               'Rika', 'Poppy']
+               'Nessa', 'Bea', 'Victor', 'Piers',
+               'Sonia', 'Poppy']
   },
   Legendary: {
     rate: 0.02,
     supports: ['Cynthia', 'Red', 'Steven', 'N',
                'ProfessorOak', 'Diantha', 'Leon', 'Selene',
-               'Gloria', 'Nemona', 'Mustard', 'Victor',
-               'Arven', 'Penny', 'Sonia', 'Hop',
-               'Geeta', 'Kieran', 'Carmine', 'Drayton',
+               'Gloria', 'Nemona', 'Mustard', 'Opal',
+               'Arven', 'Penny', 'Rika', 'Hop',
+               'Karen', 'Avery', 'Carmine', 'Drayton',
                'Lacey']
   }
 };
