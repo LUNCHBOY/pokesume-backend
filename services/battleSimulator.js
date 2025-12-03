@@ -1144,30 +1144,30 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
         message += ` ${attackerName}'s stats rose!`;
       }
     } else if (effect.type === 'debuff_instinct_self') {
-      // Self instinct debuff (DracoMeteor) - doubled strength
+      // Self instinct debuff (DracoMeteor) - NOT doubled (stays at 0.6)
       combatant.statusEffects.push({
         type: 'debuff_instinct',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 0.2
+        multiplier: 0.6
       });
       message += ` ${attackerName}'s Instinct fell!`;
     } else if (effect.type === 'debuff_speed_self') {
-      // Self speed debuff (HammerArm) - doubled strength
+      // Self speed debuff (HammerArm) - NOT doubled (stays at 0.6)
       combatant.statusEffects.push({
         type: 'debuff_speed',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 0.2
+        multiplier: 0.6
       });
       message += ` ${attackerName}'s Speed fell!`;
     } else if (effect.type === 'debuff_attack_self') {
-      // Self attack debuff (Superpower) - doubled strength
+      // Self attack debuff (Superpower) - NOT doubled (stays at 0.6)
       combatant.statusEffects.push({
         type: 'debuff_attack',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 0.2
+        multiplier: 0.6
       });
       message += ` ${attackerName}'s Attack fell!`;
     } else if (effect.type === 'confuse_self_after') {
