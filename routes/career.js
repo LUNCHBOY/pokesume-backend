@@ -777,6 +777,20 @@ router.post('/start', authenticateToken, async (req, res) => {
       supportFriendships[supportName] = supportCard?.initialFriendship || 0;
     });
 
+    // Query support limit break levels from user's inventory
+    const supportLimitBreaks = {};
+    if (selectedSupports.length > 0) {
+      const lbResult = await pool.query(
+        `SELECT support_name, limit_break_level
+         FROM support_inventory
+         WHERE user_id = $1 AND support_name = ANY($2)`,
+        [userId, selectedSupports]
+      );
+      lbResult.rows.forEach(row => {
+        supportLimitBreaks[row.support_name] = row.limit_break_level || 0;
+      });
+    }
+
     // Generate gym leaders and initial wild battles
     const gymLeaders = generateGymLeaders();
     const availableBattles = generateWildBattles(1);
@@ -798,6 +812,7 @@ router.post('/start', authenticateToken, async (req, res) => {
       turnLog: [],
       inspirations: selectedInspirations || [], // Store inspirations
       supportFriendships,
+      supportLimitBreaks, // Store limit break levels for training bonus calculation
       completedHangouts: [],
       pokeclocks: 3,
       gymLeaders,
@@ -1080,6 +1095,17 @@ router.post('/train', authenticateToken, async (req, res) => {
     const currentLevel = careerState.trainingLevels?.[stat] || 0;
     const levelBonus = currentLevel * GAME_CONFIG.TRAINING.LEVEL_BONUS_MULTIPLIER;
     statGain = Math.floor(statGain * (1 + levelBonus));
+
+    // Apply limit break bonus from support cards (+5% per limit break level)
+    // Calculate total limit break multiplier from all supports in this training option
+    let totalLimitBreakBonus = 0;
+    option.supports.forEach(supportName => {
+      const lbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
+      totalLimitBreakBonus += lbLevel * 0.05; // 5% per level per support
+    });
+    if (totalLimitBreakBonus > 0) {
+      statGain = Math.floor(statGain * (1 + totalLimitBreakBonus));
+    }
 
     // Update training progress and level
     const currentProgress = careerState.trainingProgress?.[stat] || 0;
