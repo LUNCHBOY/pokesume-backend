@@ -38,7 +38,7 @@ const areInSameEvolutionChain = (pokemon1Name, pokemon2Name) => {
 };
 
 // Helper function to generate gym leaders
-// Pool includes all Support Card trainers EXCEPT Elite Four members (Lorelei, Bruno, Agatha, Lance)
+// Returns 8 leaders total: 4 random gym leaders (turns 12,24,36,48) + Elite Four (turns 60-63)
 const generateGymLeaders = () => {
   const allGymLeaders = [
     // Original Gym Leaders (kept from original pool, minus Elite Four)
@@ -111,9 +111,12 @@ const generateGymLeaders = () => {
     { name: 'Lacey', type: 'Fighting', pokemon: GYM_LEADER_POKEMON.LaceyExcadrill }
   ];
 
-  // Randomly shuffle and pick 4 gym leaders (Elite 4 on turns 60-63)
+  // Randomly shuffle and pick 4 gym leaders for turns 12, 24, 36, 48
   const shuffled = [...allGymLeaders].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, 4);
+  const randomGymLeaders = shuffled.slice(0, 4);
+
+  // Append Elite Four for turns 60-63 (Lorelei, Bruno, Agatha, Lance)
+  return [...randomGymLeaders, ...ELITE_FOUR];
 };
 
 // Helper function to calculate difficulty multiplier based on turn
