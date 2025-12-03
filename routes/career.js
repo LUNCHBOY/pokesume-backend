@@ -117,29 +117,26 @@ const generateGymLeaders = () => {
 };
 
 // Helper function to calculate difficulty multiplier based on turn
-// TRUE ACCELERATION: Percentage increase grows over time (5% → 24%)
+// Accelerating curve starting from turn 0
 const calculateDifficultyMultiplier = (turn) => {
   const enemyStatMult = GAME_CONFIG.CAREER.ENEMY_STAT_MULTIPLIER || 1.0;
 
-  // Scale from turn 1 to turn 59 with accelerating growth
-  // Progress from 0 to 1 over 59 turns
-  const progress = (turn - 1) / 59;
-  // Quartic curve: 1.0 + 1.7p⁴ + 0.4p³ + 0.3p² + 0.6p
-  // Provides true acceleration - percentage increase grows from ~5% to ~24% over time
-  // Peaks at ~3.85x at turn 59, then smooth transition to Elite Four at 4.5x (Lorelei)
-  const baseMultiplier = 1.0 + (1.7 * Math.pow(progress, 4)) + (0.4 * Math.pow(progress, 3)) + (0.3 * progress * progress) + (0.6 * progress);
+  // Exponential curve: 1.0 + 3.5 * (p^2.5)
+  // Starting from turn 0 with accelerating growth
+  // Naturally reaches 4.5x at turn 59, matching Lorelei's multiplier
+  const progress = turn / 59;
+  const baseMultiplier = 1.0 + 3.5 * Math.pow(progress, 2.5);
+
   return baseMultiplier * enemyStatMult;
 };
 
 // Elite Four fixed base multipliers (used instead of turn-based scaling)
-// With ENEMY_STAT_MULTIPLIER at 1.0 and updated base stats (400 total), these values ensure Lance reaches S+ grade
-// Elite Four now use calculateBaseStats which gives them 400 total base stats
-// Cascades smoothly from turn 59 (3.99x) to Lance at S+ grade (2150 stats)
+// With 400 base stats, these multipliers ensure proper grade progression
 const ELITE_FOUR_BASE_MULTIPLIERS = {
-  0: 4.50,  // Lorelei (turn 60) - 1800 stats (B+ to A range)
-  1: 4.875, // Bruno (turn 61) - 1950 stats (A to S range)
-  2: 5.125, // Agatha (turn 62) - 2050 stats (S range)
-  3: 5.375  // Lance (turn 63) - 2150 stats (S+ grade, Champion)
+  0: 4.688,  // Lorelei (turn 60) - 1875 stats (A grade)
+  1: 5.000,  // Bruno (turn 61) - 2000 stats (A+ grade)
+  2: 5.250,  // Agatha (turn 62) - 2100 stats (S grade, low)
+  3: 5.500   // Lance (turn 63) - 2200 stats (S grade, Champion)
 };
 
 // Get Elite Four multiplier with ENEMY_STAT_MULTIPLIER applied
