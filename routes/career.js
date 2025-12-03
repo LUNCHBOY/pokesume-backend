@@ -8,7 +8,34 @@ const router = express.Router();
 const { pool } = require('../config/database');
 const authenticateToken = require('../middleware/auth');
 const { simulateBattle } = require('../services/battleSimulator');
-const { LEGENDARY_POKEMON, GYM_LEADER_POKEMON, ELITE_FOUR, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS } = require('../shared/gameData');
+const { LEGENDARY_POKEMON, GYM_LEADER_POKEMON, ELITE_FOUR, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS, EVOLUTION_CHAINS } = require('../shared/gameData');
+
+// Helper function to get all Pokemon in the same evolution chain
+const getEvolutionChainMembers = (pokemonName) => {
+  if (EVOLUTION_CHAINS[pokemonName]) {
+    const chain = EVOLUTION_CHAINS[pokemonName];
+    const members = [pokemonName, chain.stage1];
+    if (chain.stage2) members.push(chain.stage2);
+    return members;
+  }
+
+  for (const [basePokemon, chain] of Object.entries(EVOLUTION_CHAINS)) {
+    if (chain.stage1 === pokemonName || chain.stage2 === pokemonName) {
+      const members = [basePokemon, chain.stage1];
+      if (chain.stage2) members.push(chain.stage2);
+      return members;
+    }
+  }
+
+  return [pokemonName];
+};
+
+// Helper function to check if two Pokemon are in the same evolution chain
+const areInSameEvolutionChain = (pokemon1Name, pokemon2Name) => {
+  if (pokemon1Name === pokemon2Name) return true;
+  const chain1 = getEvolutionChainMembers(pokemon1Name);
+  return chain1.includes(pokemon2Name);
+};
 
 // Helper function to generate gym leaders
 // Pool includes all Support Card trainers EXCEPT Elite Four members (Lorelei, Bruno, Agatha, Lance)
@@ -567,6 +594,27 @@ router.post('/start', authenticateToken, async (req, res) => {
         return res.status(400).json({
           error: 'Cannot use the same Pokemon species as inspiration'
         });
+      }
+
+      // Check if any inspiration is in the same evolution chain as the selected Pokemon
+      const hasEvolutionConflict = selectedInspirations.some(
+        inspiration => areInSameEvolutionChain(pokemonName, inspiration.name)
+      );
+
+      if (hasEvolutionConflict) {
+        return res.status(400).json({
+          error: 'Cannot use Pokemon from the same evolution line as inspiration'
+        });
+      }
+
+      // Check if the two inspirations are in the same evolution chain as each other
+      if (selectedInspirations.length === 2) {
+        const [insp1, insp2] = selectedInspirations;
+        if (areInSameEvolutionChain(insp1.name, insp2.name)) {
+          return res.status(400).json({
+            error: 'Both inspirations cannot be from the same evolution line'
+          });
+        }
       }
 
       // TODO: Validate inspiration ownership from user's trained_pokemon table
