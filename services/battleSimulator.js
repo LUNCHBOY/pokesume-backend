@@ -1063,95 +1063,113 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
       combatant.currentHP = Math.min(combatant.stats.HP, combatant.currentHP + healAmount);
       message += ` ${attackerName} recovered ${healAmount} HP!`;
     } else if (effect.type === 'buff_attack') {
-      // Attack buff (SwordsDance, MeteorMash) - reduced 50% since buffs last entire battle
+      // Attack buff (SwordsDance, MeteorMash) - doubled strength
       if (effectApplied) {
         combatant.statusEffects.push({
           type: 'buff_attack',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 1.5
+          multiplier: 2.0
         });
         message += ` ${attackerName}'s Attack rose sharply!`;
       }
     } else if (effect.type === 'buff_defense') {
-      // Defense buff (IronDefense) - reduced 50% since buffs last entire battle
+      // Defense buff (IronDefense) - doubled strength
       combatant.statusEffects.push({
         type: 'buff_defense',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.4
+        multiplier: 1.8
       });
       message += ` ${attackerName}'s Defense rose sharply!`;
     } else if (effect.type === 'buff_speed') {
-      // Speed buff (RockPolish) - reduced 50% since buffs last entire battle
+      // Speed buff (RockPolish) - doubled strength
       combatant.statusEffects.push({
         type: 'buff_speed',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.4
+        multiplier: 1.8
       });
       message += ` ${attackerName}'s Speed rose sharply!`;
     } else if (effect.type === 'buff_instinct') {
-      // Instinct buff (CalmMind, NastyPlot) - reduced 50% since buffs last entire battle
+      // Instinct buff (CalmMind, NastyPlot) - doubled strength
       combatant.statusEffects.push({
         type: 'buff_instinct',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.4
+        multiplier: 1.8
       });
       message += ` ${attackerName}'s Instinct rose sharply!`;
     } else if (effect.type === 'buff_attack_defense') {
-      // Attack + Defense buff (BulkUp) - reduced 50% since buffs last entire battle
+      // Attack + Defense buff (BulkUp) - doubled strength
       combatant.statusEffects.push({
         type: 'buff_attack',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.15
+        multiplier: 1.3
       });
       combatant.statusEffects.push({
         type: 'buff_defense',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.15
+        multiplier: 1.3
       });
       message += ` ${attackerName}'s Attack and Defense rose!`;
     } else if (effect.type === 'buff_attack_speed') {
-      // Attack + Speed buff (DragonDance) - reduced 50% since buffs last entire battle
+      // Attack + Speed buff (DragonDance) - doubled strength
       combatant.statusEffects.push({
         type: 'buff_attack',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.15
+        multiplier: 1.3
       });
       combatant.statusEffects.push({
         type: 'buff_speed',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 1.15
+        multiplier: 1.3
       });
       message += ` ${attackerName}'s Attack and Speed rose!`;
     } else if (effect.type === 'buff_all') {
-      // All stats buff (AncientPower - 10% chance) - reduced 50% since buffs last entire battle
+      // All stats buff (AncientPower - 10% chance) - doubled strength
       if (effectApplied) {
         ['buff_attack', 'buff_defense', 'buff_speed', 'buff_instinct'].forEach(buffType => {
           combatant.statusEffects.push({
             type: buffType,
             duration: 4,
             ticksRemaining: 4,
-            multiplier: 1.1
+            multiplier: 1.2
           });
         });
         message += ` ${attackerName}'s stats rose!`;
       }
     } else if (effect.type === 'debuff_instinct_self') {
-      // Self instinct debuff (DracoMeteor)
+      // Self instinct debuff (DracoMeteor) - doubled strength
       combatant.statusEffects.push({
         type: 'debuff_instinct',
         duration: effect.duration,
         ticksRemaining: effect.duration,
-        multiplier: 0.6
+        multiplier: 0.2
       });
       message += ` ${attackerName}'s Instinct fell!`;
+    } else if (effect.type === 'debuff_speed_self') {
+      // Self speed debuff (HammerArm) - doubled strength
+      combatant.statusEffects.push({
+        type: 'debuff_speed',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        multiplier: 0.2
+      });
+      message += ` ${attackerName}'s Speed fell!`;
+    } else if (effect.type === 'debuff_attack_self') {
+      // Self attack debuff (Superpower) - doubled strength
+      combatant.statusEffects.push({
+        type: 'debuff_attack',
+        duration: effect.duration,
+        ticksRemaining: effect.duration,
+        multiplier: 0.2
+      });
+      message += ` ${attackerName}'s Attack fell!`;
     } else if (effect.type === 'confuse_self_after') {
       // Confuse self after attack (Outrage)
       combatant.statusEffects.push({
@@ -1338,7 +1356,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           type: 'debuff_defense',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.7
+          multiplier: 0.4
         });
         message += ` ${opponentName}'s Defense fell!`;
       } else if (effect.type === 'debuff_instinct') {
@@ -1346,7 +1364,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           type: 'debuff_instinct',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.7
+          multiplier: 0.4
         });
         message += ` ${opponentName}'s Instinct fell!`;
       } else if (effect.type === 'debuff_attack') {
@@ -1354,7 +1372,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           type: 'debuff_attack',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.7
+          multiplier: 0.4
         });
         message += ` ${opponentName}'s Attack fell!`;
       } else if (effect.type === 'debuff_speed') {
@@ -1362,7 +1380,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           type: 'debuff_speed',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.7
+          multiplier: 0.4
         });
         message += ` ${opponentName}'s Speed fell!`;
       } else if (effect.type === 'debuff_accuracy') {
@@ -1370,7 +1388,7 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           type: 'debuff_accuracy',
           duration: effect.duration,
           ticksRemaining: effect.duration,
-          multiplier: 0.7
+          multiplier: 0.4
         });
         message += ` ${opponentName}'s Accuracy fell!`;
       } else if (effect.type === 'energize') {

@@ -133,13 +133,14 @@ const calculateDifficultyMultiplier = (turn) => {
   return baseMultiplier * enemyStatMult;
 };
 
-// Elite Four fixed base multipliers (used instead of turn-based scaling)
-// With 400 base stats, these multipliers ensure proper grade progression
+// Elite Four fixed base multipliers - Adjusted for actual base stat totals
+// Lorelei (Cloyster): 560 base, Bruno (Machamp): 520 base, Agatha (Gengar): 595 base, Lance (Dragonite): 590 base
+// Target grades: A (1750), A+ (1925), S (2100), S+ (2275)
 const ELITE_FOUR_BASE_MULTIPLIERS = {
-  0: 4.688,  // Lorelei (turn 60) - 1875 stats (A grade)
-  1: 5.000,  // Bruno (turn 61) - 2000 stats (A+ grade)
-  2: 5.250,  // Agatha (turn 62) - 2100 stats (S grade, low)
-  3: 5.500   // Lance (turn 63) - 2200 stats (S grade, Champion)
+  0: 3.125,  // Lorelei (turn 60) - 1750 stats (A grade)
+  1: 3.702,  // Bruno (turn 61) - 1925 stats (A+ grade)
+  2: 3.529,  // Agatha (turn 62) - 2100 stats (S grade)
+  3: 3.856   // Lance (turn 63) - 2275 stats (S+ grade, Champion)
 };
 
 // Get Elite Four multiplier with ENEMY_STAT_MULTIPLIER applied
