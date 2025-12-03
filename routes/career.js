@@ -117,33 +117,29 @@ const generateGymLeaders = () => {
 };
 
 // Helper function to calculate difficulty multiplier based on turn
-// Scaling: 1.0x until turn 12, then curve to 3.25x effective at turn 60
-// ENEMY_STAT_MULTIPLIER (0.8) is applied, so base reaches 4.06x
+// TRUE ACCELERATION: Percentage increase grows over time (5% → 24%)
 const calculateDifficultyMultiplier = (turn) => {
   const enemyStatMult = GAME_CONFIG.CAREER.ENEMY_STAT_MULTIPLIER || 1.0;
 
-  // No scaling before turn 12
-  if (turn < 12) {
-    return 1.0 * enemyStatMult;
-  }
-  // After turn 12, use mixed scaling to match player power curve
-  // Progress from 0 to 1 over 48 turns (turn 12 to 60)
-  const progress = (turn - 12) / 48;
-  // More linear curve: stronger mid-game challenge, same start/end points
-  // At turn 12: 1.0x, at turn 36 (midpoint): ~2.44x, at turn 60: 4.06x base (3.25x effective)
-  // Old formula was 1.56*p² + 1.5*p (midpoint ~2.14x), new is 0.36*p² + 2.7*p (midpoint ~2.44x)
-  const baseMultiplier = 1.0 + (0.36 * progress * progress) + (2.7 * progress);
+  // Scale from turn 1 to turn 59 with accelerating growth
+  // Progress from 0 to 1 over 59 turns
+  const progress = (turn - 1) / 59;
+  // Quartic curve: 1.0 + 1.7p⁴ + 0.4p³ + 0.3p² + 0.6p
+  // Provides true acceleration - percentage increase grows from ~5% to ~24% over time
+  // Peaks at ~3.85x at turn 59, then smooth transition to Elite Four at 4.5x (Lorelei)
+  const baseMultiplier = 1.0 + (1.7 * Math.pow(progress, 4)) + (0.4 * Math.pow(progress, 3)) + (0.3 * progress * progress) + (0.6 * progress);
   return baseMultiplier * enemyStatMult;
 };
 
 // Elite Four fixed base multipliers (used instead of turn-based scaling)
-// ENEMY_STAT_MULTIPLIER (0.8) is applied, giving effective multipliers in comments
-// Cascades smoothly from quadratic curve endpoint, capping at 3.75x for Lance
+// With ENEMY_STAT_MULTIPLIER at 1.0 and updated base stats (400 total), these values ensure Lance reaches S+ grade
+// Elite Four now use calculateBaseStats which gives them 400 total base stats
+// Cascades smoothly from turn 59 (3.99x) to Lance at S+ grade (2150 stats)
 const ELITE_FOUR_BASE_MULTIPLIERS = {
-  0: 4.06,  // Lorelei (turn 60) - 3.25x effective
-  1: 4.25,  // Bruno (turn 61) - 3.40x effective
-  2: 4.44,  // Agatha (turn 62) - 3.55x effective
-  3: 4.69   // Lance (turn 63) - 3.75x effective (Champion cap)
+  0: 4.50,  // Lorelei (turn 60) - 1800 stats (B+ to A range)
+  1: 4.875, // Bruno (turn 61) - 1950 stats (A to S range)
+  2: 5.125, // Agatha (turn 62) - 2050 stats (S range)
+  3: 5.375  // Lance (turn 63) - 2150 stats (S+ grade, Champion)
 };
 
 // Get Elite Four multiplier with ENEMY_STAT_MULTIPLIER applied
