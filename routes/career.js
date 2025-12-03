@@ -702,6 +702,18 @@ router.post('/start', authenticateToken, async (req, res) => {
       }
     });
 
+    // Apply support card base stat bonuses
+    selectedSupports.forEach(supportName => {
+      const supportCard = SUPPORT_CARDS[supportName];
+      if (supportCard && supportCard.baseStats) {
+        Object.entries(supportCard.baseStats).forEach(([statName, value]) => {
+          if (upgradedBaseStats[statName] !== undefined) {
+            upgradedBaseStats[statName] += value;
+          }
+        });
+      }
+    });
+
     // Build validated Pokemon object from server data + bonuses
     const validatedPokemon = {
       ...serverPokemonData,
