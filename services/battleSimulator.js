@@ -1492,9 +1492,15 @@ function applyStatusEffectDamage(combatant, name) {
 
   combatant.statusEffects.forEach(effect => {
     // === DAMAGE OVER TIME ===
-    if (effect.type === 'burn' || effect.type === 'poison') {
+    if (effect.type === 'burn') {
+      // Burn does percentage-based damage (effect.damage is percentage, e.g., 3 = 3%)
+      const burnDamage = Math.floor(combatant.stats.HP * (effect.damage / 100));
+      combatant.currentHP = Math.max(0, combatant.currentHP - burnDamage);
+      messages.push(`${name} takes ${burnDamage} damage from burn!`);
+    } else if (effect.type === 'poison') {
+      // Poison does static damage
       combatant.currentHP = Math.max(0, combatant.currentHP - effect.damage);
-      messages.push(`${name} takes ${effect.damage} damage from ${effect.type}!`);
+      messages.push(`${name} takes ${effect.damage} damage from poison!`);
     } else if (effect.type === 'badly_poison') {
       // Toxic damage increases each turn
       effect.turnsActive = (effect.turnsActive || 0) + 1;
