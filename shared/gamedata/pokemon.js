@@ -6,7 +6,7 @@
 const { calculateBaseStats } = require('./config');
 
 const POKEMON = {
-  // Original 5 starter pokemons
+  // Starter Pokemon (5 total - players can start careers with these)
   Charmander: {
     name: 'Charmander',
     primaryType: 'Fire',
@@ -58,7 +58,7 @@ const POKEMON = {
     isStarter: true
   },
   
-  // 25 Additional Wild Pokemons
+  // Additional Pokemon (gacha pool and evolutions)
   Growlithe: {
     name: 'Growlithe',
     primaryType: 'Fire',

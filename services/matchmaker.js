@@ -540,14 +540,13 @@ async function processMatch(entry1, entry2, isAIMatch = false) {
       );
     }
 
-    // Award 100 primos to the winner
-    if (player1Won) {
-      await db.query(
-        'UPDATE users SET primos = primos + 100 WHERE id = $1',
-        [entry1.user_id]
-      );
-    } else if (!isAIMatch) {
-      // Player 2 won (only award if not AI match)
+    // Award 100 primos to both players (winner and loser both get rewarded for participating)
+    await db.query(
+      'UPDATE users SET primos = primos + 100 WHERE id = $1',
+      [entry1.user_id]
+    );
+    if (!isAIMatch) {
+      // Player 2 also gets 100 primos (only award if not AI match)
       await db.query(
         'UPDATE users SET primos = primos + 100 WHERE id = $1',
         [entry2.user_id]

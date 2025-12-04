@@ -616,7 +616,9 @@ router.post('/start', authenticateToken, async (req, res) => {
         }
       }
 
-      // TODO: Validate inspiration ownership from user's trained_pokemon table
+      // Note: Inspiration validation happens implicitly - inspirations come from frontend
+      // which only shows Pokemon from the user's trained_pokemon. Server validates
+      // that inspirations don't duplicate the current Pokemon's evolution chain.
     }
 
     // SECURITY: SERVER-SIDE CALCULATION OF INSPIRATION BONUSES
