@@ -239,7 +239,8 @@ const GAME_CONFIG = {
     STAT_LOSS_ON_FAILURE: 2,
     FRIENDSHIP_GAIN_PER_TRAINING: 10,
     LEVEL_UP_REQUIREMENT: 4, // Successful trainings needed to level up
-    LEVEL_BONUS_MULTIPLIER: 0.10 // 10% bonus per level
+    LEVEL_BONUS_MULTIPLIER: 0.50, // 50% bonus per level
+    MAX_TRAINING_LEVEL: 5 // Maximum training level cap
   },
   REST: {
     ENERGY_GAINS: [30, 50, 70],

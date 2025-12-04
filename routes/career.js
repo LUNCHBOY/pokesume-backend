@@ -1141,7 +1141,8 @@ router.post('/train', authenticateToken, async (req, res) => {
     let newLevel = currentLevel;
     let leveledUp = false;
 
-    if (newProgress >= GAME_CONFIG.TRAINING.LEVEL_UP_REQUIREMENT) {
+    const maxLevel = GAME_CONFIG.TRAINING.MAX_TRAINING_LEVEL || 99;
+    if (newProgress >= GAME_CONFIG.TRAINING.LEVEL_UP_REQUIREMENT && currentLevel < maxLevel) {
       newLevel = currentLevel + 1;
       leveledUp = true;
     }
