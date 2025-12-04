@@ -63,10 +63,10 @@ router.post('/register', async (req, res) => {
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Create user with starting primos (5000 for new accounts)
+    // Create user with starting primos (10000 for new accounts)
     const result = await db.query(
       `INSERT INTO users (username, email, password_hash, rating, primos, created_at)
-       VALUES ($1, $2, $3, 1000, 5000, NOW())
+       VALUES ($1, $2, $3, 1000, 10000, NOW())
        RETURNING id, username, email, rating, primos, created_at`,
       [username, email, passwordHash]
     );
@@ -229,10 +229,10 @@ router.post('/google', async (req, res) => {
         // Use a temporary username - user will choose their own
         const tempUsername = `Trainer${Date.now()}`;
 
-        // Create the new user with temporary username (5000 starting primos)
+        // Create the new user with temporary username (10000 starting primos)
         result = await db.query(
           `INSERT INTO users (username, email, google_id, rating, primos, needs_username, created_at)
-           VALUES ($1, $2, $3, 1000, 5000, true, NOW())
+           VALUES ($1, $2, $3, 1000, 10000, true, NOW())
            RETURNING id, username, email, rating, primos, needs_username, created_at`,
           [tempUsername, email, googleId]
         );

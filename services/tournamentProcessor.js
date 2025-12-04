@@ -1,24 +1,200 @@
 const db = require('../config/database');
 const { simulateBattle } = require('./battleSimulator');
 
-// Gym-themed tournament configuration
+// Gym-themed tournament configuration with battle conditions
 const GYM_BADGES = [
-  { key: 'boulder', name: 'Boulder Badge', gym: 'Pewter Gym', leader: 'Brock', type: 'Rock' },
-  { key: 'cascade', name: 'Cascade Badge', gym: 'Cerulean Gym', leader: 'Misty', type: 'Water' },
-  { key: 'thunder', name: 'Thunder Badge', gym: 'Vermilion Gym', leader: 'Lt. Surge', type: 'Electric' },
-  { key: 'rainbow', name: 'Rainbow Badge', gym: 'Celadon Gym', leader: 'Erika', type: 'Grass' },
-  { key: 'soul', name: 'Soul Badge', gym: 'Fuchsia Gym', leader: 'Koga', type: 'Poison' },
-  { key: 'marsh', name: 'Marsh Badge', gym: 'Saffron Gym', leader: 'Sabrina', type: 'Psychic' },
-  { key: 'volcano', name: 'Volcano Badge', gym: 'Cinnabar Gym', leader: 'Blaine', type: 'Fire' },
-  { key: 'earth', name: 'Earth Badge', gym: 'Viridian Gym', leader: 'Giovanni', type: 'Ground' },
-  { key: 'zephyr', name: 'Zephyr Badge', gym: 'Violet Gym', leader: 'Falkner', type: 'Flying' },
-  { key: 'hive', name: 'Hive Badge', gym: 'Azalea Gym', leader: 'Bugsy', type: 'Bug' },
-  { key: 'plain', name: 'Plain Badge', gym: 'Goldenrod Gym', leader: 'Whitney', type: 'Normal' },
-  { key: 'fog', name: 'Fog Badge', gym: 'Ecruteak Gym', leader: 'Morty', type: 'Ghost' },
-  { key: 'storm', name: 'Storm Badge', gym: 'Cianwood Gym', leader: 'Chuck', type: 'Fighting' },
-  { key: 'mineral', name: 'Mineral Badge', gym: 'Olivine Gym', leader: 'Jasmine', type: 'Steel' },
-  { key: 'glacier', name: 'Glacier Badge', gym: 'Mahogany Gym', leader: 'Pryce', type: 'Ice' },
-  { key: 'rising', name: 'Rising Badge', gym: 'Blackthorn Gym', leader: 'Clair', type: 'Dragon' }
+  {
+    key: 'boulder',
+    name: 'Boulder Badge',
+    gym: 'Pewter Gym',
+    leader: 'Brock',
+    type: 'Rock',
+    condition: {
+      name: 'Stone Fortress',
+      description: 'All Pokemon gain +15% Defense. Fighting-type moves deal 10% more damage.',
+      effects: { defenseBonus: 0.15, typeDamageBonus: { Fighting: 0.10 } }
+    }
+  },
+  {
+    key: 'cascade',
+    name: 'Cascade Badge',
+    gym: 'Cerulean Gym',
+    leader: 'Misty',
+    type: 'Water',
+    condition: {
+      name: 'Aquatic Arena',
+      description: 'Water-type moves deal 15% more damage. Fire-type moves deal 15% less damage.',
+      effects: { typeDamageBonus: { Water: 0.15 }, typeDamagePenalty: { Fire: 0.15 } }
+    }
+  },
+  {
+    key: 'thunder',
+    name: 'Thunder Badge',
+    gym: 'Vermilion Gym',
+    leader: 'Lt. Surge',
+    type: 'Electric',
+    condition: {
+      name: 'Charged Field',
+      description: 'All Pokemon gain +10% Speed. Electric-type moves have +15% paralysis chance.',
+      effects: { speedBonus: 0.10, typeStatusBonus: { Electric: { paralyze: 0.15 } } }
+    }
+  },
+  {
+    key: 'rainbow',
+    name: 'Rainbow Badge',
+    gym: 'Celadon Gym',
+    leader: 'Erika',
+    type: 'Grass',
+    condition: {
+      name: 'Aromatic Garden',
+      description: 'All Pokemon regenerate 2% HP per turn. Grass-type moves deal 10% more damage.',
+      effects: { passiveHealPercent: 0.02, typeDamageBonus: { Grass: 0.10 } }
+    }
+  },
+  {
+    key: 'soul',
+    name: 'Soul Badge',
+    gym: 'Fuchsia Gym',
+    leader: 'Koga',
+    type: 'Poison',
+    condition: {
+      name: 'Toxic Mist',
+      description: 'Status effect durations are extended by 2 turns. Psychic-type moves have +20% status chance.',
+      effects: { statusDurationBonus: 2, typeStatusBonus: { Psychic: { all: 0.20 } } }
+    }
+  },
+  {
+    key: 'marsh',
+    name: 'Marsh Badge',
+    gym: 'Saffron Gym',
+    leader: 'Sabrina',
+    type: 'Psychic',
+    condition: {
+      name: 'Mind Palace',
+      description: 'All Pokemon gain +15% Instinct. Critical hit damage increased to 2.25x.',
+      effects: { instinctBonus: 0.15, critDamageBonus: 0.25 }
+    }
+  },
+  {
+    key: 'volcano',
+    name: 'Volcano Badge',
+    gym: 'Cinnabar Gym',
+    leader: 'Blaine',
+    type: 'Fire',
+    condition: {
+      name: 'Volcanic Heat',
+      description: 'Fire-type moves deal 20% more damage. All Pokemon lose 1% max HP per turn from heat.',
+      effects: { typeDamageBonus: { Fire: 0.20 }, passiveDamagePercent: 0.01 }
+    }
+  },
+  {
+    key: 'earth',
+    name: 'Earth Badge',
+    gym: 'Viridian Gym',
+    leader: 'Giovanni',
+    type: 'Ground',
+    condition: {
+      name: 'Seismic Zone',
+      description: 'Fighting-type moves deal 15% more damage. All Pokemon gain +10% Attack.',
+      effects: { attackBonus: 0.10, typeDamageBonus: { Fighting: 0.15 } }
+    }
+  },
+  {
+    key: 'zephyr',
+    name: 'Zephyr Badge',
+    gym: 'Violet Gym',
+    leader: 'Falkner',
+    type: 'Flying',
+    condition: {
+      name: 'Gale Winds',
+      description: 'All Pokemon gain +20% Speed. Dodge chance increased by 5%.',
+      effects: { speedBonus: 0.20, dodgeBonus: 0.05 }
+    }
+  },
+  {
+    key: 'hive',
+    name: 'Hive Badge',
+    gym: 'Azalea Gym',
+    leader: 'Bugsy',
+    type: 'Bug',
+    condition: {
+      name: 'Swarm Tactics',
+      description: 'Low-stamina moves (≤25) deal 20% more damage. Stamina regeneration +15%.',
+      effects: { lowStaminaMoveBonus: 0.20, staminaRegenBonus: 0.15 }
+    }
+  },
+  {
+    key: 'plain',
+    name: 'Plain Badge',
+    gym: 'Goldenrod Gym',
+    leader: 'Whitney',
+    type: 'Normal',
+    condition: {
+      name: 'Endurance Test',
+      description: 'All Pokemon gain +20% HP. Normal-type moves deal 15% more damage.',
+      effects: { hpBonus: 0.20, typeDamageBonus: { Normal: 0.15 } }
+    }
+  },
+  {
+    key: 'fog',
+    name: 'Fog Badge',
+    gym: 'Ecruteak Gym',
+    leader: 'Morty',
+    type: 'Ghost',
+    condition: {
+      name: 'Ethereal Shroud',
+      description: 'All Pokemon have +10% dodge chance. Psychic-type moves deal 15% more damage.',
+      effects: { dodgeBonus: 0.10, typeDamageBonus: { Psychic: 0.15 } }
+    }
+  },
+  {
+    key: 'storm',
+    name: 'Storm Badge',
+    gym: 'Cianwood Gym',
+    leader: 'Chuck',
+    type: 'Fighting',
+    condition: {
+      name: 'Fighting Spirit',
+      description: 'Fighting-type moves deal 20% more damage. Buff effects have +50% duration.',
+      effects: { typeDamageBonus: { Fighting: 0.20 }, buffDurationBonus: 0.50 }
+    }
+  },
+  {
+    key: 'mineral',
+    name: 'Mineral Badge',
+    gym: 'Olivine Gym',
+    leader: 'Jasmine',
+    type: 'Steel',
+    condition: {
+      name: 'Steel Resolve',
+      description: 'All Pokemon gain +20% Defense. Debuff effects have -25% duration.',
+      effects: { defenseBonus: 0.20, debuffDurationPenalty: 0.25 }
+    }
+  },
+  {
+    key: 'glacier',
+    name: 'Glacier Badge',
+    gym: 'Mahogany Gym',
+    leader: 'Pryce',
+    type: 'Ice',
+    condition: {
+      name: 'Frozen Battlefield',
+      description: 'Water-type moves deal 20% more damage. All Pokemon have -10% Speed.',
+      effects: { typeDamageBonus: { Water: 0.20 }, speedPenalty: 0.10 }
+    }
+  },
+  {
+    key: 'rising',
+    name: 'Rising Badge',
+    gym: 'Blackthorn Gym',
+    leader: 'Clair',
+    type: 'Dragon',
+    condition: {
+      name: 'Dragon\'s Domain',
+      description: 'All stats gain +5%. High-damage moves (≥30) deal 10% more damage.',
+      effects: { allStatsBonus: 0.05, highDamageMoveBonus: 0.10 }
+    }
+  }
 ];
 
 const TOURNAMENT_CONFIG = {
@@ -32,16 +208,21 @@ const TOURNAMENT_CONFIG = {
 // Create a new tournament automatically with gym theme
 async function createScheduledTournament() {
   try {
-    // Check if there's already an upcoming or registration tournament
-    const existingResult = await db.query(
-      `SELECT id FROM tournaments
-       WHERE status IN ('upcoming', 'registration')
+    // Check when the last tournament was created
+    const lastTournamentResult = await db.query(
+      `SELECT id, created_at FROM tournaments
+       ORDER BY created_at DESC
        LIMIT 1`
     );
 
-    if (existingResult.rows.length > 0) {
-      console.log('[Tournament Creator] Tournament already scheduled, skipping creation');
-      return null;
+    if (lastTournamentResult.rows.length > 0) {
+      const lastCreatedAt = new Date(lastTournamentResult.rows[0].created_at);
+      const hoursSinceLastCreation = (Date.now() - lastCreatedAt.getTime()) / (1000 * 60 * 60);
+
+      if (hoursSinceLastCreation < TOURNAMENT_CONFIG.CREATE_INTERVAL_HOURS) {
+        console.log(`[Tournament Creator] Last tournament created ${hoursSinceLastCreation.toFixed(1)} hours ago, waiting for ${TOURNAMENT_CONFIG.CREATE_INTERVAL_HOURS} hour interval`);
+        return null;
+      }
     }
 
     // Pick a random gym for the tournament theme
@@ -72,14 +253,14 @@ async function createScheduledTournament() {
   }
 }
 
-// Simulate best-of-3 match between two entries
-function simulateBestOf3(entry1, entry2) {
+// Simulate best-of-3 match between two entries with optional tournament condition
+function simulateBestOf3(entry1, entry2, tournamentCondition = null) {
   const battles = [];
   let entry1Wins = 0;
   let entry2Wins = 0;
 
   // Battle 1: Pokemon1 vs Pokemon1
-  const battle1 = simulateBattle(entry1.pokemon1_data, entry2.pokemon1_data);
+  const battle1 = simulateBattle(entry1.pokemon1_data, entry2.pokemon1_data, tournamentCondition);
   battles.push({
     battle: 1,
     pokemon1Name: entry1.pokemon1_data.name,
@@ -103,7 +284,7 @@ function simulateBestOf3(entry1, entry2) {
   else entry2Wins++;
 
   // Battle 2: Pokemon2 vs Pokemon2 (always play all 3)
-  const battle2 = simulateBattle(entry1.pokemon2_data, entry2.pokemon2_data);
+  const battle2 = simulateBattle(entry1.pokemon2_data, entry2.pokemon2_data, tournamentCondition);
   battles.push({
     battle: 2,
     pokemon1Name: entry1.pokemon2_data.name,
@@ -127,7 +308,7 @@ function simulateBestOf3(entry1, entry2) {
   else entry2Wins++;
 
   // Battle 3: Pokemon3 vs Pokemon3
-  const battle3 = simulateBattle(entry1.pokemon3_data, entry2.pokemon3_data);
+  const battle3 = simulateBattle(entry1.pokemon3_data, entry2.pokemon3_data, tournamentCondition);
   battles.push({
     battle: 3,
     pokemon1Name: entry1.pokemon3_data.name,
@@ -240,9 +421,22 @@ async function processRound(tournamentId, round) {
   try {
     console.log(`Processing round ${round} for tournament ${tournamentId}`);
 
+    // Get tournament info to retrieve the gym condition
+    const tournamentInfo = await db.query(
+      'SELECT gym_theme FROM tournaments WHERE id = $1',
+      [tournamentId]
+    );
+    const gymTheme = tournamentInfo.rows[0]?.gym_theme;
+    const gymBadge = GYM_BADGES.find(g => g.key === gymTheme);
+    const tournamentCondition = gymBadge?.condition || null;
+
+    if (tournamentCondition) {
+      console.log(`Tournament condition: ${tournamentCondition.name} - ${tournamentCondition.description}`);
+    }
+
     // Get all matches in this round that haven't been completed
     const matchesResult = await db.query(
-      `SELECT 
+      `SELECT
         tm.id,
         tm.position,
         te1.id as entry1_id,
@@ -301,7 +495,7 @@ async function processRound(tournamentId, round) {
         pokemon3_data: match.pokemon2_3_data
       };
 
-      const matchResult = simulateBestOf3(entry1, entry2);
+      const matchResult = simulateBestOf3(entry1, entry2, tournamentCondition);
 
       // Update match with results
       await db.query(
@@ -311,19 +505,17 @@ async function processRound(tournamentId, round) {
         [matchResult.winner, JSON.stringify(matchResult), match.id]
       );
 
-      // Award 20 primos to the round winner
-      const winnerUserId = matchResult.winner === entry1.id ? entry1.user_id : entry2.user_id;
-      await db.query(
-        'UPDATE users SET primos = primos + 20 WHERE id = $1',
-        [winnerUserId]
-      );
+      // Track winner and loser for placement rewards
+      const winnerEntryId = matchResult.winner;
+      const loserEntryId = matchResult.winner === entry1.id ? entry2.id : entry1.id;
 
       winners.push({
-        entryId: matchResult.winner,
+        entryId: winnerEntryId,
+        loserEntryId: loserEntryId,
         position: match.position
       });
 
-      console.log(`Match completed: ${entry1.username} vs ${entry2.username}, Winner: ${matchResult.winner}, +20 primos`);
+      console.log(`Match completed: ${entry1.username} vs ${entry2.username}, Winner: ${winnerEntryId}`);
     }
 
     return { completed: matches.length, winners };
@@ -414,21 +606,95 @@ async function advanceToNextRound(tournamentId, currentRound, winners) {
 
     if (allAdvancing.length < 2) {
       // Tournament complete - only 1 winner
-      // Award badge and 100 primos bonus to the winner
+      // Award placement prizes: 10K for 1st, 5K for 2nd, 1K for 3rd/4th
       if (allAdvancing.length === 1) {
-        await awardBadge(tournamentId, allAdvancing[0].entryId);
+        const winnerEntryId = allAdvancing[0].entryId;
+        const secondPlaceEntryId = allAdvancing[0].loserEntryId; // Loser of final match
 
-        // Get winner's user_id and award 100 primos for winning the tournament
+        // Award badge to 1st place
+        await awardBadge(tournamentId, winnerEntryId);
+
+        // Get 1st place user_id and award 10,000 primos
         const winnerResult = await db.query(
           'SELECT user_id FROM tournament_entries WHERE id = $1',
-          [allAdvancing[0].entryId]
+          [winnerEntryId]
         );
         if (winnerResult.rows.length > 0) {
           await db.query(
-            'UPDATE users SET primos = primos + 100 WHERE id = $1',
+            'UPDATE users SET primos = primos + 10000 WHERE id = $1',
             [winnerResult.rows[0].user_id]
           );
-          console.log(`Tournament winner awarded 100 primos bonus!`);
+          console.log(`Tournament 1st place awarded 10,000 primos!`);
+        }
+
+        // Award 2nd place: 5,000 primos
+        if (secondPlaceEntryId) {
+          const secondResult = await db.query(
+            'SELECT user_id FROM tournament_entries WHERE id = $1',
+            [secondPlaceEntryId]
+          );
+          if (secondResult.rows.length > 0) {
+            await db.query(
+              'UPDATE users SET primos = primos + 5000 WHERE id = $1',
+              [secondResult.rows[0].user_id]
+            );
+            console.log(`Tournament 2nd place awarded 5,000 primos!`);
+          }
+        }
+
+        // Award 3rd/4th place: 1,000 primos each (losers of semifinal round)
+        // Semifinal is currentRound - 1 (the round before the final)
+        const semifinalRound = currentRound - 1;
+        const semifinalLosersResult = await db.query(
+          `SELECT te.user_id
+           FROM tournament_matches tm
+           JOIN tournament_entries te ON (
+             CASE WHEN tm.winner_entry_id = tm.player1_entry_id
+                  THEN tm.player2_entry_id
+                  ELSE tm.player1_entry_id
+             END = te.id
+           )
+           WHERE tm.tournament_id = $1 AND tm.round = $2`,
+          [tournamentId, semifinalRound]
+        );
+
+        for (const loser of semifinalLosersResult.rows) {
+          await db.query(
+            'UPDATE users SET primos = primos + 1000 WHERE id = $1',
+            [loser.user_id]
+          );
+          console.log(`Tournament 3rd/4th place awarded 1,000 primos!`);
+        }
+
+        // Award participation prize: 100 primos to everyone who placed below 4th
+        // Get all entry user_ids except 1st, 2nd, and 3rd/4th place
+        const topPlacerIds = [winnerEntryId, secondPlaceEntryId].filter(Boolean);
+        const semifinalLoserEntryIds = await db.query(
+          `SELECT
+             CASE WHEN tm.winner_entry_id = tm.player1_entry_id
+                  THEN tm.player2_entry_id
+                  ELSE tm.player1_entry_id
+             END as entry_id
+           FROM tournament_matches tm
+           WHERE tm.tournament_id = $1 AND tm.round = $2`,
+          [tournamentId, semifinalRound]
+        );
+        const allTopIds = [...topPlacerIds, ...semifinalLoserEntryIds.rows.map(r => r.entry_id)];
+
+        const participantsResult = await db.query(
+          `SELECT user_id FROM tournament_entries
+           WHERE tournament_id = $1 AND id != ALL($2)`,
+          [tournamentId, allTopIds]
+        );
+
+        for (const participant of participantsResult.rows) {
+          await db.query(
+            'UPDATE users SET primos = primos + 100 WHERE id = $1',
+            [participant.user_id]
+          );
+        }
+        if (participantsResult.rows.length > 0) {
+          console.log(`Tournament participation prize: ${participantsResult.rows.length} players awarded 100 primos each!`);
         }
       }
 

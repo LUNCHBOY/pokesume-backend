@@ -8,7 +8,7 @@ const router = express.Router();
 const { pool } = require('../config/database');
 const authenticateToken = require('../middleware/auth');
 const { simulateBattle } = require('../services/battleSimulator');
-const { LEGENDARY_POKEMON, GYM_LEADER_POKEMON, ELITE_FOUR, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS, EVOLUTION_CHAINS } = require('../shared/gameData');
+const { LEGENDARY_POKEMON, GYM_LEADER_POKEMON, ELITE_FOUR, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS, EVOLUTION_CHAINS, getSupportAtLimitBreak } = require('../shared/gameData');
 
 // Helper function to get all Pokemon in the same evolution chain
 const getEvolutionChainMembers = (pokemonName) => {
@@ -200,7 +200,8 @@ const calculateMaxEnergy = (careerState) => {
   let maxEnergy = GAME_CONFIG.CAREER.MAX_ENERGY;
   if (careerState.selectedSupports) {
     careerState.selectedSupports.forEach(supportName => {
-      const supportCard = SUPPORT_CARDS[supportName];
+      const supportLbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
+      const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
       if (supportCard?.specialEffect?.maxEnergyBonus) {
         maxEnergy += supportCard.specialEffect.maxEnergyBonus;
       }
@@ -398,7 +399,8 @@ const generateTrainingOptionsWithAppearanceChance = (selectedSupports, careerSta
 
   // Process each support with appearance chance
   selectedSupports.forEach(supportName => {
-    const supportCard = SUPPORT_CARDS[supportName];
+    const supportLbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
+    const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
     if (!supportCard) return;
 
     const support = getSupportCardAttributes(supportCard);
@@ -738,18 +740,46 @@ router.post('/start', authenticateToken, async (req, res) => {
     const upgradedStrategyAptitudes = applyStrategyAptitudesUpgrade(serverPokemonData.strategyAptitudes || {}, strategyUpgrades);
     const { strategy: defaultStrategy, strategyGrade: defaultStrategyGrade } = deriveStrategyFromAptitudes(upgradedStrategyAptitudes);
 
-    // Apply initial stat bonuses from inspirations
+    // Get Pokemon's limit break level from inventory
+    const limitBreakResult = await pool.query(
+      'SELECT limit_break_level FROM pokemon_inventory WHERE user_id = $1 AND pokemon_name = $2',
+      [userId, pokemonName]
+    );
+    const limitBreakLevel = limitBreakResult.rows[0]?.limit_break_level || 0;
+    const limitBreakMultiplier = 1 + (limitBreakLevel * 0.05); // 5% per level
+
+    // Apply initial stat bonuses from inspirations AND limit break
     const baseStats = serverPokemonData.baseStats || { HP: 150, Attack: 50, Defense: 50, Instinct: 50, Speed: 50 };
-    const upgradedBaseStats = { ...baseStats };
+    const upgradedBaseStats = {};
+
+    // First apply limit break multiplier to base stats
+    Object.keys(baseStats).forEach(statName => {
+      upgradedBaseStats[statName] = Math.round(baseStats[statName] * limitBreakMultiplier);
+    });
+
+    // Then apply inspiration stat bonuses
     Object.keys(statBonuses).forEach(statName => {
       if (upgradedBaseStats[statName] !== undefined) {
         upgradedBaseStats[statName] += statBonuses[statName];
       }
     });
 
-    // Apply support card base stat bonuses
+    // Get support card limit break levels from inventory
+    const supportLimitBreaks = {};
+    if (selectedSupports.length > 0) {
+      const supportLbResult = await pool.query(
+        'SELECT support_name, limit_break_level FROM support_inventory WHERE user_id = $1 AND support_name = ANY($2)',
+        [userId, selectedSupports]
+      );
+      supportLbResult.rows.forEach(row => {
+        supportLimitBreaks[row.support_name] = row.limit_break_level || 0;
+      });
+    }
+
+    // Apply support card base stat bonuses (with limit break scaling)
     selectedSupports.forEach(supportName => {
-      const supportCard = SUPPORT_CARDS[supportName];
+      const supportLbLevel = supportLimitBreaks[supportName] || 0;
+      const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
       if (supportCard && supportCard.baseStats) {
         Object.entries(supportCard.baseStats).forEach(([statName, value]) => {
           if (upgradedBaseStats[statName] !== undefined) {
@@ -770,26 +800,13 @@ router.post('/start', authenticateToken, async (req, res) => {
       strategyGrade: defaultStrategyGrade
     };
 
-    // Initialize support friendships with their initial friendship values
+    // Initialize support friendships with their initial friendship values (with limit break scaling)
     const supportFriendships = {};
     selectedSupports.forEach(supportName => {
-      const supportCard = SUPPORT_CARDS[supportName];
+      const supportLbLevel = supportLimitBreaks[supportName] || 0;
+      const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
       supportFriendships[supportName] = supportCard?.initialFriendship || 0;
     });
-
-    // Query support limit break levels from user's inventory
-    const supportLimitBreaks = {};
-    if (selectedSupports.length > 0) {
-      const lbResult = await pool.query(
-        `SELECT support_name, limit_break_level
-         FROM support_inventory
-         WHERE user_id = $1 AND support_name = ANY($2)`,
-        [userId, selectedSupports]
-      );
-      lbResult.rows.forEach(row => {
-        supportLimitBreaks[row.support_name] = row.limit_break_level || 0;
-      });
-    }
 
     // Generate gym leaders and initial wild battles
     const gymLeaders = generateGymLeaders();
@@ -799,6 +816,7 @@ router.post('/start', authenticateToken, async (req, res) => {
     const careerState = {
       pokemon: validatedPokemon,
       selectedSupports,
+      supportLimitBreaks, // Store support limit break levels for later use
       basePokemonName: pokemonName,
       evolutionStage: 0,
       currentStats: { ...validatedPokemon.baseStats },
@@ -812,7 +830,6 @@ router.post('/start', authenticateToken, async (req, res) => {
       turnLog: [],
       inspirations: selectedInspirations || [], // Store inspirations
       supportFriendships,
-      supportLimitBreaks, // Store limit break levels for training bonus calculation
       completedHangouts: [],
       pokeclocks: 3,
       gymLeaders,
@@ -1069,7 +1086,8 @@ router.post('/train', authenticateToken, async (req, res) => {
     let energyRegenBonus = 0; // Bonus energy regen for Speed training from support cards
 
     option.supports.forEach(supportName => {
-      const supportCard = SUPPORT_CARDS[supportName];
+      const supportLbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
+      const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
       if (!supportCard) return;
 
       const support = getSupportCardAttributes(supportCard);
@@ -1095,17 +1113,6 @@ router.post('/train', authenticateToken, async (req, res) => {
     const currentLevel = careerState.trainingLevels?.[stat] || 0;
     const levelBonus = currentLevel * GAME_CONFIG.TRAINING.LEVEL_BONUS_MULTIPLIER;
     statGain = Math.floor(statGain * (1 + levelBonus));
-
-    // Apply limit break bonus from support cards (+5% per limit break level)
-    // Calculate total limit break multiplier from all supports in this training option
-    let totalLimitBreakBonus = 0;
-    option.supports.forEach(supportName => {
-      const lbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
-      totalLimitBreakBonus += lbLevel * 0.05; // 5% per level per support
-    });
-    if (totalLimitBreakBonus > 0) {
-      statGain = Math.floor(statGain * (1 + totalLimitBreakBonus));
-    }
 
     // Update training progress and level
     const currentProgress = careerState.trainingProgress?.[stat] || 0;
@@ -1146,13 +1153,7 @@ router.post('/train', authenticateToken, async (req, res) => {
     }
 
     // Calculate max energy (base 100 + any maxEnergyBonus from selected support cards)
-    let maxEnergy = GAME_CONFIG.CAREER.MAX_ENERGY;
-    careerState.selectedSupports.forEach(supportName => {
-      const supportCard = SUPPORT_CARDS[supportName];
-      if (supportCard?.specialEffect?.maxEnergyBonus) {
-        maxEnergy += supportCard.specialEffect.maxEnergyBonus;
-      }
-    });
+    const maxEnergy = calculateMaxEnergy(careerState);
 
     // Calculate new energy: subtract cost, add bonus for Speed training, cap at maxEnergy
     let newEnergy = careerState.energy - energyCost;
@@ -1255,13 +1256,7 @@ router.post('/rest', authenticateToken, async (req, res) => {
     }
 
     // Calculate max energy (base 100 + any maxEnergyBonus from selected support cards)
-    let maxEnergy = GAME_CONFIG.CAREER.MAX_ENERGY;
-    careerState.selectedSupports.forEach(supportName => {
-      const supportCard = SUPPORT_CARDS[supportName];
-      if (supportCard?.specialEffect?.maxEnergyBonus) {
-        maxEnergy += supportCard.specialEffect.maxEnergyBonus;
-      }
-    });
+    const maxEnergy = calculateMaxEnergy(careerState);
 
     const currentEnergy = careerState.energy ?? GAME_CONFIG.CAREER.STARTING_ENERGY;
     const newEnergy = Math.min(maxEnergy, currentEnergy + energyGain);
@@ -1954,7 +1949,7 @@ router.post('/battle', authenticateToken, async (req, res) => {
           defeatedAt: new Date().toISOString()
         };
         // Award primos for gym leader/Elite Four victory
-        primosReward = isEliteFour ? 20 : 10; // 20 for Elite Four, 10 for regular gym leaders
+        primosReward = 100; // 100 for gym leaders and Elite Four
       } else if (isEventBattle) {
         // Event battle victory - +15 to all stats, no energy cost
         statGain = 15;
@@ -2167,11 +2162,11 @@ router.post('/complete', authenticateToken, async (req, res) => {
     );
 
     // Award primos for career completion
-    // Champion (defeated all Elite Four) gets 20 primos bonus
+    // Champion (defeated all Elite Four) gets 200 primos bonus
     // Regular completion (gym loss or retirement) gets nothing
     let primosReward = 0;
     if (completionType === 'champion') {
-      primosReward = 20;
+      primosReward = 200;
     }
 
     if (primosReward > 0) {

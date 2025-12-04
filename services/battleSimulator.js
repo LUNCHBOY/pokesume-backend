@@ -1,4 +1,4 @@
-/**
+﻿/**
  * POKEMON CAREER BATTLE SIMULATOR
  * Extracted from App.jsx to be used server-side
  * This implements the EXACT battle logic from the client
@@ -46,12 +46,12 @@ const GAME_CONFIG = {
   // Valid strategies (move selection behavior only, no modifiers)
   VALID_STRATEGIES: ['Scaler', 'Nuker', 'Debuffer', 'Chipper', 'MadLad'],
   TYPE_MATCHUPS: {
-    Red: { strong: 'Grass', weak: 'Water' },
-    Blue: { strong: 'Fire', weak: 'Grass' },
-    Green: { strong: 'Water', weak: 'Fire' },
-    Yellow: { strong: 'Water', weak: 'Grass' }, // Electric is strong vs Water, weak vs Grass (Ground not in game)
-    Purple: { strong: 'Fighting', weak: 'Psychic' },
-    Orange: { strong: 'Electric', weak: 'Psychic' }
+    Fire: { strong: 'Grass', weak: 'Water' },
+    Water: { strong: 'Fire', weak: 'Grass' },
+    Grass: { strong: 'Water', weak: 'Fire' },
+    Electric: { strong: 'Water', weak: 'Grass' }, // Electric is strong vs Water, weak vs Grass (Ground not in game)
+    Psychic: { strong: 'Fighting', weak: 'Psychic' },
+    Fighting: { strong: 'Electric', weak: 'Psychic' }
   }
 };
 
@@ -328,14 +328,47 @@ const TYPE_TO_COLOR = {
  *
  * @param {Object} player1 - Pokemon 1 data { name, primaryType, stats, abilities, typeAptitudes, strategy, strategyGrade }
  * @param {Object} player2 - Pokemon 2 data
+ * @param {Object} tournamentCondition - Optional tournament condition effects
  * @returns {Object} { winner: 1|2, battleLog: [...tick states], finalState: {...} }
  */
-function simulateBattle(player1, player2) {
+function simulateBattle(player1, player2, tournamentCondition = null) {
+  // Apply tournament condition stat modifiers to base stats
+  const applyStatModifiers = (stats) => {
+    if (!tournamentCondition?.effects) return { ...stats };
+    const effects = tournamentCondition.effects;
+    const modified = { ...stats };
+
+    // All stats bonus (e.g., Dragon's Domain)
+    if (effects.allStatsBonus) {
+      modified.HP = Math.floor(modified.HP * (1 + effects.allStatsBonus));
+      modified.Attack = Math.floor(modified.Attack * (1 + effects.allStatsBonus));
+      modified.Defense = Math.floor(modified.Defense * (1 + effects.allStatsBonus));
+      modified.Instinct = Math.floor(modified.Instinct * (1 + effects.allStatsBonus));
+      modified.Speed = Math.floor(modified.Speed * (1 + effects.allStatsBonus));
+    }
+
+    // Individual stat bonuses
+    if (effects.hpBonus) modified.HP = Math.floor(modified.HP * (1 + effects.hpBonus));
+    if (effects.attackBonus) modified.Attack = Math.floor(modified.Attack * (1 + effects.attackBonus));
+    if (effects.defenseBonus) modified.Defense = Math.floor(modified.Defense * (1 + effects.defenseBonus));
+    if (effects.instinctBonus) modified.Instinct = Math.floor(modified.Instinct * (1 + effects.instinctBonus));
+    if (effects.speedBonus) modified.Speed = Math.floor(modified.Speed * (1 + effects.speedBonus));
+
+    // Speed penalty (e.g., Frozen Battlefield)
+    if (effects.speedPenalty) modified.Speed = Math.floor(modified.Speed * (1 - effects.speedPenalty));
+
+    return modified;
+  };
+
+  const modifiedStats1 = applyStatModifiers(player1.stats);
+  const modifiedStats2 = applyStatModifiers(player2.stats);
+
   // Initialize battle state
   const battleState = {
     player1: {
       ...player1,
-      currentHP: player1.stats.HP,
+      stats: modifiedStats1,
+      currentHP: modifiedStats1.HP,
       currentStamina: GAME_CONFIG.BATTLE.MAX_STAMINA,
       moveStates: {},
       isResting: false,
@@ -343,7 +376,8 @@ function simulateBattle(player1, player2) {
     },
     player2: {
       ...player2,
-      currentHP: player2.stats.HP,
+      stats: modifiedStats2,
+      currentHP: modifiedStats2.HP,
       currentStamina: GAME_CONFIG.BATTLE.MAX_STAMINA,
       moveStates: {},
       isResting: false,
@@ -356,7 +390,9 @@ function simulateBattle(player1, player2) {
       type: null,       // 'sand', 'rain', 'sun', 'hail', etc.
       ticksRemaining: 0,
       caster: null      // 1 or 2 - which player started the weather
-    }
+    },
+    // Tournament condition for damage/status modifiers
+    tournamentCondition: tournamentCondition
   };
 
   // Simulate battle ticks until one Pokemon faints
@@ -396,6 +432,41 @@ function simulateBattle(player1, player2) {
     if (battleState.weather.type && battleState.weather.ticksRemaining > 0) {
       const weatherMessages = processWeatherEffects(battleState);
       tickMessages.push(...weatherMessages);
+    }
+
+    // Apply tournament condition passive effects
+    if (battleState.tournamentCondition?.effects) {
+      const tcEffects = battleState.tournamentCondition.effects;
+
+      // Passive healing (e.g., Aromatic Garden)
+      if (tcEffects.passiveHealPercent) {
+        const p1Heal = Math.floor(battleState.player1.stats.HP * tcEffects.passiveHealPercent);
+        const p2Heal = Math.floor(battleState.player2.stats.HP * tcEffects.passiveHealPercent);
+
+        if (battleState.player1.currentHP > 0 && battleState.player1.currentHP < battleState.player1.stats.HP) {
+          battleState.player1.currentHP = Math.min(battleState.player1.stats.HP, battleState.player1.currentHP + p1Heal);
+          tickMessages.push(`${battleState.player1.name} recovered ${p1Heal} HP from the arena!`);
+        }
+        if (battleState.player2.currentHP > 0 && battleState.player2.currentHP < battleState.player2.stats.HP) {
+          battleState.player2.currentHP = Math.min(battleState.player2.stats.HP, battleState.player2.currentHP + p2Heal);
+          tickMessages.push(`${battleState.player2.name} recovered ${p2Heal} HP from the arena!`);
+        }
+      }
+
+      // Passive damage (e.g., Volcanic Heat)
+      if (tcEffects.passiveDamagePercent) {
+        const p1Dmg = Math.max(1, Math.floor(battleState.player1.stats.HP * tcEffects.passiveDamagePercent));
+        const p2Dmg = Math.max(1, Math.floor(battleState.player2.stats.HP * tcEffects.passiveDamagePercent));
+
+        if (battleState.player1.currentHP > 0) {
+          battleState.player1.currentHP = Math.max(0, battleState.player1.currentHP - p1Dmg);
+          tickMessages.push(`${battleState.player1.name} took ${p1Dmg} damage from the arena!`);
+        }
+        if (battleState.player2.currentHP > 0) {
+          battleState.player2.currentHP = Math.max(0, battleState.player2.currentHP - p2Dmg);
+          tickMessages.push(`${battleState.player2.name} took ${p2Dmg} damage from the arena!`);
+        }
+      }
     }
 
     // Save state to log AFTER all actions - HP reflects the result of this tick's actions
@@ -582,7 +653,13 @@ function processCombatantTick(combatant, opponent, name, battleState) {
       if (e.type === 'debuff_speed' && e.multiplier) effectiveSpeed *= e.multiplier;
     });
     const speedBonus = Math.floor(effectiveSpeed / GAME_CONFIG.BATTLE.SPEED_STAMINA_DENOMINATOR);
-    const restGain = baseRestGain + speedBonus;
+    let restGain = baseRestGain + speedBonus;
+
+    // Tournament condition: Stamina regen bonus (e.g., Swarm Tactics)
+    if (battleState?.tournamentCondition?.effects?.staminaRegenBonus) {
+      restGain = Math.floor(restGain * (1 + battleState.tournamentCondition.effects.staminaRegenBonus));
+    }
+
     combatant.currentStamina = Math.min(GAME_CONFIG.BATTLE.MAX_STAMINA, combatant.currentStamina + restGain);
     combatant.isResting = true;
     messages.push(`${name} is resting... (+${restGain} stamina)`);
@@ -716,6 +793,49 @@ function selectMove(combatant, opponent, available) {
   const opponentHasDebuff = opponent.statusEffects.some(e =>
     e.type.startsWith('debuff_') || ['burn', 'poison', 'badly_poison', 'paralyze', 'freeze', 'sleep', 'confuse', 'curse'].includes(e.type)
   );
+
+  // Low HP healing priority (all strategies except MadLad)
+  // If HP is below 50%, prioritize healing moves
+  if (combatant.strategy !== 'MadLad') {
+    const hpPercent = combatant.currentHP / combatant.stats.HP;
+    if (hpPercent < 0.5) {
+      // Find healing moves (heal_self, regen, drain moves)
+      const healingMoves = movesWithData.filter(m =>
+        m.move.effect && (
+          m.move.effect.type === 'heal_self' ||
+          m.move.effect.type === 'regen' ||
+          m.move.effect.type === 'drain'
+        )
+      );
+
+      if (healingMoves.length > 0) {
+        // Prioritize direct healing (heal_self) over drain/regen when very low
+        const directHealMoves = healingMoves.filter(m => m.move.effect.type === 'heal_self');
+        if (hpPercent < 0.3 && directHealMoves.length > 0) {
+          // Very low HP - strongly prefer direct healing
+          if (Math.random() < 0.85) {
+            return directHealMoves[0].moveName;
+          }
+        }
+
+        // Moderate low HP - use any healing move with high probability
+        if (Math.random() < 0.7) {
+          // Prefer heal_self > drain > regen
+          if (directHealMoves.length > 0) {
+            return directHealMoves[0].moveName;
+          }
+          const drainMoves = healingMoves.filter(m => m.move.effect.type === 'drain');
+          if (drainMoves.length > 0) {
+            // Sort by predicted damage (drain moves deal damage too)
+            drainMoves.sort((a, b) => b.predictedDamage - a.predictedDamage);
+            return drainMoves[0].moveName;
+          }
+          // Fallback to regen
+          return healingMoves[0].moveName;
+        }
+      }
+    }
+  }
 
   // Strategy-specific move selection
   switch (combatant.strategy) {
@@ -864,6 +984,38 @@ function selectMove(combatant, opponent, available) {
 }
 
 /**
+ * Calculate status effect duration with tournament condition modifiers
+ * @param {number} baseDuration - The base duration of the effect
+ * @param {boolean} isBuff - Whether this is a buff (true) or debuff (false)
+ * @param {Object} battleState - The battle state containing tournament conditions
+ * @returns {number} The modified duration
+ */
+function getStatusDuration(baseDuration, isBuff, battleState) {
+  let duration = baseDuration;
+
+  if (battleState?.tournamentCondition?.effects) {
+    const tcEffects = battleState.tournamentCondition.effects;
+
+    // General status duration bonus (e.g., Toxic Mist)
+    if (tcEffects.statusDurationBonus) {
+      duration += tcEffects.statusDurationBonus;
+    }
+
+    // Buff duration bonus (e.g., Fighting Spirit)
+    if (isBuff && tcEffects.buffDurationBonus) {
+      duration = Math.ceil(duration * (1 + tcEffects.buffDurationBonus));
+    }
+
+    // Debuff duration penalty (e.g., Steel Resolve)
+    if (!isBuff && tcEffects.debuffDurationPenalty) {
+      duration = Math.max(1, Math.ceil(duration * (1 - tcEffects.debuffDurationPenalty)));
+    }
+  }
+
+  return duration;
+}
+
+/**
  * Execute a move and return battle message
  */
 function executeMove(combatant, opponent, moveName, attackerName, battleState) {
@@ -905,6 +1057,11 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   const hasEvasion = opponent.statusEffects.some(e => e.type === 'evasion' && e.ticksRemaining > 0);
   if (hasEvasion) {
     dodgeChance += 0.8; // 80% additional dodge chance while in evasion state
+  }
+
+  // Tournament condition: Dodge bonus (e.g., Gale Winds, Ethereal Shroud)
+  if (battleState?.tournamentCondition?.effects?.dodgeBonus) {
+    dodgeChance += battleState.tournamentCondition.effects.dodgeBonus;
   }
 
   const hitRoll = Math.random();
@@ -975,6 +1132,31 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   const baseDamage = move.damage * (attackStat / defenseStat);
   let damage = Math.floor(baseDamage * aptitudeMult * typeBonus);
 
+  // Apply tournament condition damage modifiers
+  if (battleState?.tournamentCondition?.effects) {
+    const tcEffects = battleState.tournamentCondition.effects;
+
+    // Type-specific damage bonus (e.g., Water moves in Aquatic Arena)
+    if (tcEffects.typeDamageBonus && tcEffects.typeDamageBonus[moveType]) {
+      damage = Math.floor(damage * (1 + tcEffects.typeDamageBonus[moveType]));
+    }
+
+    // Type-specific damage penalty (e.g., Fire moves in Aquatic Arena)
+    if (tcEffects.typeDamagePenalty && tcEffects.typeDamagePenalty[moveType]) {
+      damage = Math.floor(damage * (1 - tcEffects.typeDamagePenalty[moveType]));
+    }
+
+    // Low stamina move bonus (e.g., Swarm Tactics - moves with stamina ≤25)
+    if (tcEffects.lowStaminaMoveBonus && move.stamina <= 25) {
+      damage = Math.floor(damage * (1 + tcEffects.lowStaminaMoveBonus));
+    }
+
+    // High damage move bonus (e.g., Dragon's Domain - moves with base damage ≥30)
+    if (tcEffects.highDamageMoveBonus && move.damage >= 30) {
+      damage = Math.floor(damage * (1 + tcEffects.highDamageMoveBonus));
+    }
+  }
+
   // Apply HP-based damage modifier (Eruption)
   if (move.effect && move.effect.type === 'hp_based_damage') {
     const hpPercent = combatant.currentHP / combatant.stats.HP;
@@ -996,10 +1178,15 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
     critChance *= 3;
   }
 
+  // Tournament condition: Critical damage bonus (e.g., Mind Palace)
+  let critMultiplier = 2;
+  if (battleState?.tournamentCondition?.effects?.critDamageBonus) {
+    critMultiplier = 2 + battleState.tournamentCondition.effects.critDamageBonus;
+  }
 
   const isCrit = Math.random() < critChance;
   if (isCrit) {
-    damage = Math.floor(damage * 2);
+    damage = Math.floor(damage * critMultiplier);
   }
 
   // Handle zero-damage (status/weather) moves differently
@@ -1065,79 +1252,86 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
     } else if (effect.type === 'buff_attack') {
       // Attack buff (SwordsDance, MeteorMash) - doubled strength
       if (effectApplied) {
+        const buffDur = getStatusDuration(effect.duration, true, battleState);
         combatant.statusEffects.push({
           type: 'buff_attack',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: buffDur,
+          ticksRemaining: buffDur,
           multiplier: 2.0
         });
         message += ` ${attackerName}'s Attack rose sharply!`;
       }
     } else if (effect.type === 'buff_defense') {
       // Defense buff (IronDefense) - doubled strength
+      const buffDur = getStatusDuration(effect.duration, true, battleState);
       combatant.statusEffects.push({
         type: 'buff_defense',
-        duration: effect.duration,
-        ticksRemaining: effect.duration,
+        duration: buffDur,
+        ticksRemaining: buffDur,
         multiplier: 1.8
       });
       message += ` ${attackerName}'s Defense rose sharply!`;
     } else if (effect.type === 'buff_speed') {
       // Speed buff (RockPolish) - doubled strength
+      const buffDur = getStatusDuration(effect.duration, true, battleState);
       combatant.statusEffects.push({
         type: 'buff_speed',
-        duration: effect.duration,
-        ticksRemaining: effect.duration,
+        duration: buffDur,
+        ticksRemaining: buffDur,
         multiplier: 1.8
       });
       message += ` ${attackerName}'s Speed rose sharply!`;
     } else if (effect.type === 'buff_instinct') {
       // Instinct buff (CalmMind, NastyPlot) - doubled strength
+      const buffDur = getStatusDuration(effect.duration, true, battleState);
       combatant.statusEffects.push({
         type: 'buff_instinct',
-        duration: effect.duration,
-        ticksRemaining: effect.duration,
+        duration: buffDur,
+        ticksRemaining: buffDur,
         multiplier: 1.8
       });
       message += ` ${attackerName}'s Instinct rose sharply!`;
     } else if (effect.type === 'buff_attack_defense') {
       // Attack + Defense buff (BulkUp) - doubled strength
+      const buffDur = getStatusDuration(effect.duration, true, battleState);
       combatant.statusEffects.push({
         type: 'buff_attack',
-        duration: effect.duration,
-        ticksRemaining: effect.duration,
+        duration: buffDur,
+        ticksRemaining: buffDur,
         multiplier: 1.3
       });
       combatant.statusEffects.push({
         type: 'buff_defense',
-        duration: effect.duration,
-        ticksRemaining: effect.duration,
+        duration: buffDur,
+        ticksRemaining: buffDur,
         multiplier: 1.3
       });
       message += ` ${attackerName}'s Attack and Defense rose!`;
     } else if (effect.type === 'buff_attack_speed') {
       // Attack + Speed buff (DragonDance) - doubled strength
+      const buffDur = getStatusDuration(effect.duration, true, battleState);
       combatant.statusEffects.push({
         type: 'buff_attack',
-        duration: effect.duration,
-        ticksRemaining: effect.duration,
+        duration: buffDur,
+        ticksRemaining: buffDur,
         multiplier: 1.3
       });
       combatant.statusEffects.push({
         type: 'buff_speed',
-        duration: effect.duration,
-        ticksRemaining: effect.duration,
+        duration: buffDur,
+        ticksRemaining: buffDur,
         multiplier: 1.3
       });
       message += ` ${attackerName}'s Attack and Speed rose!`;
     } else if (effect.type === 'buff_all') {
       // All stats buff (AncientPower - 10% chance) - doubled strength
       if (effectApplied) {
+        const buffDur = getStatusDuration(4, true, battleState);
         ['buff_attack', 'buff_defense', 'buff_speed', 'buff_instinct'].forEach(buffType => {
           combatant.statusEffects.push({
             type: buffType,
-            duration: 4,
-            ticksRemaining: 4,
+            duration: buffDur,
+            ticksRemaining: buffDur,
             multiplier: 1.2
           });
         });
@@ -1267,20 +1461,22 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
 
     // === OPPONENT STATUS EFFECTS ===
     } else if (effectApplied) {
-      // All other effects that apply to opponent
+      // All other effects that apply to opponent - apply duration modifiers
+      const statusDur = getStatusDuration(effect.duration, false, battleState);
+
       if (effect.type === 'burn') {
         opponent.statusEffects.push({
           type: 'burn',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: statusDur,
+          ticksRemaining: statusDur,
           damage: effect.damage || 4
         });
         message += ` ${opponentName} was burned!`;
       } else if (effect.type === 'poison') {
         opponent.statusEffects.push({
           type: 'poison',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: statusDur,
+          ticksRemaining: statusDur,
           damage: effect.damage || 4
         });
         message += ` ${opponentName} was poisoned!`;
@@ -1288,8 +1484,8 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
         // Toxic - damage increases each turn
         opponent.statusEffects.push({
           type: 'badly_poison',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: statusDur,
+          ticksRemaining: statusDur,
           damage: 2,
           turnsActive: 0
         });
@@ -1297,97 +1493,97 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
       } else if (effect.type === 'paralyze') {
         opponent.statusEffects.push({
           type: 'paralyze',
-          duration: effect.duration,
-          ticksRemaining: effect.duration
+          duration: statusDur,
+          ticksRemaining: statusDur
         });
         message += ` ${opponentName} was paralyzed!`;
       } else if (effect.type === 'freeze') {
         opponent.statusEffects.push({
           type: 'freeze',
-          duration: effect.duration,
-          ticksRemaining: effect.duration
+          duration: statusDur,
+          ticksRemaining: statusDur
         });
         message += ` ${opponentName} was frozen!`;
       } else if (effect.type === 'sleep') {
         opponent.statusEffects.push({
           type: 'sleep',
-          duration: effect.duration,
-          ticksRemaining: effect.duration
+          duration: statusDur,
+          ticksRemaining: statusDur
         });
         message += ` ${opponentName} fell asleep!`;
       } else if (effect.type === 'confuse') {
         opponent.statusEffects.push({
           type: 'confuse',
-          duration: effect.duration,
-          ticksRemaining: effect.duration
+          duration: statusDur,
+          ticksRemaining: statusDur
         });
         message += ` ${opponentName} became confused!`;
       } else if (effect.type === 'stun') {
         opponent.statusEffects.push({
           type: 'stun',
-          duration: effect.duration,
-          ticksRemaining: effect.duration
+          duration: statusDur,
+          ticksRemaining: statusDur
         });
         message += ` ${opponentName} flinched!`;
       } else if (effect.type === 'infatuate') {
         opponent.statusEffects.push({
           type: 'infatuate',
-          duration: effect.duration,
-          ticksRemaining: effect.duration
+          duration: statusDur,
+          ticksRemaining: statusDur
         });
         message += ` ${opponentName} fell in love!`;
       } else if (effect.type === 'curse') {
         opponent.statusEffects.push({
           type: 'curse',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: statusDur,
+          ticksRemaining: statusDur,
           damage: effect.damage || 6
         });
         message += ` ${opponentName} was cursed!`;
       } else if (effect.type === 'soak') {
         opponent.statusEffects.push({
           type: 'soak',
-          duration: effect.duration,
-          ticksRemaining: effect.duration
+          duration: statusDur,
+          ticksRemaining: statusDur
         });
         message += ` ${opponentName} got soaked!`;
       } else if (effect.type === 'debuff_defense') {
         opponent.statusEffects.push({
           type: 'debuff_defense',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: statusDur,
+          ticksRemaining: statusDur,
           multiplier: 0.4
         });
         message += ` ${opponentName}'s Defense fell!`;
       } else if (effect.type === 'debuff_instinct') {
         opponent.statusEffects.push({
           type: 'debuff_instinct',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: statusDur,
+          ticksRemaining: statusDur,
           multiplier: 0.4
         });
         message += ` ${opponentName}'s Instinct fell!`;
       } else if (effect.type === 'debuff_attack') {
         opponent.statusEffects.push({
           type: 'debuff_attack',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: statusDur,
+          ticksRemaining: statusDur,
           multiplier: 0.4
         });
         message += ` ${opponentName}'s Attack fell!`;
       } else if (effect.type === 'debuff_speed') {
         opponent.statusEffects.push({
           type: 'debuff_speed',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: statusDur,
+          ticksRemaining: statusDur,
           multiplier: 0.4
         });
         message += ` ${opponentName}'s Speed fell!`;
       } else if (effect.type === 'debuff_accuracy') {
         opponent.statusEffects.push({
           type: 'debuff_accuracy',
-          duration: effect.duration,
-          ticksRemaining: effect.duration,
+          duration: statusDur,
+          ticksRemaining: statusDur,
           multiplier: 0.4
         });
         message += ` ${opponentName}'s Accuracy fell!`;

@@ -37,7 +37,7 @@ BEGIN
 END $$;
 
 -- Update starting primos for new accounts (handled in auth.js, this is for documentation)
--- New accounts now start with 5000 primos instead of 1000
+-- New accounts now start with 10000 primos
 
 -- Create unique constraint on pokemon_inventory (user_id, pokemon_name) to prevent true duplicates
 -- This allows us to find and update existing pokemon when pulling duplicates
