@@ -120,9 +120,10 @@ const generateGymLeaders = () => {
 };
 
 // Helper function to calculate difficulty multiplier based on turn
-// Accelerating curve starting from turn 0
+// Accelerating curve starting from turn 0, with additional scaling that increases over time
 const calculateDifficultyMultiplier = (turn) => {
   const enemyStatMult = GAME_CONFIG.CAREER.ENEMY_STAT_MULTIPLIER || 1.0;
+  const difficultyScalingMax = GAME_CONFIG.CAREER.DIFFICULTY_SCALING_MAX || 0;
 
   // Exponential curve: 1.0 + 3.5 * (p^2.5)
   // Starting from turn 0 with accelerating growth
@@ -130,24 +131,31 @@ const calculateDifficultyMultiplier = (turn) => {
   const progress = turn / 59;
   const baseMultiplier = 1.0 + 3.5 * Math.pow(progress, 2.5);
 
-  return baseMultiplier * enemyStatMult;
+  // Additional accelerating difficulty scaling (0% at turn 0, max% at turn 59)
+  // Uses same progress curve so difficulty ramps up smoothly
+  const difficultyScaling = 1.0 + (difficultyScalingMax * progress);
+
+  return baseMultiplier * enemyStatMult * difficultyScaling;
 };
 
 // Elite Four fixed base multipliers - Adjusted for actual base stat totals
 // Lorelei (Cloyster): 560 base, Bruno (Machamp): 520 base, Agatha (Gengar): 595 base, Lance (Dragonite): 590 base
-// Target grades: A (1750), A+ (1925), S (2100), S+ (2275)
+// Target grades: A (2000), A+ (2200), S (2400), S+ (2600) - updated for 200 stat point grades
 const ELITE_FOUR_BASE_MULTIPLIERS = {
-  0: 3.125,  // Lorelei (turn 60) - 1750 stats (A grade)
-  1: 3.702,  // Bruno (turn 61) - 1925 stats (A+ grade)
-  2: 3.529,  // Agatha (turn 62) - 2100 stats (S grade)
-  3: 3.856   // Lance (turn 63) - 2275 stats (S+ grade, Champion)
+  0: 3.571,  // Lorelei (turn 60) - 2000 stats (A grade)
+  1: 4.231,  // Bruno (turn 61) - 2200 stats (A+ grade)
+  2: 4.034,  // Agatha (turn 62) - 2400 stats (S grade)
+  3: 4.407   // Lance (turn 63) - 2600 stats (S+ grade, Champion)
 };
 
-// Get Elite Four multiplier with ENEMY_STAT_MULTIPLIER applied
+// Get Elite Four multiplier with ENEMY_STAT_MULTIPLIER and max difficulty scaling applied
 const getEliteFourMultiplier = (index) => {
   const baseMult = ELITE_FOUR_BASE_MULTIPLIERS[index] || 4.25;
   const enemyStatMult = GAME_CONFIG.CAREER.ENEMY_STAT_MULTIPLIER || 1.0;
-  return baseMult * enemyStatMult;
+  const difficultyScalingMax = GAME_CONFIG.CAREER.DIFFICULTY_SCALING_MAX || 0;
+  // Elite Four gets the full difficulty scaling (as if at turn 59+)
+  const difficultyScaling = 1.0 + difficultyScalingMax;
+  return baseMult * enemyStatMult * difficultyScaling;
 };
 
 // Helper function to scale Pokemon stats based on turn difficulty
