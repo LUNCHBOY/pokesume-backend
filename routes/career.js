@@ -776,6 +776,7 @@ router.post('/start', authenticateToken, async (req, res) => {
       supportLbResult.rows.forEach(row => {
         supportLimitBreaks[row.support_name] = row.limit_break_level || 0;
       });
+      console.log('[Career Start] Support limit breaks from DB:', supportLimitBreaks);
     }
 
     // Apply support card base stat bonuses (with limit break scaling)
@@ -1087,6 +1088,8 @@ router.post('/train', authenticateToken, async (req, res) => {
     const friendshipGains = {};
     let energyRegenBonus = 0; // Bonus energy regen for Speed training from support cards
 
+    console.log(`[Training] Base stat gain for ${stat}: ${statGain}`);
+
     option.supports.forEach(supportName => {
       const supportLbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
       const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
@@ -1097,9 +1100,15 @@ router.post('/train', authenticateToken, async (req, res) => {
       const isMaxFriendship = friendship >= 100;
       const supportType = support.supportType;
 
+      console.log(`[Training] Support ${supportName}: LB${supportLbLevel}, type=${supportType}, friendship=${friendship}, isMaxFriendship=${isMaxFriendship}`);
+      console.log(`[Training] Support bonuses: typeBonus=${support.typeBonusTraining}, generalBonus=${support.generalBonusTraining}, friendshipBonus=${support.friendshipBonusTraining}`);
+
       if (supportType === stat) {
-        statGain += isMaxFriendship ? support.friendshipBonusTraining : support.typeBonusTraining;
+        const bonus = isMaxFriendship ? support.friendshipBonusTraining : support.typeBonusTraining;
+        console.log(`[Training] Type match! Adding ${bonus} (${isMaxFriendship ? 'friendshipBonus' : 'typeBonus'})`);
+        statGain += bonus;
       } else {
+        console.log(`[Training] No type match. Adding ${support.generalBonusTraining} (generalBonus)`);
         statGain += support.generalBonusTraining;
       }
 
@@ -1114,7 +1123,9 @@ router.post('/train', authenticateToken, async (req, res) => {
     // Apply training level bonus
     const currentLevel = careerState.trainingLevels?.[stat] || 0;
     const levelBonus = currentLevel * GAME_CONFIG.TRAINING.LEVEL_BONUS_MULTIPLIER;
+    const preMultiplierGain = statGain;
     statGain = Math.floor(statGain * (1 + levelBonus));
+    console.log(`[Training] Final: preMultiplier=${preMultiplierGain}, level=${currentLevel}, levelBonus=${levelBonus}, finalGain=${statGain}`);
 
     // Update training progress and level
     const currentProgress = careerState.trainingProgress?.[stat] || 0;

@@ -1890,15 +1890,22 @@ const getSupportAtLimitBreak = (supportName, limitBreakLevel = 4) => {
   let adjustedSpecialEffect = null;
   if (baseCard.specialEffect && lbData.specialEffect > 0) {
     adjustedSpecialEffect = {};
+
+    // Integer bonus effects that should be rounded
+    const integerBonusEffects = ['maxEnergyBonus', 'restBonus', 'friendshipGainBonus', 'energyRegenBonus', 'energyCostReduction'];
+
     for (const [effect, value] of Object.entries(baseCard.specialEffect)) {
       if (typeof value === 'number') {
         // For multiplier effects, scale the bonus portion
         if (effect.includes('Multiplier')) {
           const bonus = value - 1.0;
           adjustedSpecialEffect[effect] = 1.0 + (bonus * lbData.specialEffect);
-        } else {
-          // For flat bonuses, scale and round
+        } else if (integerBonusEffects.includes(effect)) {
+          // For flat integer bonuses, scale and round
           adjustedSpecialEffect[effect] = Math.round(value * lbData.specialEffect);
+        } else {
+          // For percentage-based effects (failRateReduction, etc.), keep decimal precision
+          adjustedSpecialEffect[effect] = value * lbData.specialEffect;
         }
       } else {
         adjustedSpecialEffect[effect] = value;
@@ -1908,7 +1915,8 @@ const getSupportAtLimitBreak = (supportName, limitBreakLevel = 4) => {
     // Check if any effect is meaningful
     const hasSignificantEffect = Object.entries(adjustedSpecialEffect).some(([key, val]) => {
       if (key.includes('Multiplier')) return val > 1.005;
-      return val > 0;
+      if (integerBonusEffects.includes(key)) return val > 0;
+      return val > 0.001; // For percentage effects, check if > 0.1%
     });
     if (!hasSignificantEffect) adjustedSpecialEffect = null;
   }
