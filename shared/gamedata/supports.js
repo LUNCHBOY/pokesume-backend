@@ -23,7 +23,7 @@ const SUPPORT_CARDS = {
     moveHints: ['Earthquake', 'DragonClaw', 'Outrage', 'StoneEdge', 'SwordsDance'],
     description: 'The Sinnoh Champion grants overwhelming growth potential'
   },
-  Fire: {
+  Red: {
     name: 'Red',
     trainer: 'Red',
     rarity: 'Legendary',
@@ -379,7 +379,7 @@ const SUPPORT_CARDS = {
     moveHints: ['DragonDance', 'Outrage', 'Earthquake', 'DragonClaw', 'SwordsDance'],
     description: 'The Unova Champion commands dragons'
   },
-  Water: {
+  Blue: {
     name: 'Blue',
     trainer: 'Blue',
     rarity: 'Rare',
@@ -956,7 +956,7 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
     ]
   },
 
-  Fire: {
+  Red: {
     // LB0: Rare and silent - low appearance, already has special effect active
     // LB1: BIG JUMP typeMatchPreference (0.30→0.55) - Type mastery achieved
     // LB2: BIG JUMP baseStats (0.50→0.80) - Silent strength revealed
