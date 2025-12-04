@@ -307,16 +307,8 @@ const MOVES = {
   Crunch: { type: 'Psychic', damage: 26, warmup: 2, cooldown: 3, stamina: 40, cost: 48, effect: { type: 'debuff_defense', chance: 0.2, duration: 2 } }
 };
 
-// Type to color mapping for aptitude lookups
-const TYPE_TO_COLOR = {
-  Fire: 'Red',
-  Water: 'Blue',
-  Grass: 'Green',
-  Electric: 'Yellow',
-  Psychic: 'Purple',
-  Fighting: 'Orange',
-  Normal: 'Colorless'
-};
+// Valid types for aptitudes (used by GAME_CONFIG.TYPE_MATCHUPS)
+// Types: Fire, Water, Grass, Electric, Psychic, Fighting
 
 // ============================================================================
 // BATTLE SIMULATOR
@@ -726,20 +718,19 @@ function selectMove(combatant, opponent, available) {
   const movesWithData = available.map(moveName => {
     const move = MOVES[moveName];
     const moveType = move.type;
-    const moveColor = TYPE_TO_COLOR[moveType];
 
-    // Aptitude multiplier
+    // Aptitude multiplier - use type name directly
     const aptitude = moveType === 'Normal' ? 'B' :
-                     (moveColor ? combatant.typeAptitudes[moveColor] : 'B');
+                     (combatant.typeAptitudes?.[moveType] || 'B');
     const aptitudeMult = moveType === 'Normal' ? 1.0 :
                          (GAME_CONFIG.APTITUDE.MULTIPLIERS[aptitude] || 1.0);
 
     // Type matchup bonus
     let typeMatchupMult = 1.0;
-    if (moveColor && GAME_CONFIG.TYPE_MATCHUPS[moveColor]) {
-      if (GAME_CONFIG.TYPE_MATCHUPS[moveColor].strong === opponent.primaryType) {
+    if (moveType !== 'Normal' && GAME_CONFIG.TYPE_MATCHUPS[moveType]) {
+      if (GAME_CONFIG.TYPE_MATCHUPS[moveType].strong === opponent.primaryType) {
         typeMatchupMult = 1.25;
-      } else if (GAME_CONFIG.TYPE_MATCHUPS[moveColor].weak === opponent.primaryType) {
+      } else if (GAME_CONFIG.TYPE_MATCHUPS[moveType].weak === opponent.primaryType) {
         typeMatchupMult = 0.75;
       }
     }
@@ -1081,18 +1072,17 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
 
   // HIT - Calculate damage
   const moveType = move.type;
-  const moveColor = TYPE_TO_COLOR[moveType];
 
-  // Aptitude multiplier
+  // Aptitude multiplier - use type name directly
   const aptitude = moveType === 'Normal' ? 'B' :
-                   (moveColor ? combatant.typeAptitudes[moveColor] : 'B');
+                   (combatant.typeAptitudes?.[moveType] || 'B');
   const aptitudeMult = moveType === 'Normal' ? 1.0 :
                        (GAME_CONFIG.APTITUDE.MULTIPLIERS[aptitude] || 1.0);
 
   // Type matchup bonus
   let typeBonus = 1.0;
-  if (moveType !== 'Normal' && moveColor && GAME_CONFIG.TYPE_MATCHUPS[moveColor]) {
-    if (GAME_CONFIG.TYPE_MATCHUPS[moveColor].strong === opponent.primaryType) {
+  if (moveType !== 'Normal' && GAME_CONFIG.TYPE_MATCHUPS[moveType]) {
+    if (GAME_CONFIG.TYPE_MATCHUPS[moveType].strong === opponent.primaryType) {
       typeBonus = 1.2;
     }
   }
@@ -1829,6 +1819,5 @@ function processWeatherEffects(battleState) {
 module.exports = {
   simulateBattle,
   GAME_CONFIG,
-  MOVES,
-  TYPE_TO_COLOR
+  MOVES
 };

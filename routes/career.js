@@ -912,16 +912,16 @@ router.post('/apply-inspirations', authenticateToken, async (req, res) => {
 
     // Apply aptitude upgrade (only one grade level at a time)
     if (inspirationUpdates.aptitudeUpgrade) {
-      const { color, newGrade } = inspirationUpdates.aptitudeUpgrade;
-      const validColors = ['Red', 'Blue', 'Green', 'Yellow', 'Purple', 'Orange'];
+      const { type, newGrade } = inspirationUpdates.aptitudeUpgrade;
+      const validTypes = ['Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Fighting'];
       const gradeOrder = ['F', 'E', 'D', 'C', 'B', 'A', 'S'];
-      if (validColors.includes(color) && gradeOrder.includes(newGrade)) {
-        const currentGrade = newAptitudes[color] || 'F';
+      if (validTypes.includes(type) && gradeOrder.includes(newGrade)) {
+        const currentGrade = newAptitudes[type] || 'F';
         const currentIndex = gradeOrder.indexOf(currentGrade);
         const newIndex = gradeOrder.indexOf(newGrade);
         // Only allow upgrade by one level
         if (newIndex === currentIndex + 1) {
-          newAptitudes[color] = newGrade;
+          newAptitudes[type] = newGrade;
         }
       }
     }

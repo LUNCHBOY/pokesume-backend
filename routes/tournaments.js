@@ -2,8 +2,25 @@ const express = require('express');
 const db = require('../config/database');
 const authenticateToken = require('../middleware/auth');
 const { simulateBattle } = require('../services/battleSimulator');
+const { GYM_BADGES } = require('../services/tournamentProcessor');
 
 const router = express.Router();
+
+// Helper to attach gym badge condition to tournament data
+const attachGymCondition = (tournament) => {
+  if (!tournament || !tournament.gym_theme) return tournament;
+  const gymBadge = GYM_BADGES.find(g => g.key === tournament.gym_theme);
+  if (gymBadge) {
+    tournament.gymBadge = {
+      name: gymBadge.name,
+      gym: gymBadge.gym,
+      leader: gymBadge.leader,
+      type: gymBadge.type,
+      condition: gymBadge.condition
+    };
+  }
+  return tournament;
+};
 
 // Create tournament (admin only - for now, any authenticated user can create)
 router.post('/create', authenticateToken, async (req, res) => {
@@ -60,7 +77,9 @@ router.get('/', async (req, res) => {
       ORDER BY t.start_time ASC`
     );
 
-    res.json({ tournaments: result.rows });
+    // Attach gym badge conditions to each tournament
+    const tournaments = result.rows.map(attachGymCondition);
+    res.json({ tournaments });
   } catch (error) {
     console.error('Fetch tournaments error:', error);
     res.status(500).json({ error: 'Failed to fetch tournaments' });
@@ -91,7 +110,8 @@ router.get('/:tournamentId', async (req, res) => {
       return res.status(404).json({ error: 'Tournament not found' });
     }
 
-    const tournament = tournamentResult.rows[0];
+    // Attach gym badge condition to tournament
+    const tournament = attachGymCondition(tournamentResult.rows[0]);
 
     // Get entries
     const entriesResult = await db.query(

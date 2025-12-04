@@ -352,7 +352,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 72, Attack: 52, Defense: 52, Instinct: 65, Speed: 56 }, 1),
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'E', Psychic: 'C', Electric: 'E', Fighting: 'E' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'C', MadLad: 'D' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'Confusion', 'TailWhip'],
     learnableAbilities: ['Surf', 'Psyshock', 'AquaTail']
   },
@@ -1578,7 +1578,7 @@ const POKEMON = {
     primaryType: 'Normal',
     baseStats: calculateBaseStats({ HP: 70, Attack: 52, Defense: 52, Instinct: 62, Speed: 62 }, 1),
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['QuickAttack', 'Swift', 'Confusion'],
     learnableAbilities: ['BodySlam', 'AirSlash', 'Psychic']
   },
@@ -1587,7 +1587,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 65, Attack: 48, Defense: 52, Instinct: 62, Speed: 68 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['BulletSeed', 'Swift', 'Headbutt'],
     learnableAbilities: ['RazorLeaf', 'MegaDrain', 'AirSlash']
   },
@@ -1596,7 +1596,7 @@ const POKEMON = {
     primaryType: 'Psychic',
     baseStats: calculateBaseStats({ HP: 62, Attack: 52, Defense: 52, Instinct: 68, Speed: 63 }, 1),
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['Confusion', 'Psyshock', 'QuickAttack'],
     learnableAbilities: ['Psychic', 'ShadowBall', 'AirSlash']
   },
@@ -1605,7 +1605,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 72, Attack: 48, Defense: 52, Instinct: 55, Speed: 68 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'BubbleBeam', 'PlayRough'],
     learnableAbilities: ['Surf', 'AquaTail', 'Moonblast']
   },
@@ -1614,7 +1614,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 75, Attack: 55, Defense: 55, Instinct: 48, Speed: 62 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'TailWhip'],
     learnableAbilities: ['Surf', 'Earthquake', 'Scald']
   },
@@ -1623,7 +1623,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 68, Attack: 55, Defense: 52, Instinct: 52, Speed: 68 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['IcePunch', 'AquaJet', 'Headbutt'],
     learnableAbilities: ['IceBeam', 'Earthquake', 'Blizzard']
   },
@@ -1632,7 +1632,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 60, Attack: 62, Defense: 45, Instinct: 62, Speed: 68 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'E', Nuker: 'C', Debuffer: 'E', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'E', Nuker: 'B', Debuffer: 'E', Chipper: 'C', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'BubbleBeam', 'Swift'],
     learnableAbilities: ['Surf', 'IceBeam', 'Scald']
   },
@@ -1641,7 +1641,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 62, Attack: 55, Defense: 52, Instinct: 52, Speed: 72 }, 2),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'Headbutt'],
     learnableAbilities: ['RazorLeaf', 'SolarBeam', 'DarkPulse']
   },
@@ -1650,7 +1650,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 68, Attack: 50, Defense: 50, Instinct: 62, Speed: 65 }, 2),
     typeAptitudes: { Fire: 'E', Water: 'C', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BubbleBeam', 'MegaDrain'],
     learnableAbilities: ['RazorLeaf', 'Surf', 'EnergyBall']
   },
@@ -1659,7 +1659,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 70, Attack: 58, Defense: 58, Instinct: 52, Speed: 55 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'SleepPowder'],
     learnableAbilities: ['SeedBomb', 'EnergyBall', 'MachPunch']
   },
@@ -1668,7 +1668,7 @@ const POKEMON = {
     primaryType: 'Fighting',
     baseStats: calculateBaseStats({ HP: 78, Attack: 60, Defense: 52, Instinct: 48, Speed: 55 }, 1),
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['LowKick', 'MachPunch', 'BulkUp'],
     learnableAbilities: ['BrickBreak', 'CloseCombat', 'Earthquake']
   },
@@ -1686,7 +1686,7 @@ const POKEMON = {
     primaryType: 'Psychic',
     baseStats: calculateBaseStats({ HP: 72, Attack: 55, Defense: 55, Instinct: 58, Speed: 55 }, 1),
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['PsyBeam', 'Toxic', 'Harden'],
     learnableAbilities: ['Psychic', 'SludgeBomb', 'ShadowBall']
   },
@@ -1695,7 +1695,7 @@ const POKEMON = {
     primaryType: 'Fire',
     baseStats: calculateBaseStats({ HP: 70, Attack: 60, Defense: 55, Instinct: 60, Speed: 50 }, 1),
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['Ember', 'FlameCharge', 'Headbutt'],
     learnableAbilities: ['Flamethrower', 'LavaPlume', 'Earthquake']
   },
@@ -1704,7 +1704,7 @@ const POKEMON = {
     primaryType: 'Fighting',
     baseStats: calculateBaseStats({ HP: 62, Attack: 78, Defense: 55, Instinct: 48, Speed: 50 }, 2),
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
-    strategyAptitudes: { Scaler: 'E', Nuker: 'C', Debuffer: 'E', Chipper: 'D', MadLad: 'D' },
+    strategyAptitudes: { Scaler: 'E', Nuker: 'B', Debuffer: 'E', Chipper: 'D', MadLad: 'D' },
     defaultAbilities: ['Headbutt', 'SandAttack', 'Bite'],
     learnableAbilities: ['Earthquake', 'RockSlide', 'DragonClaw']
   },
@@ -1713,7 +1713,7 @@ const POKEMON = {
     primaryType: 'Psychic',
     baseStats: calculateBaseStats({ HP: 62, Attack: 52, Defense: 60, Instinct: 68, Speed: 55 }, 1),
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['Confusion', 'CosmicPower', 'RapidSpin'],
     learnableAbilities: ['Psychic', 'Earthquake', 'ShadowBall']
   },
@@ -1722,7 +1722,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 68, Attack: 55, Defense: 50, Instinct: 55, Speed: 65 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'TailWhip'],
     learnableAbilities: ['Surf', 'Earthquake', 'Scald']
   },
@@ -1731,7 +1731,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 65, Attack: 68, Defense: 60, Instinct: 48, Speed: 52 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'E', Chipper: 'D', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'E', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'Slash', 'Harden'],
     learnableAbilities: ['Surf', 'Crunch', 'Waterfall']
   },
@@ -1740,7 +1740,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 58, Attack: 52, Defense: 52, Instinct: 52, Speed: 72 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'E', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'E', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['BulletSeed', 'StringShot', 'Bite'],
     learnableAbilities: ['RazorLeaf', 'MegaDrain', 'SeedBomb']
   },
@@ -1749,7 +1749,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 62, Attack: 48, Defense: 55, Instinct: 55, Speed: 72 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['BulletSeed', 'StringShot', 'Harden'],
     learnableAbilities: ['RazorLeaf', 'MegaDrain', 'SeedBomb']
   },
@@ -1758,7 +1758,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 58, Attack: 48, Defense: 52, Instinct: 55, Speed: 82 }, 0),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'E', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'E', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['BulletSeed', 'Swift', 'Bite'],
     learnableAbilities: ['RazorLeaf', 'AirSlash', 'MegaDrain']
   },
@@ -1767,7 +1767,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 65, Attack: 55, Defense: 55, Instinct: 58, Speed: 58 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'Synthesis'],
     learnableAbilities: ['RazorLeaf', 'SolarBeam', 'EnergyBall']
   },
@@ -1785,7 +1785,7 @@ const POKEMON = {
     primaryType: 'Water',
     baseStats: calculateBaseStats({ HP: 62, Attack: 52, Defense: 52, Instinct: 62, Speed: 68 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'Swift'],
     learnableAbilities: ['Surf', 'IceBeam', 'Scald']
   },
@@ -1794,7 +1794,7 @@ const POKEMON = {
     primaryType: 'Normal',
     baseStats: calculateBaseStats({ HP: 60, Attack: 58, Defense: 48, Instinct: 55, Speed: 72 }, 2),
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
-    strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'E', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'E', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['QuickAttack', 'AirSlash', 'Growl'],
     learnableAbilities: ['BodySlam', 'BraveBird', 'Return']
   },
@@ -1803,7 +1803,7 @@ const POKEMON = {
     primaryType: 'Electric',
     baseStats: calculateBaseStats({ HP: 62, Attack: 58, Defense: 48, Instinct: 58, Speed: 72 }, 1),
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'A', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'E', Chipper: 'C', MadLad: 'D' },
+    strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'E', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['ThunderShock', 'Spark', 'QuickAttack'],
     learnableAbilities: ['Thunderbolt', 'WildCharge', 'Discharge']
   },
@@ -1812,7 +1812,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 62, Attack: 55, Defense: 55, Instinct: 52, Speed: 68 }, 2),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'StringShot'],
     learnableAbilities: ['RazorLeaf', 'SeedBomb', 'LeafBlade']
   },
@@ -1821,7 +1821,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 62, Attack: 45, Defense: 58, Instinct: 68, Speed: 62 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'F', Debuffer: 'C', Chipper: 'D', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'F', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'CharmMove'],
     learnableAbilities: ['EnergyBall', 'Moonblast', 'GigaDrain']
   },
@@ -1830,7 +1830,7 @@ const POKEMON = {
     primaryType: 'Grass',
     baseStats: calculateBaseStats({ HP: 65, Attack: 48, Defense: 48, Instinct: 68, Speed: 66 }, 1),
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
-    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
+    strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'MegaDrain', 'SleepPowder'],
     learnableAbilities: ['EnergyBall', 'SolarBeam', 'Synthesis']
   },

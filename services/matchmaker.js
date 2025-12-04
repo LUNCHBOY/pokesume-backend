@@ -19,16 +19,8 @@ const CONFIG = {
   MAX_INFLATION_BONUS: 0.5       // Max 50% bonus for wins / 50% reduction for losses at low rating
 };
 
-// Pokemon types and their colors
+// Pokemon types
 const TYPES = ['Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Fighting'];
-const TYPE_TO_COLOR = {
-  Fire: 'Red',
-  Water: 'Blue',
-  Grass: 'Green',
-  Electric: 'Yellow',
-  Psychic: 'Purple',
-  Fighting: 'Orange'
-};
 
 // Strategies (new paradigm)
 const STRATEGIES = ['Scaler', 'Nuker', 'Debuffer', 'Chipper', 'MadLad'];
@@ -241,7 +233,6 @@ function pickRandomMove(moveArray, usedMoves) {
  */
 function generateAIPokemon(tierConfig) {
   const type = TYPES[Math.floor(Math.random() * TYPES.length)];
-  const color = TYPE_TO_COLOR[type];
   const strategy = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)];
   // Pick strategy grade from tier-appropriate options
   const strategyGrade = tierConfig.strategyGrades[Math.floor(Math.random() * tierConfig.strategyGrades.length)];
@@ -269,15 +260,14 @@ function generateAIPokemon(tierConfig) {
     Speed: generateStat()
   };
 
-  // Generate type aptitudes
+  // Generate type aptitudes using type names directly
   const aptitudeGrades = ['D', 'C', 'B', 'A', 'S'];
   const typeAptitudes = {};
-  Object.keys(TYPE_TO_COLOR).forEach(t => {
-    const col = TYPE_TO_COLOR[t];
-    typeAptitudes[col] = aptitudeGrades[Math.floor(Math.random() * aptitudeGrades.length)];
+  TYPES.forEach(t => {
+    typeAptitudes[t] = aptitudeGrades[Math.floor(Math.random() * aptitudeGrades.length)];
   });
   // Boost primary type aptitude
-  typeAptitudes[color] = 'A';
+  typeAptitudes[type] = 'A';
 
   // NEW: Build moves based on strategy (Tackle + 2 strategy-specific moves)
   const abilities = ['Tackle']; // Everyone starts with Tackle
