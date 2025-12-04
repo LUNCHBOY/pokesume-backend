@@ -420,8 +420,8 @@ function simulateBattle(player1, player2, tournamentCondition = null) {
       tickMessages.push(...p2StatusMessages);
     }
 
-    // Process weather effects at end of tick
-    if (battleState.weather.type && battleState.weather.ticksRemaining > 0) {
+    // Process weather effects at end of tick (weather lasts until replaced)
+    if (battleState.weather.type) {
       const weatherMessages = processWeatherEffects(battleState);
       tickMessages.push(...weatherMessages);
     }
@@ -1147,6 +1147,31 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
     }
   }
 
+  // Apply weather/terrain damage boosts (50% boost)
+  if (battleState?.weather?.type) {
+    const weatherType = battleState.weather.type;
+    // Rain boosts Water moves
+    if (weatherType === 'rain' && moveType === 'Water') {
+      damage = Math.floor(damage * 1.5);
+    }
+    // Sun boosts Fire moves
+    if (weatherType === 'sun' && moveType === 'Fire') {
+      damage = Math.floor(damage * 1.5);
+    }
+    // Electric Terrain boosts Electric moves
+    if (weatherType === 'terrain_electric' && moveType === 'Electric') {
+      damage = Math.floor(damage * 1.5);
+    }
+    // Grassy Terrain boosts Grass moves
+    if (weatherType === 'terrain_grassy' && moveType === 'Grass') {
+      damage = Math.floor(damage * 1.5);
+    }
+    // Psychic Terrain boosts Psychic moves
+    if (weatherType === 'terrain_psychic' && moveType === 'Psychic') {
+      damage = Math.floor(damage * 1.5);
+    }
+  }
+
   // Apply HP-based damage modifier (Eruption)
   if (move.effect && move.effect.type === 'hp_based_damage') {
     const hpPercent = combatant.currentHP / combatant.stats.HP;
@@ -1397,6 +1422,22 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
         hail: 'Hail'
       };
       message += ` ${weatherNames[weatherType] || weatherType} started!`;
+
+    // === TERRAIN EFFECTS (also stored in weather state) ===
+    } else if (effect.type.startsWith('terrain_')) {
+      const terrainType = effect.type; // Keep full terrain_electric, terrain_grassy, etc.
+      const casterNum = attackerName === 'Player 1' ? 1 : 2;
+      battleState.weather = {
+        type: terrainType,
+        ticksRemaining: effect.duration,
+        caster: casterNum
+      };
+      const terrainNames = {
+        terrain_electric: 'Electric Terrain',
+        terrain_grassy: 'Grassy Terrain',
+        terrain_psychic: 'Psychic Terrain'
+      };
+      message += ` ${terrainNames[terrainType] || terrainType} was set!`;
 
     // === DRAIN EFFECTS ===
     } else if (effect.type === 'drain' && effectApplied) {
@@ -1758,20 +1799,21 @@ function tickStatusEffects(combatant) {
 
 /**
  * Process weather effects at end of each tick
+ * Weather lasts until replaced by a new weather effect
  * Returns array of messages
  */
 function processWeatherEffects(battleState) {
   const messages = [];
   const weather = battleState.weather;
 
-  if (!weather.type || weather.ticksRemaining <= 0) {
+  if (!weather.type) {
     return messages;
   }
 
   // Weather damage configuration
   const WEATHER_DAMAGE = {
     sand: 4,  // Sandstorm deals chip damage
-    hail: 4   // Hail also deals chip damage (if added later)
+    hail: 4   // Hail also deals chip damage
   };
 
   // Types immune to weather damage
@@ -1798,20 +1840,7 @@ function processWeatherEffects(battleState) {
     }
   }
 
-  // Decrement weather duration
-  weather.ticksRemaining--;
-
-  // Weather ended message
-  if (weather.ticksRemaining <= 0) {
-    const weatherNames = {
-      sand: 'The sandstorm subsided.',
-      rain: 'The rain stopped.',
-      sun: 'The harsh sunlight faded.',
-      hail: 'The hail stopped.'
-    };
-    messages.push(weatherNames[weather.type] || `The ${weather.type} ended.`);
-    battleState.weather = { type: null, ticksRemaining: 0, caster: null };
-  }
+  // Weather no longer expires - it lasts until replaced by a new weather effect
 
   return messages;
 }
