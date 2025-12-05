@@ -866,6 +866,156 @@ const SUPPORT_CARDS = {
     specialEffect: { statGainMultiplier: 1.08, failRateReduction: 0.05 },
     moveHints: ['Eruption', 'EarthPower', 'LavaPlume', 'Earthquake', 'Flamethrower'],
     description: 'The Lavaridge Gym Leader cultivates fiery growth'
+  },
+
+  // ============================================================================
+  // NEW SUPPORT CARDS - Water/Electric/Grass focused for type distribution
+  // ============================================================================
+
+  // === LEGENDARY TIER (5 new cards) ===
+  Crasher: {
+    name: 'Crasher Wake',
+    trainer: 'Crasher Wake',
+    rarity: 'Legendary',
+    supportType: 'HP',
+    baseStats: { HP: 65, Attack: 15, Defense: 15, Instinct: 0, Speed: 5 },
+    trainingBonus: { typeMatch: 9, otherStats: 3, maxFriendshipTypeMatch: 24 },
+    initialFriendship: 45,
+    appearanceRate: 0.48,
+    typeMatchPreference: 0.35,
+    specialEffect: { maxEnergyBonus: 15, restBonus: 6 },
+    moveHints: ['WaveCrash', 'Liquidation', 'AquaJet', 'Waterfall', 'RazorShell'],
+    description: 'The Pastoria Gym Leader brings tidal wave power'
+  },
+  Elesa: {
+    name: 'Elesa',
+    trainer: 'Elesa',
+    rarity: 'Legendary',
+    supportType: 'Speed',
+    baseStats: { HP: 0, Attack: 20, Defense: 5, Instinct: 15, Speed: 60 },
+    trainingBonus: { typeMatch: 10, otherStats: 2, maxFriendshipTypeMatch: 26 },
+    initialFriendship: 30,
+    appearanceRate: 0.42,
+    typeMatchPreference: 0.40,
+    specialEffect: { energyRegenBonus: 8, statGainMultiplier: 1.12 },
+    moveHints: ['VoltTackle', 'Thunderbolt', 'WildCharge', 'ThunderFang', 'Discharge'],
+    description: 'The Nimbasa Gym Leader electrifies with style'
+  },
+  Volkner: {
+    name: 'Volkner',
+    trainer: 'Volkner',
+    rarity: 'Legendary',
+    supportType: 'Attack',
+    baseStats: { HP: 0, Attack: 58, Defense: 10, Instinct: 15, Speed: 12 },
+    trainingBonus: { typeMatch: 11, otherStats: 2, maxFriendshipTypeMatch: 28 },
+    initialFriendship: 20,
+    appearanceRate: 0.38,
+    typeMatchPreference: 0.45,
+    specialEffect: { failRateReduction: 0.12 },
+    moveHints: ['BoltBeak', 'PlasmaFists', 'Thunder', 'ZingZap', 'Electroweb'],
+    description: 'The Sunyshore Gym Leader seeks worthy challengers'
+  },
+  Gardenia: {
+    name: 'Gardenia',
+    trainer: 'Gardenia',
+    rarity: 'Legendary',
+    supportType: 'HP',
+    baseStats: { HP: 55, Attack: 0, Defense: 20, Instinct: 15, Speed: 5 },
+    trainingBonus: { typeMatch: 8, otherStats: 4, maxFriendshipTypeMatch: 22 },
+    initialFriendship: 50,
+    appearanceRate: 0.52,
+    typeMatchPreference: 0.35,
+    specialEffect: { maxEnergyBonus: 12, restBonus: 8, friendshipGainBonus: 5 },
+    moveHints: ['GigaDrain', 'LeafBlade', 'EnergyBall', 'SeedBomb', 'Synthesis'],
+    description: 'The Eterna Gym Leader nurtures natural growth'
+  },
+  Juan: {
+    name: 'Juan',
+    trainer: 'Juan',
+    rarity: 'Legendary',
+    supportType: 'Instinct',
+    baseStats: { HP: 15, Attack: 10, Defense: 15, Instinct: 50, Speed: 10 },
+    trainingBonus: { typeMatch: 9, otherStats: 3, maxFriendshipTypeMatch: 24 },
+    initialFriendship: 35,
+    appearanceRate: 0.45,
+    typeMatchPreference: 0.40,
+    specialEffect: { skillPointMultiplier: 1.35, friendshipGainBonus: 4 },
+    moveHints: ['HydroPump', 'Surf', 'WaterPulse', 'Dive', 'AquaRing'],
+    description: 'The Sootopolis Gym Leader teaches elegant mastery'
+  },
+
+  // === RARE TIER (3 new cards) ===
+  Clemont: {
+    name: 'Clemont',
+    trainer: 'Clemont',
+    rarity: 'Rare',
+    supportType: 'Instinct',
+    baseStats: { HP: 10, Attack: 5, Defense: 10, Instinct: 42, Speed: 8 },
+    trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 20 },
+    initialFriendship: 40,
+    appearanceRate: 0.50,
+    typeMatchPreference: 0.30,
+    specialEffect: { skillPointMultiplier: 1.25 },
+    moveHints: ['ParabolicCharge', 'ShockWave', 'RisingVoltage', 'Thunderbolt', 'ElectricTerrain'],
+    description: 'The Lumiose Gym Leader invents brilliant strategies'
+  },
+  Cress: {
+    name: 'Cress',
+    trainer: 'Cress',
+    rarity: 'Rare',
+    supportType: 'Defense',
+    baseStats: { HP: 15, Attack: 10, Defense: 40, Instinct: 10, Speed: 0 },
+    trainingBonus: { typeMatch: 7, otherStats: 3, maxFriendshipTypeMatch: 18 },
+    initialFriendship: 35,
+    appearanceRate: 0.48,
+    typeMatchPreference: 0.35,
+    specialEffect: { failRateReduction: 0.10 },
+    moveHints: ['Scald', 'Surf', 'FlipTurn', 'Whirlpool', 'LifeDew'],
+    description: 'The Striaton Gym Leader serves refined technique'
+  },
+  Ramos: {
+    name: 'Ramos',
+    trainer: 'Ramos',
+    rarity: 'Rare',
+    supportType: 'HP',
+    baseStats: { HP: 48, Attack: 0, Defense: 15, Instinct: 8, Speed: 0 },
+    trainingBonus: { typeMatch: 6, otherStats: 4, maxFriendshipTypeMatch: 16 },
+    initialFriendship: 50,
+    appearanceRate: 0.55,
+    typeMatchPreference: 0.30,
+    specialEffect: { maxEnergyBonus: 14, restBonus: 6 },
+    moveHints: ['GigaDrain', 'LeechSeed', 'Synthesis', 'PollenPuff', 'SeedBomb'],
+    description: 'The Coumarine Gym Leader cultivates with patience'
+  },
+
+  // === UNCOMMON TIER (2 new cards) ===
+  Marlon: {
+    name: 'Marlon',
+    trainer: 'Marlon',
+    rarity: 'Uncommon',
+    supportType: 'HP',
+    baseStats: { HP: 38, Attack: 5, Defense: 8, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
+    initialFriendship: 45,
+    appearanceRate: 0.55,
+    typeMatchPreference: 0.30,
+    specialEffect: { maxEnergyBonus: 10 },
+    moveHints: ['AquaCutter', 'Waterfall', 'Dive', 'AquaJet', 'FlipTurn'],
+    description: 'The Humilau Gym Leader rides the waves of training'
+  },
+  Cilan: {
+    name: 'Cilan',
+    trainer: 'Cilan',
+    rarity: 'Uncommon',
+    supportType: 'Instinct',
+    baseStats: { HP: 5, Attack: 0, Defense: 5, Instinct: 32, Speed: 5 },
+    trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 16 },
+    initialFriendship: 50,
+    appearanceRate: 0.55,
+    typeMatchPreference: 0.25,
+    specialEffect: { skillPointMultiplier: 1.15, friendshipGainBonus: 3 },
+    moveHints: ['GigaDrain', 'LeafBlade', 'SeedBomb', 'EnergyBall', 'Synthesis'],
+    description: 'The Striaton Gym Leader evaluates compatibility'
   }
 };
 
@@ -875,21 +1025,30 @@ const LEGACY_SUPPORT_NAME_MAP = {
   RedCharizard: 'Red',
   StevenMetagross: 'Steven',
   NReshiram: 'N',
+  NZoroark: 'N',
   ProfessorOakMew: 'ProfessorOak',
   DianthaDiancie: 'Diantha',
   LeonCharizard: 'Leon',
   SeleneLunala: 'Selene',
+  SeleneDecidueye: 'Selene',
   GloriaZacian: 'Gloria',
+  GloriaInteleon: 'Gloria',
   NemonaKoraidon: 'Nemona',
+  NemonaPawmot: 'Nemona',
   MustardUrshifu: 'Mustard',
+  MustardMienshao: 'Mustard',
   VictorCalyrex: 'Victor',
+  VictorDragapult: 'Victor',
   ArvenMabosstiff: 'Arven',
   PennyEevee: 'Penny',
   SoniaYamper: 'Sonia',
   HopZamazenta: 'Hop',
+  HopDubwool: 'Hop',
   GeetaKingambit: 'Geeta',
   KieranOgerpon: 'Kieran',
+  KieranHydreigon: 'Kieran',
   CarmineBloodmoon: 'Carmine',
+  CarmineArcanine: 'Carmine',
   DraytonArchaludon: 'Drayton',
   LaceyExcadrill: 'Lacey',
   // Rare
@@ -1852,6 +2011,163 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
       { baseStats: 1.00, trainingBonus: 0.80, appearanceRate: 0.38, typeMatchPreference: 0.35, initialFriendship: 25, specialEffect: 1.00 },
       { baseStats: 1.00, trainingBonus: 0.80, appearanceRate: 0.48, typeMatchPreference: 0.35, initialFriendship: 25, specialEffect: 1.00 },
       { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.35, initialFriendship: 25, specialEffect: 1.00 }
+    ]
+  },
+
+  // ============================================================================
+  // NEW SUPPORT CARDS - Water/Electric/Grass focused
+  // ============================================================================
+
+  // === LEGENDARY TIER ===
+  Crasher: {
+    // LB0: Water wrestler - strong HP, partial effect
+    // LB1: BIG JUMP typeMatchPreference (0.20→0.35) - Water mastery
+    // LB2: BIG JUMP appearanceRate (0.35→0.48) - Always ready to splash
+    // LB3: BIG JUMP specialEffect (0.40→1.00) - Recovery mastered
+    // LB4: BIG JUMP baseStats (0.50→1.00) - Full tidal power
+    progression: [
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.20, initialFriendship: 45, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.35, initialFriendship: 45, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.35, initialFriendship: 45, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.35, initialFriendship: 45, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.35, initialFriendship: 45, specialEffect: 1.00 }
+    ]
+  },
+
+  Elesa: {
+    // LB0: Electric supermodel - fast, partial effects
+    // LB1: BIG JUMP typeMatchPreference (0.25→0.40) - Electric mastery
+    // LB2: BIG JUMP baseStats (0.50→1.00) - Runway power
+    // LB3: BIG JUMP specialEffect (0.35→1.00) - Full star energy
+    // LB4: BIG JUMP appearanceRate (0.30→0.42) - Spotlight presence
+    progression: [
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.30, typeMatchPreference: 0.25, initialFriendship: 30, specialEffect: 0.35 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.30, typeMatchPreference: 0.40, initialFriendship: 30, specialEffect: 0.35 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.30, typeMatchPreference: 0.40, initialFriendship: 30, specialEffect: 0.35 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.30, typeMatchPreference: 0.40, initialFriendship: 30, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.42, typeMatchPreference: 0.40, initialFriendship: 30, specialEffect: 1.00 }
+    ]
+  },
+
+  Volkner: {
+    // LB0: Bored Electric master - powerful but distant
+    // LB1: BIG JUMP typeMatchPreference (0.30→0.45) - Electric mastery awakens
+    // LB2: BIG JUMP initialFriendship (10→20) - Found worthy opponent
+    // LB3: BIG JUMP specialEffect (0.40→1.00) - Full protection
+    // LB4: BIG JUMP baseStats (0.50→1.00) - Full Sunyshore power
+    progression: [
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.30, initialFriendship: 10, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.45, initialFriendship: 10, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.45, initialFriendship: 20, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.45, initialFriendship: 20, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.45, initialFriendship: 20, specialEffect: 1.00 }
+    ]
+  },
+
+  Gardenia: {
+    // LB0: Nurturing Grass leader - friendly, partial effects
+    // LB1: BIG JUMP appearanceRate (0.40→0.52) - Always in the garden
+    // LB2: BIG JUMP initialFriendship (35→50) - Deep nature bond
+    // LB3: BIG JUMP specialEffect (0.40→1.00) - Full nurturing power
+    // LB4: BIG JUMP baseStats (0.50→1.00) - Full growth potential
+    progression: [
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.40, typeMatchPreference: 0.35, initialFriendship: 35, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.35, initialFriendship: 35, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.35, initialFriendship: 50, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.35, initialFriendship: 50, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.35, initialFriendship: 50, specialEffect: 1.00 }
+    ]
+  },
+
+  Juan: {
+    // LB0: Elegant Water master - refined, partial skill bonus
+    // LB1: BIG JUMP typeMatchPreference (0.25→0.40) - Water artistry
+    // LB2: BIG JUMP trainingBonus (0.60→1.00) - Contest wisdom
+    // LB3: BIG JUMP specialEffect (0.50→1.00) - Full mastery
+    // LB4: BIG JUMP baseStats (0.50→1.00) - Full elegance
+    progression: [
+      { baseStats: 0.50, trainingBonus: 0.60, appearanceRate: 0.45, typeMatchPreference: 0.25, initialFriendship: 35, specialEffect: 0.50 },
+      { baseStats: 0.50, trainingBonus: 0.60, appearanceRate: 0.45, typeMatchPreference: 0.40, initialFriendship: 35, specialEffect: 0.50 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.40, initialFriendship: 35, specialEffect: 0.50 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.40, initialFriendship: 35, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.40, initialFriendship: 35, specialEffect: 1.00 }
+    ]
+  },
+
+  // === RARE TIER ===
+  Clemont: {
+    // LB0: Inventor - curious, partial skill bonus
+    // LB1: BIG JUMP typeMatchPreference (0.18→0.30) - Electric innovation
+    // LB2: BIG JUMP appearanceRate (0.38→0.50) - Always inventing
+    // LB3: BIG JUMP specialEffect (0.50→1.00) - Full genius
+    // LB4: BIG JUMP baseStats (0.60→1.00) - Full potential
+    progression: [
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.18, initialFriendship: 40, specialEffect: 0.50 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.30, initialFriendship: 40, specialEffect: 0.50 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.30, initialFriendship: 40, specialEffect: 0.50 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.30, initialFriendship: 40, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.30, initialFriendship: 40, specialEffect: 1.00 }
+    ]
+  },
+
+  Cress: {
+    // LB0: Refined Water waiter - defensive, partial effect
+    // LB1: BIG JUMP typeMatchPreference (0.22→0.35) - Water service
+    // LB2: BIG JUMP initialFriendship (25→35) - Regular customer
+    // LB3: BIG JUMP specialEffect (0.50→1.00) - Full protection
+    // LB4: BIG JUMP baseStats (0.60→1.00) - Full refinement
+    progression: [
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.22, initialFriendship: 25, specialEffect: 0.50 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.35, initialFriendship: 25, specialEffect: 0.50 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.35, initialFriendship: 35, specialEffect: 0.50 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.35, initialFriendship: 35, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.35, initialFriendship: 35, specialEffect: 1.00 }
+    ]
+  },
+
+  Ramos: {
+    // LB0: Wise gardener - patient, partial recovery
+    // LB1: BIG JUMP initialFriendship (40→50) - Garden wisdom shared
+    // LB2: BIG JUMP appearanceRate (0.45→0.55) - Always tending
+    // LB3: BIG JUMP specialEffect (0.50→1.00) - Full restoration
+    // LB4: BIG JUMP baseStats (0.60→1.00) - Full growth
+    progression: [
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.30, initialFriendship: 40, specialEffect: 0.50 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.30, initialFriendship: 50, specialEffect: 0.50 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.30, initialFriendship: 50, specialEffect: 0.50 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.30, initialFriendship: 50, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.30, initialFriendship: 50, specialEffect: 1.00 }
+    ]
+  },
+
+  // === UNCOMMON TIER ===
+  Marlon: {
+    // LB0: Surfer dude - chill, partial recovery
+    // LB1: BIG JUMP typeMatchPreference (0.18→0.30) - Wave mastery
+    // LB2: BIG JUMP appearanceRate (0.45→0.55) - Always at the beach
+    // LB3: BIG JUMP specialEffect (0.50→1.00) - Full chill vibes
+    // LB4: BIG JUMP initialFriendship (35→45) - Surf buddies
+    progression: [
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.18, initialFriendship: 35, specialEffect: 0.50 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.30, initialFriendship: 35, specialEffect: 0.50 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.30, initialFriendship: 35, specialEffect: 0.50 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.30, initialFriendship: 35, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.30, initialFriendship: 45, specialEffect: 1.00 }
+    ]
+  },
+
+  Cilan: {
+    // LB0: Grass sommelier - evaluates compatibility
+    // LB1: BIG JUMP typeMatchPreference (0.15→0.25) - Grass expertise
+    // LB2: BIG JUMP appearanceRate (0.45→0.55) - Always evaluating
+    // LB3: BIG JUMP initialFriendship (40→50) - Perfect pairing found
+    // LB4: BIG JUMP specialEffect (0.50→1.00) - Full compatibility
+    progression: [
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.15, initialFriendship: 40, specialEffect: 0.50 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 0.50 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 0.50 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.25, initialFriendship: 50, specialEffect: 0.50 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.25, initialFriendship: 50, specialEffect: 1.00 }
     ]
   }
 };

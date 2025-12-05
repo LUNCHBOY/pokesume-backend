@@ -1010,6 +1010,68 @@ const HANGOUT_EVENTS = {
     description: 'Grusha teaches the value of staying cool under pressure.',
     flavor: 'Grusha speaks calmly. "Panic leads to mistakes. Stay frosty," he advises.',
     effect: { stats: { Defense: 13, Speed: 11 }, moveHint: 'IceBeam', energy: 15 }
+  },
+
+  // === NEW SUPPORT CARD HANGOUT EVENTS ===
+  Crasher: {
+    name: 'Tidal Training',
+    description: 'Crasher Wake invites you to train in the marsh waters!',
+    flavor: 'Crasher Wake flexes dramatically. "The ocean\'s power flows through ME! Let\'s make some WAVES!" he roars.',
+    effect: { stats: { HP: 16, Attack: 10 }, moveHint: 'WaveCrash', energy: 18 }
+  },
+  Elesa: {
+    name: 'Runway Electrification',
+    description: 'Elesa combines fashion and battle training.',
+    flavor: 'Elesa strikes a pose. "Speed and style go hand in hand. Now, let\'s light up the stage!" she declares.',
+    effect: { stats: { Speed: 17, Instinct: 9 }, moveHint: 'VoltTackle', energy: 16 }
+  },
+  Volkner: {
+    name: 'Electric Challenge',
+    description: 'Volkner finally finds a worthy training partner.',
+    flavor: 'Volkner\'s eyes light up. "Finally, someone interesting. Show me what you\'ve got!" he says with rare enthusiasm.',
+    effect: { stats: { Attack: 15, Speed: 11 }, moveHint: 'Thunder', skillPoints: 14 }
+  },
+  Gardenia: {
+    name: 'Garden Harmony',
+    description: 'Gardenia teaches you to connect with nature.',
+    flavor: 'Gardenia smiles among the flowers. "Nature gives us everything we need. Breathe deep and grow strong!" she whispers.',
+    effect: { stats: { HP: 14, Defense: 12 }, moveHint: 'GigaDrain', energy: 22 }
+  },
+  Juan: {
+    name: 'Elegant Currents',
+    description: 'Juan demonstrates the art of water mastery.',
+    flavor: 'Juan glides gracefully. "Water is poetry in motion. Let your movements flow like the tide," he instructs.',
+    effect: { stats: { Instinct: 15, Defense: 11 }, moveHint: 'HydroPump', skillPoints: 15 }
+  },
+  Clemont: {
+    name: 'Inventor\'s Lab Session',
+    description: 'Clemont shows you his latest training invention!',
+    flavor: 'Clemont adjusts his glasses excitedly. "The future is now, thanks to science! This device will optimize your training!" he explains.',
+    effect: { stats: { Instinct: 14, Speed: 10 }, moveHint: 'Thunderbolt', skillPoints: 18 }
+  },
+  Cress: {
+    name: 'Refined Service',
+    description: 'Cress serves up a masterclass in technique.',
+    flavor: 'Cress bows elegantly. "Like the finest cuisine, battle requires precision and timing," he says smoothly.',
+    effect: { stats: { Defense: 14, HP: 10 }, moveHint: 'Scald', energy: 16 }
+  },
+  Ramos: {
+    name: 'Pruning Wisdom',
+    description: 'Ramos shares gardening wisdom and training tips.',
+    flavor: 'Ramos clips a branch carefully. "Hee hee! Growth takes patience, young sprout. Don\'t rush the seasons," he chuckles.',
+    effect: { stats: { HP: 15, Defense: 9 }, moveHint: 'Synthesis', energy: 20 }
+  },
+  Marlon: {
+    name: 'Surf\'s Up Training',
+    description: 'Marlon takes you wave riding for training!',
+    flavor: 'Marlon grins broadly. "Yo! Nothing builds endurance like riding the waves! Cowabunga!" he shouts.',
+    effect: { stats: { HP: 12, Speed: 8 }, moveHint: 'Waterfall', energy: 18 }
+  },
+  Cilan: {
+    name: 'Compatibility Tasting',
+    description: 'Cilan evaluates your Pokemon\'s battle flavor.',
+    flavor: 'Cilan poses thoughtfully. "Ah, I detect notes of determination with hints of potential! A fine pairing indeed!" he analyzes.',
+    effect: { stats: { Instinct: 13, HP: 9 }, moveHint: 'EnergyBall', skillPoints: 12 }
   }
 };
 

@@ -415,14 +415,14 @@ const GYM_LEADER_POKEMON = {
     defaultAbilities: ['IronHead', 'Psychic', 'Earthquake'],
     learnableAbilities: ['MeteorMash', 'ZenHeadbutt', 'IronDefense']
   },
-  NReshiram: {
-    name: 'Reshiram',
-    primaryType: 'Fire',
-    baseStats: { HP: 140, Attack: 135, Defense: 105, Instinct: 145, Speed: 100 },
-    typeAptitudes: { Fire: 'S', Water: 'C', Grass: 'C', Psychic: 'B', Electric: 'C', Fighting: 'B' },
-    strategyAptitudes: { Scaler: 'B', Nuker: 'S', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
-    defaultAbilities: ['BlueFlare', 'DragonPulse', 'AncientPower'],
-    learnableAbilities: ['DracoMeteor', 'FlareBlitz', 'Psychic']
+  NZoroark: {
+    name: 'Zoroark',
+    primaryType: 'Psychic',
+    baseStats: { HP: 110, Attack: 115, Defense: 70, Instinct: 135, Speed: 115 },
+    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'B' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'B', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['DarkPulse', 'ShadowBall', 'Flamethrower'],
+    learnableAbilities: ['NastyPlot', 'FocusBlast', 'Psychic']
   },
   ProfessorOakDragonite: {
     name: 'Dragonite',
@@ -451,50 +451,50 @@ const GYM_LEADER_POKEMON = {
     defaultAbilities: ['BlastBurn', 'AirSlash', 'DragonPulse'],
     learnableAbilities: ['FlareBlitz', 'DragonDance', 'SolarBeam']
   },
-  SeleneLunala: {
-    name: 'Lunala',
-    primaryType: 'Psychic',
-    baseStats: { HP: 147, Attack: 123, Defense: 99, Instinct: 147, Speed: 107 },
-    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'S', Electric: 'C', Fighting: 'D' },
+  SeleneDecidueye: {
+    name: 'Decidueye',
+    primaryType: 'Grass',
+    baseStats: { HP: 128, Attack: 117, Defense: 95, Instinct: 120, Speed: 90 },
+    typeAptitudes: { Fire: 'D', Water: 'B', Grass: 'A', Psychic: 'A', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'B', Chipper: 'A', MadLad: 'B' },
-    defaultAbilities: ['PsychicBlast', 'ShadowBall', 'Moonblast'],
-    learnableAbilities: ['DracoMeteor', 'IceBeam', 'CalmMind']
+    defaultAbilities: ['SpiritShackle', 'ShadowBall', 'LeafBlade'],
+    learnableAbilities: ['BraveBird', 'SwordsDance', 'Roost']
   },
-  GloriaZacian: {
-    name: 'Zacian',
-    primaryType: 'Psychic',
-    baseStats: { HP: 142, Attack: 150, Defense: 125, Instinct: 90, Speed: 148 },
-    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'B', Electric: 'B', Fighting: 'A' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'S', Debuffer: 'C', Chipper: 'A', MadLad: 'A' },
-    defaultAbilities: ['IronHead', 'PlayRough', 'CloseCombat'],
-    learnableAbilities: ['SwordsDance', 'DragonClaw', 'WildCharge']
+  GloriaInteleon: {
+    name: 'Inteleon',
+    primaryType: 'Water',
+    baseStats: { HP: 110, Attack: 135, Defense: 75, Instinct: 135, Speed: 140 },
+    typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'C', Fighting: 'C' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'S', Debuffer: 'B', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['HydroPump', 'IceBeam', 'DarkPulse'],
+    learnableAbilities: ['Surf', 'ShadowBall', 'AirSlash']
   },
-  NemonaKoraidon: {
-    name: 'Koraidon',
+  NemonaPawmot: {
+    name: 'Pawmot',
+    primaryType: 'Electric',
+    baseStats: { HP: 120, Attack: 125, Defense: 80, Instinct: 80, Speed: 125 },
+    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'A', Fighting: 'A' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'A', MadLad: 'A' },
+    defaultAbilities: ['CloseCombat', 'WildCharge', 'DrainPunch'],
+    learnableAbilities: ['ThunderPunch', 'IronHead', 'Agility']
+  },
+  MustardMienshao: {
+    name: 'Mienshao',
     primaryType: 'Fighting',
-    baseStats: { HP: 140, Attack: 155, Defense: 100, Instinct: 95, Speed: 155 },
-    typeAptitudes: { Fire: 'B', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'S' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'S', Debuffer: 'C', Chipper: 'A', MadLad: 'S' },
-    defaultAbilities: ['CloseCombat', 'DragonClaw', 'FlareBlitz'],
-    learnableAbilities: ['DragonDance', 'Outrage', 'Earthquake']
+    baseStats: { HP: 115, Attack: 135, Defense: 70, Instinct: 100, Speed: 125 },
+    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'D', Electric: 'C', Fighting: 'S' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'A', MadLad: 'A' },
+    defaultAbilities: ['CloseCombat', 'DrainPunch', 'StoneEdge'],
+    learnableAbilities: ['SwordsDance', 'PoisonJab', 'Acrobatics']
   },
-  MustardUrshifu: {
-    name: 'Urshifu',
-    primaryType: 'Fighting',
-    baseStats: { HP: 140, Attack: 140, Defense: 105, Instinct: 75, Speed: 107 },
-    typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'C', Psychic: 'B', Electric: 'C', Fighting: 'S' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'S', Debuffer: 'C', Chipper: 'B', MadLad: 'A' },
-    defaultAbilities: ['CloseCombat', 'DarkPulse', 'Surf'],
-    learnableAbilities: ['DrainPunch', 'IronHead', 'Earthquake']
-  },
-  VictorCalyrex: {
-    name: 'Calyrex',
+  VictorDragapult: {
+    name: 'Dragapult',
     primaryType: 'Psychic',
-    baseStats: { HP: 140, Attack: 90, Defense: 90, Instinct: 155, Speed: 100 },
-    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'B', Psychic: 'S', Electric: 'C', Fighting: 'C' },
-    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'A', Chipper: 'B', MadLad: 'C' },
-    defaultAbilities: ['Psychic', 'GigaDrain', 'ShadowBall'],
-    learnableAbilities: ['CalmMind', 'DracoMeteor', 'Recover']
+    baseStats: { HP: 128, Attack: 140, Defense: 85, Instinct: 110, Speed: 162 },
+    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'B' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'B', Chipper: 'A', MadLad: 'A' },
+    defaultAbilities: ['ShadowBall', 'DragonDarts', 'Flamethrower'],
+    learnableAbilities: ['DragonDance', 'Thunderbolt', 'Psychic']
   },
   ArvenMabosstiff: {
     name: 'Mabosstiff',
@@ -523,14 +523,14 @@ const GYM_LEADER_POKEMON = {
     defaultAbilities: ['WildCharge', 'Thunderbolt', 'PlayRough'],
     learnableAbilities: ['Thunder', 'Crunch', 'VoltSwitch']
   },
-  HopZamazenta: {
-    name: 'Zamazenta',
-    primaryType: 'Fighting',
-    baseStats: { HP: 142, Attack: 140, Defense: 150, Instinct: 90, Speed: 138 },
-    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'B', Fighting: 'A' },
-    strategyAptitudes: { Scaler: 'A', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
-    defaultAbilities: ['CloseCombat', 'IronHead', 'PlayRough'],
-    learnableAbilities: ['IronDefense', 'Crunch', 'WildCharge']
+  HopDubwool: {
+    name: 'Dubwool',
+    primaryType: 'Normal',
+    baseStats: { HP: 142, Attack: 100, Defense: 125, Instinct: 80, Speed: 98 },
+    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'B' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'C', Debuffer: 'B', Chipper: 'B', MadLad: 'B' },
+    defaultAbilities: ['BodySlam', 'Headbutt', 'WildCharge'],
+    learnableAbilities: ['CottonGuard', 'Bounce', 'Earthquake']
   },
   GeetaKingambit: {
     name: 'Kingambit',
@@ -541,23 +541,23 @@ const GYM_LEADER_POKEMON = {
     defaultAbilities: ['IronHead', 'DarkPulse', 'CloseCombat'],
     learnableAbilities: ['SwordsDance', 'StoneEdge', 'Earthquake']
   },
-  KieranTerapagos: {
-    name: 'Terapagos',
+  KieranHydreigon: {
+    name: 'Hydreigon',
     primaryType: 'Psychic',
-    baseStats: { HP: 150, Attack: 100, Defense: 130, Instinct: 120, Speed: 80 },
-    typeAptitudes: { Fire: 'B', Water: 'B', Grass: 'B', Psychic: 'B', Electric: 'B', Fighting: 'B' },
-    strategyAptitudes: { Scaler: 'A', Nuker: 'B', Debuffer: 'B', Chipper: 'B', MadLad: 'B' },
-    defaultAbilities: ['Psychic', 'EarthPower', 'IceBeam'],
-    learnableAbilities: ['DracoMeteor', 'Flamethrower', 'Recover']
+    baseStats: { HP: 142, Attack: 115, Defense: 100, Instinct: 135, Speed: 108 },
+    typeAptitudes: { Fire: 'B', Water: 'B', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'B', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['DarkPulse', 'DragonPulse', 'Flamethrower'],
+    learnableAbilities: ['DracoMeteor', 'EarthPower', 'FocusBlast']
   },
-  CarmineOgerpon: {
-    name: 'Ogerpon',
-    primaryType: 'Grass',
-    baseStats: { HP: 120, Attack: 140, Defense: 100, Instinct: 70, Speed: 130 },
-    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'S', Psychic: 'C', Electric: 'C', Fighting: 'B' },
-    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'A', MadLad: 'A' },
-    defaultAbilities: ['LeafBlade', 'PlayRough', 'CloseCombat'],
-    learnableAbilities: ['SwordsDance', 'PowerWhip', 'DrainPunch']
+  CarmineArcanine: {
+    name: 'Arcanine',
+    primaryType: 'Fire',
+    baseStats: { HP: 130, Attack: 120, Defense: 90, Instinct: 105, Speed: 105 },
+    typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'B', Psychic: 'C', Electric: 'C', Fighting: 'C' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
+    defaultAbilities: ['FlareBlitz', 'ExtremeSpeed', 'WildCharge'],
+    learnableAbilities: ['CloseCombat', 'Crunch', 'MorningSun']
   },
   DraytonArchaludon: {
     name: 'Archaludon',

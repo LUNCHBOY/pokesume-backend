@@ -1170,12 +1170,54 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
     if (weatherType === 'terrain_psychic' && moveType === 'Psychic') {
       damage = Math.floor(damage * 1.5);
     }
+    // Misty Terrain boosts Normal moves (Fairy-type representation)
+    if (weatherType === 'terrain_misty' && moveType === 'Normal') {
+      damage = Math.floor(damage * 1.3);
+    }
   }
 
   // Apply HP-based damage modifier (Eruption)
   if (move.effect && move.effect.type === 'hp_based_damage') {
     const hpPercent = combatant.currentHP / combatant.stats.HP;
     damage = Math.floor(damage * hpPercent);
+  }
+
+  // Low HP boost - damage increases as user HP decreases (Reversal, Flail)
+  if (move.effect && move.effect.type === 'low_hp_boost') {
+    const hpPercent = combatant.currentHP / combatant.stats.HP;
+    // At full HP: 1x, at 50% HP: 1.5x, at 25% HP: 2x, at 10% HP: 3x
+    const boost = 1 + (2 * (1 - hpPercent));
+    damage = Math.floor(damage * boost);
+  }
+
+  // Double damage if opponent is below half HP (Brine)
+  if (move.effect && move.effect.type === 'double_if_half_hp') {
+    const opponentHpPercent = opponent.currentHP / opponent.stats.HP;
+    if (opponentHpPercent < 0.5) {
+      damage = Math.floor(damage * 2);
+    }
+  }
+
+  // Double damage if user has a status condition (Facade)
+  if (move.effect && move.effect.type === 'double_if_status_self') {
+    const hasStatus = combatant.statusEffects.some(e =>
+      ['burn', 'poison', 'badly_poison', 'paralyze', 'freeze', 'sleep'].includes(e.type)
+    );
+    if (hasStatus) {
+      damage = Math.floor(damage * 2);
+    }
+  }
+
+  // Buff boost damage - damage increases based on how many stat boosts user has (StoredPower)
+  if (move.effect && move.effect.type === 'buff_boost_damage') {
+    const buffCount = combatant.statusEffects.filter(e =>
+      e.type.startsWith('buff_')
+    ).length;
+    // Each buff adds 20 base power (like the original Stored Power)
+    if (buffCount > 0) {
+      const boostMultiplier = 1 + (buffCount * 0.5); // 50% more damage per buff
+      damage = Math.floor(damage * boostMultiplier);
+    }
   }
 
   // Critical hit calculation with high_crit modifier
@@ -1191,6 +1233,11 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
   // High crit moves (Slash) have 3x crit chance
   if (move.effect && move.effect.type === 'high_crit') {
     critChance *= 3;
+  }
+
+  // Always crit moves (WickedBlow)
+  if (move.effect && move.effect.type === 'always_crit') {
+    critChance = 1.0;
   }
 
   // Tournament condition: Critical damage bonus (e.g., Mind Palace)
@@ -1435,7 +1482,8 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
       const terrainNames = {
         terrain_electric: 'Electric Terrain',
         terrain_grassy: 'Grassy Terrain',
-        terrain_psychic: 'Psychic Terrain'
+        terrain_psychic: 'Psychic Terrain',
+        terrain_misty: 'Misty Terrain'
       };
       message += ` ${terrainNames[terrainType] || terrainType} was set!`;
 
@@ -1556,6 +1604,14 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           ticksRemaining: statusDur
         });
         message += ` ${opponentName} flinched!`;
+      } else if (effect.type === 'flinch') {
+        // Flinch causes opponent to skip their next action (like stun but 1 tick)
+        opponent.statusEffects.push({
+          type: 'stun',
+          duration: 1,
+          ticksRemaining: 1
+        });
+        message += ` ${opponentName} flinched!`;
       } else if (effect.type === 'infatuate') {
         opponent.statusEffects.push({
           type: 'infatuate',
@@ -1642,6 +1698,15 @@ function executeMove(combatant, opponent, moveName, attackerName, battleState) {
           damage: damage // Store the calculated damage
         });
         message += ` ${attackerName} foresaw an attack!`;
+      } else if (effect.type === 'delayed_heal') {
+        // Wish - heal will happen after a delay
+        combatant.statusEffects.push({
+          type: 'delayed_heal',
+          duration: 2, // Heal happens after 2 ticks
+          ticksRemaining: 2,
+          healPercent: effect.healPercent || 0.5
+        });
+        message += ` ${attackerName} made a wish!`;
       } else if (effect.type === 'entry_hazard' || effect.type === 'entry_hazard_rock') {
         // Entry hazards (Spikes, StealthRock) - simplified: just deal damage now
         const hazardDamage = effect.type === 'entry_hazard_rock' ? 8 : 5;
@@ -1741,6 +1806,11 @@ function applyStatusEffectDamage(combatant, name) {
       // FutureSight damage hits when timer is about to expire (will be 0 after decrement)
       combatant.currentHP = Math.max(0, combatant.currentHP - effect.damage);
       messages.push(`${name} was hit by the foreseen attack for ${effect.damage} damage!`);
+    } else if (effect.type === 'delayed_heal' && effect.ticksRemaining === 1) {
+      // Wish healing triggers when timer is about to expire
+      const healAmount = Math.floor(combatant.stats.HP * effect.healPercent);
+      combatant.currentHP = Math.min(combatant.stats.HP, combatant.currentHP + healAmount);
+      messages.push(`${name}'s wish came true and restored ${healAmount} HP!`);
     }
 
     // === HEALING OVER TIME ===
