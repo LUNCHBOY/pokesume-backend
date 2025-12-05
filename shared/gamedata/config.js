@@ -229,7 +229,7 @@ const GAME_CONFIG = {
     // Global multiplier applied to all enemy Pokemon stats (wild, event, gym leaders, Elite Four)
     ENEMY_STAT_MULTIPLIER: 1.1,
     // Additional difficulty scaling that accelerates over the career (0% at start, this % at Elite Four)
-    DIFFICULTY_SCALING_MAX: 0.10
+    DIFFICULTY_SCALING_MAX: 0.15
   },
   TRAINING: {
     ENERGY_COSTS: { HP: 20, Attack: 25, Defense: 15, Instinct: 20, Speed: -5 },
