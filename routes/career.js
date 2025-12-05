@@ -137,9 +137,23 @@ const calculateDifficultyMultiplier = (turn) => {
   }
 };
 
-// Get Elite Four multiplier - uses same curve, Elite Four are at turns 60-63
+// Elite Four fixed base multipliers - KEPT AS ORIGINAL
+// Lorelei (Cloyster): 560 base, Bruno (Machamp): 520 base, Agatha (Gengar): 595 base, Lance (Dragonite): 590 base
+// Target grades: A (2000), A+ (2200), S (2400), S+ (2600)
+const ELITE_FOUR_BASE_MULTIPLIERS = {
+  0: 3.571,  // Lorelei (turn 60) - 2000 stats (A grade)
+  1: 4.231,  // Bruno (turn 61) - 2200 stats (A+ grade)
+  2: 4.034,  // Agatha (turn 62) - 2400 stats (S grade)
+  3: 4.407   // Lance (turn 63) - 2600 stats (S+ grade, Champion)
+};
+
+// Get Elite Four multiplier with ENEMY_STAT_MULTIPLIER and difficulty scaling applied
 const getEliteFourMultiplier = (index) => {
-  return calculateDifficultyMultiplier(60 + index);
+  const baseMult = ELITE_FOUR_BASE_MULTIPLIERS[index] || 4.25;
+  const enemyStatMult = GAME_CONFIG.CAREER.ENEMY_STAT_MULTIPLIER || 1.0;
+  const difficultyScalingMax = GAME_CONFIG.CAREER.DIFFICULTY_SCALING_MAX || 0;
+  const difficultyScaling = 1.0 + difficultyScalingMax;
+  return baseMult * enemyStatMult * difficultyScaling;
 };
 
 // Helper function to scale Pokemon stats based on turn difficulty
@@ -1096,9 +1110,10 @@ router.post('/train', authenticateToken, async (req, res) => {
     }
 
     // Training succeeded - calculate gains
-    let statGain = GAME_CONFIG.TRAINING.BASE_STAT_GAINS[stat];
+    const baseStatGain = GAME_CONFIG.TRAINING.BASE_STAT_GAINS[stat];
     const friendshipGains = {};
     let energyRegenBonus = 0; // Bonus energy regen for Speed training from support cards
+    let supportBonusGain = 0; // Accumulated bonus from support cards
 
     // First pass: collect special effects from supports appearing in this training
     let totalStatGainMultiplier = 1.0;
@@ -1125,7 +1140,7 @@ router.post('/train', authenticateToken, async (req, res) => {
       }
     });
 
-    console.log(`[Training] Base stat gain for ${stat}: ${statGain}`);
+    console.log(`[Training] Base stat gain for ${stat}: ${baseStatGain}`);
 
     // Second pass: calculate stat gains and friendship
     option.supports.forEach(supportName => {
@@ -1144,10 +1159,10 @@ router.post('/train', authenticateToken, async (req, res) => {
       if (supportType === stat) {
         const bonus = isMaxFriendship ? support.friendshipBonusTraining : support.typeBonusTraining;
         console.log(`[Training] Type match! Adding ${bonus} (${isMaxFriendship ? 'friendshipBonus' : 'typeBonus'})`);
-        statGain += bonus;
+        supportBonusGain += bonus;
       } else {
         console.log(`[Training] No type match. Adding ${support.generalBonusTraining} (generalBonus)`);
-        statGain += support.generalBonusTraining;
+        supportBonusGain += support.generalBonusTraining;
       }
 
       // Base friendship gain + total bonus from all appearing support cards
@@ -1155,13 +1170,13 @@ router.post('/train', authenticateToken, async (req, res) => {
       friendshipGains[supportName] = (friendshipGains[supportName] || 0) + friendshipGain;
     });
 
-    // Apply training level bonus
+    // Apply training level bonus ONLY to base stat gain, not support bonuses
     const currentLevel = careerState.trainingLevels?.[stat] || 0;
     const levelBonus = currentLevel * GAME_CONFIG.TRAINING.LEVEL_BONUS_MULTIPLIER;
-    const preMultiplierGain = statGain;
-    // Apply stat gain multiplier from support cards, then training level bonus
-    statGain = Math.floor(statGain * totalStatGainMultiplier * (1 + levelBonus));
-    console.log(`[Training] Final: preMultiplier=${preMultiplierGain}, statGainMult=${totalStatGainMultiplier}, level=${currentLevel}, levelBonus=${levelBonus}, finalGain=${statGain}`);
+    const leveledBaseGain = Math.floor(baseStatGain * (1 + levelBonus));
+    // Apply stat gain multiplier to everything (leveled base + support bonuses)
+    const statGain = Math.floor((leveledBaseGain + supportBonusGain) * totalStatGainMultiplier);
+    console.log(`[Training] Final: base=${baseStatGain}, leveledBase=${leveledBaseGain}, supportBonus=${supportBonusGain}, statGainMult=${totalStatGainMultiplier}, level=${currentLevel}, finalGain=${statGain}`);
 
     // Update training progress and level
     const currentProgress = careerState.trainingProgress?.[stat] || 0;

@@ -227,7 +227,7 @@ const GAME_CONFIG = {
     GYM_ABILITY_COUNTS: [3, 4, 4, 5],
     ELITE_FOUR_ABILITY_COUNT: 6,
     // Global multiplier applied to all enemy Pokemon stats (wild, event, gym leaders, Elite Four)
-    ENEMY_STAT_MULTIPLIER: 1.1,
+    ENEMY_STAT_MULTIPLIER: 1.0,
     // Additional difficulty scaling that accelerates over the career (0% at start, this % at Elite Four)
     DIFFICULTY_SCALING_MAX: 0.15
   },
@@ -239,7 +239,7 @@ const GAME_CONFIG = {
     STAT_LOSS_ON_FAILURE: 2,
     FRIENDSHIP_GAIN_PER_TRAINING: 10,
     LEVEL_UP_REQUIREMENT: 4, // Successful trainings needed to level up
-    LEVEL_BONUS_MULTIPLIER: 0.10, // 10% bonus per level
+    LEVEL_BONUS_MULTIPLIER: 0.50, // 50% bonus per level (applies only to base stat gain)
     MAX_TRAINING_LEVEL: 5 // Maximum training level cap
   },
   REST: {
