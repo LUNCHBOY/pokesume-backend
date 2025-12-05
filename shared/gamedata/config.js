@@ -79,7 +79,7 @@ const EVOLUTION_CHAINS = {
   'Goldeen': { stage1: 'Seaking', stage2: null, stages: 1 },
   'Staryu': { stage1: 'Starmie', stage2: null, stages: 1 },
   'Magikarp': { stage1: 'Gyarados', stage2: null, stages: 1 },
-  'Eevee': { stage1: 'Vaporeon', stage2: null, stages: 1 },
+  'Eevee': { stage1: ['Vaporeon', 'Jolteon', 'Flareon', 'Espeon', 'Umbreon', 'Leafeon', 'Glaceon', 'Sylveon'], stage2: null, stages: 1 },
   'Omanyte': { stage1: 'Omastar', stage2: null, stages: 1 },
   'Kabuto': { stage1: 'Kabutops', stage2: null, stages: 1 },
   'Dratini': { stage1: 'Dragonair', stage2: 'Dragonite', stages: 2 },

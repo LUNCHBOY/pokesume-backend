@@ -248,6 +248,51 @@ const POKEMON = {
     defaultAbilities: ['Ember', 'Tackle'],
     learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
   },
+  Espeon: {
+    name: 'Espeon',
+    primaryType: 'Psychic',
+    baseStats: { HP: 81, Attack: 69, Defense: 59, Instinct: 91, Speed: 80 },
+    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'B' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
+    defaultAbilities: ['Confusion', 'Tackle'],
+    learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
+  },
+  Umbreon: {
+    name: 'Umbreon',
+    primaryType: 'Fighting',
+    baseStats: { HP: 95, Attack: 69, Defense: 87, Instinct: 69, Speed: 60 },
+    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'B', Electric: 'C', Fighting: 'A' },
+    strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
+    defaultAbilities: ['Bite', 'Tackle'],
+    learnableAbilities: ['DarkPulse', 'FoulPlay', 'BodySlam']
+  },
+  Leafeon: {
+    name: 'Leafeon',
+    primaryType: 'Grass',
+    baseStats: { HP: 81, Attack: 87, Defense: 84, Instinct: 59, Speed: 69 },
+    typeAptitudes: { Fire: 'D', Water: 'B', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'D', Chipper: 'A', MadLad: 'E' },
+    defaultAbilities: ['RazorLeaf', 'Tackle'],
+    learnableAbilities: ['LeafBlade', 'SolarBeam', 'BodySlam']
+  },
+  Glaceon: {
+    name: 'Glaceon',
+    primaryType: 'Water',
+    baseStats: { HP: 81, Attack: 59, Defense: 87, Instinct: 91, Speed: 62 },
+    typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'C', Psychic: 'B', Electric: 'C', Fighting: 'C' },
+    strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'B', Chipper: 'E', MadLad: 'D' },
+    defaultAbilities: ['IceShard', 'Tackle'],
+    learnableAbilities: ['IceBeam', 'Blizzard', 'BodySlam']
+  },
+  Sylveon: {
+    name: 'Sylveon',
+    primaryType: 'Psychic',
+    baseStats: { HP: 95, Attack: 69, Defense: 69, Instinct: 84, Speed: 63 },
+    typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'B' },
+    strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'A', Chipper: 'D', MadLad: 'E' },
+    defaultAbilities: ['Confusion', 'Tackle'],
+    learnableAbilities: ['Moonblast', 'DazzlingGleam', 'BodySlam']
+  },
   Cloyster: {
     name: 'Cloyster',
     primaryType: 'Water',

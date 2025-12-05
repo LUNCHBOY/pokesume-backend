@@ -14,14 +14,18 @@ const { LEGENDARY_POKEMON, GYM_LEADER_POKEMON, ELITE_FOUR, POKEMON, GAME_CONFIG,
 const getEvolutionChainMembers = (pokemonName) => {
   if (EVOLUTION_CHAINS[pokemonName]) {
     const chain = EVOLUTION_CHAINS[pokemonName];
-    const members = [pokemonName, chain.stage1];
+    // Handle array of stage1 options (e.g., Eevee)
+    const stage1Options = Array.isArray(chain.stage1) ? chain.stage1 : [chain.stage1];
+    const members = [pokemonName, ...stage1Options];
     if (chain.stage2) members.push(chain.stage2);
     return members;
   }
 
   for (const [basePokemon, chain] of Object.entries(EVOLUTION_CHAINS)) {
-    if (chain.stage1 === pokemonName || chain.stage2 === pokemonName) {
-      const members = [basePokemon, chain.stage1];
+    // Handle array of stage1 options
+    const stage1Options = Array.isArray(chain.stage1) ? chain.stage1 : [chain.stage1];
+    if (stage1Options.includes(pokemonName) || chain.stage2 === pokemonName) {
+      const members = [basePokemon, ...stage1Options];
       if (chain.stage2) members.push(chain.stage2);
       return members;
     }
