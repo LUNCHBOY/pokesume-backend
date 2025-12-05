@@ -137,6 +137,11 @@ const calculateDifficultyMultiplier = (turn) => {
   }
 };
 
+// Get Elite Four multiplier - uses same curve, Elite Four are at turns 60-63
+const getEliteFourMultiplier = (index) => {
+  return calculateDifficultyMultiplier(60 + index);
+};
+
 // Helper function to scale Pokemon stats based on turn difficulty
 const scaleStats = (baseStats, turn) => {
   const difficultyMult = calculateDifficultyMultiplier(turn);
