@@ -234,7 +234,7 @@ const GAME_CONFIG = {
   TRAINING: {
     ENERGY_COSTS: { HP: 20, Attack: 25, Defense: 15, Instinct: 20, Speed: -5 },
     FAILURE_CHANCE_AT_ZERO_ENERGY: 0.99,
-    BASE_STAT_GAINS: { HP: 12, Attack: 8, Defense: 8, Instinct: 6, Speed: 5 },
+    BASE_STAT_GAINS: { HP: 16, Attack: 10, Defense: 10, Instinct: 8, Speed: 6 },
     SKILL_POINTS_ON_SUCCESS: 3,
     STAT_LOSS_ON_FAILURE: 2,
     FRIENDSHIP_GAIN_PER_TRAINING: 10,
