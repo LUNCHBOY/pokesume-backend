@@ -1019,8 +1019,25 @@ router.post('/train', authenticateToken, async (req, res) => {
     }
 
     const option = careerState.currentTrainingOptions[stat];
-    const energyCost = GAME_CONFIG.TRAINING.ENERGY_COSTS[stat];
+    const baseEnergyCost = GAME_CONFIG.TRAINING.ENERGY_COSTS[stat];
     const currentEnergy = careerState.energy;
+
+    // Collect special effects ONLY from supports appearing in this training
+    let totalFailRateReduction = 0;
+    let totalEnergyCostReduction = 0;
+    option.supports.forEach(supportName => {
+      const supportLbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
+      const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
+      if (supportCard?.specialEffect?.failRateReduction) {
+        totalFailRateReduction += supportCard.specialEffect.failRateReduction;
+      }
+      if (supportCard?.specialEffect?.energyCostReduction) {
+        totalEnergyCostReduction += supportCard.specialEffect.energyCostReduction;
+      }
+    });
+
+    // Apply energy cost reduction (minimum cost of 1 for non-Speed training)
+    const energyCost = stat === 'Speed' ? baseEnergyCost : Math.max(1, baseEnergyCost - totalEnergyCostReduction);
 
     // Calculate failure chance based on current energy (before deduction)
     // Speed training has a shifted curve starting at 30 energy instead of 50
@@ -1040,6 +1057,9 @@ router.post('/train', authenticateToken, async (req, res) => {
         failureChance = 0.10 + 0.89 * Math.pow(1 - energyRatio, 3);
       }
     }
+
+    // Apply fail rate reduction from support cards (cap at 0.95 reduction to prevent guaranteed success)
+    failureChance = Math.max(0, failureChance - Math.min(totalFailRateReduction, 0.95));
 
     const trainingFailed = Math.random() < failureChance;
 
@@ -1096,8 +1116,34 @@ router.post('/train', authenticateToken, async (req, res) => {
     const friendshipGains = {};
     let energyRegenBonus = 0; // Bonus energy regen for Speed training from support cards
 
+    // First pass: collect special effects from supports appearing in this training
+    let totalStatGainMultiplier = 1.0;
+    let totalSkillPointMultiplier = 1.0;
+    let totalFriendshipGainBonus = 0;
+
+    option.supports.forEach(supportName => {
+      const supportLbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
+      const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
+      if (!supportCard) return;
+
+      if (stat === 'Speed' && supportCard.specialEffect?.energyRegenBonus) {
+        energyRegenBonus += supportCard.specialEffect.energyRegenBonus;
+      }
+      if (supportCard?.specialEffect?.statGainMultiplier) {
+        // Multipliers stack additively: 1.25 + 1.20 = 1.45 total bonus (not 1.50)
+        totalStatGainMultiplier += (supportCard.specialEffect.statGainMultiplier - 1);
+      }
+      if (supportCard?.specialEffect?.skillPointMultiplier) {
+        totalSkillPointMultiplier += (supportCard.specialEffect.skillPointMultiplier - 1);
+      }
+      if (supportCard?.specialEffect?.friendshipGainBonus) {
+        totalFriendshipGainBonus += supportCard.specialEffect.friendshipGainBonus;
+      }
+    });
+
     console.log(`[Training] Base stat gain for ${stat}: ${statGain}`);
 
+    // Second pass: calculate stat gains and friendship
     option.supports.forEach(supportName => {
       const supportLbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
       const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
@@ -1120,20 +1166,18 @@ router.post('/train', authenticateToken, async (req, res) => {
         statGain += support.generalBonusTraining;
       }
 
-      // Collect energy regen bonus for Speed training (only from supports appearing in this training)
-      if (stat === 'Speed' && supportCard.specialEffect?.energyRegenBonus) {
-        energyRegenBonus += supportCard.specialEffect.energyRegenBonus;
-      }
-
-      friendshipGains[supportName] = (friendshipGains[supportName] || 0) + GAME_CONFIG.TRAINING.FRIENDSHIP_GAIN_PER_TRAINING;
+      // Base friendship gain + total bonus from all appearing support cards
+      const friendshipGain = GAME_CONFIG.TRAINING.FRIENDSHIP_GAIN_PER_TRAINING + totalFriendshipGainBonus;
+      friendshipGains[supportName] = (friendshipGains[supportName] || 0) + friendshipGain;
     });
 
     // Apply training level bonus
     const currentLevel = careerState.trainingLevels?.[stat] || 0;
     const levelBonus = currentLevel * GAME_CONFIG.TRAINING.LEVEL_BONUS_MULTIPLIER;
     const preMultiplierGain = statGain;
-    statGain = Math.floor(statGain * (1 + levelBonus));
-    console.log(`[Training] Final: preMultiplier=${preMultiplierGain}, level=${currentLevel}, levelBonus=${levelBonus}, finalGain=${statGain}`);
+    // Apply stat gain multiplier from support cards, then training level bonus
+    statGain = Math.floor(statGain * totalStatGainMultiplier * (1 + levelBonus));
+    console.log(`[Training] Final: preMultiplier=${preMultiplierGain}, statGainMult=${totalStatGainMultiplier}, level=${currentLevel}, levelBonus=${levelBonus}, finalGain=${statGain}`);
 
     // Update training progress and level
     const currentProgress = careerState.trainingProgress?.[stat] || 0;
@@ -1192,7 +1236,7 @@ router.post('/train', authenticateToken, async (req, res) => {
         [stat]: careerState.currentStats[stat] + statGain
       },
       energy: newEnergy,
-      skillPoints: careerState.skillPoints + GAME_CONFIG.TRAINING.SKILL_POINTS_ON_SUCCESS,
+      skillPoints: careerState.skillPoints + Math.floor(GAME_CONFIG.TRAINING.SKILL_POINTS_ON_SUCCESS * totalSkillPointMultiplier),
       supportFriendships: newFriendships,
       moveHints: newMoveHints,
       learnableAbilities: newLearnableAbilities,
@@ -1276,6 +1320,19 @@ router.post('/rest', authenticateToken, async (req, res) => {
     } else if (roll > 1 - GAME_CONFIG.REST.PROBMOVES[2]) {
       energyGain = GAME_CONFIG.REST.ENERGY_GAINS[2]; // High roll: 70
     }
+
+    // Add rest bonus from support cards
+    let totalRestBonus = 0;
+    if (careerState.selectedSupports) {
+      careerState.selectedSupports.forEach(supportName => {
+        const supportLbLevel = careerState.supportLimitBreaks?.[supportName] || 0;
+        const supportCard = getSupportAtLimitBreak(supportName, supportLbLevel);
+        if (supportCard?.specialEffect?.restBonus) {
+          totalRestBonus += supportCard.specialEffect.restBonus;
+        }
+      });
+    }
+    energyGain += totalRestBonus;
 
     // Calculate max energy (base 100 + any maxEnergyBonus from selected support cards)
     const maxEnergy = calculateMaxEnergy(careerState);
