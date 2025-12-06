@@ -14,8 +14,8 @@ const SUPPORT_CARDS = {
     trainer: 'Cynthia',
     rarity: 'Legendary',
     supportType: 'Instinct',
-    baseStats: { HP: 0, Attack: 22, Defense: 0, Instinct: 50, Speed: 11 },
-    trainingBonus: { typeMatch: 15, otherStats: 2, maxFriendshipTypeMatch: 37 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 41.5, Speed: 0 },
+    trainingBonus: { typeMatch: 15, otherStats: 2, maxFriendshipTypeMatch: 25 },
     initialFriendship: 10,
     appearanceRate: 0.38,
     typeMatchPreference: 0.05,
@@ -28,8 +28,8 @@ const SUPPORT_CARDS = {
     trainer: 'Red',
     rarity: 'Legendary',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 65, Defense: 0, Instinct: 10, Speed: 13 },
-    trainingBonus: { typeMatch: 13, otherStats: 1, maxFriendshipTypeMatch: 36 },
+    baseStats: { HP: 0, Attack: 115, Defense: 0, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 13, otherStats: 1, maxFriendshipTypeMatch: 25 },
     initialFriendship: 30,
     appearanceRate: 0.32,
     typeMatchPreference: 0.55,
@@ -42,7 +42,7 @@ const SUPPORT_CARDS = {
     trainer: 'Steven',
     rarity: 'Legendary',
     supportType: 'Defense',
-    baseStats: { HP: 30, Attack: 0, Defense: 60, Instinct: 10, Speed: 0 },
+    baseStats: { HP: 0, Attack: 0, Defense: 50, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 4, maxFriendshipTypeMatch: 20 },
     initialFriendship: 40,
     appearanceRate: 0.45,
@@ -56,7 +56,7 @@ const SUPPORT_CARDS = {
     trainer: 'N',
     rarity: 'Legendary',
     supportType: 'Instinct',
-    baseStats: { HP: 0, Attack: 15, Defense: 0, Instinct: 65, Speed: 15 },
+    baseStats: { HP: 0, Attack: 7.5, Defense: 0, Instinct: 50, Speed: 7.5 },
     trainingBonus: { typeMatch: 6, otherStats: 4, maxFriendshipTypeMatch: 17 },
     initialFriendship: 60,
     appearanceRate: 0.45,
@@ -70,12 +70,12 @@ const SUPPORT_CARDS = {
     trainer: 'Professor Oak',
     rarity: 'Legendary',
     supportType: 'Instinct',
-    baseStats: { HP: 20, Attack: 15, Defense: 15, Instinct: 35, Speed: 15 },
-    trainingBonus: { typeMatch: 6, otherStats: 5, maxFriendshipTypeMatch: 17 },
+    baseStats: { HP: 10, Attack: 7.5, Defense: 7.5, Instinct: 17.5, Speed: 7.5 },
+    trainingBonus: { typeMatch: 6, otherStats: 5, maxFriendshipTypeMatch: 15 },
     initialFriendship: 45,
     appearanceRate: 0.50,
     typeMatchPreference: 0.10,
-    specialEffect: { skillPointMultiplier: 1.5, friendshipGainBonus: 4 },
+    specialEffect: { skillPointMultiplier: 1.5 },
     moveHints: ['Psychic', 'AuraSphere', 'Transform', 'Metronome', 'AncientPower'],
     description: 'The Professor grants knowledge and wisdom'
   },
@@ -84,12 +84,12 @@ const SUPPORT_CARDS = {
     trainer: 'Diantha',
     rarity: 'Legendary',
     supportType: 'Instinct',
-    baseStats: { HP: 15, Attack: 0, Defense: 20, Instinct: 47, Speed: 5 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 43.5, Speed: 0 },
     trainingBonus: { typeMatch: 9, otherStats: 3, maxFriendshipTypeMatch: 23 },
     initialFriendship: 25,
     appearanceRate: 0.42,
     typeMatchPreference: 0.15,
-    specialEffect: { statGainMultiplier: 1.2, failRateReduction: 0.10 },
+    specialEffect: { statGainMultiplier: 1.2 },
     moveHints: ['DiamondStorm', 'Moonblast', 'DazzlingGleam', 'RockPolish', 'Reflect'],
     description: 'The Kalos Champion radiates brilliance and growth'
   },
@@ -98,8 +98,8 @@ const SUPPORT_CARDS = {
     trainer: 'Leon',
     rarity: 'Legendary',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 60, Defense: 0, Instinct: 10, Speed: 20 },
-    trainingBonus: { typeMatch: 12, otherStats: 2, maxFriendshipTypeMatch: 31 },
+    baseStats: { HP: 0, Attack: 45, Defense: 0, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 12, otherStats: 2, maxFriendshipTypeMatch: 25 },
     initialFriendship: 35,
     appearanceRate: 0.40,
     typeMatchPreference: 0.10,
@@ -112,7 +112,7 @@ const SUPPORT_CARDS = {
     trainer: 'Selene',
     rarity: 'Legendary',
     supportType: 'Instinct',
-    baseStats: { HP: 15, Attack: 0, Defense: 10, Instinct: 60, Speed: 15 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 50, Speed: 0 },
     trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 21 },
     initialFriendship: 30,
     appearanceRate: 0.45,
@@ -126,7 +126,7 @@ const SUPPORT_CARDS = {
     trainer: 'Gloria',
     rarity: 'Legendary',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 65, Defense: 10, Instinct: 5, Speed: 18 },
+    baseStats: { HP: 0, Attack: 49, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 23 },
     initialFriendship: 25,
     appearanceRate: 0.42,
@@ -140,8 +140,8 @@ const SUPPORT_CARDS = {
     trainer: 'Nemona',
     rarity: 'Legendary',
     supportType: 'Speed',
-    baseStats: { HP: 10, Attack: 25, Defense: 0, Instinct: 10, Speed: 55 },
-    trainingBonus: { typeMatch: 7, otherStats: 4, maxFriendshipTypeMatch: 20 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 50 },
+    trainingBonus: { typeMatch: 7, otherStats: 4, maxFriendshipTypeMatch: 12 },
     initialFriendship: 60,
     appearanceRate: 0.55,
     typeMatchPreference: 0.10,
@@ -154,8 +154,8 @@ const SUPPORT_CARDS = {
     trainer: 'Mustard',
     rarity: 'Legendary',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 62, Defense: 10, Instinct: 5, Speed: 10 },
-    trainingBonus: { typeMatch: 10, otherStats: 1, maxFriendshipTypeMatch: 28 },
+    baseStats: { HP: 0, Attack: 43.5, Defense: 0, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 10, otherStats: 1, maxFriendshipTypeMatch: 25 },
     initialFriendship: 25,
     appearanceRate: 0.42,
     typeMatchPreference: 0.45,
@@ -168,7 +168,7 @@ const SUPPORT_CARDS = {
     trainer: 'Victor',
     rarity: 'Rare',
     supportType: 'Instinct',
-    baseStats: { HP: 10, Attack: 8, Defense: 0, Instinct: 42, Speed: 10 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 35, Speed: 0 },
     trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 20 },
     initialFriendship: 30,
     appearanceRate: 0.42,
@@ -182,12 +182,12 @@ const SUPPORT_CARDS = {
     trainer: 'Arven',
     rarity: 'Legendary',
     supportType: 'HP',
-    baseStats: { HP: 55, Attack: 20, Defense: 15, Instinct: 0, Speed: 5 },
+    baseStats: { HP: 47.5, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 4, maxFriendshipTypeMatch: 17 },
     initialFriendship: 50,
-    appearanceRate: 0.55,
+    appearanceRate: 0.42,
     typeMatchPreference: 0.20,
-    specialEffect: { maxEnergyBonus: 18, restBonus: 8 },
+    specialEffect: { restBonus: 8 },
     moveHints: ['Crunch', 'PlayRough', 'Reversal', 'Psychicfangs', 'Rest'],
     description: 'The culinary expert nurtures with care'
   },
@@ -196,7 +196,7 @@ const SUPPORT_CARDS = {
     trainer: 'Penny',
     rarity: 'Legendary',
     supportType: 'Defense',
-    baseStats: { HP: 22, Attack: 10, Defense: 18, Instinct: 25, Speed: 18 },
+    baseStats: { HP: 11, Attack: 5, Defense: 30, Instinct: 12.5, Speed: 9 },
     trainingBonus: { typeMatch: 7, otherStats: 3, maxFriendshipTypeMatch: 20 },
     initialFriendship: 20,
     appearanceRate: 0.38,
@@ -210,7 +210,7 @@ const SUPPORT_CARDS = {
     trainer: 'Sonia',
     rarity: 'Rare',
     supportType: 'Instinct',
-    baseStats: { HP: 10, Attack: 5, Defense: 5, Instinct: 45, Speed: 10 },
+    baseStats: { HP: 5, Attack: 2.5, Defense: 2.5, Instinct: 22.5, Speed: 5 },
     trainingBonus: { typeMatch: 7, otherStats: 3, maxFriendshipTypeMatch: 18 },
     initialFriendship: 40,
     appearanceRate: 0.45,
@@ -224,12 +224,12 @@ const SUPPORT_CARDS = {
     trainer: 'Hop',
     rarity: 'Legendary',
     supportType: 'HP',
-    baseStats: { HP: 60, Attack: 10, Defense: 20, Instinct: 5, Speed: 10 },
-    trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 21 },
+    baseStats: { HP: 30, Attack: 5, Defense: 10, Instinct: 2.5, Speed: 5 },
+    trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 16 },
     initialFriendship: 55,
     appearanceRate: 0.52,
     typeMatchPreference: 0.20,
-    specialEffect: { maxEnergyBonus: 10, friendshipGainBonus: 4 },
+    specialEffect: { friendshipGainBonus: 4 },
     moveHints: ['BehemothBash', 'CloseCombat', 'IronDefense', 'Crunch', 'WildCharge'],
     description: 'The aspiring researcher supports with heart'
   },
@@ -238,7 +238,7 @@ const SUPPORT_CARDS = {
     trainer: 'Geeta',
     rarity: 'Uncommon',
     supportType: 'Instinct',
-    baseStats: { HP: 5, Attack: 8, Defense: 5, Instinct: 30, Speed: 0 },
+    baseStats: { HP: 2.5, Attack: 4, Defense: 2.5, Instinct: 15, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 18 },
     initialFriendship: 15,
     appearanceRate: 0.48,
@@ -252,12 +252,12 @@ const SUPPORT_CARDS = {
     trainer: 'Kieran',
     rarity: 'Uncommon',
     supportType: 'Instinct',
-    baseStats: { HP: 12, Attack: 0, Defense: 8, Instinct: 28, Speed: 4 },
+    baseStats: { HP: 6, Attack: 0, Defense: 4, Instinct: 14, Speed: 2 },
     trainingBonus: { typeMatch: 6, otherStats: 2, maxFriendshipTypeMatch: 16 },
     initialFriendship: 20,
     appearanceRate: 0.52,
     typeMatchPreference: 0.25,
-    specialEffect: { maxEnergyBonus: 15 },
+    specialEffect: null,
     moveHints: ['TeraStarstorm', 'EarthPower', 'DarkPulse', 'Psychic', 'Recover'],
     description: 'The Blueberry Champion commands crystalline potential'
   },
@@ -266,7 +266,7 @@ const SUPPORT_CARDS = {
     trainer: 'Carmine',
     rarity: 'Legendary',
     supportType: 'Speed',
-    baseStats: { HP: 10, Attack: 25, Defense: 5, Instinct: 5, Speed: 55 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 50 },
     trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 21 },
     initialFriendship: 20,
     appearanceRate: 0.42,
@@ -280,8 +280,8 @@ const SUPPORT_CARDS = {
     trainer: 'Drayton',
     rarity: 'Legendary',
     supportType: 'Defense',
-    baseStats: { HP: 20, Attack: 15, Defense: 55, Instinct: 10, Speed: 0 },
-    trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 21 },
+    baseStats: { HP: 0, Attack: 0, Defense: 50, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 15 },
     initialFriendship: 40,
     appearanceRate: 0.48,
     typeMatchPreference: 0.15,
@@ -294,12 +294,12 @@ const SUPPORT_CARDS = {
     trainer: 'Lacey',
     rarity: 'Legendary',
     supportType: 'Speed',
-    baseStats: { HP: 0, Attack: 25, Defense: 5, Instinct: 10, Speed: 55 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 47.5 },
     trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 23 },
     initialFriendship: 35,
     appearanceRate: 0.45,
     typeMatchPreference: 0.20,
-    specialEffect: { energyRegenBonus: 15 },
+    specialEffect: null,
     moveHints: ['Earthquake', 'IronHead', 'RockSlide', 'SwordsDance', 'RapidSpin'],
     description: 'The Blueberry Elite drills with blazing speed'
   },
@@ -314,8 +314,8 @@ const SUPPORT_CARDS = {
     trainer: 'Lance',
     rarity: 'Rare',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 45, Defense: 0, Instinct: 10, Speed: 12 },
-    trainingBonus: { typeMatch: 9, otherStats: 2, maxFriendshipTypeMatch: 25 },
+    baseStats: { HP: 0, Attack: 33.5, Defense: 0, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 9, otherStats: 2, maxFriendshipTypeMatch: 17 },
     initialFriendship: 30,
     appearanceRate: 0.50,
     typeMatchPreference: 0.10,
@@ -328,8 +328,8 @@ const SUPPORT_CARDS = {
     trainer: 'Sabrina',
     rarity: 'Rare',
     supportType: 'Instinct',
-    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 50, Speed: 15 },
-    trainingBonus: { typeMatch: 11, otherStats: 2, maxFriendshipTypeMatch: 27 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 32.5, Speed: 0 },
+    trainingBonus: { typeMatch: 11, otherStats: 2, maxFriendshipTypeMatch: 21 },
     initialFriendship: 25,
     appearanceRate: 0.45,
     typeMatchPreference: 0.15,
@@ -342,7 +342,7 @@ const SUPPORT_CARDS = {
     trainer: 'Morty',
     rarity: 'Rare',
     supportType: 'Speed',
-    baseStats: { HP: 0, Attack: 10, Defense: 0, Instinct: 15, Speed: 45 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 77 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 17 },
     initialFriendship: 35,
     appearanceRate: 0.40,
@@ -356,12 +356,12 @@ const SUPPORT_CARDS = {
     trainer: 'Wallace',
     rarity: 'Rare',
     supportType: 'HP',
-    baseStats: { HP: 50, Attack: 0, Defense: 15, Instinct: 5, Speed: 0 },
+    baseStats: { HP: 35, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 18 },
     initialFriendship: 45,
     appearanceRate: 0.48,
     typeMatchPreference: 0.30,
-    specialEffect: { maxEnergyBonus: 12, restBonus: 5 },
+    specialEffect: null,
     moveHints: ['Surf', 'IceBeam', 'Recover', 'DragonTail', 'AquaRing'],
     description: 'The Hoenn Champion exudes elegance'
   },
@@ -370,7 +370,7 @@ const SUPPORT_CARDS = {
     trainer: 'Iris',
     rarity: 'Rare',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 58, Defense: 0, Instinct: 7, Speed: 20 },
+    baseStats: { HP: 0, Attack: 42.5, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 17 },
     initialFriendship: 50,
     appearanceRate: 0.45,
@@ -384,12 +384,12 @@ const SUPPORT_CARDS = {
     trainer: 'Blue',
     rarity: 'Rare',
     supportType: 'Speed',
-    baseStats: { HP: 18, Attack: 18, Defense: 18, Instinct: 15, Speed: 7 },
+    baseStats: { HP: 9, Attack: 9, Defense: 9, Instinct: 7.5, Speed: 15.5 },
     trainingBonus: { typeMatch: 5, otherStats: 4, maxFriendshipTypeMatch: 12 },
     initialFriendship: 25,
     appearanceRate: 0.55,
     typeMatchPreference: 0.05,
-    specialEffect: { energyRegenBonus: 12 },
+    specialEffect: null,
     moveHints: ['Hurricane', 'BraveBird', 'AirSlash', 'Roost', 'UTurn'],
     description: 'The rival trainer pushes limits'
   },
@@ -398,7 +398,7 @@ const SUPPORT_CARDS = {
     trainer: 'Giovanni',
     rarity: 'Rare',
     supportType: 'Speed',
-    baseStats: { HP: 0, Attack: 10, Defense: 0, Instinct: 8, Speed: 35 },
+    baseStats: { HP: 0, Attack: 5, Defense: 0, Instinct: 4, Speed: 45 },
     trainingBonus: { typeMatch: 8, otherStats: 1, maxFriendshipTypeMatch: 22 },
     initialFriendship: 20,
     appearanceRate: 0.40,
@@ -412,7 +412,7 @@ const SUPPORT_CARDS = {
     trainer: 'Maxie',
     rarity: 'Rare',
     supportType: 'Defense',
-    baseStats: { HP: 0, Attack: 54, Defense: 0, Instinct: 12, Speed: 10 },
+    baseStats: { HP: 0, Attack: 0, Defense: 38, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 3, maxFriendshipTypeMatch: 18 },
     initialFriendship: 20,
     appearanceRate: 0.45,
@@ -426,7 +426,7 @@ const SUPPORT_CARDS = {
     trainer: 'Archie',
     rarity: 'Rare',
     supportType: 'HP',
-    baseStats: { HP: 55, Attack: 0, Defense: 10, Instinct: 5, Speed: 0 },
+    baseStats: { HP: 35, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 40,
     appearanceRate: 0.52,
@@ -440,7 +440,7 @@ const SUPPORT_CARDS = {
     trainer: 'Raihan',
     rarity: 'Rare',
     supportType: 'Defense',
-    baseStats: { HP: 10, Attack: 15, Defense: 40, Instinct: 5, Speed: 5 },
+    baseStats: { HP: 0, Attack: 0, Defense: 25, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 3, maxFriendshipTypeMatch: 19 },
     initialFriendship: 30,
     appearanceRate: 0.45,
@@ -454,7 +454,7 @@ const SUPPORT_CARDS = {
     trainer: 'Marnie',
     rarity: 'Rare',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 58, Speed: 18 },
+    baseStats: { HP: 0, Attack: 65, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 25,
     appearanceRate: 0.45,
@@ -468,7 +468,7 @@ const SUPPORT_CARDS = {
     trainer: 'Nessa',
     rarity: 'Rare',
     supportType: 'HP',
-    baseStats: { HP: 45, Attack: 15, Defense: 10, Instinct: 0, Speed: 5 },
+    baseStats: { HP: 37.5, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 35,
     appearanceRate: 0.52,
@@ -482,8 +482,8 @@ const SUPPORT_CARDS = {
     trainer: 'Bea',
     rarity: 'Rare',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 45, Defense: 0, Instinct: 0, Speed: 24 },
-    trainingBonus: { typeMatch: 8, otherStats: 1, maxFriendshipTypeMatch: 29 },
+    baseStats: { HP: 0, Attack: 48, Defense: 0, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 8, otherStats: 1, maxFriendshipTypeMatch: 25 },
     initialFriendship: 20,
     appearanceRate: 0.42,
     typeMatchPreference: 0.30,
@@ -496,12 +496,12 @@ const SUPPORT_CARDS = {
     trainer: 'Opal',
     rarity: 'Legendary',
     supportType: 'HP',
-    baseStats: { HP: 60, Attack: 0, Defense: 20, Instinct: 20, Speed: 0 },
-    trainingBonus: { typeMatch: 8, otherStats: 4, maxFriendshipTypeMatch: 22 },
+    baseStats: { HP: 30, Attack: 0, Defense: 10, Instinct: 10, Speed: 0 },
+    trainingBonus: { typeMatch: 8, otherStats: 4, maxFriendshipTypeMatch: 19 },
     initialFriendship: 40,
     appearanceRate: 0.48,
     typeMatchPreference: 0.20,
-    specialEffect: { maxEnergyBonus: 10, restBonus: 5, statGainMultiplier: 1.12 },
+    specialEffect: null,
     moveHints: ['DrainingKiss', 'DazzlingGleam', 'Recover', 'CalmMind', 'Encore'],
     description: 'The Ballonlea Gym Leader sweetens training'
   },
@@ -510,12 +510,12 @@ const SUPPORT_CARDS = {
     trainer: 'Piers',
     rarity: 'Rare',
     supportType: 'Speed',
-    baseStats: { HP: 0, Attack: 20, Defense: 0, Instinct: 5, Speed: 45 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 35 },
     trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 20,
     appearanceRate: 0.50,
     typeMatchPreference: 0.35,
-    specialEffect: { energyRegenBonus: 12 },
+    specialEffect: { energyRegenBonus: 7 },
     moveHints: ['Overdrive', 'SludgeWave', 'BoomBurst', 'ShiftGear', 'Discharge'],
     description: 'The punk rock Gym Leader amplifies tempo'
   },
@@ -524,12 +524,12 @@ const SUPPORT_CARDS = {
     trainer: 'Rika',
     rarity: 'Legendary',
     supportType: 'HP',
-    baseStats: { HP: 65, Attack: 15, Defense: 15, Instinct: 8, Speed: 0 },
+    baseStats: { HP: 51.5, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 4, maxFriendshipTypeMatch: 20 },
     initialFriendship: 35,
     appearanceRate: 0.45,
     typeMatchPreference: 0.30,
-    specialEffect: { maxEnergyBonus: 20, failRateReduction: 0.10 },
+    specialEffect: { failRateReduction: 0.10 },
     moveHints: ['Earthquake', 'IceBeam', 'Surf', 'ZenHeadbutt', 'Rest'],
     description: 'The Elite Four member interrogates the earth'
   },
@@ -538,7 +538,7 @@ const SUPPORT_CARDS = {
     trainer: 'Poppy',
     rarity: 'Rare',
     supportType: 'Defense',
-    baseStats: { HP: 10, Attack: 20, Defense: 35, Instinct: 5, Speed: 5 },
+    baseStats: { HP: 0, Attack: 0, Defense: 37.5, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 2, maxFriendshipTypeMatch: 15 },
     initialFriendship: 55,
     appearanceRate: 0.50,
@@ -558,7 +558,7 @@ const SUPPORT_CARDS = {
     trainer: 'Misty',
     rarity: 'Uncommon',
     supportType: 'HP',
-    baseStats: { HP: 30, Attack: 0, Defense: 10, Instinct: 5, Speed: 5 },
+    baseStats: { HP: 25, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 2, maxFriendshipTypeMatch: 15 },
     initialFriendship: 30,
     appearanceRate: 0.48,
@@ -572,7 +572,7 @@ const SUPPORT_CARDS = {
     trainer: 'Brock',
     rarity: 'Uncommon',
     supportType: 'Defense',
-    baseStats: { HP: 15, Attack: 0, Defense: 38, Instinct: 0, Speed: 0 },
+    baseStats: { HP: 0, Attack: 0, Defense: 26.5, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 18 },
     initialFriendship: 45,
     appearanceRate: 0.42,
@@ -586,7 +586,7 @@ const SUPPORT_CARDS = {
     trainer: 'Erika',
     rarity: 'Uncommon',
     supportType: 'HP',
-    baseStats: { HP: 35, Attack: 0, Defense: 10, Instinct: 0, Speed: 0 },
+    baseStats: { HP: 22.5, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 15 },
     initialFriendship: 40,
     appearanceRate: 0.48,
@@ -600,8 +600,8 @@ const SUPPORT_CARDS = {
     trainer: 'Blaine',
     rarity: 'Uncommon',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 35, Defense: 0, Instinct: 5, Speed: 5 },
-    trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 20 },
+    baseStats: { HP: 0, Attack: 22.5, Defense: 0, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 16 },
     initialFriendship: 25,
     appearanceRate: 0.48,
     typeMatchPreference: 0.10,
@@ -614,7 +614,7 @@ const SUPPORT_CARDS = {
     trainer: 'Koga',
     rarity: 'Uncommon',
     supportType: 'Speed',
-    baseStats: { HP: 0, Attack: 2, Defense: 7, Instinct: 5, Speed: 16 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 26 },
     trainingBonus: { typeMatch: 6, otherStats: 2, maxFriendshipTypeMatch: 18 },
     initialFriendship: 20,
     appearanceRate: 0.40,
@@ -628,7 +628,7 @@ const SUPPORT_CARDS = {
     trainer: 'Jasmine',
     rarity: 'Uncommon',
     supportType: 'Defense',
-    baseStats: { HP: 10, Attack: 0, Defense: 35, Instinct: 0, Speed: 0 },
+    baseStats: { HP: 0, Attack: 0, Defense: 39, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 19 },
     initialFriendship: 30,
     appearanceRate: 0.40,
@@ -642,7 +642,7 @@ const SUPPORT_CARDS = {
     trainer: 'Winona',
     rarity: 'Uncommon',
     supportType: 'Speed',
-    baseStats: { HP: 6, Attack: 0, Defense: 6, Instinct: 6, Speed: 37 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 19 },
     trainingBonus: { typeMatch: 4, otherStats: 2, maxFriendshipTypeMatch: 12 },
     initialFriendship: 35,
     appearanceRate: 0.58,
@@ -656,8 +656,8 @@ const SUPPORT_CARDS = {
     trainer: 'Karen',
     rarity: 'Legendary',
     supportType: 'Defense',
-    baseStats: { HP: 18, Attack: 0, Defense: 50, Instinct: 18, Speed: 0 },
-    trainingBonus: { typeMatch: 12, otherStats: 3, maxFriendshipTypeMatch: 30 },
+    baseStats: { HP: 9, Attack: 0, Defense: 55, Instinct: 9, Speed: 0 },
+    trainingBonus: { typeMatch: 12, otherStats: 3, maxFriendshipTypeMatch: 25 },
     initialFriendship: 10,
     appearanceRate: 0.32,
     typeMatchPreference: 0.25,
@@ -670,7 +670,7 @@ const SUPPORT_CARDS = {
     trainer: 'Agatha',
     rarity: 'Uncommon',
     supportType: 'Instinct',
-    baseStats: { HP: 0, Attack: 8, Defense: 0, Instinct: 32, Speed: 5 },
+    baseStats: { HP: 0, Attack: 4, Defense: 0, Instinct: 41, Speed: 2.5 },
     trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 19 },
     initialFriendship: 35,
     appearanceRate: 0.38,
@@ -684,12 +684,12 @@ const SUPPORT_CARDS = {
     trainer: 'Milo',
     rarity: 'Uncommon',
     supportType: 'HP',
-    baseStats: { HP: 35, Attack: 0, Defense: 10, Instinct: 5, Speed: 0 },
+    baseStats: { HP: 17.5, Attack: 0, Defense: 5, Instinct: 2.5, Speed: 0 },
     trainingBonus: { typeMatch: 4, otherStats: 3, maxFriendshipTypeMatch: 11 },
     initialFriendship: 50,
     appearanceRate: 0.58,
     typeMatchPreference: 0.15,
-    specialEffect: { maxEnergyBonus: 8, restBonus: 4 },
+    specialEffect: null,
     moveHints: ['GigaDrain', 'CottonGuard', 'LeechSeed', 'Synthesis', 'PollenPuff'],
     description: 'The Turffield Gym Leader nurtures growth'
   },
@@ -698,7 +698,7 @@ const SUPPORT_CARDS = {
     trainer: 'Kabu',
     rarity: 'Uncommon',
     supportType: 'Attack',
-    baseStats: { HP: 5, Attack: 32, Defense: 5, Instinct: 0, Speed: 5 },
+    baseStats: { HP: 0, Attack: 35, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 18 },
     initialFriendship: 15,
     appearanceRate: 0.45,
@@ -712,7 +712,7 @@ const SUPPORT_CARDS = {
     trainer: 'Melony',
     rarity: 'Uncommon',
     supportType: 'HP',
-    baseStats: { HP: 40, Attack: 0, Defense: 10, Instinct: 5, Speed: 0 },
+    baseStats: { HP: 40, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 4, otherStats: 2, maxFriendshipTypeMatch: 12 },
     initialFriendship: 45,
     appearanceRate: 0.52,
@@ -726,7 +726,7 @@ const SUPPORT_CARDS = {
     trainer: 'Gordie',
     rarity: 'Uncommon',
     supportType: 'Defense',
-    baseStats: { HP: 10, Attack: 5, Defense: 35, Instinct: 0, Speed: 0 },
+    baseStats: { HP: 0, Attack: 0, Defense: 25, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 12 },
     initialFriendship: 25,
     appearanceRate: 0.52,
@@ -740,7 +740,7 @@ const SUPPORT_CARDS = {
     trainer: 'Klara',
     rarity: 'Uncommon',
     supportType: 'Defense',
-    baseStats: { HP: 15, Attack: 0, Defense: 30, Instinct: 5, Speed: 0 },
+    baseStats: { HP: 0, Attack: 0, Defense: 70, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 12 },
     initialFriendship: 20,
     appearanceRate: 0.40,
@@ -754,7 +754,7 @@ const SUPPORT_CARDS = {
     trainer: 'Avery',
     rarity: 'Legendary',
     supportType: 'Speed',
-    baseStats: { HP: 0, Attack: 18, Defense: 10, Instinct: 18, Speed: 55 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 38 },
     trainingBonus: { typeMatch: 10, otherStats: 3, maxFriendshipTypeMatch: 25 },
     initialFriendship: 15,
     appearanceRate: 0.38,
@@ -768,7 +768,7 @@ const SUPPORT_CARDS = {
     trainer: 'Iono',
     rarity: 'Uncommon',
     supportType: 'Speed',
-    baseStats: { HP: 0, Attack: 12, Defense: 0, Instinct: 10, Speed: 23 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 22.5 },
     trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 18 },
     initialFriendship: 40,
     appearanceRate: 0.42,
@@ -782,7 +782,7 @@ const SUPPORT_CARDS = {
     trainer: 'Grusha',
     rarity: 'Uncommon',
     supportType: 'Defense',
-    baseStats: { HP: 10, Attack: 0, Defense: 30, Instinct: 10, Speed: 5 },
+    baseStats: { HP: 0, Attack: 0, Defense: 41, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 4, otherStats: 3, maxFriendshipTypeMatch: 11 },
     initialFriendship: 30,
     appearanceRate: 0.48,
@@ -802,7 +802,7 @@ const SUPPORT_CARDS = {
     trainer: 'Whitney',
     rarity: 'Common',
     supportType: 'HP',
-    baseStats: { HP: 28, Attack: 0, Defense: 7, Instinct: 0, Speed: 0 },
+    baseStats: { HP: 17.5, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 11 },
     initialFriendship: 35,
     appearanceRate: 0.55,
@@ -816,7 +816,7 @@ const SUPPORT_CARDS = {
     trainer: 'Chuck',
     rarity: 'Common',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 24, Defense: 0, Instinct: 0, Speed: 5 },
+    baseStats: { HP: 0, Attack: 14.5, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 1, maxFriendshipTypeMatch: 14 },
     initialFriendship: 25,
     appearanceRate: 0.50,
@@ -830,12 +830,12 @@ const SUPPORT_CARDS = {
     trainer: 'Pryce',
     rarity: 'Common',
     supportType: 'Defense',
-    baseStats: { HP: 20, Attack: 0, Defense: 5, Instinct: 5, Speed: 0 },
+    baseStats: { HP: 0, Attack: 0, Defense: 27, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 4, otherStats: 2, maxFriendshipTypeMatch: 10 },
     initialFriendship: 35,
     appearanceRate: 0.55,
     typeMatchPreference: 0.10,
-    specialEffect: { maxEnergyBonus: 12, restBonus: 6 },
+    specialEffect: null,
     moveHints: ['Present', 'IceBeam', 'IcePunch', 'Blizzard', 'AerialAce'],
     description: 'The Mahogany Gym Leader aids recovery'
   },
@@ -844,7 +844,7 @@ const SUPPORT_CARDS = {
     trainer: 'Wattson',
     rarity: 'Common',
     supportType: 'Instinct',
-    baseStats: { HP: 0, Attack: 0, Defense: 5, Instinct: 25, Speed: 5 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 17.5, Speed: 0 },
     trainingBonus: { typeMatch: 4, otherStats: 2, maxFriendshipTypeMatch: 11 },
     initialFriendship: 35,
     appearanceRate: 0.52,
@@ -858,7 +858,7 @@ const SUPPORT_CARDS = {
     trainer: 'Flannery',
     rarity: 'Common',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 5, Defense: 0, Instinct: 20, Speed: 0 },
+    baseStats: { HP: 0, Attack: 41, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 4, otherStats: 2, maxFriendshipTypeMatch: 11 },
     initialFriendship: 25,
     appearanceRate: 0.48,
@@ -878,8 +878,8 @@ const SUPPORT_CARDS = {
     trainer: 'Crasher Wake',
     rarity: 'Legendary',
     supportType: 'HP',
-    baseStats: { HP: 65, Attack: 15, Defense: 15, Instinct: 0, Speed: 5 },
-    trainingBonus: { typeMatch: 9, otherStats: 3, maxFriendshipTypeMatch: 24 },
+    baseStats: { HP: 50, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 9, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 45,
     appearanceRate: 0.48,
     typeMatchPreference: 0.35,
@@ -892,12 +892,12 @@ const SUPPORT_CARDS = {
     trainer: 'Elesa',
     rarity: 'Legendary',
     supportType: 'Speed',
-    baseStats: { HP: 0, Attack: 20, Defense: 5, Instinct: 15, Speed: 60 },
-    trainingBonus: { typeMatch: 10, otherStats: 2, maxFriendshipTypeMatch: 26 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 0, Speed: 50 },
+    trainingBonus: { typeMatch: 10, otherStats: 2, maxFriendshipTypeMatch: 25 },
     initialFriendship: 30,
     appearanceRate: 0.42,
     typeMatchPreference: 0.40,
-    specialEffect: { energyRegenBonus: 8, statGainMultiplier: 1.12 },
+    specialEffect: { statGainMultiplier: 1.12 },
     moveHints: ['VoltTackle', 'Thunderbolt', 'WildCharge', 'ThunderFang', 'Discharge'],
     description: 'The Nimbasa Gym Leader electrifies with style'
   },
@@ -906,8 +906,8 @@ const SUPPORT_CARDS = {
     trainer: 'Volkner',
     rarity: 'Legendary',
     supportType: 'Attack',
-    baseStats: { HP: 0, Attack: 58, Defense: 10, Instinct: 15, Speed: 12 },
-    trainingBonus: { typeMatch: 11, otherStats: 2, maxFriendshipTypeMatch: 28 },
+    baseStats: { HP: 0, Attack: 67, Defense: 0, Instinct: 0, Speed: 0 },
+    trainingBonus: { typeMatch: 11, otherStats: 2, maxFriendshipTypeMatch: 25 },
     initialFriendship: 20,
     appearanceRate: 0.38,
     typeMatchPreference: 0.45,
@@ -920,7 +920,7 @@ const SUPPORT_CARDS = {
     trainer: 'Gardenia',
     rarity: 'Legendary',
     supportType: 'HP',
-    baseStats: { HP: 55, Attack: 0, Defense: 20, Instinct: 15, Speed: 5 },
+    baseStats: { HP: 47.5, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 8, otherStats: 4, maxFriendshipTypeMatch: 22 },
     initialFriendship: 50,
     appearanceRate: 0.42,
@@ -934,12 +934,12 @@ const SUPPORT_CARDS = {
     trainer: 'Juan',
     rarity: 'Legendary',
     supportType: 'Instinct',
-    baseStats: { HP: 15, Attack: 10, Defense: 15, Instinct: 50, Speed: 10 },
-    trainingBonus: { typeMatch: 9, otherStats: 3, maxFriendshipTypeMatch: 24 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 50, Speed: 0 },
+    trainingBonus: { typeMatch: 9, otherStats: 3, maxFriendshipTypeMatch: 21 },
     initialFriendship: 35,
     appearanceRate: 0.45,
     typeMatchPreference: 0.40,
-    specialEffect: { skillPointMultiplier: 1.35, friendshipGainBonus: 4 },
+    specialEffect: { friendshipGainBonus: 4 },
     moveHints: ['HydroPump', 'Surf', 'WaterPulse', 'Dive', 'AquaRing'],
     description: 'The Sootopolis Gym Leader teaches elegant mastery'
   },
@@ -950,7 +950,7 @@ const SUPPORT_CARDS = {
     trainer: 'Clemont',
     rarity: 'Rare',
     supportType: 'Instinct',
-    baseStats: { HP: 10, Attack: 5, Defense: 10, Instinct: 42, Speed: 8 },
+    baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 37.5, Speed: 0 },
     trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 20 },
     initialFriendship: 40,
     appearanceRate: 0.42,
@@ -964,7 +964,7 @@ const SUPPORT_CARDS = {
     trainer: 'Cress',
     rarity: 'Rare',
     supportType: 'Defense',
-    baseStats: { HP: 15, Attack: 10, Defense: 40, Instinct: 10, Speed: 0 },
+    baseStats: { HP: 0, Attack: 0, Defense: 69, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 3, maxFriendshipTypeMatch: 18 },
     initialFriendship: 35,
     appearanceRate: 0.40,
@@ -978,7 +978,7 @@ const SUPPORT_CARDS = {
     trainer: 'Ramos',
     rarity: 'Rare',
     supportType: 'HP',
-    baseStats: { HP: 48, Attack: 0, Defense: 15, Instinct: 8, Speed: 0 },
+    baseStats: { HP: 63, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 4, maxFriendshipTypeMatch: 16 },
     initialFriendship: 50,
     appearanceRate: 0.40,
@@ -994,7 +994,7 @@ const SUPPORT_CARDS = {
     trainer: 'Marlon',
     rarity: 'Uncommon',
     supportType: 'HP',
-    baseStats: { HP: 38, Attack: 5, Defense: 8, Instinct: 0, Speed: 0 },
+    baseStats: { HP: 49, Attack: 0, Defense: 0, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 45,
     appearanceRate: 0.42,
@@ -1008,7 +1008,7 @@ const SUPPORT_CARDS = {
     trainer: 'Cilan',
     rarity: 'Uncommon',
     supportType: 'Instinct',
-    baseStats: { HP: 5, Attack: 0, Defense: 5, Instinct: 32, Speed: 5 },
+    baseStats: { HP: 2.5, Attack: 0, Defense: 2.5, Instinct: 16, Speed: 2.5 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 16 },
     initialFriendship: 50,
     appearanceRate: 0.45,
@@ -1269,16 +1269,16 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
 
   Arven: {
     // LB0: Caring chef - good friendship, partial HP regen effect
-    // LB1: BIG JUMP appearanceRate (0.40→0.55) - Always bringing sandwiches
-    // LB2: BIG JUMP initialFriendship (35→50) - Deep bond formed
-    // LB3: BIG JUMP specialEffect (0.40→1.00) - HP regen mastered
-    // LB4: BIG JUMP baseStats (0.50→1.00) - Full potential unlocked
+    // LB1: BIG JUMP initialFriendship (35→50) - Deep bond formed
+    // LB2: BIG JUMP specialEffect (0.40→1.00) - HP regen mastered
+    // LB3: BIG JUMP baseStats (0.50→1.00) - Full potential unlocked
+    // LB4: BIG JUMP appearanceRate (0.32→0.42) - Always bringing sandwiches
     progression: [
-      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.40, typeMatchPreference: 0.20, initialFriendship: 35, specialEffect: 0.40 },
-      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.20, initialFriendship: 35, specialEffect: 0.40 },
-      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.20, initialFriendship: 50, specialEffect: 0.40 },
-      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.20, initialFriendship: 50, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.20, initialFriendship: 50, specialEffect: 1.00 }
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.32, typeMatchPreference: 0.20, initialFriendship: 35, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.32, typeMatchPreference: 0.20, initialFriendship: 50, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.32, typeMatchPreference: 0.20, initialFriendship: 50, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.32, typeMatchPreference: 0.20, initialFriendship: 50, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.42, typeMatchPreference: 0.20, initialFriendship: 50, specialEffect: 1.00 }
     ]
   },
 
@@ -1343,17 +1343,17 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Lacey: {
-    // LB0: Pop idol - good friendship, partial friendship effect
-    // LB1: BIG JUMP typeMatchPreference (0.12→0.25) - Fairy type mastery
-    // LB2: BIG JUMP initialFriendship (30→45) - Fans adore her
-    // LB3: BIG JUMP specialEffect (0.35→1.00) - Friendship bonus mastered
-    // LB4: BIG JUMP appearanceRate (0.40→0.52) - Star presence
+    // LB0: Pop idol - Speed specialist, no special effect
+    // LB1: BIG JUMP typeMatchPreference (0.12→0.20) - Fairy type focus
+    // LB2: BIG JUMP initialFriendship (25→35) - Fans adore her
+    // LB3: BIG JUMP trainingBonus (0.70→1.00) - Training mastery
+    // LB4: BIG JUMP appearanceRate (0.35→0.45) - Star presence
     progression: [
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.40, typeMatchPreference: 0.12, initialFriendship: 30, specialEffect: 0.35 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.40, typeMatchPreference: 0.25, initialFriendship: 30, specialEffect: 0.35 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.40, typeMatchPreference: 0.25, initialFriendship: 45, specialEffect: 0.35 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.40, typeMatchPreference: 0.25, initialFriendship: 45, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.25, initialFriendship: 45, specialEffect: 1.00 }
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.35, typeMatchPreference: 0.12, initialFriendship: 25, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.35, typeMatchPreference: 0.20, initialFriendship: 25, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.35, typeMatchPreference: 0.20, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.20, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.20, initialFriendship: 35, specialEffect: 0 }
     ]
   },
 
@@ -1373,17 +1373,17 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Opal: {
-    // LB0: Eccentric grandma - no special effect, tests you
-    // LB1: BIG JUMP typeMatchPreference (0.15→0.30) - Fairy wisdom
+    // LB0: Eccentric grandma - tests you, no special effect
+    // LB1: BIG JUMP typeMatchPreference (0.15→0.20) - Fairy wisdom
     // LB2: BIG JUMP initialFriendship (25→40) - Passes her quiz
-    // LB3: UNLOCK specialEffect (0→1.00) - Instinct bonus activates
-    // LB4: BIG JUMP appearanceRate (0.38→0.52) - Full pink presence
+    // LB3: BIG JUMP trainingBonus (0.70→1.00) - Training mastery
+    // LB4: BIG JUMP appearanceRate (0.38→0.48) - Full pink presence
     progression: [
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.15, initialFriendship: 25, specialEffect: 0 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.30, initialFriendship: 25, specialEffect: 0 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.30, initialFriendship: 40, specialEffect: 0 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.30, initialFriendship: 40, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.30, initialFriendship: 40, specialEffect: 1.00 }
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.38, typeMatchPreference: 0.15, initialFriendship: 25, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.38, typeMatchPreference: 0.20, initialFriendship: 25, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.38, typeMatchPreference: 0.20, initialFriendship: 40, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.20, initialFriendship: 40, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.20, initialFriendship: 40, specialEffect: 0 }
     ]
   },
 
@@ -1467,17 +1467,17 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Wallace: {
-    // LB0: Elegant champion - high friendship, partial HP regen
-    // LB1: BIG JUMP appearanceRate (0.38→0.50) - Graceful presence
-    // LB2: BIG JUMP initialFriendship (30→45) - Contest bond
-    // LB3: BIG JUMP specialEffect (0.45→1.00) - HP regen mastered
-    // LB4: BIG JUMP typeMatchPreference (0.18→0.30) - Water mastery
+    // LB0: Elegant champion - HP specialist, no special effect
+    // LB1: BIG JUMP typeMatchPreference (0.20→0.30) - Water mastery
+    // LB2: BIG JUMP initialFriendship (35→45) - Contest bond
+    // LB3: BIG JUMP trainingBonus (0.70→1.00) - Training elegance
+    // LB4: BIG JUMP appearanceRate (0.38→0.48) - Graceful presence
     progression: [
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.18, initialFriendship: 30, specialEffect: 0.45 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.18, initialFriendship: 30, specialEffect: 0.45 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.18, initialFriendship: 45, specialEffect: 0.45 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.18, initialFriendship: 45, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.30, initialFriendship: 45, specialEffect: 1.00 }
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.38, typeMatchPreference: 0.20, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.38, typeMatchPreference: 0.30, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.38, typeMatchPreference: 0.30, initialFriendship: 45, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.30, initialFriendship: 45, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.30, initialFriendship: 45, specialEffect: 0 }
     ]
   },
 
@@ -1497,17 +1497,17 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Blue: {
-    // LB0: Arrogant rival - known for high energy, low friendship
-    // LB1: BIG JUMP initialFriendship (10→25) - Respects you now
-    // LB2: BIG JUMP appearanceRate (0.35→0.55) - Rival presence
-    // LB3: BIG JUMP specialEffect (0.30→1.00) - Energy regen mastered
-    // LB4: BIG JUMP baseStats (0.55→1.00) - Champion power revealed
+    // LB0: Arrogant rival - Speed specialist, balanced stats, no special effect
+    // LB1: BIG JUMP initialFriendship (15→25) - Respects you now
+    // LB2: BIG JUMP appearanceRate (0.40→0.55) - Rival presence
+    // LB3: BIG JUMP trainingBonus (0.70→1.00) - Training rivalry peaks
+    // LB4: BIG JUMP baseStats (0.60→1.00) - Champion power revealed
     progression: [
-      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.05, initialFriendship: 10, specialEffect: 0.30 },
-      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 0.30 },
-      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 0.30 },
-      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 1.00 }
+      { baseStats: 0.60, trainingBonus: 0.70, appearanceRate: 0.40, typeMatchPreference: 0.05, initialFriendship: 15, specialEffect: 0 },
+      { baseStats: 0.60, trainingBonus: 0.70, appearanceRate: 0.40, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 0 },
+      { baseStats: 0.60, trainingBonus: 0.70, appearanceRate: 0.55, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 0 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 0 }
     ]
   },
 
@@ -1801,17 +1801,17 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Milo: {
-    // LB0: Friendly farmer Grass leader - very high friendship
-    // LB1: BIG JUMP appearanceRate (0.45→0.55) - Always there to help
-    // LB2: BIG JUMP initialFriendship (40→52) - Instant farmhand buddy
-    // LB3: BIG JUMP specialEffect (0.55→1.00) - Farm training mastered
-    // LB4: BIG JUMP baseStats (0.65→1.00) - Full farmer strength
+    // LB0: Friendly farmer Grass leader - HP specialist, no special effect
+    // LB1: BIG JUMP initialFriendship (40→50) - Instant farmhand buddy
+    // LB2: BIG JUMP appearanceRate (0.48→0.58) - Always there to help
+    // LB3: BIG JUMP trainingBonus (0.70→1.00) - Farm training mastered
+    // LB4: BIG JUMP typeMatchPreference (0.10→0.15) - Grass growth wisdom
     progression: [
-      { baseStats: 0.65, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 0.55 },
-      { baseStats: 0.65, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 0.55 },
-      { baseStats: 0.65, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.25, initialFriendship: 52, specialEffect: 0.55 },
-      { baseStats: 0.65, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.25, initialFriendship: 52, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.25, initialFriendship: 52, specialEffect: 1.00 }
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.48, typeMatchPreference: 0.10, initialFriendship: 40, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.48, typeMatchPreference: 0.10, initialFriendship: 50, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.58, typeMatchPreference: 0.10, initialFriendship: 50, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.58, typeMatchPreference: 0.10, initialFriendship: 50, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.58, typeMatchPreference: 0.15, initialFriendship: 50, specialEffect: 0 }
     ]
   },
 
@@ -1876,17 +1876,17 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Kieran: {
-    // LB0: Shy rival - grows through competition
-    // LB1: BIG JUMP typeMatchPreference (0.24→0.40) - Type mastery emerges
-    // LB2: BIG JUMP initialFriendship (20→38) - True bond formed
-    // LB3: BIG JUMP specialEffect (0.50→1.00) - Instinct mastered
-    // LB4: BIG JUMP appearanceRate (0.28→0.42) - Confident presence
+    // LB0: Shy rival - Instinct specialist, no special effect
+    // LB1: BIG JUMP typeMatchPreference (0.15→0.25) - Type mastery emerges
+    // LB2: BIG JUMP initialFriendship (15→20) - True bond formed
+    // LB3: BIG JUMP trainingBonus (0.70→1.00) - Training confidence
+    // LB4: BIG JUMP appearanceRate (0.42→0.52) - Confident presence
     progression: [
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.28, typeMatchPreference: 0.24, initialFriendship: 20, specialEffect: 0.50 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.28, typeMatchPreference: 0.40, initialFriendship: 20, specialEffect: 0.50 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.28, typeMatchPreference: 0.40, initialFriendship: 38, specialEffect: 0.50 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.28, typeMatchPreference: 0.40, initialFriendship: 38, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.42, typeMatchPreference: 0.40, initialFriendship: 38, specialEffect: 1.00 }
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.42, typeMatchPreference: 0.15, initialFriendship: 15, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.42, typeMatchPreference: 0.25, initialFriendship: 15, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.70, appearanceRate: 0.42, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.42, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0 }
     ]
   },
 
@@ -1970,17 +1970,17 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Pryce: {
-    // LB0: Mahogany's Ice gym leader - Defense support, recovery special (maxEnergyBonus, restBonus)
-    // LB1: BIG JUMP specialEffect (0.50→1.00) - Recovery power surge
-    // LB2: BIG JUMP appearanceRate (0.42→0.50) - More available
-    // LB3: BIG JUMP initialFriendship (28→35) - Deep bond formed
-    // LB4: BIG JUMP trainingBonus (0.80→1.00) - Full elder wisdom
+    // LB0: Mahogany's Ice gym leader - Defense specialist, no special effect
+    // LB1: BIG JUMP initialFriendship (28→35) - Elder wisdom shared
+    // LB2: BIG JUMP appearanceRate (0.45→0.55) - More available
+    // LB3: BIG JUMP trainingBonus (0.80→1.00) - Full elder wisdom
+    // LB4: BIG JUMP typeMatchPreference (0.08→0.10) - Ice mastery
     progression: [
-      { baseStats: 1.00, trainingBonus: 0.80, appearanceRate: 0.42, typeMatchPreference: 0.10, initialFriendship: 28, specialEffect: 0.50 },
-      { baseStats: 1.00, trainingBonus: 0.80, appearanceRate: 0.42, typeMatchPreference: 0.10, initialFriendship: 28, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 0.80, appearanceRate: 0.50, typeMatchPreference: 0.10, initialFriendship: 28, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 0.80, appearanceRate: 0.50, typeMatchPreference: 0.10, initialFriendship: 35, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.10, initialFriendship: 35, specialEffect: 1.00 }
+      { baseStats: 1.00, trainingBonus: 0.80, appearanceRate: 0.45, typeMatchPreference: 0.08, initialFriendship: 28, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.80, appearanceRate: 0.45, typeMatchPreference: 0.08, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 0.80, appearanceRate: 0.55, typeMatchPreference: 0.08, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.08, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.10, initialFriendship: 35, specialEffect: 0 }
     ]
   },
 
