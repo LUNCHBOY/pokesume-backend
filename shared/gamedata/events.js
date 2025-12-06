@@ -3,7 +3,7 @@
  * Random events and hangout events for career mode
  */
 
-const RANDOM_EVENTS = {
+export const RANDOM_EVENTS = {
   // Stat increase events (10) - Stats reduced by 50%
   wildEncounter: {
     type: 'stat_increase',
@@ -647,7 +647,7 @@ const RANDOM_EVENTS = {
   }
 };
 
-const HANGOUT_EVENTS = {
+export const HANGOUT_EVENTS = {
   Cynthia: {
     name: 'Champion\'s Masterclass',
     description: 'Cynthia invites you to train with her!',
@@ -1075,7 +1075,3 @@ const HANGOUT_EVENTS = {
   }
 };
 
-module.exports = {
-  RANDOM_EVENTS,
-  HANGOUT_EVENTS
-};

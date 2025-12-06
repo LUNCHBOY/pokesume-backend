@@ -317,4 +317,4 @@ const MOVES = {
   SupremeVoltage: { type: 'Electric', damage: 40, warmup: 5, cooldown: 6, stamina: 65, cost: 80, effect: { type: 'paralyze', chance: 0.4, duration: 5 } }
 };
 
-module.exports = { MOVES };
+export { MOVES };

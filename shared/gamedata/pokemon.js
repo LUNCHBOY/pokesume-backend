@@ -3,7 +3,7 @@
  * All Pokemon definitions with stats, types, abilities, etc.
  */
 
-const { calculateBaseStats } = require('./config');
+import { calculateBaseStats } from './config.js';
 
 const POKEMON = {
   // Starter Pokemon (5 total - players can start careers with these)
@@ -2619,7 +2619,7 @@ const LEGENDARY_POKEMON = {
   }
 };
 
-module.exports = {
+export {
   POKEMON,
   LEGENDARY_POKEMON
 };

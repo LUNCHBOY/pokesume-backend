@@ -1977,7 +1977,7 @@ function processWeatherEffects(battleState) {
   return messages;
 }
 
-module.exports = {
+export {
   simulateBattle,
   GAME_CONFIG,
   MOVES

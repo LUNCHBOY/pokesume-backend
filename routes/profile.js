@@ -1,7 +1,7 @@
-const express = require('express');
-const db = require('../config/database');
-const authenticateToken = require('../middleware/auth');
-const { GYM_BADGES } = require('../services/tournamentProcessor');
+import express from 'express';
+import * as db from '../config/database.js';
+import authenticateToken from '../middleware/auth.js';
+import { GYM_BADGES } from '../services/tournamentProcessor.js';
 
 const router = express.Router();
 
@@ -272,4 +272,4 @@ router.get('/badges', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -3,11 +3,12 @@
  * Handles Pokemon and Support Card inventories with Limit Break system
  */
 
-const express = require('express');
+import express from 'express';
+import { pool } from '../config/database.js';
+import authenticateToken from '../middleware/auth.js';
+import { POKEMON, LEGENDARY_POKEMON, GACHA_RARITY, SUPPORT_CARDS, SUPPORT_GACHA_RARITY } from '../shared/gameData.js';
+
 const router = express.Router();
-const { pool } = require('../config/database');
-const authenticateToken = require('../middleware/auth');
-const { POKEMON, LEGENDARY_POKEMON, GACHA_RARITY, SUPPORT_CARDS, SUPPORT_GACHA_RARITY } = require('../shared/gameData');
 
 // Limit break shard rewards by rarity (when pulling max limit break duplicates)
 const LIMIT_BREAK_SHARD_REWARDS = {
@@ -758,4 +759,4 @@ router.put('/support-decks/:deckIndex', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

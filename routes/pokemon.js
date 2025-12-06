@@ -1,6 +1,6 @@
-const express = require('express');
-const db = require('../config/database');
-const authenticateToken = require('../middleware/auth');
+import express from 'express';
+import * as db from '../config/database.js';
+import authenticateToken from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -60,7 +60,7 @@ router.post('/roster', authenticateToken, async (req, res) => {
 router.get('/rosters', authenticateToken, async (req, res) => {
   try {
     console.log('[GET /rosters] User ID from token:', req.user.userId);
-    
+
     const { limit = 10, offset = 0 } = req.query;
     const result = await db.query(
       `SELECT id, pokemon_data, turn_number, created_at
@@ -70,7 +70,7 @@ router.get('/rosters', authenticateToken, async (req, res) => {
        LIMIT $2 OFFSET $3`,
       [req.user.userId, limit, offset]
     );
-    
+
     console.log('[GET /rosters] Found', result.rows.length, 'rosters');
     res.json({ rosters: result.rows });
   } catch (error) {
@@ -120,4 +120,4 @@ router.delete('/roster/:rosterId', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

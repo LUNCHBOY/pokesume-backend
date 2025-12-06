@@ -14,4 +14,4 @@
  * - gacha.js: GACHA_RARITY
  */
 
-module.exports = require('./gamedata/index');
+export * from './gamedata/index.js';

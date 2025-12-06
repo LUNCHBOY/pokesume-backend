@@ -3,12 +3,13 @@
  * Handles active career state and progression
  */
 
-const express = require('express');
+import express from 'express';
+import { pool } from '../config/database.js';
+import authenticateToken from '../middleware/auth.js';
+import { simulateBattle } from '../services/battleSimulator.js';
+import { LEGENDARY_POKEMON, GYM_LEADER_POKEMON, ELITE_FOUR, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS, EVOLUTION_CHAINS, getSupportAtLimitBreak, MOVES } from '../shared/gameData.js';
+
 const router = express.Router();
-const { pool } = require('../config/database');
-const authenticateToken = require('../middleware/auth');
-const { simulateBattle } = require('../services/battleSimulator');
-const { LEGENDARY_POKEMON, GYM_LEADER_POKEMON, ELITE_FOUR, POKEMON, GAME_CONFIG, RANDOM_EVENTS, HANGOUT_EVENTS, SUPPORT_CARDS, EVOLUTION_CHAINS, getSupportAtLimitBreak } = require('../shared/gameData');
 
 // Helper function to get all Pokemon in the same evolution chain
 const getEvolutionChainMembers = (pokemonName) => {
@@ -1808,7 +1809,6 @@ router.post('/learn-ability', authenticateToken, async (req, res) => {
     const careerState = careerResult.rows[0].career_state;
 
     // Validate move exists and is learnable
-    const { MOVES } = require('../shared/gameData');
     const move = MOVES[moveName];
     if (!move) {
       return res.status(400).json({ error: 'Invalid move' });
@@ -2503,4 +2503,4 @@ router.put('/update', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

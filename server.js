@@ -1,18 +1,18 @@
-const cron = require('node-cron');
-const { processTournaments } = require('./services/tournamentProcessor');
-const matchmaker = require('./services/matchmaker');
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const http = require('http');
-const socketIo = require('socket.io');
+import cron from 'node-cron';
+import { processTournaments } from './services/tournamentProcessor.js';
+import matchmaker from './services/matchmaker.js';
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import http from 'http';
+import { Server } from 'socket.io';
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
+const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
     methods: ['GET', 'POST']
@@ -25,15 +25,15 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const pokemonRoutes = require('./routes/pokemon');
-const pvpRoutes = require('./routes/pvp');
-const leaderboardRoutes = require('./routes/leaderboard');
-const tournamentRoutes = require('./routes/tournaments');
-const careerRoutes = require('./routes/career');
-const inventoryRoutes = require('./routes/inventory');
-const profileRoutes = require('./routes/profile');
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/users.js';
+import pokemonRoutes from './routes/pokemon.js';
+import pvpRoutes from './routes/pvp.js';
+import leaderboardRoutes from './routes/leaderboard.js';
+import tournamentRoutes from './routes/tournaments.js';
+import careerRoutes from './routes/career.js';
+import inventoryRoutes from './routes/inventory.js';
+import profileRoutes from './routes/profile.js';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -53,7 +53,7 @@ app.get('/api/health', (req, res) => {
 // Socket.io connection handling
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
-  
+
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
   });
@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ 
+  res.status(500).json({
     error: 'Internal server error',
     message: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
@@ -85,4 +85,4 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
-module.exports = { app, io };
+export { app, io };

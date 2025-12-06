@@ -1,5 +1,5 @@
-const db = require('../config/database');
-const { simulateBattle } = require('./battleSimulator');
+import * as db from '../config/database.js';
+import { simulateBattle } from './battleSimulator.js';
 
 // Gym-themed tournament configuration with battle conditions
 const GYM_BADGES = [
@@ -886,4 +886,4 @@ function startTournamentProcessor() {
   setInterval(processTournaments, 15 * 1000);
 }
 
-module.exports = { startTournamentProcessor, processTournaments, createScheduledTournament, GYM_BADGES };
+export { startTournamentProcessor, processTournaments, createScheduledTournament, GYM_BADGES };

@@ -1,6 +1,6 @@
-const express = require('express');
-const db = require('../config/database');
-const authenticateToken = require('../middleware/auth');
+import express from 'express';
+import * as db from '../config/database.js';
+import authenticateToken from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -30,7 +30,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
 router.get('/stats', authenticateToken, async (req, res) => {
   try {
     const result = await db.query(
-      `SELECT 
+      `SELECT
         (SELECT COUNT(*) FROM pvp_matches WHERE winner_id = $1) as total_wins,
         (SELECT COUNT(*) FROM pvp_matches WHERE (player1_id = $1 OR player2_id = $1) AND winner_id != $1) as total_losses,
         (SELECT COUNT(*) FROM pokemon_rosters WHERE user_id = $1) as total_pokemon,
@@ -47,4 +47,4 @@ router.get('/stats', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

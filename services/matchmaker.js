@@ -4,8 +4,8 @@
  * Runs every 5 seconds to match players and simulate battles
  */
 
-const db = require('../config/database');
-const { simulateBattle } = require('./battleSimulator');
+import * as db from '../config/database.js';
+import { simulateBattle } from './battleSimulator.js';
 
 // Configuration
 const CONFIG = {
@@ -720,7 +720,7 @@ function stop() {
   }
 }
 
-module.exports = {
+export default {
   start,
   stop,
   processQueue,

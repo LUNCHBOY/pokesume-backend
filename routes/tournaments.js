@@ -1,8 +1,8 @@
-const express = require('express');
-const db = require('../config/database');
-const authenticateToken = require('../middleware/auth');
-const { simulateBattle } = require('../services/battleSimulator');
-const { GYM_BADGES } = require('../services/tournamentProcessor');
+import express from 'express';
+import db from '../config/database.js';
+import authenticateToken from '../middleware/auth.js';
+import { simulateBattle } from '../services/battleSimulator.js';
+import { GYM_BADGES } from '../services/tournamentProcessor.js';
 
 const router = express.Router();
 
@@ -115,7 +115,7 @@ router.get('/:tournamentId', async (req, res) => {
 
     // Get entries
     const entriesResult = await db.query(
-      `SELECT 
+      `SELECT
         te.id,
         te.bracket_position,
         te.joined_at,
@@ -202,7 +202,7 @@ router.post('/:tournamentId/enter', authenticateToken, async (req, res) => {
 
     // Insert entry
     const result = await db.query(
-      `INSERT INTO tournament_entries 
+      `INSERT INTO tournament_entries
         (tournament_id, user_id, pokemon1_roster_id, pokemon2_roster_id, pokemon3_roster_id, joined_at)
        VALUES ($1, $2, $3, $4, $5, NOW())
        RETURNING id, joined_at`,
@@ -426,4 +426,4 @@ router.post('/matches/:matchId/simulate', authenticateToken, async (req, res) =>
   }
 });
 
-module.exports = router;
+export default router;

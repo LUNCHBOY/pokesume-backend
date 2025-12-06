@@ -1,9 +1,9 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { OAuth2Client } = require('google-auth-library');
-const db = require('../config/database');
-const { SUPPORT_CARDS } = require('../shared/gameData');
+import express from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
+import { query as db } from '../config/database.js';
+import { SUPPORT_CARDS } from '../shared/gameData.js';
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ async function grantStarterSupports(userId) {
     for (const supportName of STARTER_SUPPORTS) {
       const supportData = SUPPORT_CARDS[supportName];
       if (supportData) {
-        await db.query(
+        await db(
           `INSERT INTO support_inventory (user_id, support_name, support_data)
            VALUES ($1, $2, $3)`,
           [userId, supportName, JSON.stringify(supportData)]
@@ -51,7 +51,7 @@ router.post('/register', async (req, res) => {
     }
 
     // Check if user exists
-    const existingUser = await db.query(
+    const existingUser = await db(
       'SELECT id FROM users WHERE username = $1 OR email = $2',
       [username, email]
     );
@@ -64,7 +64,7 @@ router.post('/register', async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
 
     // Create user with starting primos (10000 for new accounts)
-    const result = await db.query(
+    const result = await db(
       `INSERT INTO users (username, email, password_hash, rating, primos, created_at)
        VALUES ($1, $2, $3, 1000, 10000, NOW())
        RETURNING id, username, email, rating, primos, created_at`,
@@ -110,7 +110,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Find user
-    const result = await db.query(
+    const result = await db(
       'SELECT id, username, email, password_hash, rating FROM users WHERE username = $1',
       [username]
     );
@@ -163,7 +163,7 @@ router.get('/verify', async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const result = await db.query(
+    const result = await db(
       'SELECT id, username, email, rating FROM users WHERE id = $1',
       [decoded.userId]
     );
@@ -199,7 +199,7 @@ router.post('/google', async (req, res) => {
     const name = payload.name;
 
     // Check if user exists with this Google ID
-    let result = await db.query(
+    let result = await db(
       'SELECT id, username, email, rating, needs_username FROM users WHERE google_id = $1',
       [googleId]
     );
@@ -212,7 +212,7 @@ router.post('/google', async (req, res) => {
       user = result.rows[0];
     } else {
       // Check if email already exists (link accounts)
-      result = await db.query(
+      result = await db(
         'SELECT id, username, email, rating, google_id FROM users WHERE email = $1',
         [email]
       );
@@ -220,7 +220,7 @@ router.post('/google', async (req, res) => {
       if (result.rows.length > 0) {
         // Link Google account to existing user
         user = result.rows[0];
-        await db.query(
+        await db(
           'UPDATE users SET google_id = $1 WHERE id = $2',
           [googleId, user.id]
         );
@@ -230,7 +230,7 @@ router.post('/google', async (req, res) => {
         const tempUsername = `Trainer${Date.now()}`;
 
         // Create the new user with temporary username (10000 starting primos)
-        result = await db.query(
+        result = await db(
           `INSERT INTO users (username, email, google_id, rating, primos, needs_username, created_at)
            VALUES ($1, $2, $3, 1000, 10000, true, NOW())
            RETURNING id, username, email, rating, primos, needs_username, created_at`,
@@ -297,7 +297,7 @@ router.post('/set-username', async (req, res) => {
     }
 
     // Check if username is taken
-    const existing = await db.query(
+    const existing = await db(
       'SELECT id FROM users WHERE username = $1 AND id != $2',
       [username, decoded.userId]
     );
@@ -307,7 +307,7 @@ router.post('/set-username', async (req, res) => {
     }
 
     // Update username and clear needs_username flag
-    const result = await db.query(
+    const result = await db(
       `UPDATE users SET username = $1, needs_username = false
        WHERE id = $2
        RETURNING id, username, email, rating`,
@@ -344,4 +344,4 @@ router.post('/set-username', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

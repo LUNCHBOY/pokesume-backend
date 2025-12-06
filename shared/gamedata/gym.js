@@ -634,7 +634,7 @@ const ELITE_FOUR = [
   }
 ];
 
-module.exports = {
+export {
   GYM_LEADER_POKEMON,
   ELITE_FOUR
 };

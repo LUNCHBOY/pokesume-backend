@@ -77,4 +77,4 @@ const GACHA_RARITY = {
     }
 };
 
-module.exports = { GACHA_RARITY };
+export { GACHA_RARITY };

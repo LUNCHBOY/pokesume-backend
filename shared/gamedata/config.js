@@ -3,7 +3,7 @@
  * Core configuration constants and utility functions
  */
 
-const ICONS = {
+export const ICONS = {
   SLEEPING: '\u{1F4A4}',
   CHECKMARK: '\u2713',
   CHECK: '\u2713',
@@ -15,7 +15,7 @@ const ICONS = {
   CLOSE: '\u00D7'
 };
 
-const EVOLUTION_CONFIG = {
+export const EVOLUTION_CONFIG = {
   GRADE_REQUIREMENTS: {
     STAGE_1: 'C',
     STAGE_2: 'A'
@@ -33,7 +33,7 @@ const EVOLUTION_CONFIG = {
   }
 };
 
-const EVOLUTION_CHAINS = {
+export const EVOLUTION_CHAINS = {
   'Charmander': { stage1: 'Charmeleon', stage2: 'Charizard', stages: 2 },
   'Squirtle': { stage1: 'Wartortle', stage2: 'Blastoise', stages: 2 },
   'Bulbasaur': { stage1: 'Ivysaur', stage2: 'Venusaur', stages: 2 },
@@ -214,7 +214,7 @@ const EVOLUTION_CHAINS = {
   'Pumpkaboo': { stage1: 'Gourgeist', stage2: null, stages: 1 }
 };
 
-const GAME_CONFIG = {
+export const GAME_CONFIG = {
   CAREER: {
     TOTAL_TURNS: 60,
     GYM_LEADER_INTERVAL: 12,
@@ -227,7 +227,7 @@ const GAME_CONFIG = {
     GYM_ABILITY_COUNTS: [3, 4, 4, 5],
     ELITE_FOUR_ABILITY_COUNT: 6,
     // Global multiplier applied to all enemy Pokemon stats (wild, event, gym leaders, Elite Four)
-    ENEMY_STAT_MULTIPLIER: 1.0,
+    ENEMY_STAT_MULTIPLIER: 0.8,
     // Additional difficulty scaling that accelerates over the career (0% at start, this % at Elite Four)
     DIFFICULTY_SCALING_MAX: 0.15
   },
@@ -289,7 +289,7 @@ const GAME_CONFIG = {
   }
 };
 
-const calculateBaseStats = (rawStats, evolutionStages) => {
+export const calculateBaseStats = (rawStats, evolutionStages) => {
   let multiplier = EVOLUTION_CONFIG.BASE_STAT_MULTIPLIERS.TWO_EVOLUTIONS;
 
   if (evolutionStages === 0) {
@@ -319,10 +319,3 @@ const calculateBaseStats = (rawStats, evolutionStages) => {
   return adjustedStats;
 };
 
-module.exports = {
-  ICONS,
-  EVOLUTION_CONFIG,
-  EVOLUTION_CHAINS,
-  GAME_CONFIG,
-  calculateBaseStats
-};

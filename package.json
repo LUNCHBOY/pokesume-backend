@@ -1,6 +1,7 @@
 {
   "name": "pokesume-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "Backend API server for Pokesume PVP game",
   "main": "server.js",
   "scripts": {

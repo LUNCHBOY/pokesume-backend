@@ -1,4 +1,5 @@
-const { Pool } = require('pg');
+import pg from 'pg';
+const { Pool } = pg;
 
 // Only use SSL for production (Railway) - local PostgreSQL typically doesn't support SSL
 const isProduction = process.env.NODE_ENV === 'production';
@@ -21,7 +22,6 @@ pool.on('connect', () => {
   console.log('[DB] Connected to PostgreSQL');
 });
 
-module.exports = {
-  query: (text, params) => pool.query(text, params),
-  pool
-};
+const query = (text, params) => pool.query(text, params);
+
+export { query, pool };

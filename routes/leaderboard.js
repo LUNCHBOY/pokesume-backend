@@ -1,6 +1,6 @@
-const express = require('express');
-const db = require('../config/database');
-const authenticateToken = require('../middleware/auth');
+import express from 'express';
+import * as db from '../config/database.js';
+import authenticateToken from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const { limit = 100, offset = 0 } = req.query;
 
     const result = await db.query(
-      `SELECT 
+      `SELECT
         u.id,
         u.username,
         u.rating,
@@ -36,7 +36,7 @@ router.get('/rank', authenticateToken, async (req, res) => {
   try {
     const result = await db.query(
       `WITH ranked_users AS (
-        SELECT 
+        SELECT
           u.id,
           u.username,
           u.rating,
@@ -51,9 +51,9 @@ router.get('/rank', authenticateToken, async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.json({ 
-        rank: null, 
-        message: 'User not ranked (no PVP matches played)' 
+      return res.json({
+        rank: null,
+        message: 'User not ranked (no PVP matches played)'
       });
     }
 
@@ -70,7 +70,7 @@ router.get('/top-wins', async (req, res) => {
     const { limit = 10 } = req.query;
 
     const result = await db.query(
-      `SELECT 
+      `SELECT
         u.id,
         u.username,
         u.rating,
@@ -90,4 +90,4 @@ router.get('/top-wins', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
