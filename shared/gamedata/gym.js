@@ -586,7 +586,7 @@ const ELITE_FOUR = [
     pokemon: {
       name: 'Cloyster',
       primaryType: 'Water',
-      baseStats: { HP: 120, Attack: 100, Defense: 180, Instinct: 90, Speed: 70 },
+      baseStats: { HP: 132, Attack: 110, Defense: 198, Instinct: 99, Speed: 77 },
       typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'B', Electric: 'C', Fighting: 'C' },
       strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
       defaultAbilities: ['HydroPump', 'Blizzard', 'IceBeam'],
@@ -599,7 +599,7 @@ const ELITE_FOUR = [
     pokemon: {
       name: 'Machamp',
       primaryType: 'Fighting',
-      baseStats: { HP: 140, Attack: 145, Defense: 95, Instinct: 75, Speed: 65 },
+      baseStats: { HP: 154, Attack: 160, Defense: 105, Instinct: 83, Speed: 72 },
       typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'D', Electric: 'C', Fighting: 'S' },
       strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
       defaultAbilities: ['CloseCombat', 'Earthquake', 'StoneEdge'],
@@ -612,7 +612,7 @@ const ELITE_FOUR = [
     pokemon: {
       name: 'Gengar',
       primaryType: 'Psychic',
-      baseStats: { HP: 110, Attack: 140, Defense: 70, Instinct: 145, Speed: 130 },
+      baseStats: { HP: 121, Attack: 154, Defense: 77, Instinct: 160, Speed: 143 },
       typeAptitudes: { Fire: 'B', Water: 'B', Grass: 'C', Psychic: 'S', Electric: 'D', Fighting: 'B' },
       strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
       defaultAbilities: ['ShadowBall', 'PsychicBlast', 'DarkPulse'],
@@ -625,7 +625,7 @@ const ELITE_FOUR = [
     pokemon: {
       name: 'Dragonite',
       primaryType: 'Fighting',
-      baseStats: { HP: 145, Attack: 145, Defense: 100, Instinct: 110, Speed: 90 },
+      baseStats: { HP: 160, Attack: 160, Defense: 110, Instinct: 121, Speed: 99 },
       typeAptitudes: { Fire: 'A', Water: 'A', Grass: 'A', Psychic: 'B', Electric: 'A', Fighting: 'S' },
       strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
       defaultAbilities: ['DragonClaw', 'HyperBeam', 'Earthquake'],

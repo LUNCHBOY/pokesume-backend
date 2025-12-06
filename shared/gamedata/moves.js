@@ -45,141 +45,89 @@ export const MOVES = {
   // ============================================================================
 
   // === FIRE MID-TIER ===
-  // Flamethrower: The standard - reliable damage with burn chance
   Flamethrower: { type: 'Fire', damage: 28, warmup: 2, cooldown: 4, stamina: 45, cost: 55, effect: { type: 'burn', chance: 0.25, duration: 4, damage: 3 } },
-  // FireFang: Fast attacker's choice - quick with flinch
   FireFang: { type: 'Fire', damage: 18, warmup: 0, cooldown: 3, stamina: 28, cost: 48, effect: { type: 'flinch', chance: 0.35 } },
-  // LavaPlume: Defensive option - spreads burn more reliably
   LavaPlume: { type: 'Fire', damage: 22, warmup: 3, cooldown: 4, stamina: 40, cost: 52, effect: { type: 'burn', chance: 0.5, duration: 5, damage: 4 } },
-  // FlameCharge: Speed booster - damage is secondary
   FlameCharge: { type: 'Fire', damage: 14, warmup: 0, cooldown: 3, stamina: 25, cost: 45, effect: { type: 'buff_speed', chance: 1.0, duration: 8 } },
 
   // === WATER MID-TIER ===
-  // Surf: The standard - solid damage, wide coverage
   Surf: { type: 'Water', damage: 28, warmup: 2, cooldown: 4, stamina: 45, cost: 55, effect: null },
-  // IceBeam: Utility option - can freeze, slightly less damage
   IceBeam: { type: 'Water', damage: 24, warmup: 3, cooldown: 4, stamina: 48, cost: 60, effect: { type: 'freeze', chance: 0.2, duration: 3 } },
-  // Scald: Burn from water! Great for defensive play
   Scald: { type: 'Water', damage: 22, warmup: 2, cooldown: 3, stamina: 38, cost: 55, effect: { type: 'burn', chance: 0.4, duration: 4, damage: 3 } },
-  // AquaJet: Fast water move - quick strike with speed boost
   AquaJet: { type: 'Water', damage: 14, warmup: 0, cooldown: 2, stamina: 22, cost: 45, effect: { type: 'buff_speed', chance: 0.3, duration: 3 } },
 
   // === GRASS MID-TIER ===
-  // RazorLeaf: High crit chance - gambler's choice
   RazorLeaf: { type: 'Grass', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 50, effect: { type: 'high_crit' } },
-  // GigaDrain: Sustain option - heal while dealing damage
   GigaDrain: { type: 'Grass', damage: 20, warmup: 3, cooldown: 4, stamina: 35, cost: 58, effect: { type: 'drain', chance: 1.0, healPercent: 0.5 } },
-  // LeafBlade: Fast and sharp - quick high crit
   LeafBlade: { type: 'Grass', damage: 26, warmup: 1, cooldown: 3, stamina: 40, cost: 55, effect: { type: 'high_crit' } },
-  // SleepPowder: Pure utility - no damage but puts to sleep
   SleepPowder: { type: 'Grass', damage: 0, warmup: 2, cooldown: 6, stamina: 30, cost: 52, effect: { type: 'sleep', chance: 0.75, duration: 4 } },
 
   // === PSYCHIC MID-TIER ===
-  // Psychic: The standard - solid damage with defense drop
   Psychic: { type: 'Psychic', damage: 26, warmup: 2, cooldown: 4, stamina: 45, cost: 55, effect: { type: 'debuff_defense', chance: 0.3, duration: 5 } },
-  // Psyshock: Psychic hit that ignores some defense - debuffs defense
   Psyshock: { type: 'Psychic', damage: 24, warmup: 2, cooldown: 3, stamina: 40, cost: 52, effect: { type: 'debuff_defense', chance: 0.5, duration: 4 } },
-  // Hypnosis: High risk, high reward sleep
   Hypnosis: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 5, stamina: 25, cost: 48, effect: { type: 'sleep', chance: 0.6, duration: 4 } },
-  // ShadowBall: Ghost coverage - defense shredder
   ShadowBall: { type: 'Psychic', damage: 24, warmup: 2, cooldown: 3, stamina: 42, cost: 55, effect: { type: 'debuff_defense', chance: 0.35, duration: 6 } },
 
   // === ELECTRIC MID-TIER ===
-  // Thunderbolt: The standard - reliable with paralysis
   Thunderbolt: { type: 'Electric', damage: 26, warmup: 2, cooldown: 4, stamina: 45, cost: 55, effect: { type: 'paralyze', chance: 0.3, duration: 4 } },
-  // VoltSwitch: Hit and energize - momentum move
   VoltSwitch: { type: 'Electric', damage: 18, warmup: 0, cooldown: 3, stamina: 28, cost: 48, effect: { type: 'energize', chance: 0.5, staminaBoost: 8 } },
-  // Discharge: Spread paralysis - higher chance, less damage
   Discharge: { type: 'Electric', damage: 22, warmup: 2, cooldown: 3, stamina: 40, cost: 52, effect: { type: 'paralyze', chance: 0.45, duration: 4 } },
-  // ThunderWave: Pure utility - guaranteed paralysis
   ThunderWave: { type: 'Electric', damage: 0, warmup: 1, cooldown: 4, stamina: 25, cost: 45, effect: { type: 'paralyze', chance: 0.95, duration: 6 } },
 
   // === FIGHTING MID-TIER ===
-  // BrickBreak: Barrier breaker - removes hazards
   BrickBreak: { type: 'Fighting', damage: 24, warmup: 2, cooldown: 3, stamina: 38, cost: 50, effect: { type: 'remove_hazards' } },
-  // DrainPunch: Sustain fighter - heal while punching
   DrainPunch: { type: 'Fighting', damage: 20, warmup: 2, cooldown: 3, stamina: 35, cost: 55, effect: { type: 'drain', chance: 1.0, healPercent: 0.5 } },
-  // RockSlide: Coverage move - flinch chance
   RockSlide: { type: 'Fighting', damage: 22, warmup: 2, cooldown: 3, stamina: 40, cost: 52, effect: { type: 'flinch', chance: 0.35 } },
-  // MachPunch: Fast fighting move - quick strike with speed boost
   MachPunch: { type: 'Fighting', damage: 14, warmup: 0, cooldown: 2, stamina: 22, cost: 45, effect: { type: 'buff_speed', chance: 0.3, duration: 3 } },
 
   // === NORMAL MID-TIER ===
-  // BodySlam: Reliable with paralysis chance
   BodySlam: { type: 'Normal', damage: 24, warmup: 2, cooldown: 3, stamina: 40, cost: 50, effect: { type: 'paralyze', chance: 0.35, duration: 4 } },
-  // ExtremeSpeed: Blazing fast attack - guaranteed speed boost
   ExtremeSpeed: { type: 'Normal', damage: 22, warmup: 0, cooldown: 3, stamina: 38, cost: 65, effect: { type: 'buff_speed', chance: 1.0, duration: 4 } },
-  // AerialAce: Precise aerial strike - can flinch
   AerialAce: { type: 'Normal', damage: 18, warmup: 0, cooldown: 2, stamina: 28, cost: 42, effect: { type: 'flinch', chance: 0.2 } },
-  // PayDay: Makes money... I mean stamina
   PayDay: { type: 'Normal', damage: 14, warmup: 0, cooldown: 2, stamina: 20, cost: 38, effect: { type: 'energize', chance: 0.7, staminaBoost: 8 } },
 
   // ============================================================================
   // HIGH-TIER MOVES (Cost 80-100) - Powerful but expensive
-  // These define endgame builds
   // ============================================================================
 
   // === FIRE HIGH-TIER ===
-  // FireBlast: Raw power with burn - the big gun
   FireBlast: { type: 'Fire', damage: 38, warmup: 4, cooldown: 5, stamina: 60, cost: 85, effect: { type: 'burn', chance: 0.35, duration: 5, damage: 4 } },
-  // FlareBlitz: Maximum damage with recoil - glass cannon
   FlareBlitz: { type: 'Fire', damage: 42, warmup: 3, cooldown: 5, stamina: 55, cost: 90, effect: { type: 'recoil', damagePercent: 0.25 } },
-  // Overheat: Nuke but weakens you - one-shot potential
   Overheat: { type: 'Fire', damage: 48, warmup: 4, cooldown: 6, stamina: 65, cost: 95, effect: { type: 'debuff_instinct_self', duration: 10 } },
 
   // === WATER HIGH-TIER ===
-  // HydroPump: Raw water power - devastating with small debuff
   HydroPump: { type: 'Water', damage: 40, warmup: 4, cooldown: 5, stamina: 60, cost: 85, effect: { type: 'debuff_defense', chance: 0.25, duration: 4 } },
-  // Blizzard: Ice nuke - freeze chance on high damage
   Blizzard: { type: 'Water', damage: 38, warmup: 5, cooldown: 6, stamina: 65, cost: 92, effect: { type: 'freeze', chance: 0.35, duration: 4 } },
-  // WaveCrash: Physical water nuke with recoil
   WaveCrash: { type: 'Water', damage: 44, warmup: 3, cooldown: 5, stamina: 58, cost: 90, effect: { type: 'recoil', damagePercent: 0.25 } },
 
   // === GRASS HIGH-TIER ===
-  // SolarBeam: Charge up for massive damage - timing matters
   SolarBeam: { type: 'Grass', damage: 45, warmup: 6, cooldown: 4, stamina: 55, cost: 88, effect: null },
-  // PowerWhip: Physical grass nuke - high damage with flinch
   PowerWhip: { type: 'Grass', damage: 38, warmup: 3, cooldown: 5, stamina: 55, cost: 85, effect: { type: 'flinch', chance: 0.4 } },
-  // WoodHammer: Maximum grass damage with recoil
   WoodHammer: { type: 'Grass', damage: 44, warmup: 3, cooldown: 5, stamina: 58, cost: 90, effect: { type: 'recoil', damagePercent: 0.25 } },
 
   // === PSYCHIC HIGH-TIER ===
-  // PsychicBlast: Pure psychic devastation - guaranteed confuse
   PsychicBlast: { type: 'Psychic', damage: 38, warmup: 4, cooldown: 5, stamina: 60, cost: 88, effect: { type: 'confuse', chance: 0.8, duration: 5 } },
-  // FutureSight: Delayed massive damage - strategic timing
   FutureSight: { type: 'Psychic', damage: 50, warmup: 6, cooldown: 7, stamina: 55, cost: 95, effect: { type: 'delayed_damage', turns: 2 } },
-  // DreamEater: Only works on sleeping targets but devastating
   DreamEater: { type: 'Psychic', damage: 40, warmup: 3, cooldown: 5, stamina: 50, cost: 85, effect: { type: 'drain_sleep', healPercent: 0.6 } },
 
   // === ELECTRIC HIGH-TIER ===
-  // Thunder: Raw electric power - paralyzes on hit
   Thunder: { type: 'Electric', damage: 40, warmup: 4, cooldown: 5, stamina: 65, cost: 88, effect: { type: 'paralyze', chance: 0.4, duration: 5 } },
-  // WildCharge: Physical electric with recoil
   WildCharge: { type: 'Electric', damage: 38, warmup: 3, cooldown: 5, stamina: 55, cost: 85, effect: { type: 'recoil', damagePercent: 0.2 } },
-  // ZapCannon: Slow but near-guaranteed paralysis
   ZapCannon: { type: 'Electric', damage: 42, warmup: 5, cooldown: 6, stamina: 60, cost: 92, effect: { type: 'paralyze', chance: 0.9, duration: 5 } },
 
   // === FIGHTING HIGH-TIER ===
-  // CloseCombat: Maximum fighting damage, lowers your defenses
   CloseCombat: { type: 'Fighting', damage: 44, warmup: 3, cooldown: 5, stamina: 55, cost: 90, effect: { type: 'recoil', damagePercent: 0.15 } },
-  // Earthquake: Ground shaking power - massive AoE damage
   Earthquake: { type: 'Fighting', damage: 38, warmup: 4, cooldown: 5, stamina: 52, cost: 85, effect: { type: 'debuff_speed', chance: 0.5, duration: 4 } },
-  // AuraSphere: Reliable special fighting - debuffs instinct
   AuraSphere: { type: 'Fighting', damage: 32, warmup: 3, cooldown: 4, stamina: 50, cost: 80, effect: { type: 'debuff_instinct', chance: 0.3, duration: 5 } },
-  // DynamicPunch: Guaranteed confuse - powerful but risky
   DynamicPunch: { type: 'Fighting', damage: 36, warmup: 4, cooldown: 5, stamina: 55, cost: 85, effect: { type: 'confuse', chance: 1.0, duration: 4 } },
 
   // === NORMAL HIGH-TIER ===
-  // DoubleEdge: Maximum normal damage with harsh recoil
   DoubleEdge: { type: 'Normal', damage: 42, warmup: 3, cooldown: 5, stamina: 55, cost: 85, effect: { type: 'recoil', damagePercent: 0.3 } },
-  // HyperBeam: Ultimate normal nuke - exhausts you after
   HyperBeam: { type: 'Normal', damage: 50, warmup: 6, cooldown: 8, stamina: 70, cost: 95, effect: { type: 'exhaust', duration: 3 } },
-  // StoneEdge: Rock coverage - high crit chance
-  StoneEdge: { type: 'Normal', damage: 34, warmup: 3, cooldown: 4, stamina: 50, cost: 80, effect: { type: 'high_crit' } },
+  StoneEdge: { type: 'Fighting', damage: 34, warmup: 3, cooldown: 4, stamina: 50, cost: 80, effect: { type: 'high_crit' } },
 
   // ============================================================================
   // PREMIUM/SIGNATURE MOVES (Cost 100-150) - Elite moves
-  // These are the crown jewels - difficult to obtain but game-changing
   // ============================================================================
 
   // === LEGENDARY FIRE ===
@@ -223,7 +171,7 @@ export const MOVES = {
   DragonDance: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 75, effect: { type: 'buff_attack_speed', duration: 10 } },
   CalmMind: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 5, stamina: 30, cost: 65, effect: { type: 'buff_instinct', duration: 12 } },
   Agility: { type: 'Psychic', damage: 0, warmup: 0, cooldown: 4, stamina: 25, cost: 55, effect: { type: 'buff_speed', duration: 12, strength: 2 } },
-  IronDefense: { type: 'Normal', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 60, effect: { type: 'buff_defense', duration: 12, strength: 2 } },
+  IronDefense: { type: 'Fighting', damage: 0, warmup: 2, cooldown: 5, stamina: 30, cost: 60, effect: { type: 'buff_defense', duration: 12, strength: 2 } },
   NastyPlot: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 70, effect: { type: 'buff_instinct', duration: 12, strength: 2 } },
   BulkUp: { type: 'Fighting', damage: 0, warmup: 1, cooldown: 5, stamina: 30, cost: 60, effect: { type: 'buff_attack_defense', duration: 10 } },
   ShellSmash: { type: 'Normal', damage: 0, warmup: 2, cooldown: 7, stamina: 40, cost: 85, effect: { type: 'buff_attack_speed', duration: 10 } },
@@ -260,7 +208,7 @@ export const MOVES = {
   // ADDITIONAL MOVES - Curated selection with raised costs for premium options
   // ============================================================================
 
-  // === CHIPPER/QUICK MOVES (Cost 35-50) - Fast chip damage options ===
+  // === CHIPPER/QUICK MOVES (Cost 35-50) ===
   Incinerate: { type: 'Fire', damage: 15, warmup: 0, cooldown: 2, stamina: 22, cost: 38, effect: { type: 'burn', chance: 0.1, duration: 2, damage: 1 } },
   BubbleBeam: { type: 'Water', damage: 16, warmup: 0, cooldown: 2, stamina: 22, cost: 38, effect: { type: 'debuff_speed', chance: 0.15, duration: 4 } },
   BulletSeed: { type: 'Grass', damage: 12, warmup: 0, cooldown: 2, stamina: 20, cost: 35, effect: { type: 'consecutive_boost', maxHits: 5 } },
@@ -269,10 +217,10 @@ export const MOVES = {
   ChargeBeam: { type: 'Electric', damage: 12, warmup: 0, cooldown: 3, stamina: 20, cost: 42, effect: { type: 'buff_instinct', chance: 0.8, duration: 6 } },
   Confusion: { type: 'Psychic', damage: 14, warmup: 0, cooldown: 2, stamina: 20, cost: 35, effect: { type: 'confuse', chance: 0.15, duration: 2 } },
   ForcePalm: { type: 'Fighting', damage: 16, warmup: 0, cooldown: 2, stamina: 22, cost: 38, effect: { type: 'paralyze', chance: 0.25, duration: 2 } },
-  Bite: { type: 'Normal', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 35, effect: { type: 'flinch', chance: 0.25 } },
+  Bite: { type: 'Psychic', damage: 16, warmup: 0, cooldown: 2, stamina: 20, cost: 35, effect: { type: 'flinch', chance: 0.25 } },
   Swift: { type: 'Normal', damage: 18, warmup: 0, cooldown: 2, stamina: 24, cost: 42, effect: null },
 
-  // === COVERAGE MOVES (Cost 55-75) - Type coverage and utility ===
+  // === COVERAGE MOVES (Cost 55-75) ===
   AirSlash: { type: 'Normal', damage: 26, warmup: 2, cooldown: 3, stamina: 42, cost: 58, effect: { type: 'flinch', chance: 0.35 } },
   IcePunch: { type: 'Water', damage: 24, warmup: 2, cooldown: 3, stamina: 40, cost: 55, effect: { type: 'freeze', chance: 0.15, duration: 3 } },
   FirePunch: { type: 'Fire', damage: 24, warmup: 2, cooldown: 3, stamina: 40, cost: 55, effect: { type: 'burn', chance: 0.2, duration: 3, damage: 2 } },
@@ -284,12 +232,12 @@ export const MOVES = {
   SeedBomb: { type: 'Grass', damage: 28, warmup: 2, cooldown: 3, stamina: 44, cost: 60, effect: null },
   EnergyBall: { type: 'Grass', damage: 30, warmup: 3, cooldown: 4, stamina: 48, cost: 65, effect: { type: 'debuff_defense', chance: 0.15, duration: 8 } },
 
-  // === PUNCHING MOVES (Cost 50-65) - Physical contact options ===
+  // === PUNCHING MOVES (Cost 50-65) ===
   BulletPunch: { type: 'Fighting', damage: 14, warmup: 0, cooldown: 2, stamina: 22, cost: 48, effect: { type: 'buff_speed', chance: 0.3, duration: 3 } },
-  IronHead: { type: 'Normal', damage: 28, warmup: 2, cooldown: 3, stamina: 44, cost: 62, effect: { type: 'flinch', chance: 0.35 } },
-  IronTail: { type: 'Normal', damage: 32, warmup: 3, cooldown: 4, stamina: 52, cost: 72, effect: { type: 'debuff_defense', chance: 0.35, duration: 5 } },
+  IronHead: { type: 'Fighting', damage: 28, warmup: 2, cooldown: 3, stamina: 44, cost: 62, effect: { type: 'flinch', chance: 0.35 } },
+  IronTail: { type: 'Fighting', damage: 32, warmup: 3, cooldown: 4, stamina: 52, cost: 72, effect: { type: 'debuff_defense', chance: 0.35, duration: 5 } },
 
-  // === DRAGON-THEMED MOVES (Cost 70-95) - Powerful coverage ===
+  // === DRAGON-THEMED MOVES (Cost 70-95) ===
   DragonClaw: { type: 'Fighting', damage: 30, warmup: 2, cooldown: 3, stamina: 45, cost: 68, effect: null },
   DragonPulse: { type: 'Fire', damage: 32, warmup: 3, cooldown: 4, stamina: 48, cost: 72, effect: null },
   DracoMeteor: { type: 'Fire', damage: 48, warmup: 5, cooldown: 6, stamina: 70, cost: 105, effect: { type: 'debuff_instinct_self', duration: 8 } },
@@ -347,22 +295,22 @@ export const MOVES = {
   GMaxWildfire: { type: 'Fire', damage: 50, warmup: 5, cooldown: 7, stamina: 80, cost: 125, effect: { type: 'burn', chance: 0.6, duration: 6, damage: 6 } },
   WickedBlow: { type: 'Psychic', damage: 38, warmup: 3, cooldown: 5, stamina: 55, cost: 110, effect: { type: 'high_crit' } },
   DynamaxCannon: { type: 'Psychic', damage: 45, warmup: 5, cooldown: 6, stamina: 70, cost: 115, effect: { type: 'debuff_defense', chance: 0.4, duration: 5 } },
-  BehemothBlade: { type: 'Normal', damage: 45, warmup: 4, cooldown: 5, stamina: 65, cost: 115, effect: { type: 'high_crit' } },
-  BehemothBash: { type: 'Normal', damage: 42, warmup: 4, cooldown: 5, stamina: 62, cost: 110, effect: { type: 'buff_defense', chance: 0.5, duration: 8 } },
+  BehemothBlade: { type: 'Fighting', damage: 45, warmup: 4, cooldown: 5, stamina: 65, cost: 115, effect: { type: 'high_crit' } },
+  BehemothBash: { type: 'Fighting', damage: 42, warmup: 4, cooldown: 5, stamina: 62, cost: 110, effect: { type: 'buff_defense', chance: 0.5, duration: 8 } },
   SacredSword: { type: 'Fighting', damage: 35, warmup: 2, cooldown: 3, stamina: 50, cost: 95, effect: { type: 'debuff_defense', chance: 0.5, duration: 5 } },
-  TeraStarstorm: { type: 'Normal', damage: 42, warmup: 4, cooldown: 5, stamina: 65, cost: 110, effect: { type: 'buff_all', chance: 0.25 } },
-  GigatonHammer: { type: 'Normal', damage: 52, warmup: 5, cooldown: 8, stamina: 75, cost: 125, effect: { type: 'exhaust', duration: 2 } },
+  TeraStarstorm: { type: 'Psychic', damage: 42, warmup: 4, cooldown: 5, stamina: 65, cost: 110, effect: { type: 'buff_all', chance: 0.25 } },
+  GigatonHammer: { type: 'Fighting', damage: 52, warmup: 5, cooldown: 8, stamina: 75, cost: 125, effect: { type: 'exhaust', duration: 2 } },
   IvyCudgel: { type: 'Grass', damage: 35, warmup: 3, cooldown: 4, stamina: 50, cost: 92, effect: { type: 'high_crit' } },
 
-  // === MISCELLANEOUS MOVES needed for support cards ===
+  // === MISCELLANEOUS MOVES ===
   Slash: { type: 'Normal', damage: 24, warmup: 2, cooldown: 3, stamina: 40, cost: 52, effect: { type: 'high_crit' } },
-  AncientPower: { type: 'Normal', damage: 20, warmup: 2, cooldown: 3, stamina: 38, cost: 55, effect: { type: 'buff_all', chance: 0.12 } },
-  Moonblast: { type: 'Normal', damage: 32, warmup: 3, cooldown: 4, stamina: 50, cost: 70, effect: { type: 'debuff_instinct', chance: 0.35, duration: 6 } },
-  DazzlingGleam: { type: 'Normal', damage: 28, warmup: 3, cooldown: 4, stamina: 48, cost: 65, effect: { type: 'debuff_instinct', chance: 0.25, duration: 4 } },
-  PlayRough: { type: 'Normal', damage: 30, warmup: 2, cooldown: 4, stamina: 48, cost: 68, effect: { type: 'debuff_attack', chance: 0.25, duration: 5 } },
-  FlashCannon: { type: 'Normal', damage: 28, warmup: 3, cooldown: 4, stamina: 48, cost: 65, effect: { type: 'debuff_defense', chance: 0.15, duration: 8 } },
-  MeteorMash: { type: 'Normal', damage: 32, warmup: 3, cooldown: 4, stamina: 52, cost: 72, effect: { type: 'buff_attack', chance: 0.25, duration: 8 } },
-  SteelWing: { type: 'Normal', damage: 24, warmup: 1, cooldown: 3, stamina: 38, cost: 52, effect: { type: 'buff_defense', chance: 0.15, duration: 5 } },
+  AncientPower: { type: 'Fighting', damage: 20, warmup: 2, cooldown: 3, stamina: 38, cost: 55, effect: { type: 'buff_all', chance: 0.12 } },
+  Moonblast: { type: 'Psychic', damage: 32, warmup: 3, cooldown: 4, stamina: 50, cost: 70, effect: { type: 'debuff_instinct', chance: 0.35, duration: 6 } },
+  DazzlingGleam: { type: 'Psychic', damage: 28, warmup: 3, cooldown: 4, stamina: 48, cost: 65, effect: { type: 'debuff_instinct', chance: 0.25, duration: 4 } },
+  PlayRough: { type: 'Psychic', damage: 30, warmup: 2, cooldown: 4, stamina: 48, cost: 68, effect: { type: 'debuff_attack', chance: 0.25, duration: 5 } },
+  FlashCannon: { type: 'Fighting', damage: 28, warmup: 3, cooldown: 4, stamina: 48, cost: 65, effect: { type: 'debuff_defense', chance: 0.15, duration: 8 } },
+  MeteorMash: { type: 'Fighting', damage: 32, warmup: 3, cooldown: 4, stamina: 52, cost: 72, effect: { type: 'buff_attack', chance: 0.25, duration: 8 } },
+  SteelWing: { type: 'Fighting', damage: 24, warmup: 1, cooldown: 3, stamina: 38, cost: 52, effect: { type: 'buff_defense', chance: 0.15, duration: 5 } },
   HeatWave: { type: 'Fire', damage: 32, warmup: 4, cooldown: 5, stamina: 55, cost: 72, effect: { type: 'burn', chance: 0.25, duration: 3, damage: 3 } },
   SludgeBomb: { type: 'Grass', damage: 30, warmup: 3, cooldown: 4, stamina: 50, cost: 68, effect: { type: 'poison', chance: 0.45, duration: 8, damage: 5 } },
   PoisonJab: { type: 'Grass', damage: 28, warmup: 2, cooldown: 3, stamina: 45, cost: 62, effect: { type: 'poison', chance: 0.35, duration: 6, damage: 4 } },
@@ -375,9 +323,9 @@ export const MOVES = {
   Taunt: { type: 'Psychic', damage: 0, warmup: 0, cooldown: 4, stamina: 22, cost: 42, effect: { type: 'debuff_instinct', duration: 4 } },
   Reflect: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 6, stamina: 30, cost: 55, effect: { type: 'buff_defense', duration: 8, team: true } },
   LightScreen: { type: 'Psychic', damage: 0, warmup: 1, cooldown: 6, stamina: 30, cost: 55, effect: { type: 'buff_instinct', duration: 8, team: true } },
-  MistyTerrain: { type: 'Normal', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 65, effect: { type: 'terrain_misty', duration: 8 } },
+  MistyTerrain: { type: 'Psychic', damage: 0, warmup: 2, cooldown: 6, stamina: 35, cost: 65, effect: { type: 'terrain_misty', duration: 8 } },
   HyperVoice: { type: 'Normal', damage: 30, warmup: 2, cooldown: 3, stamina: 48, cost: 65, effect: null },
-  UTurn: { type: 'Normal', damage: 22, warmup: 1, cooldown: 3, stamina: 35, cost: 52, effect: { type: 'energize', chance: 0.5, staminaBoost: 8 } },
+  UTurn: { type: 'Grass', damage: 22, warmup: 1, cooldown: 3, stamina: 35, cost: 52, effect: { type: 'energize', chance: 0.5, staminaBoost: 8 } },
   Extrasensory: { type: 'Psychic', damage: 26, warmup: 2, cooldown: 3, stamina: 42, cost: 58, effect: { type: 'flinch', chance: 0.15 } },
   ZenHeadbutt: { type: 'Psychic', damage: 28, warmup: 2, cooldown: 4, stamina: 42, cost: 62, effect: { type: 'flinch', chance: 0.25 } },
   PsychoCut: { type: 'Psychic', damage: 24, warmup: 1, cooldown: 3, stamina: 38, cost: 52, effect: { type: 'high_crit' } },
@@ -398,14 +346,14 @@ export const MOVES = {
   Attract: { type: 'Normal', damage: 0, warmup: 1, cooldown: 6, stamina: 28, cost: 48, effect: { type: 'infatuate', chance: 0.5, duration: 4 } },
   Encore: { type: 'Normal', damage: 0, warmup: 1, cooldown: 6, stamina: 28, cost: 52, effect: { type: 'confuse', chance: 0.6, duration: 4 } },
   Present: { type: 'Normal', damage: 20, warmup: 1, cooldown: 3, stamina: 32, cost: 45, effect: { type: 'random_damage_or_heal' } },
-  Rollout: { type: 'Normal', damage: 12, warmup: 1, cooldown: 2, stamina: 25, cost: 42, effect: { type: 'consecutive_boost', maxHits: 5 } },
+  Rollout: { type: 'Fighting', damage: 12, warmup: 1, cooldown: 2, stamina: 25, cost: 42, effect: { type: 'consecutive_boost', maxHits: 5 } },
   Headbutt: { type: 'Normal', damage: 22, warmup: 2, cooldown: 3, stamina: 38, cost: 52, effect: { type: 'flinch', chance: 0.35 } },
   Stomp: { type: 'Normal', damage: 22, warmup: 1, cooldown: 3, stamina: 38, cost: 52, effect: { type: 'flinch', chance: 0.35 } },
   SkyAttack: { type: 'Normal', damage: 38, warmup: 4, cooldown: 5, stamina: 60, cost: 85, effect: { type: 'high_crit' } },
-  SpiritBreak: { type: 'Normal', damage: 28, warmup: 2, cooldown: 3, stamina: 45, cost: 62, effect: { type: 'debuff_instinct', chance: 1.0, duration: 6 } },
+  SpiritBreak: { type: 'Psychic', damage: 28, warmup: 2, cooldown: 3, stamina: 45, cost: 62, effect: { type: 'debuff_instinct', chance: 1.0, duration: 6 } },
   BoomBurst: { type: 'Normal', damage: 38, warmup: 4, cooldown: 5, stamina: 58, cost: 82, effect: null },
-  ShiftGear: { type: 'Normal', damage: 0, warmup: 1, cooldown: 5, stamina: 30, cost: 65, effect: { type: 'buff_attack_speed', duration: 10 } },
-  DrainingKiss: { type: 'Normal', damage: 18, warmup: 1, cooldown: 3, stamina: 32, cost: 48, effect: { type: 'drain', chance: 1.0, healPercent: 0.6 } },
+  ShiftGear: { type: 'Fighting', damage: 0, warmup: 1, cooldown: 5, stamina: 30, cost: 65, effect: { type: 'buff_attack_speed', duration: 10 } },
+  DrainingKiss: { type: 'Psychic', damage: 18, warmup: 1, cooldown: 3, stamina: 32, cost: 48, effect: { type: 'drain', chance: 1.0, healPercent: 0.6 } },
   RockTomb: { type: 'Fighting', damage: 20, warmup: 2, cooldown: 3, stamina: 38, cost: 52, effect: { type: 'debuff_speed', chance: 1.0, duration: 5 } },
   EarthPower: { type: 'Fighting', damage: 32, warmup: 3, cooldown: 4, stamina: 50, cost: 72, effect: { type: 'debuff_defense', chance: 0.15, duration: 6 } },
   HighHorsepower: { type: 'Fighting', damage: 34, warmup: 3, cooldown: 4, stamina: 52, cost: 75, effect: null },
