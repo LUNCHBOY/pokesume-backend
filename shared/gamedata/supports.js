@@ -45,9 +45,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 30, Attack: 0, Defense: 60, Instinct: 10, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 4, maxFriendshipTypeMatch: 20 },
     initialFriendship: 40,
-    appearanceRate: 0.52,
+    appearanceRate: 0.45,
     typeMatchPreference: 0.25,
-    specialEffect: { failRateReduction: 0.15 },
+    specialEffect: { failRateReduction: 0.10 },
     moveHints: ['MeteorMash', 'ZenHeadbutt', 'BulletPunch', 'IronDefense', 'Earthquake'],
     description: 'The Hoenn Champion fortifies iron defenses'
   },
@@ -241,7 +241,7 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 5, Attack: 8, Defense: 5, Instinct: 30, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 18 },
     initialFriendship: 15,
-    appearanceRate: 0.40,
+    appearanceRate: 0.48,
     typeMatchPreference: 0.30,
     specialEffect: null,
     moveHints: ['KowtowCleave', 'SuckerPunch', 'IronHead', 'SwordsDance', 'LowKick'],
@@ -255,9 +255,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 12, Attack: 0, Defense: 8, Instinct: 28, Speed: 4 },
     trainingBonus: { typeMatch: 6, otherStats: 2, maxFriendshipTypeMatch: 16 },
     initialFriendship: 20,
-    appearanceRate: 0.42,
+    appearanceRate: 0.52,
     typeMatchPreference: 0.25,
-    specialEffect: { maxEnergyBonus: 8 },
+    specialEffect: { maxEnergyBonus: 15 },
     moveHints: ['TeraStarstorm', 'EarthPower', 'DarkPulse', 'Psychic', 'Recover'],
     description: 'The Blueberry Champion commands crystalline potential'
   },
@@ -299,7 +299,7 @@ const SUPPORT_CARDS = {
     initialFriendship: 35,
     appearanceRate: 0.45,
     typeMatchPreference: 0.20,
-    specialEffect: { energyRegenBonus: 7 },
+    specialEffect: { energyRegenBonus: 15 },
     moveHints: ['Earthquake', 'IronHead', 'RockSlide', 'SwordsDance', 'RapidSpin'],
     description: 'The Blueberry Elite drills with blazing speed'
   },
@@ -345,9 +345,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 0, Attack: 10, Defense: 0, Instinct: 15, Speed: 45 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 17 },
     initialFriendship: 35,
-    appearanceRate: 0.55,
+    appearanceRate: 0.40,
     typeMatchPreference: 0.50,
-    specialEffect: { friendshipGainBonus: 6 },
+    specialEffect: null,
     moveHints: ['ShadowBall', 'SludgeBomb', 'Hypnosis', 'DreamEater', 'Hex'],
     description: 'The Ecruteak Gym Leader channels ghostly power'
   },
@@ -373,7 +373,7 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 0, Attack: 58, Defense: 0, Instinct: 7, Speed: 20 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 17 },
     initialFriendship: 50,
-    appearanceRate: 0.60,
+    appearanceRate: 0.45,
     typeMatchPreference: 0.20,
     specialEffect: null,
     moveHints: ['DragonDance', 'Outrage', 'Earthquake', 'DragonClaw', 'SwordsDance'],
@@ -387,9 +387,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 18, Attack: 18, Defense: 18, Instinct: 15, Speed: 7 },
     trainingBonus: { typeMatch: 5, otherStats: 4, maxFriendshipTypeMatch: 12 },
     initialFriendship: 25,
-    appearanceRate: 0.50,
+    appearanceRate: 0.55,
     typeMatchPreference: 0.05,
-    specialEffect: { energyRegenBonus: 5 },
+    specialEffect: { energyRegenBonus: 12 },
     moveHints: ['Hurricane', 'BraveBird', 'AirSlash', 'Roost', 'UTurn'],
     description: 'The rival trainer pushes limits'
   },
@@ -415,9 +415,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 0, Attack: 54, Defense: 0, Instinct: 12, Speed: 10 },
     trainingBonus: { typeMatch: 7, otherStats: 3, maxFriendshipTypeMatch: 18 },
     initialFriendship: 20,
-    appearanceRate: 0.42,
+    appearanceRate: 0.45,
     typeMatchPreference: 0.10,
-    specialEffect: null,
+    specialEffect: { failRateReduction: 0.08 },
     moveHints: ['Earthquake', 'PrecipiceBlades', 'FirePunch', 'BulkUp', 'LavaPlume'],
     description: 'The Magma Leader harnesses earth power'
   },
@@ -429,9 +429,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 55, Attack: 0, Defense: 10, Instinct: 5, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 40,
-    appearanceRate: 0.45,
+    appearanceRate: 0.52,
     typeMatchPreference: 0.25,
-    specialEffect: { maxEnergyBonus: 10 },
+    specialEffect: { maxEnergyBonus: 20 },
     moveHints: ['OriginPulse', 'HydroPump', 'IceBeam', 'Thunder', 'AquaRing'],
     description: 'The Aqua Leader commands the seas'
   },
@@ -457,7 +457,7 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 0, Attack: 0, Defense: 0, Instinct: 58, Speed: 18 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 25,
-    appearanceRate: 0.42,
+    appearanceRate: 0.45,
     typeMatchPreference: 0.25,
     specialEffect: { friendshipGainBonus: 6 },
     moveHints: ['SpiritBreak', 'DarkPulse', 'ThunderWave', 'Taunt', 'BulkUp'],
@@ -471,9 +471,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 45, Attack: 15, Defense: 10, Instinct: 0, Speed: 5 },
     trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 35,
-    appearanceRate: 0.48,
+    appearanceRate: 0.52,
     typeMatchPreference: 0.20,
-    specialEffect: { maxEnergyBonus: 10 },
+    specialEffect: { maxEnergyBonus: 20 },
     moveHints: ['Liquidation', 'RockTomb', 'JawLock', 'ShellSmash', 'HeadSmash'],
     description: 'The Hulbury Gym Leader builds endurance'
   },
@@ -513,9 +513,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 0, Attack: 20, Defense: 0, Instinct: 5, Speed: 45 },
     trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 20,
-    appearanceRate: 0.40,
+    appearanceRate: 0.50,
     typeMatchPreference: 0.35,
-    specialEffect: { energyRegenBonus: 5 },
+    specialEffect: { energyRegenBonus: 12 },
     moveHints: ['Overdrive', 'SludgeWave', 'BoomBurst', 'ShiftGear', 'Discharge'],
     description: 'The punk rock Gym Leader amplifies tempo'
   },
@@ -541,9 +541,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 10, Attack: 20, Defense: 35, Instinct: 5, Speed: 5 },
     trainingBonus: { typeMatch: 6, otherStats: 2, maxFriendshipTypeMatch: 15 },
     initialFriendship: 55,
-    appearanceRate: 0.55,
+    appearanceRate: 0.50,
     typeMatchPreference: 0.20,
-    specialEffect: { friendshipGainBonus: 7 },
+    specialEffect: { friendshipGainBonus: 5 },
     moveHints: ['GigatonHammer', 'PlayRough', 'StoneEdge', 'SwordsDance', 'ThunderWave'],
     description: 'The youngest Elite Four hammers with joy'
   },
@@ -575,7 +575,7 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 15, Attack: 0, Defense: 38, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 18 },
     initialFriendship: 45,
-    appearanceRate: 0.55,
+    appearanceRate: 0.42,
     typeMatchPreference: 0.05,
     specialEffect: null,
     moveHints: ['RockSlide', 'IronTail', 'StealthRock', 'Sandstorm', 'Earthquake'],
@@ -589,9 +589,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 35, Attack: 0, Defense: 10, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 15 },
     initialFriendship: 40,
-    appearanceRate: 0.52,
+    appearanceRate: 0.48,
     typeMatchPreference: 0.30,
-    specialEffect: { maxEnergyBonus: 8, restBonus: 4 },
+    specialEffect: { maxEnergyBonus: 6 },
     moveHints: ['GigaDrain', 'SleepPowder', 'EnergyBall', 'SeedBomb', 'StringShot'],
     description: 'The Celadon Gym Leader nurtures vitality'
   },
@@ -603,7 +603,7 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 0, Attack: 35, Defense: 0, Instinct: 5, Speed: 5 },
     trainingBonus: { typeMatch: 8, otherStats: 2, maxFriendshipTypeMatch: 20 },
     initialFriendship: 25,
-    appearanceRate: 0.40,
+    appearanceRate: 0.48,
     typeMatchPreference: 0.10,
     specialEffect: null,
     moveHints: ['FireBlast', 'Flamethrower', 'FlameBurst', 'Overheat', 'Smokescreen'],
@@ -701,7 +701,7 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 5, Attack: 32, Defense: 5, Instinct: 0, Speed: 5 },
     trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 18 },
     initialFriendship: 15,
-    appearanceRate: 0.38,
+    appearanceRate: 0.45,
     typeMatchPreference: 0.25,
     specialEffect: null,
     moveHints: ['FireLash', 'Flamethrower', 'Crunch', 'Coil', 'PowerWhip'],
@@ -729,9 +729,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 10, Attack: 5, Defense: 35, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 2, maxFriendshipTypeMatch: 12 },
     initialFriendship: 25,
-    appearanceRate: 0.42,
+    appearanceRate: 0.52,
     typeMatchPreference: 0.30,
-    specialEffect: null,
+    specialEffect: { failRateReduction: 0.06 },
     moveHints: ['TarShot', 'StoneEdge', 'HeatCrash', 'Earthquake', 'StealthRock'],
     description: 'The Circhester Gym Leader stands firm'
   },
@@ -771,9 +771,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 0, Attack: 12, Defense: 0, Instinct: 10, Speed: 23 },
     trainingBonus: { typeMatch: 7, otherStats: 2, maxFriendshipTypeMatch: 18 },
     initialFriendship: 40,
-    appearanceRate: 0.50,
+    appearanceRate: 0.42,
     typeMatchPreference: 0.15,
-    specialEffect: { friendshipGainBonus: 4 },
+    specialEffect: null,
     moveHints: ['WildCharge', 'Discharge', 'Spark', 'ElectroBall', 'ChargeBeam'],
     description: 'The streaming Gym Leader electrifies fans'
   },
@@ -833,9 +833,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 20, Attack: 0, Defense: 5, Instinct: 5, Speed: 0 },
     trainingBonus: { typeMatch: 4, otherStats: 2, maxFriendshipTypeMatch: 10 },
     initialFriendship: 35,
-    appearanceRate: 0.50,
+    appearanceRate: 0.55,
     typeMatchPreference: 0.10,
-    specialEffect: { maxEnergyBonus: 6, restBonus: 2 },
+    specialEffect: { maxEnergyBonus: 12, restBonus: 6 },
     moveHints: ['Present', 'IceBeam', 'IcePunch', 'Blizzard', 'AerialAce'],
     description: 'The Mahogany Gym Leader aids recovery'
   },
@@ -847,9 +847,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 0, Attack: 0, Defense: 5, Instinct: 25, Speed: 5 },
     trainingBonus: { typeMatch: 4, otherStats: 2, maxFriendshipTypeMatch: 11 },
     initialFriendship: 35,
-    appearanceRate: 0.48,
+    appearanceRate: 0.52,
     typeMatchPreference: 0.25,
-    specialEffect: null,
+    specialEffect: { friendshipGainBonus: 3 },
     moveHints: ['Thunderbolt', 'ZapCannon', 'Discharge', 'Spark', 'ElectricTerrain'],
     description: 'The Mauville Gym Leader electrifies training'
   },
@@ -863,7 +863,7 @@ const SUPPORT_CARDS = {
     initialFriendship: 25,
     appearanceRate: 0.48,
     typeMatchPreference: 0.35,
-    specialEffect: { statGainMultiplier: 1.08, failRateReduction: 0.05 },
+    specialEffect: null,
     moveHints: ['Eruption', 'EarthPower', 'LavaPlume', 'Earthquake', 'Flamethrower'],
     description: 'The Lavaridge Gym Leader cultivates fiery growth'
   },
@@ -923,9 +923,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 55, Attack: 0, Defense: 20, Instinct: 15, Speed: 5 },
     trainingBonus: { typeMatch: 8, otherStats: 4, maxFriendshipTypeMatch: 22 },
     initialFriendship: 50,
-    appearanceRate: 0.52,
+    appearanceRate: 0.42,
     typeMatchPreference: 0.35,
-    specialEffect: { maxEnergyBonus: 12, restBonus: 8, friendshipGainBonus: 5 },
+    specialEffect: null,
     moveHints: ['GigaDrain', 'LeafBlade', 'EnergyBall', 'SeedBomb', 'Synthesis'],
     description: 'The Eterna Gym Leader nurtures natural growth'
   },
@@ -953,9 +953,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 10, Attack: 5, Defense: 10, Instinct: 42, Speed: 8 },
     trainingBonus: { typeMatch: 8, otherStats: 3, maxFriendshipTypeMatch: 20 },
     initialFriendship: 40,
-    appearanceRate: 0.50,
+    appearanceRate: 0.42,
     typeMatchPreference: 0.30,
-    specialEffect: { skillPointMultiplier: 1.25 },
+    specialEffect: null,
     moveHints: ['ParabolicCharge', 'ShockWave', 'RisingVoltage', 'Thunderbolt', 'ElectricTerrain'],
     description: 'The Lumiose Gym Leader invents brilliant strategies'
   },
@@ -967,9 +967,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 15, Attack: 10, Defense: 40, Instinct: 10, Speed: 0 },
     trainingBonus: { typeMatch: 7, otherStats: 3, maxFriendshipTypeMatch: 18 },
     initialFriendship: 35,
-    appearanceRate: 0.48,
+    appearanceRate: 0.40,
     typeMatchPreference: 0.35,
-    specialEffect: { failRateReduction: 0.10 },
+    specialEffect: null,
     moveHints: ['Scald', 'Surf', 'FlipTurn', 'Whirlpool', 'LifeDew'],
     description: 'The Striaton Gym Leader serves refined technique'
   },
@@ -981,9 +981,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 48, Attack: 0, Defense: 15, Instinct: 8, Speed: 0 },
     trainingBonus: { typeMatch: 6, otherStats: 4, maxFriendshipTypeMatch: 16 },
     initialFriendship: 50,
-    appearanceRate: 0.55,
+    appearanceRate: 0.40,
     typeMatchPreference: 0.30,
-    specialEffect: { maxEnergyBonus: 14, restBonus: 6 },
+    specialEffect: null,
     moveHints: ['GigaDrain', 'LeechSeed', 'Synthesis', 'PollenPuff', 'SeedBomb'],
     description: 'The Coumarine Gym Leader cultivates with patience'
   },
@@ -997,9 +997,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 38, Attack: 5, Defense: 8, Instinct: 0, Speed: 0 },
     trainingBonus: { typeMatch: 5, otherStats: 3, maxFriendshipTypeMatch: 14 },
     initialFriendship: 45,
-    appearanceRate: 0.55,
+    appearanceRate: 0.42,
     typeMatchPreference: 0.30,
-    specialEffect: { maxEnergyBonus: 10 },
+    specialEffect: null,
     moveHints: ['AquaCutter', 'Waterfall', 'Dive', 'AquaJet', 'FlipTurn'],
     description: 'The Humilau Gym Leader rides the waves of training'
   },
@@ -1011,9 +1011,9 @@ const SUPPORT_CARDS = {
     baseStats: { HP: 5, Attack: 0, Defense: 5, Instinct: 32, Speed: 5 },
     trainingBonus: { typeMatch: 6, otherStats: 3, maxFriendshipTypeMatch: 16 },
     initialFriendship: 50,
-    appearanceRate: 0.55,
+    appearanceRate: 0.45,
     typeMatchPreference: 0.25,
-    specialEffect: { skillPointMultiplier: 1.15, friendshipGainBonus: 3 },
+    specialEffect: { friendshipGainBonus: 2 },
     moveHints: ['GigaDrain', 'LeafBlade', 'SeedBomb', 'EnergyBall', 'Synthesis'],
     description: 'The Striaton Gym Leader evaluates compatibility'
   }
@@ -1133,17 +1133,17 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   Steven: {
     // LB0: Reliable gentleman - partial fail reduction already active
     // LB1: BIG JUMP trainingBonus (0.60→1.00) - Training wisdom unlocked
-    // LB2: BIG JUMP appearanceRate (0.38→0.52) - Always there when needed
+    // LB2: BIG JUMP appearanceRate (0.32→0.45) - Always there when needed
     // LB3: BIG JUMP initialFriendship (20→40) - Instant deep bond formed
     // LB4: BIG JUMP specialEffect (0.40→1.00) - Fail reduction mastered
     // LB5: BIG JUMP baseStats (0.50→1.00) - Full Steel Champion power
     progression: [
-      { baseStats: 0.50, trainingBonus: 0.60, appearanceRate: 0.38, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0.40 },
-      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0.40 },
-      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0.40 },
-      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 0.40 },
-      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 1.00 }
+      { baseStats: 0.50, trainingBonus: 0.60, appearanceRate: 0.32, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.32, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 0.40 },
+      { baseStats: 0.50, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 1.00 }
     ]
   },
 
@@ -1452,17 +1452,17 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Morty: {
-    // LB0: Ghost mystic - partial energy effect, decent friendship
-    // LB1: BIG JUMP appearanceRate (0.30→0.45) - Spiritual presence
-    // LB2: BIG JUMP typeMatchPreference (0.20→0.35) - Ghost mastery
-    // LB3: BIG JUMP specialEffect (0.30→1.00) - Energy mastered
-    // LB4: BIG JUMP initialFriendship (18→30) - Deep bond
+    // LB0: Ghost mystic - known for ghost typing, decent friendship
+    // LB1: BIG JUMP typeMatchPreference (0.25→0.50) - Ghost mastery unlocked
+    // LB2: BIG JUMP appearanceRate (0.30→0.40) - Spiritual presence
+    // LB3: BIG JUMP initialFriendship (20→35) - Deep bond
+    // LB4: BIG JUMP baseStats (0.70→1.00) - Full ghost power
     progression: [
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.30, typeMatchPreference: 0.20, initialFriendship: 18, specialEffect: 0.30 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.20, initialFriendship: 18, specialEffect: 0.30 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.35, initialFriendship: 18, specialEffect: 0.30 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.35, initialFriendship: 18, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.35, initialFriendship: 30, specialEffect: 1.00 }
+      { baseStats: 0.70, trainingBonus: 1.00, appearanceRate: 0.30, typeMatchPreference: 0.25, initialFriendship: 20, specialEffect: 0 },
+      { baseStats: 0.70, trainingBonus: 1.00, appearanceRate: 0.30, typeMatchPreference: 0.50, initialFriendship: 20, specialEffect: 0 },
+      { baseStats: 0.70, trainingBonus: 1.00, appearanceRate: 0.40, typeMatchPreference: 0.50, initialFriendship: 20, specialEffect: 0 },
+      { baseStats: 0.70, trainingBonus: 1.00, appearanceRate: 0.40, typeMatchPreference: 0.50, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.40, typeMatchPreference: 0.50, initialFriendship: 35, specialEffect: 0 }
     ]
   },
 
@@ -1482,32 +1482,32 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Iris: {
-    // LB0: Young dragon champ - partial friendship bonus, friendly
-    // LB1: BIG JUMP typeMatchPreference (0.25→0.40) - Dragon mastery
-    // LB2: BIG JUMP appearanceRate (0.35→0.50) - Energetic presence
-    // LB3: BIG JUMP specialEffect (0.50→1.00) - Friendship bonus mastered
+    // LB0: Young dragon champ - known for dragon mastery, friendly
+    // LB1: BIG JUMP typeMatchPreference (0.10→0.20) - Dragon mastery
+    // LB2: BIG JUMP appearanceRate (0.35→0.45) - Energetic presence
+    // LB3: BIG JUMP initialFriendship (35→50) - Dragon bond deepens
     // LB4: BIG JUMP baseStats (0.60→1.00) - Full dragon champion power
     progression: [
-      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.25, initialFriendship: 35, specialEffect: 0.50 },
-      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.40, initialFriendship: 35, specialEffect: 0.50 },
-      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.40, initialFriendship: 35, specialEffect: 0.50 },
-      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.40, initialFriendship: 35, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.50, typeMatchPreference: 0.40, initialFriendship: 35, specialEffect: 1.00 }
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.10, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.20, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.20, initialFriendship: 35, specialEffect: 0 },
+      { baseStats: 0.60, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.20, initialFriendship: 50, specialEffect: 0 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.20, initialFriendship: 50, specialEffect: 0 }
     ]
   },
 
   Blue: {
-    // LB0: Arrogant rival - low friendship, partial stat multiplier
-    // LB1: BIG JUMP typeMatchPreference (0.25→0.48) - Type versatility mastered
-    // LB2: BIG JUMP baseStats (0.55→1.00) - Champion power revealed
-    // LB3: BIG JUMP specialEffect (0.30→1.00) - Stat multiplier mastered
-    // LB4: BIG JUMP appearanceRate (0.28→0.42) - Respects you now
+    // LB0: Arrogant rival - known for high energy, low friendship
+    // LB1: BIG JUMP initialFriendship (10→25) - Respects you now
+    // LB2: BIG JUMP appearanceRate (0.35→0.55) - Rival presence
+    // LB3: BIG JUMP specialEffect (0.30→1.00) - Energy regen mastered
+    // LB4: BIG JUMP baseStats (0.55→1.00) - Champion power revealed
     progression: [
-      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.28, typeMatchPreference: 0.25, initialFriendship: 14, specialEffect: 0.30 },
-      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.28, typeMatchPreference: 0.48, initialFriendship: 14, specialEffect: 0.30 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.28, typeMatchPreference: 0.48, initialFriendship: 14, specialEffect: 0.30 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.28, typeMatchPreference: 0.48, initialFriendship: 14, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.42, typeMatchPreference: 0.48, initialFriendship: 14, specialEffect: 1.00 }
+      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.05, initialFriendship: 10, specialEffect: 0.30 },
+      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.35, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 0.30 },
+      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 0.30 },
+      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.55, typeMatchPreference: 0.05, initialFriendship: 25, specialEffect: 1.00 }
     ]
   },
 
@@ -1527,32 +1527,32 @@ const SUPPORT_LIMIT_BREAK_PROGRESSIONS = {
   },
 
   Maxie: {
-    // LB0: Team Magma leader - scientific, calculating, no special effect yet
-    // LB1: UNLOCK specialEffect (0→1.00) - Land expansion theory manifests
-    // LB2: BIG JUMP typeMatchPreference (0.25→0.48) - Fire/Ground mastery achieved
+    // LB0: Team Magma leader - known for fail reduction, calculating
+    // LB1: UNLOCK specialEffect (0→1.00) - Fail reduction activates
+    // LB2: BIG JUMP appearanceRate (0.30→0.45) - Shows up more
     // LB3: BIG JUMP baseStats (0.55→1.00) - Full volcanic power erupts
     // LB4: BIG JUMP trainingBonus (0.58→1.00) - Groudon's blessing complete
     progression: [
-      { baseStats: 0.55, trainingBonus: 0.58, appearanceRate: 0.38, typeMatchPreference: 0.25, initialFriendship: 15, specialEffect: 0 },
-      { baseStats: 0.55, trainingBonus: 0.58, appearanceRate: 0.38, typeMatchPreference: 0.25, initialFriendship: 15, specialEffect: 1.00 },
-      { baseStats: 0.55, trainingBonus: 0.58, appearanceRate: 0.38, typeMatchPreference: 0.48, initialFriendship: 15, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 0.58, appearanceRate: 0.38, typeMatchPreference: 0.48, initialFriendship: 15, specialEffect: 1.00 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.48, initialFriendship: 15, specialEffect: 1.00 }
+      { baseStats: 0.55, trainingBonus: 0.58, appearanceRate: 0.30, typeMatchPreference: 0.10, initialFriendship: 20, specialEffect: 0 },
+      { baseStats: 0.55, trainingBonus: 0.58, appearanceRate: 0.30, typeMatchPreference: 0.10, initialFriendship: 20, specialEffect: 1.00 },
+      { baseStats: 0.55, trainingBonus: 0.58, appearanceRate: 0.45, typeMatchPreference: 0.10, initialFriendship: 20, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 0.58, appearanceRate: 0.45, typeMatchPreference: 0.10, initialFriendship: 20, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.45, typeMatchPreference: 0.10, initialFriendship: 20, specialEffect: 1.00 }
     ]
   },
 
   Archie: {
-    // LB0: Team Aqua captain - friendly pirate, loves the sea
-    // LB1: BIG JUMP initialFriendship (20→38) - Instantly bonds with you matey!
-    // LB2: BIG JUMP appearanceRate (0.32→0.48) - Always ready for adventure
-    // LB3: BIG JUMP baseStats (0.55→1.00) - Full sea captain power
-    // LB4: BIG JUMP specialEffect (0.45→1.00) - Kyogre's blessing complete
+    // LB0: Team Aqua captain - known for max energy, friendly pirate
+    // LB1: BIG JUMP initialFriendship (25→40) - Instantly bonds with you matey!
+    // LB2: BIG JUMP appearanceRate (0.38→0.52) - Always ready for adventure
+    // LB3: BIG JUMP specialEffect (0.50→1.00) - Max energy mastered
+    // LB4: BIG JUMP baseStats (0.55→1.00) - Full sea captain power
     progression: [
-      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.32, typeMatchPreference: 0.40, initialFriendship: 20, specialEffect: 0.45 },
-      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.32, typeMatchPreference: 0.40, initialFriendship: 38, specialEffect: 0.45 },
-      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.40, initialFriendship: 38, specialEffect: 0.45 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.40, initialFriendship: 38, specialEffect: 0.45 },
-      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.48, typeMatchPreference: 0.40, initialFriendship: 38, specialEffect: 1.00 }
+      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.25, initialFriendship: 25, specialEffect: 0.50 },
+      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.38, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 0.50 },
+      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 0.50 },
+      { baseStats: 0.55, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 1.00 },
+      { baseStats: 1.00, trainingBonus: 1.00, appearanceRate: 0.52, typeMatchPreference: 0.25, initialFriendship: 40, specialEffect: 1.00 }
     ]
   },
 
@@ -2283,11 +2283,5 @@ const SUPPORT_GACHA_RARITY = {
   }
 };
 
-module.exports = {
-  SUPPORT_CARDS,
-  LEGACY_SUPPORT_NAME_MAP,
-  SUPPORT_LIMIT_BREAK_PROGRESSIONS,
-  normalizeSupportName,
-  getSupportAtLimitBreak,
-  SUPPORT_GACHA_RARITY
-};
+export { SUPPORT_CARDS, LEGACY_SUPPORT_NAME_MAP, SUPPORT_LIMIT_BREAK_PROGRESSIONS, normalizeSupportName, getSupportAtLimitBreak, SUPPORT_GACHA_RARITY };
+
