@@ -14,7 +14,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'C', Psychic: 'B', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'BodySlam', 'FireBlast', 'WaterGun', 'ThunderShock'],
+    learnableAbilities: ['Flamethrower', 'FireBlast'],
     isStarter: true
   },
   Squirtle: {
@@ -24,7 +24,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'B', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'C', Chipper: 'A', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'BodySlam', 'HydroPump', 'VineWhip', 'Ember'],
+    learnableAbilities: ['Surf', 'HydroPump'],
     isStarter: true
   },
   Bulbasaur: {
@@ -34,7 +34,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'B', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'BodySlam', 'SolarBeam', 'WaterGun', 'PsyBeam'],
+    learnableAbilities: ['SolarBeam', 'RazorLeaf'],
     isStarter: true
   },
   Pikachu: {
@@ -44,7 +44,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'C', Grass: 'B', Psychic: 'C', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
-    learnableAbilities: ['Tackle', 'QuickAttack', 'Thunderbolt', 'BodySlam', 'Thunder', 'BrickBreak', 'HyperBeam', 'Ember'],
+    learnableAbilities: ['Thunderbolt', 'Thunder'],
     isStarter: true
   },
   Gastly: {
@@ -54,7 +54,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'B', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'C', Debuffer: 'A', Chipper: 'D', MadLad: 'B' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['Psychic', 'BodySlam', 'PsychicBlast', 'VineWhip', 'ThunderShock'],
+    learnableAbilities: ['Psychic', 'PsychicBlast'],
     isStarter: true
   },
   
@@ -66,7 +66,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'C', Psychic: 'B', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'E', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Arcanine: {
     name: 'Arcanine',
@@ -75,7 +75,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'B', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'E', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Golduck: {
     name: 'Golduck',
@@ -84,7 +84,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'E', Psychic: 'B', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'F' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Lapras: {
     name: 'Lapras',
@@ -93,7 +93,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'B', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'D', Chipper: 'A', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Victreebel: {
     name: 'Victreebel',
@@ -102,7 +102,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'C', Grass: 'A', Psychic: 'C', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'D', Debuffer: 'A', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Vileplume: {
     name: 'Vileplume',
@@ -111,7 +111,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'B', Grass: 'A', Psychic: 'B', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'A', Chipper: 'E', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Zapdos: {
     name: 'Zapdos',
@@ -120,7 +120,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'B', Grass: 'C', Psychic: 'B', Electric: 'S', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
-    learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
+    learnableAbilities: ['Thunderbolt', 'Thunder']
   },
   Raichu: {
     name: 'Raichu',
@@ -129,7 +129,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'C', Grass: 'B', Psychic: 'D', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'E', Chipper: 'A', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
-    learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
+    learnableAbilities: ['Thunderbolt', 'Thunder']
   },
   Arbok: {
     name: 'Arbok',
@@ -138,7 +138,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'D', Psychic: 'A', Electric: 'E', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'C', Debuffer: 'A', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
+    learnableAbilities: ['Psychic', 'PsychicBlast']
   },
   Nidoking: {
     name: 'Nidoking',
@@ -147,7 +147,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
+    learnableAbilities: ['Psychic', 'PsychicBlast']
   },
   Rapidash: {
     name: 'Rapidash',
@@ -156,7 +156,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'B', Psychic: 'C', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'F' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Starmie: {
     name: 'Starmie',
@@ -165,7 +165,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'E', Psychic: 'B', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Exeggutor: {
     name: 'Exeggutor',
@@ -174,7 +174,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'B', Grass: 'A', Psychic: 'B', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Jolteon: {
     name: 'Jolteon',
@@ -183,7 +183,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'C', Grass: 'B', Psychic: 'C', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
-    learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
+    learnableAbilities: ['Thunderbolt', 'Thunder']
   },
   Muk: {
     name: 'Muk',
@@ -192,7 +192,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'B', Grass: 'C', Psychic: 'A', Electric: 'E', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'F', Debuffer: 'B', Chipper: 'E', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
+    learnableAbilities: ['Psychic', 'PsychicBlast']
   },
   Magmar: {
     name: 'Magmar',
@@ -201,7 +201,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'C', Psychic: 'B', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Vaporeon: {
     name: 'Vaporeon',
@@ -210,7 +210,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'C', Chipper: 'A', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Tangela: {
     name: 'Tangela',
@@ -219,7 +219,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'C', Grass: 'A', Psychic: 'B', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'A', Chipper: 'E', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Electabuzz: {
     name: 'Electabuzz',
@@ -228,7 +228,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'C', Psychic: 'C', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'E', Chipper: 'A', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
-    learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
+    learnableAbilities: ['Thunderbolt', 'Thunder']
   },
   Weezing: {
     name: 'Weezing',
@@ -237,7 +237,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'E', Debuffer: 'A', Chipper: 'D', MadLad: 'B' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
+    learnableAbilities: ['Psychic', 'PsychicBlast']
   },
   Flareon: {
     name: 'Flareon',
@@ -246,7 +246,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'C', Psychic: 'B', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Espeon: {
     name: 'Espeon',
@@ -255,7 +255,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['Confusion', 'Tackle'],
-    learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
+    learnableAbilities: ['Psychic', 'PsychicBlast']
   },
   Umbreon: {
     name: 'Umbreon',
@@ -264,7 +264,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'B', Electric: 'C', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['Bite', 'Tackle'],
-    learnableAbilities: ['DarkPulse', 'FoulPlay', 'BodySlam']
+    learnableAbilities: ['DarkPulse', 'FoulPlay']
   },
   Leafeon: {
     name: 'Leafeon',
@@ -273,7 +273,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'B', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'D', Chipper: 'A', MadLad: 'E' },
     defaultAbilities: ['RazorLeaf', 'Tackle'],
-    learnableAbilities: ['LeafBlade', 'SolarBeam', 'BodySlam']
+    learnableAbilities: ['LeafBlade', 'SolarBeam']
   },
   Glaceon: {
     name: 'Glaceon',
@@ -282,7 +282,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'C', Psychic: 'B', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'B', Chipper: 'E', MadLad: 'D' },
     defaultAbilities: ['IceShard', 'Tackle'],
-    learnableAbilities: ['IceBeam', 'Blizzard', 'BodySlam']
+    learnableAbilities: ['IceBeam', 'Blizzard']
   },
   Sylveon: {
     name: 'Sylveon',
@@ -291,7 +291,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'A', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['Confusion', 'Tackle'],
-    learnableAbilities: ['Moonblast', 'DazzlingGleam', 'BodySlam']
+    learnableAbilities: ['Moonblast', 'DazzlingGleam']
   },
   Cloyster: {
     name: 'Cloyster',
@@ -300,7 +300,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'B', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'F' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Parasect: {
     name: 'Parasect',
@@ -309,7 +309,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'C', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'E', Debuffer: 'A', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Magneton: {
     name: 'Magneton',
@@ -318,7 +318,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'C', Grass: 'B', Psychic: 'D', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Tackle'],
-    learnableAbilities: ['Thunderbolt', 'Thunder', 'BodySlam']
+    learnableAbilities: ['Thunderbolt', 'Thunder']
   },
   Tentacruel: {
     name: 'Tentacruel',
@@ -327,7 +327,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'D', Psychic: 'A', Electric: 'E', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'A', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['Psychic', 'PsychicBlast', 'BodySlam']
+    learnableAbilities: ['Psychic', 'PsychicBlast']
   },
   Mew: {
     name: 'Mew',
@@ -336,7 +336,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'A', Grass: 'A', Psychic: 'A', Electric: 'A', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'A', Debuffer: 'A', Chipper: 'A', MadLad: 'A' },
     defaultAbilities: ['Tackle', 'Ember'],
-    learnableAbilities: ['BodySlam', 'HyperBeam', 'Flamethrower', 'Surf', 'RazorLeaf', 'Thunderbolt', 'Psychic']
+    learnableAbilities: ['HyperBeam', 'Flamethrower', 'Surf', 'Psychic']
   },
   Mewtwo: {
     name: 'Mewtwo',
@@ -345,7 +345,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'S', Water: 'S', Grass: 'S', Psychic: 'S', Electric: 'S', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'S', Debuffer: 'A', Chipper: 'B', MadLad: 'A' },
     defaultAbilities: ['PsyBeam', 'Tackle'],
-    learnableAbilities: ['BodySlam', 'HyperBeam', 'Flamethrower', 'FireBlast', 'Surf', 'HydroPump', 'RazorLeaf', 'SolarBeam', 'Thunderbolt', 'Thunder', 'Psychic', 'PsychicBlast']
+    learnableAbilities: ['Psychic', 'PsychicBlast', 'HyperBeam', 'Flamethrower']
   },
   Snorlax: {
     name: 'Snorlax',
@@ -354,7 +354,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'B', Grass: 'B', Psychic: 'B', Electric: 'B', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'F', MadLad: 'D' },
     defaultAbilities: ['Tackle', 'BodySlam'],
-    learnableAbilities: ['HyperBeam', 'Ember', 'WaterGun', 'VineWhip', 'ThunderShock']
+    learnableAbilities: ['HyperBeam', 'Rest']
   },
   
   // ============================================================================
@@ -372,7 +372,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'E', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Bite', 'TailWhip'],
-    learnableAbilities: ['BodySlam', 'Swift', 'Return']
+    learnableAbilities: ['BodySlam', 'Swift']
   },
   Meowth: {
     name: 'Meowth',
@@ -381,7 +381,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'C', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['PayDay', 'Slash', 'Bite'],
-    learnableAbilities: ['BodySlam', 'Swift', 'Headbutt']
+    learnableAbilities: ['BodySlam', 'Swift']
   },
   Sandshrew: {
     name: 'Sandshrew',
@@ -390,7 +390,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'E', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'D', Chipper: 'F', MadLad: 'D' },
     defaultAbilities: ['Slash', 'Harden', 'SandAttack'],
-    learnableAbilities: ['Earthquake', 'RockSlide', 'IronDefense']
+    learnableAbilities: ['Earthquake', 'IronDefense']
   },
   Psyduck: {
     name: 'Psyduck',
@@ -399,7 +399,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'E', Psychic: 'C', Electric: 'E', Fighting: 'E' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'Confusion', 'TailWhip'],
-    learnableAbilities: ['Surf', 'Psyshock', 'AquaTail']
+    learnableAbilities: ['Surf', 'Psyshock']
   },
   Poliwag: {
     name: 'Poliwag',
@@ -408,7 +408,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'BubbleBeam', 'Growl'],
-    learnableAbilities: ['Surf', 'HydroPump', 'IceBeam']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Tentacool: {
     name: 'Tentacool',
@@ -417,7 +417,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'C', Electric: 'E', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'B', Chipper: 'C', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'BubbleBeam', 'Toxic'],
-    learnableAbilities: ['Surf', 'AquaTail', 'SludgeBomb']
+    learnableAbilities: ['Surf', 'AquaTail']
   },
   Shellder: {
     name: 'Shellder',
@@ -426,7 +426,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'D', Chipper: 'F', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'Harden', 'IcePunch'],
-    learnableAbilities: ['Surf', 'IceBeam', 'IronDefense']
+    learnableAbilities: ['Surf', 'IceBeam']
   },
   Krabby: {
     name: 'Krabby',
@@ -435,7 +435,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'E', Electric: 'E', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'E', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'Harden', 'Slash'],
-    learnableAbilities: ['Surf', 'Waterfall', 'IronDefense']
+    learnableAbilities: ['Surf', 'Waterfall']
   },
   Oddish: {
     name: 'Oddish',
@@ -444,7 +444,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'E', Fighting: 'E' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'SleepPowder', 'MegaDrain'],
-    learnableAbilities: ['RazorLeaf', 'SeedBomb', 'SludgeBomb']
+    learnableAbilities: ['RazorLeaf', 'SeedBomb']
   },
   Bellsprout: {
     name: 'Bellsprout',
@@ -453,7 +453,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'E', Fighting: 'E' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'B', Debuffer: 'D', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'RazorLeaf', 'Toxic'],
-    learnableAbilities: ['SeedBomb', 'SolarBeam', 'SludgeBomb']
+    learnableAbilities: ['SeedBomb', 'SolarBeam']
   },
   Paras: {
     name: 'Paras',
@@ -462,7 +462,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'E', Fighting: 'E' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'Slash'],
-    learnableAbilities: ['RazorLeaf', 'SeedBomb', 'CrossPoison']
+    learnableAbilities: ['RazorLeaf', 'SeedBomb']
   },
   Zubat: {
     name: 'Zubat',
@@ -471,7 +471,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'E', Grass: 'E', Psychic: 'A', Electric: 'E', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'E', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['Confusion', 'Bite', 'Screech'],
-    learnableAbilities: ['Psychic', 'ShadowBall', 'DarkPulse']
+    learnableAbilities: ['Psychic', 'ShadowBall']
   },
   Grimer: {
     name: 'Grimer',
@@ -480,7 +480,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'E', Grass: 'E', Psychic: 'A', Electric: 'E', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'C', Chipper: 'E', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Harden', 'Toxic'],
-    learnableAbilities: ['Psychic', 'SludgeBomb', 'IronDefense']
+    learnableAbilities: ['Psychic', 'SludgeBomb']
   },
   Koffing: {
     name: 'Koffing',
@@ -489,7 +489,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'E', Grass: 'E', Psychic: 'A', Electric: 'E', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['PsyBeam', 'Smokescreen', 'Toxic'],
-    learnableAbilities: ['Psychic', 'SludgeBomb', 'DarkPulse']
+    learnableAbilities: ['Psychic', 'SludgeBomb']
   },
   Voltorb: {
     name: 'Voltorb',
@@ -498,7 +498,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'E', Grass: 'E', Psychic: 'E', Electric: 'A', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'F', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['ThunderShock', 'Spark', 'Screech'],
-    learnableAbilities: ['Thunderbolt', 'Discharge', 'Swift']
+    learnableAbilities: ['Thunderbolt', 'Discharge']
   },
   Magnemite: {
     name: 'Magnemite',
@@ -507,7 +507,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'E', Grass: 'E', Psychic: 'E', Electric: 'A', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'D', Chipper: 'E', MadLad: 'E' },
     defaultAbilities: ['ThunderShock', 'Spark', 'FlashCannon'],
-    learnableAbilities: ['Thunderbolt', 'ChargeBeam', 'Discharge']
+    learnableAbilities: ['Thunderbolt', 'Discharge']
   },
   Sentret: {
     name: 'Sentret',
@@ -516,7 +516,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Bite', 'TailWhip'],
-    learnableAbilities: ['BodySlam', 'Swift', 'Return']
+    learnableAbilities: ['BodySlam', 'Swift']
   },
   Zigzagoon: {
     name: 'Zigzagoon',
@@ -525,7 +525,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Headbutt', 'Growl'],
-    learnableAbilities: ['BodySlam', 'Swift', 'Return']
+    learnableAbilities: ['BodySlam', 'Swift']
   },
   Bidoof: {
     name: 'Bidoof',
@@ -534,7 +534,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'F', Debuffer: 'D', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['QuickAttack', 'Bite', 'Harden'],
-    learnableAbilities: ['BodySlam', 'Waterfall', 'Return']
+    learnableAbilities: ['BodySlam', 'Waterfall']
   },
   Lillipup: {
     name: 'Lillipup',
@@ -543,7 +543,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'E', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['QuickAttack', 'Bite', 'WorkUp'],
-    learnableAbilities: ['BodySlam', 'Return', 'PlayRough']
+    learnableAbilities: ['BodySlam', 'PlayRough']
   },
   
   // ============================================================================
@@ -561,7 +561,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'E', Psychic: 'C', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['Ember', 'FlameBurst', 'Confide'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'WillOWisp']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Ponyta: {
     name: 'Ponyta',
@@ -570,7 +570,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'B', Debuffer: 'E', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['Ember', 'FlameCharge', 'Headbutt'],
-    learnableAbilities: ['Flamethrower', 'FlareBlitz', 'Agility']
+    learnableAbilities: ['Flamethrower', 'FlareBlitz']
   },
   Houndour: {
     name: 'Houndour',
@@ -579,7 +579,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'E', Psychic: 'C', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'B', Debuffer: 'D', Chipper: 'D', MadLad: 'C' },
     defaultAbilities: ['Ember', 'FireFang', 'DarkPulse'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'ShadowBall']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Torchic: {
     name: 'Torchic',
@@ -588,7 +588,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'E', Chipper: 'C', MadLad: 'E' },
     defaultAbilities: ['Ember', 'FlameCharge', 'QuickAttack'],
-    learnableAbilities: ['Flamethrower', 'FlareBlitz', 'BrickBreak']
+    learnableAbilities: ['Flamethrower', 'FlareBlitz']
   },
   Chinchou: {
     name: 'Chinchou',
@@ -597,7 +597,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'C', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'BubbleBeam', 'Spark'],
-    learnableAbilities: ['Surf', 'Scald', 'Thunderbolt']
+    learnableAbilities: ['Surf', 'Scald']
   },
   Mareep: {
     name: 'Mareep',
@@ -606,7 +606,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'A', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
     defaultAbilities: ['ThunderShock', 'Spark', 'TailWhip'],
-    learnableAbilities: ['Thunderbolt', 'ChargeBeam', 'Discharge']
+    learnableAbilities: ['Thunderbolt', 'Discharge']
   },
   Elekid: {
     name: 'Elekid',
@@ -615,7 +615,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'E', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['ThunderShock', 'Spark', 'QuickAttack'],
-    learnableAbilities: ['Thunderbolt', 'Thunder', 'WildCharge']
+    learnableAbilities: ['Thunderbolt', 'Thunder']
   },
   Hoppip: {
     name: 'Hoppip',
@@ -624,7 +624,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'C', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'F', Debuffer: 'C', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'Swift'],
-    learnableAbilities: ['RazorLeaf', 'SeedBomb', 'SolarBeam']
+    learnableAbilities: ['RazorLeaf', 'SeedBomb']
   },
   Sunkern: {
     name: 'Sunkern',
@@ -633,7 +633,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'F' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'MegaDrain'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'Synthesis']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Spinarak: {
     name: 'Spinarak',
@@ -642,7 +642,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['Confusion', 'Toxic', 'Bite'],
-    learnableAbilities: ['Psychic', 'Psyshock', 'CrossPoison']
+    learnableAbilities: ['Psychic', 'Psyshock']
   },
   Skorupi: {
     name: 'Skorupi',
@@ -651,7 +651,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['Confusion', 'Harden', 'Bite'],
-    learnableAbilities: ['Psychic', 'DarkPulse', 'CrossPoison']
+    learnableAbilities: ['Psychic', 'DarkPulse']
   },
   Eevee: {
     name: 'Eevee',
@@ -660,7 +660,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Bite', 'Swift'],
-    learnableAbilities: ['BodySlam', 'Return', 'PlayRough']
+    learnableAbilities: ['BodySlam', 'PlayRough']
   },
   Togepi: {
     name: 'Togepi',
@@ -669,7 +669,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
     defaultAbilities: ['Swift', 'Metronome', 'CharmMove'],
-    learnableAbilities: ['DazzlingGleam', 'Moonblast', 'Psychic']
+    learnableAbilities: ['DazzlingGleam', 'Moonblast']
   },
   Snubbull: {
     name: 'Snubbull',
@@ -678,7 +678,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
     defaultAbilities: ['Bite', 'Headbutt', 'CharmMove'],
-    learnableAbilities: ['PlayRough', 'Crunch', 'Return']
+    learnableAbilities: ['PlayRough', 'Crunch']
   },
   Teddiursa: {
     name: 'Teddiursa',
@@ -687,7 +687,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'E', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['Slash', 'Bite', 'WorkUp'],
-    learnableAbilities: ['BodySlam', 'PlayRough', 'Return']
+    learnableAbilities: ['BodySlam', 'PlayRough']
   },
 
   // Rare Tier Gacha Pokemon (note: Slugma, Skitty are in Uncommon per GACHA_RARITY)
@@ -699,7 +699,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'E', Psychic: 'C', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'D', Chipper: 'C', MadLad: 'E' },
     defaultAbilities: ['Ember', 'Incinerate', 'Harden'],
-    learnableAbilities: ['Flamethrower', 'LavaPlume', 'FlameBurst']
+    learnableAbilities: ['Flamethrower', 'LavaPlume']
   },
   Clefairy: {
     name: 'Clefairy',
@@ -708,7 +708,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['Swift', 'Metronome', 'Moonblast'],
-    learnableAbilities: ['BodySlam', 'DazzlingGleam', 'Moonlight']
+    learnableAbilities: ['BodySlam', 'DazzlingGleam']
   },
   Jigglypuff: {
     name: 'Jigglypuff',
@@ -717,7 +717,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['Swift', 'Harden', 'CharmMove'],
-    learnableAbilities: ['BodySlam', 'PlayRough', 'IronDefense']
+    learnableAbilities: ['BodySlam', 'PlayRough']
   },
   Phanpy: {
     name: 'Phanpy',
@@ -726,7 +726,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'D', Chipper: 'C', MadLad: 'B' },
     defaultAbilities: ['Headbutt', 'Harden', 'Rollout'],
-    learnableAbilities: ['BodySlam', 'IronDefense', 'Earthquake']
+    learnableAbilities: ['BodySlam', 'Earthquake']
   },
   Spheal: {
     name: 'Spheal',
@@ -735,7 +735,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'C', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'Harden', 'IcePunch'],
-    learnableAbilities: ['Surf', 'IceBeam', 'IronDefense']
+    learnableAbilities: ['Surf', 'IceBeam']
   },
   Spoink: {
     name: 'Spoink',
@@ -744,7 +744,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Psyshock', 'Swift'],
-    learnableAbilities: ['Psychic', 'ShadowBall', 'PsychicBlast']
+    learnableAbilities: ['Psychic', 'PsychicBlast']
   },
   Skitty: {
     name: 'Skitty',
@@ -753,7 +753,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'C', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Bite', 'CharmMove'],
-    learnableAbilities: ['BodySlam', 'PlayRough', 'DoubleEdge']
+    learnableAbilities: ['BodySlam', 'PlayRough']
   },
   Deerling: {
     name: 'Deerling',
@@ -762,7 +762,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'A', Psychic: 'C', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'D', Debuffer: 'D', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'QuickAttack'],
-    learnableAbilities: ['RazorLeaf', 'SeedBomb', 'SolarBeam']
+    learnableAbilities: ['RazorLeaf', 'SeedBomb']
   },
 
   // Rare Tier Gacha Pokemon (starter Pokemon - these have isStarter flag)
@@ -774,7 +774,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['Ember', 'FlameCharge', 'QuickAttack'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'FlareBlitz'],
+    learnableAbilities: ['Flamethrower', 'FireBlast'],
     isStarter: true
   },
   Bunnelby: {
@@ -784,7 +784,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'D', Debuffer: 'D', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'Headbutt', 'Bite'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'HyperBeam'],
+    learnableAbilities: ['BodySlam', 'DoubleEdge'],
     isStarter: true
   },
   Yungoos: {
@@ -794,7 +794,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Bite', 'Leer'],
-    learnableAbilities: ['BodySlam', 'Return', 'Headbutt'],
+    learnableAbilities: ['BodySlam', 'Return'],
     isStarter: true
   },
   Wooloo: {
@@ -804,7 +804,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'C', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'C', Chipper: 'C', MadLad: 'B' },
     defaultAbilities: ['Headbutt', 'Harden', 'TailWhip'],
-    learnableAbilities: ['BodySlam', 'IronDefense', 'Return'],
+    learnableAbilities: ['BodySlam', 'IronDefense'],
     isStarter: true
   },
   Skwovet: {
@@ -814,7 +814,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'C', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'D', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Bite', 'TailWhip'],
-    learnableAbilities: ['BodySlam', 'Return', 'Headbutt'],
+    learnableAbilities: ['BodySlam', 'Return'],
     isStarter: true
   },
 
@@ -826,7 +826,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'D', Psychic: 'B', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['Ember', 'FireBlast', 'PsyBeam'],
-    learnableAbilities: ['Flamethrower', 'LavaPlume', 'HyperBeam']
+    learnableAbilities: ['Flamethrower', 'LavaPlume']
   },
   Totodile: {
     name: 'Totodile',
@@ -835,7 +835,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'PsyBeam'],
-    learnableAbilities: ['Surf', 'HydroPump', 'Bite']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Chikorita: {
     name: 'Chikorita',
@@ -844,7 +844,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'A', Psychic: 'B', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'D' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'PsyBeam'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'Bite']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Mudkip: {
     name: 'Mudkip',
@@ -853,7 +853,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'D', Chipper: 'D', MadLad: 'B' },
     defaultAbilities: ['WaterGun', 'Harden', 'PsyBeam'],
-    learnableAbilities: ['Surf', 'HydroPump', 'IronDefense']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Treecko: {
     name: 'Treecko',
@@ -862,7 +862,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'B', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'SolarBeam', 'PsyBeam'],
-    learnableAbilities: ['LeafBlade', 'GigaDrain', 'HyperBeam']
+    learnableAbilities: ['LeafBlade', 'GigaDrain']
   },
   Piplup: {
     name: 'Piplup',
@@ -871,7 +871,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'B', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'D', Chipper: 'A', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'PsyBeam'],
-    learnableAbilities: ['Surf', 'HydroPump', 'Bite']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Turtwig: {
     name: 'Turtwig',
@@ -880,7 +880,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'F', Debuffer: 'D', Chipper: 'D', MadLad: 'B' },
     defaultAbilities: ['VineWhip', 'Harden', 'PsyBeam'],
-    learnableAbilities: ['LeafBlade', 'SolarBeam', 'IronDefense']
+    learnableAbilities: ['LeafBlade', 'SolarBeam']
   },
   Chimchar: {
     name: 'Chimchar',
@@ -889,7 +889,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'E', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['Ember', 'FireBlast', 'PsyBeam'],
-    learnableAbilities: ['Flamethrower', 'LavaPlume', 'HyperBeam']
+    learnableAbilities: ['Flamethrower', 'LavaPlume']
   },
   Tepig: {
     name: 'Tepig',
@@ -898,7 +898,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'E', Chipper: 'D', MadLad: 'D' },
     defaultAbilities: ['Ember', 'FlameCharge', 'PsyBeam'],
-    learnableAbilities: ['Flamethrower', 'LavaPlume', 'Bite']
+    learnableAbilities: ['Flamethrower', 'LavaPlume']
   },
   Oshawott: {
     name: 'Oshawott',
@@ -907,7 +907,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'B' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'PsyBeam'],
-    learnableAbilities: ['Surf', 'HydroPump', 'Bite']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Snivy: {
     name: 'Snivy',
@@ -916,7 +916,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'A', Psychic: 'B', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'A', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'PsyBeam'],
-    learnableAbilities: ['LeafBlade', 'SolarBeam', 'Bite']
+    learnableAbilities: ['LeafBlade', 'SolarBeam']
   },
   // Uncommon Tier Pokemon (Klefki, Gligar, Snorunt, Aron, Ralts, Shinx, Starly)
   Klefki: {
@@ -926,7 +926,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'C', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'C', Chipper: 'D', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'IronDefense', 'Spark'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Harden']
+    learnableAbilities: ['BodySlam', 'IronDefense']
   },
   // Rare Tier Pokemon (Sneasel, Murkrow, Yanma - high-end with S aptitude)
   Sneasel: {
@@ -936,7 +936,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Ember'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'FireBlast']
+    learnableAbilities: ['BodySlam', 'DoubleEdge']
   },
   Murkrow: {
     name: 'Murkrow',
@@ -945,7 +945,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'HyperBeam']
   },
   // Uncommon Tier
   Gligar: {
@@ -955,7 +955,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'D', Debuffer: 'C', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Confusion', 'QuickAttack'],
-    learnableAbilities: ['Psychic', 'Psyshock', 'Bite']
+    learnableAbilities: ['Psychic', 'Psyshock']
   },
   // Rare Tier
   Yanma: {
@@ -965,7 +965,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'C', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Spark'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Thunderbolt']
+    learnableAbilities: ['BodySlam', 'Thunderbolt']
   },
   // Uncommon Tier
   Snorunt: {
@@ -975,7 +975,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'QuickAttack'],
-    learnableAbilities: ['Surf', 'IceBeam', 'Bite']
+    learnableAbilities: ['Surf', 'IceBeam']
   },
   Aron: {
     name: 'Aron',
@@ -984,7 +984,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'C', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'D', Chipper: 'E', MadLad: 'B' },
     defaultAbilities: ['Headbutt', 'IronDefense', 'QuickAttack'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Harden']
+    learnableAbilities: ['BodySlam', 'IronDefense']
   },
   Ralts: {
     name: 'Ralts',
@@ -993,7 +993,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'B', Chipper: 'D', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'CalmMind']
   },
   Shinx: {
     name: 'Shinx',
@@ -1002,7 +1002,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['ThunderShock', 'Spark', 'QuickAttack'],
-    learnableAbilities: ['Thunderbolt', 'Thunder', 'Bite']
+    learnableAbilities: ['Thunderbolt', 'Thunder']
   },
   Starly: {
     name: 'Starly',
@@ -1011,7 +1011,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'C', Debuffer: 'D', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'ExtremeSpeed']
+    learnableAbilities: ['BodySlam', 'ExtremeSpeed']
   },
   // Rare Tier Pokemon (Buneary, Glameow, Stunky, Croagunk - high-end with S aptitude)
   Buneary: {
@@ -1021,7 +1021,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'D', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'PlayRough']
+    learnableAbilities: ['BodySlam', 'PlayRough']
   },
   Glameow: {
     name: 'Glameow',
@@ -1030,7 +1030,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'B', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'PlayRough']
+    learnableAbilities: ['BodySlam', 'PlayRough']
   },
   Stunky: {
     name: 'Stunky',
@@ -1039,7 +1039,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'A', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Confusion', 'QuickAttack'],
-    learnableAbilities: ['Psychic', 'Psyshock', 'Bite']
+    learnableAbilities: ['Psychic', 'Psyshock']
   },
   Croagunk: {
     name: 'Croagunk',
@@ -1048,7 +1048,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'A', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Confusion', 'QuickAttack'],
-    learnableAbilities: ['Psychic', 'Psyshock', 'Bite']
+    learnableAbilities: ['BodySlam', 'DoubleEdge']
   },
   // Common Tier (Purrloin, Patrat, Roggenrola, Tympole, Venipede, Dwebble, Binacle)
   Purrloin: {
@@ -1058,7 +1058,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'PlayRough']
+    learnableAbilities: ['Psychic', 'PlayRough']
   },
   Patrat: {
     name: 'Patrat',
@@ -1067,7 +1067,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Swift', 'Bite'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'ExtremeSpeed']
+    learnableAbilities: ['BodySlam', 'DoubleEdge']
   },
   Roggenrola: {
     name: 'Roggenrola',
@@ -1076,7 +1076,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'D', Chipper: 'E', MadLad: 'C' },
     defaultAbilities: ['Headbutt', 'IronDefense', 'QuickAttack'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Harden']
+    learnableAbilities: ['BodySlam', 'IronDefense']
   },
   Tympole: {
     name: 'Tympole',
@@ -1085,7 +1085,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'C', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'QuickAttack'],
-    learnableAbilities: ['Surf', 'HydroPump', 'Bite']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Venipede: {
     name: 'Venipede',
@@ -1094,7 +1094,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Confusion', 'QuickAttack'],
-    learnableAbilities: ['Psychic', 'Psyshock', 'Bite']
+    learnableAbilities: ['Psychic', 'Psyshock']
   },
   // Rare Tier Pokemon (Sandile, Scraggy, Gothita, Litleo, Skiddo, Pancham, Honedge, Inkay, Skrelp, Helioptile, Tyrunt, Amaura, Goomy, Noibat, Dratini)
   Sandile: {
@@ -1104,7 +1104,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Swift', 'Ember'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Flamethrower']
+    learnableAbilities: ['BodySlam', 'DoubleEdge']
   },
   Dwebble: {
     name: 'Dwebble',
@@ -1113,7 +1113,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'D', Chipper: 'D', MadLad: 'C' },
     defaultAbilities: ['Headbutt', 'IronDefense', 'QuickAttack'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Harden']
+    learnableAbilities: ['BodySlam', 'IronDefense']
   },
   Scraggy: {
     name: 'Scraggy',
@@ -1122,7 +1122,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'D', Chipper: 'C', MadLad: 'B' },
     defaultAbilities: ['Headbutt', 'IronDefense', 'Ember'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Flamethrower']
+    learnableAbilities: ['BodySlam', 'IronDefense']
   },
   Gothita: {
     name: 'Gothita',
@@ -1131,7 +1131,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Swift', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'HyperBeam']
   },
   Litleo: {
     name: 'Litleo',
@@ -1140,7 +1140,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['Ember', 'FlameCharge', 'QuickAttack'],
-    learnableAbilities: ['Flamethrower', 'LavaPlume', 'Bite']
+    learnableAbilities: ['Flamethrower', 'LavaPlume']
   },
   Skiddo: {
     name: 'Skiddo',
@@ -1149,7 +1149,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'E', Debuffer: 'C', Chipper: 'C', MadLad: 'B' },
     defaultAbilities: ['VineWhip', 'Harden', 'QuickAttack'],
-    learnableAbilities: ['LeafBlade', 'SolarBeam', 'IronDefense']
+    learnableAbilities: ['LeafBlade', 'SolarBeam']
   },
   Pancham: {
     name: 'Pancham',
@@ -1158,7 +1158,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Swift', 'Ember'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Flamethrower']
+    learnableAbilities: ['BodySlam', 'DoubleEdge']
   },
   Honedge: {
     name: 'Honedge',
@@ -1167,7 +1167,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'C', Chipper: 'E', MadLad: 'B' },
     defaultAbilities: ['Headbutt', 'IronDefense', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'IronDefense']
   },
   Inkay: {
     name: 'Inkay',
@@ -1176,7 +1176,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'D', Debuffer: 'A', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Swift', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'Psyshock']
   },
   // Common Tier
   Binacle: {
@@ -1186,7 +1186,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'E', Debuffer: 'D', Chipper: 'D', MadLad: 'C' },
     defaultAbilities: ['WaterGun', 'Harden', 'QuickAttack'],
-    learnableAbilities: ['Surf', 'HydroPump', 'IronDefense']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   // Rare Tier
   Skrelp: {
@@ -1196,7 +1196,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'Harden', 'WaterGun'],
-    learnableAbilities: ['Psychic', 'Psyshock', 'IronDefense']
+    learnableAbilities: ['Psychic', 'IronDefense']
   },
   Helioptile: {
     name: 'Helioptile',
@@ -1205,7 +1205,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'C', Electric: 'A', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['ThunderShock', 'Thunder', 'QuickAttack'],
-    learnableAbilities: ['Thunderbolt', 'VoltSwitch', 'HyperBeam']
+    learnableAbilities: ['Thunderbolt', 'VoltSwitch']
   },
   Tyrunt: {
     name: 'Tyrunt',
@@ -1214,7 +1214,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'D', Chipper: 'C', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'Swift', 'Ember'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Flamethrower']
+    learnableAbilities: ['BodySlam', 'DoubleEdge']
   },
   Amaura: {
     name: 'Amaura',
@@ -1223,7 +1223,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'QuickAttack'],
-    learnableAbilities: ['Surf', 'IceBeam', 'Bite']
+    learnableAbilities: ['Surf', 'IceBeam']
   },
   Goomy: {
     name: 'Goomy',
@@ -1232,7 +1232,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Swift', 'Bite'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'PlayRough']
+    learnableAbilities: ['BodySlam', 'PlayRough']
   },
   Noibat: {
     name: 'Noibat',
@@ -1241,7 +1241,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'B', Debuffer: 'D', Chipper: 'A', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'HyperBeam']
   },
   Dratini: {
     name: 'Dratini',
@@ -1250,7 +1250,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'C', Psychic: 'B', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'B', Debuffer: 'C', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'HydroPump', 'BodySlam', 'HyperBeam']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
 
   // Legendary Tier Gacha Pokemon (highest tier - no evolutions, ~30% stronger base stats, S aptitudes)
@@ -1330,7 +1330,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'C', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['PsyBeam', 'Psychic', 'CalmMind'],
-    learnableAbilities: ['HyperBeam', 'ShadowBall', 'Moonblast']
+    learnableAbilities: ['HyperBeam', 'Moonblast']
   },
   Gardevoir: {
     name: 'Gardevoir',
@@ -1339,7 +1339,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['Psychic', 'Moonblast', 'CalmMind'],
-    learnableAbilities: ['ShadowBall', 'FocusBlast', 'HyperBeam', 'DrainingKiss']
+    learnableAbilities: ['ShadowBall', 'HyperBeam']
   },
 
   // Houndour -> Houndoom
@@ -1350,7 +1350,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['Ember', 'FireBlast', 'Psychic'],
-    learnableAbilities: ['Flamethrower', 'LavaPlume', 'HyperBeam']
+    learnableAbilities: ['Flamethrower', 'LavaPlume']
   },
 
   // Sentret -> Furret
@@ -1361,7 +1361,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'ExtremeSpeed']
+    learnableAbilities: ['BodySlam', 'ExtremeSpeed']
   },
 
   // Zigzagoon -> Linoone
@@ -1372,7 +1372,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'ExtremeSpeed']
+    learnableAbilities: ['BodySlam', 'ExtremeSpeed']
   },
 
   // Chinchou -> Lanturn
@@ -1383,7 +1383,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'A', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'Growl', 'Spark'],
-    learnableAbilities: ['Surf', 'HydroPump', 'Thunderbolt']
+    learnableAbilities: ['Surf', 'Thunderbolt']
   },
 
   // Mareep -> Flaaffy -> Ampharos
@@ -1394,7 +1394,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['ThunderShock', 'Thunderbolt', 'QuickAttack'],
-    learnableAbilities: ['Thunder', 'VoltSwitch', 'HyperBeam']
+    learnableAbilities: ['Thunder', 'VoltSwitch']
   },
   Ampharos: {
     name: 'Ampharos',
@@ -1403,7 +1403,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['ThunderShock', 'Thunder', 'Harden'],
-    learnableAbilities: ['Thunderbolt', 'VoltSwitch', 'IronDefense']
+    learnableAbilities: ['Thunderbolt', 'VoltSwitch']
   },
 
   // Hoppip -> Skiploom -> Jumpluff
@@ -1414,7 +1414,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'SolarBeam', 'QuickAttack'],
-    learnableAbilities: ['RazorLeaf', 'LeafBlade', 'HyperBeam']
+    learnableAbilities: ['LeafBlade', 'GigaDrain']
   },
   Jumpluff: {
     name: 'Jumpluff',
@@ -1423,7 +1423,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['VineWhip', 'SolarBeam', 'QuickAttack'],
-    learnableAbilities: ['LeafBlade', 'GigaDrain', 'HyperBeam']
+    learnableAbilities: ['LeafBlade', 'GigaDrain']
   },
 
   // Sunkern -> Sunflora
@@ -1434,7 +1434,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['VineWhip', 'SolarBeam', 'QuickAttack'],
-    learnableAbilities: ['LeafBlade', 'GigaDrain', 'HyperBeam']
+    learnableAbilities: ['LeafBlade', 'GigaDrain']
   },
 
   // Spinarak -> Ariados
@@ -1445,7 +1445,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['PsyBeam', 'PsychicBlast', 'QuickAttack'],
-    learnableAbilities: ['Psychic', 'Psyshock', 'HyperBeam']
+    learnableAbilities: ['Psychic', 'Psyshock']
   },
 
   // Skorupi -> Drapion
@@ -1456,7 +1456,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['PsyBeam', 'SwordsDance', 'QuickAttack'],
-    learnableAbilities: ['Psychic', 'PsychicBlast', 'CalmMind']
+    learnableAbilities: ['Psychic', 'CalmMind']
   },
 
   // Togepi -> Togetic
@@ -1467,7 +1467,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['QuickAttack', 'SwordsDance', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'PlayRough']
   },
 
   // Snubbull -> Granbull
@@ -1478,7 +1478,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'PlayRough']
   },
 
   // Teddiursa -> Ursaring
@@ -1489,7 +1489,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'ExtremeSpeed']
+    learnableAbilities: ['BodySlam', 'ExtremeSpeed']
   },
 
   // Slugma -> Magcargo
@@ -1500,7 +1500,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['Ember', 'SwordsDance', 'QuickAttack'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'CalmMind']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
 
   // Clefairy -> Clefable
@@ -1511,7 +1511,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['QuickAttack', 'SwordsDance', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'Moonblast']
   },
 
   // Jigglypuff -> Wigglytuff
@@ -1522,7 +1522,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'B', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['QuickAttack', 'SwordsDance', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'Moonblast']
   },
 
   // Phanpy -> Donphan
@@ -1533,7 +1533,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['QuickAttack', 'SwordsDance', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'IronDefense']
+    learnableAbilities: ['BodySlam', 'IronDefense']
   },
 
   // Spoink -> Grumpig
@@ -1544,7 +1544,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['PsyBeam', 'PsychicBlast', 'Harden'],
-    learnableAbilities: ['Psychic', 'Psyshock', 'IronDefense']
+    learnableAbilities: ['Psychic', 'Psyshock']
   },
 
   // Skitty -> Delcatty
@@ -1555,7 +1555,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'ExtremeSpeed']
+    learnableAbilities: ['BodySlam', 'ExtremeSpeed']
   },
 
   // Deerling -> Sawsbuck
@@ -1566,7 +1566,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['VineWhip', 'SolarBeam', 'QuickAttack'],
-    learnableAbilities: ['LeafBlade', 'GigaDrain', 'HyperBeam']
+    learnableAbilities: ['LeafBlade', 'GigaDrain']
   },
 
   // Bunnelby -> Diggersby
@@ -1577,7 +1577,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'A', Chipper: 'C', MadLad: 'D' },
     defaultAbilities: ['QuickAttack', 'Growl', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Leer']
+    learnableAbilities: ['BodySlam', 'DoubleEdge']
   },
 
   // Yungoos -> Gumshoos
@@ -1588,7 +1588,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'D', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'ExtremeSpeed']
+    learnableAbilities: ['BodySlam', 'ExtremeSpeed']
   },
 
   // Wooloo -> Dubwool
@@ -1599,7 +1599,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['QuickAttack', 'SwordsDance', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'IronDefense']
+    learnableAbilities: ['BodySlam', 'IronDefense']
   },
 
   // Skwovet -> Greedent
@@ -1610,7 +1610,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['QuickAttack', 'SwordsDance', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'IronDefense']
+    learnableAbilities: ['BodySlam', 'IronDefense']
   },
 
   // ============================================================================
@@ -1625,7 +1625,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['QuickAttack', 'Swift', 'Confusion'],
-    learnableAbilities: ['BodySlam', 'AirSlash', 'Psychic']
+    learnableAbilities: ['BodySlam', 'AirSlash']
   },
   Ledyba: {
     name: 'Ledyba',
@@ -1634,7 +1634,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['BulletSeed', 'Swift', 'Headbutt'],
-    learnableAbilities: ['RazorLeaf', 'MegaDrain', 'AirSlash']
+    learnableAbilities: ['RazorLeaf', 'MegaDrain']
   },
   Natu: {
     name: 'Natu',
@@ -1643,7 +1643,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['Confusion', 'Psyshock', 'QuickAttack'],
-    learnableAbilities: ['Psychic', 'ShadowBall', 'AirSlash']
+    learnableAbilities: ['Psychic', 'ShadowBall']
   },
   Marill: {
     name: 'Marill',
@@ -1652,7 +1652,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'BubbleBeam', 'PlayRough'],
-    learnableAbilities: ['Surf', 'AquaTail', 'Moonblast']
+    learnableAbilities: ['Surf', 'AquaTail']
   },
   Wooper: {
     name: 'Wooper',
@@ -1661,7 +1661,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'TailWhip'],
-    learnableAbilities: ['Surf', 'Earthquake', 'Scald']
+    learnableAbilities: ['Surf', 'Earthquake']
   },
   Swinub: {
     name: 'Swinub',
@@ -1670,7 +1670,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['IcePunch', 'AquaJet', 'Headbutt'],
-    learnableAbilities: ['IceBeam', 'Earthquake', 'Blizzard']
+    learnableAbilities: ['IceBeam', 'Earthquake']
   },
   Remoraid: {
     name: 'Remoraid',
@@ -1679,7 +1679,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'B', Debuffer: 'E', Chipper: 'C', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'BubbleBeam', 'Swift'],
-    learnableAbilities: ['Surf', 'IceBeam', 'Scald']
+    learnableAbilities: ['Surf', 'IceBeam']
   },
   Seedot: {
     name: 'Seedot',
@@ -1688,7 +1688,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'Headbutt'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'DarkPulse']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Lotad: {
     name: 'Lotad',
@@ -1697,7 +1697,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'C', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BubbleBeam', 'MegaDrain'],
-    learnableAbilities: ['RazorLeaf', 'Surf', 'EnergyBall']
+    learnableAbilities: ['RazorLeaf', 'Surf']
   },
   Shroomish: {
     name: 'Shroomish',
@@ -1706,7 +1706,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'SleepPowder'],
-    learnableAbilities: ['SeedBomb', 'EnergyBall', 'MachPunch']
+    learnableAbilities: ['SeedBomb', 'EnergyBall']
   },
   Makuhita: {
     name: 'Makuhita',
@@ -1715,7 +1715,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['LowKick', 'MachPunch', 'BulkUp'],
-    learnableAbilities: ['BrickBreak', 'CloseCombat', 'Earthquake']
+    learnableAbilities: ['BrickBreak', 'CloseCombat']
   },
   Nosepass: {
     name: 'Nosepass',
@@ -1724,7 +1724,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'C', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'F', Debuffer: 'D', Chipper: 'F', MadLad: 'E' },
     defaultAbilities: ['Headbutt', 'IronDefense', 'ThunderWave'],
-    learnableAbilities: ['StoneEdge', 'Thunderbolt', 'IronHead']
+    learnableAbilities: ['StoneEdge', 'IronHead']
   },
   Gulpin: {
     name: 'Gulpin',
@@ -1733,7 +1733,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['PsyBeam', 'Toxic', 'Harden'],
-    learnableAbilities: ['Psychic', 'SludgeBomb', 'ShadowBall']
+    learnableAbilities: ['Psychic', 'SludgeBomb']
   },
   Numel: {
     name: 'Numel',
@@ -1742,7 +1742,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'E', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'D', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['Ember', 'FlameCharge', 'Headbutt'],
-    learnableAbilities: ['Flamethrower', 'LavaPlume', 'Earthquake']
+    learnableAbilities: ['Flamethrower', 'LavaPlume']
   },
   Trapinch: {
     name: 'Trapinch',
@@ -1751,7 +1751,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'B', Debuffer: 'E', Chipper: 'D', MadLad: 'D' },
     defaultAbilities: ['Headbutt', 'SandAttack', 'Bite'],
-    learnableAbilities: ['Earthquake', 'RockSlide', 'DragonClaw']
+    learnableAbilities: ['Earthquake', 'RockSlide']
   },
   Baltoy: {
     name: 'Baltoy',
@@ -1760,7 +1760,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['Confusion', 'CosmicPower', 'RapidSpin'],
-    learnableAbilities: ['Psychic', 'Earthquake', 'ShadowBall']
+    learnableAbilities: ['Psychic', 'Earthquake']
   },
   Barboach: {
     name: 'Barboach',
@@ -1769,7 +1769,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'TailWhip'],
-    learnableAbilities: ['Surf', 'Earthquake', 'Scald']
+    learnableAbilities: ['Surf', 'Earthquake']
   },
   Corphish: {
     name: 'Corphish',
@@ -1778,7 +1778,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'E', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'Slash', 'Harden'],
-    learnableAbilities: ['Surf', 'Crunch', 'Waterfall']
+    learnableAbilities: ['Surf', 'Crunch']
   },
   Kricketot: {
     name: 'Kricketot',
@@ -1787,7 +1787,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['BulletSeed', 'StringShot', 'Bite'],
-    learnableAbilities: ['RazorLeaf', 'MegaDrain', 'SeedBomb']
+    learnableAbilities: ['RazorLeaf', 'MegaDrain']
   },
   Burmy: {
     name: 'Burmy',
@@ -1796,7 +1796,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['BulletSeed', 'StringShot', 'Harden'],
-    learnableAbilities: ['RazorLeaf', 'MegaDrain', 'SeedBomb']
+    learnableAbilities: ['RazorLeaf', 'MegaDrain']
   },
   Combee: {
     name: 'Combee',
@@ -1805,7 +1805,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['BulletSeed', 'Swift', 'Bite'],
-    learnableAbilities: ['RazorLeaf', 'AirSlash', 'MegaDrain']
+    learnableAbilities: ['RazorLeaf', 'AirSlash']
   },
   Cherubi: {
     name: 'Cherubi',
@@ -1814,7 +1814,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'Synthesis'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'EnergyBall']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Bronzor: {
     name: 'Bronzor',
@@ -1823,7 +1823,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'A', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'F', Debuffer: 'D', Chipper: 'F', MadLad: 'E' },
     defaultAbilities: ['Confusion', 'IronDefense', 'Hypnosis'],
-    learnableAbilities: ['Psychic', 'FlashCannon', 'ShadowBall']
+    learnableAbilities: ['Psychic', 'FlashCannon']
   },
   Finneon: {
     name: 'Finneon',
@@ -1832,7 +1832,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'A', Grass: 'E', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'Swift'],
-    learnableAbilities: ['Surf', 'IceBeam', 'Scald']
+    learnableAbilities: ['Surf', 'IceBeam']
   },
   Pidove: {
     name: 'Pidove',
@@ -1841,7 +1841,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'D', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'E', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['QuickAttack', 'AirSlash', 'Growl'],
-    learnableAbilities: ['BodySlam', 'BraveBird', 'Return']
+    learnableAbilities: ['BodySlam', 'BraveBird']
   },
   Blitzle: {
     name: 'Blitzle',
@@ -1850,7 +1850,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'D', Grass: 'D', Psychic: 'D', Electric: 'A', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'E', Nuker: 'D', Debuffer: 'E', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['ThunderShock', 'Spark', 'QuickAttack'],
-    learnableAbilities: ['Thunderbolt', 'WildCharge', 'Discharge']
+    learnableAbilities: ['Thunderbolt', 'WildCharge']
   },
   Sewaddle: {
     name: 'Sewaddle',
@@ -1859,7 +1859,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'StringShot'],
-    learnableAbilities: ['RazorLeaf', 'SeedBomb', 'LeafBlade']
+    learnableAbilities: ['RazorLeaf', 'SeedBomb']
   },
   Cottonee: {
     name: 'Cottonee',
@@ -1868,7 +1868,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'F', Debuffer: 'B', Chipper: 'D', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'CharmMove'],
-    learnableAbilities: ['EnergyBall', 'Moonblast', 'GigaDrain']
+    learnableAbilities: ['EnergyBall', 'Moonblast']
   },
   Petilil: {
     name: 'Petilil',
@@ -1877,7 +1877,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'E', Water: 'D', Grass: 'A', Psychic: 'D', Electric: 'D', Fighting: 'D' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'E', Debuffer: 'D', Chipper: 'B', MadLad: 'E' },
     defaultAbilities: ['VineWhip', 'MegaDrain', 'SleepPowder'],
-    learnableAbilities: ['EnergyBall', 'SolarBeam', 'Synthesis']
+    learnableAbilities: ['EnergyBall', 'SolarBeam']
   },
 
   // RARE TIER - 50 new Pokemon (Gen 2+)
@@ -1888,7 +1888,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['PsyBeam', 'Confusion', 'QuickAttack'],
-    learnableAbilities: ['Psychic', 'PsychicBlast', 'Psyshock']
+    learnableAbilities: ['Psychic', 'Psyshock']
   },
   Girafarig: {
     name: 'Girafarig',
@@ -1897,7 +1897,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['PsyBeam', 'Confusion', 'QuickAttack'],
-    learnableAbilities: ['Psychic', 'Psyshock', 'HyperBeam']
+    learnableAbilities: ['Psychic', 'Psyshock']
   },
   Dunsparce: {
     name: 'Dunsparce',
@@ -1906,7 +1906,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'D', Electric: 'C', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['QuickAttack', 'Harden', 'Swift'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Growl']
+    learnableAbilities: ['BodySlam', 'DoubleEdge']
   },
   Qwilfish: {
     name: 'Qwilfish',
@@ -1915,7 +1915,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'B', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['WaterGun', 'AquaJet', 'PsyBeam'],
-    learnableAbilities: ['Surf', 'HydroPump', 'Psychic']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Shuckle: {
     name: 'Shuckle',
@@ -1924,7 +1924,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'D', Electric: 'C', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'F', Debuffer: 'A', Chipper: 'F', MadLad: 'C' },
     defaultAbilities: ['Headbutt', 'SwordsDance', 'Swift'],
-    learnableAbilities: ['BodySlam', 'IronDefense', 'Growl']
+    learnableAbilities: ['BodySlam', 'IronDefense']
   },
   Corsola: {
     name: 'Corsola',
@@ -1933,7 +1933,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['WaterGun', 'Harden', 'QuickAttack'],
-    learnableAbilities: ['Surf', 'HydroPump', 'IronDefense']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Mantine: {
     name: 'Mantine',
@@ -1942,7 +1942,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'C', Debuffer: 'A', Chipper: 'B', MadLad: 'D' },
     defaultAbilities: ['WaterGun', 'Growl', 'QuickAttack'],
-    learnableAbilities: ['Surf', 'IceBeam', 'Leer']
+    learnableAbilities: ['Surf', 'IceBeam']
   },
   Larvitar: {
     name: 'Larvitar',
@@ -1951,7 +1951,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'C', Grass: 'C', Psychic: 'D', Electric: 'C', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'Ember'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Flamethrower']
+    learnableAbilities: ['BodySlam', 'DoubleEdge']
   },
   Poochyena: {
     name: 'Poochyena',
@@ -1960,7 +1960,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['QuickAttack', 'HyperBeam', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DoubleEdge', 'Psychic']
+    learnableAbilities: ['Psychic', 'HyperBeam']
   },
   Wingull: {
     name: 'Wingull',
@@ -1969,7 +1969,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['WaterGun', 'HydroPump', 'QuickAttack'],
-    learnableAbilities: ['Surf', 'IceBeam', 'HyperBeam']
+    learnableAbilities: ['Surf', 'IceBeam']
   },
   Surskit: {
     name: 'Surskit',
@@ -1978,7 +1978,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['WaterGun', 'HydroPump', 'QuickAttack'],
-    learnableAbilities: ['Surf', 'IceBeam', 'HyperBeam']
+    learnableAbilities: ['Surf', 'IceBeam']
   },
   Electrike: {
     name: 'Electrike',
@@ -1987,7 +1987,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'A', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'B', Debuffer: 'D', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['ThunderShock', 'Thunder', 'QuickAttack'],
-    learnableAbilities: ['Thunderbolt', 'VoltSwitch', 'HyperBeam']
+    learnableAbilities: ['Thunderbolt', 'VoltSwitch']
   },
   Roselia: {
     name: 'Roselia',
@@ -1996,7 +1996,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'B', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['VineWhip', 'BulletSeed', 'PsyBeam'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'Psychic']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Wailmer: {
     name: 'Wailmer',
@@ -2005,7 +2005,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['WaterGun', 'Tackle'],
-    learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Torkoal: {
     name: 'Torkoal',
@@ -2014,7 +2014,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Cacnea: {
     name: 'Cacnea',
@@ -2050,7 +2050,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Chimecho: {
     name: 'Chimecho',
@@ -2077,7 +2077,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'B', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'IceBeam', 'BodySlam']
+    learnableAbilities: ['RazorLeaf', 'IceBeam']
   },
   Riolu: {
     name: 'Riolu',
@@ -2104,7 +2104,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['PowerWhip', 'SolarBeam', 'BodySlam']
+    learnableAbilities: ['PowerWhip', 'SolarBeam']
   },
   Mantyke: {
     name: 'Mantyke',
@@ -2122,7 +2122,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['LowKick', 'QuickAttack'],
-    learnableAbilities: ['BrickBreak', 'CloseCombat', 'BodySlam']
+    learnableAbilities: ['BrickBreak', 'CloseCombat']
   },
   Throh: {
     name: 'Throh',
@@ -2131,7 +2131,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'A' },
     strategyAptitudes: { Scaler: 'A', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['LowKick', 'Tackle'],
-    learnableAbilities: ['BrickBreak', 'CloseCombat', 'BodySlam']
+    learnableAbilities: ['BrickBreak', 'CloseCombat']
   },
   Basculin: {
     name: 'Basculin',
@@ -2140,7 +2140,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'A', Grass: 'D', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['WaterGun', 'QuickAttack'],
-    learnableAbilities: ['Surf', 'HydroPump', 'BodySlam']
+    learnableAbilities: ['Surf', 'HydroPump']
   },
   Darumaka: {
     name: 'Darumaka',
@@ -2158,7 +2158,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'D', Water: 'C', Grass: 'A', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'B', Debuffer: 'C', Chipper: 'A', MadLad: 'B' },
     defaultAbilities: ['VineWhip', 'Tackle'],
-    learnableAbilities: ['RazorLeaf', 'SolarBeam', 'BodySlam']
+    learnableAbilities: ['RazorLeaf', 'SolarBeam']
   },
   Druddigon: {
     name: 'Druddigon',
@@ -2167,7 +2167,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'C', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Pawniard: {
     name: 'Pawniard',
@@ -2194,7 +2194,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'C', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'B', Nuker: 'D', Debuffer: 'B', Chipper: 'C', MadLad: 'C' },
     defaultAbilities: ['Tackle', 'QuickAttack'],
-    learnableAbilities: ['BodySlam', 'DarkPulse', 'AirSlash']
+    learnableAbilities: ['DarkPulse', 'AirSlash']
   },
   Heatmor: {
     name: 'Heatmor',
@@ -2203,7 +2203,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'A', Water: 'D', Grass: 'C', Psychic: 'C', Electric: 'C', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'C', Nuker: 'A', Debuffer: 'C', Chipper: 'B', MadLad: 'B' },
     defaultAbilities: ['Ember', 'Tackle'],
-    learnableAbilities: ['Flamethrower', 'FireBlast', 'BodySlam']
+    learnableAbilities: ['Flamethrower', 'FireBlast']
   },
   Durant: {
     name: 'Durant',
@@ -2221,7 +2221,7 @@ const POKEMON = {
     typeAptitudes: { Fire: 'B', Water: 'C', Grass: 'C', Psychic: 'A', Electric: 'D', Fighting: 'C' },
     strategyAptitudes: { Scaler: 'D', Nuker: 'C', Debuffer: 'D', Chipper: 'B', MadLad: 'C' },
     defaultAbilities: ['Tackle', 'PsyBeam'],
-    learnableAbilities: ['BodySlam', 'DarkPulse', 'Psychic']
+    learnableAbilities: ['DarkPulse', 'Psychic']
   },
   Espurr: {
     name: 'Espurr',
