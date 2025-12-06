@@ -1,5 +1,5 @@
 import express from 'express';
-import db from '../config/database.js';
+import * as db from '../config/database.js';
 import authenticateToken from '../middleware/auth.js';
 import { simulateBattle } from '../services/battleSimulator.js';
 import { GYM_BADGES } from '../services/tournamentProcessor.js';
